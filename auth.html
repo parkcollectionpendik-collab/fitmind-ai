@@ -140,7 +140,7 @@ async function signIn() {
   btn.disabled = true; btn.textContent = 'Signing in...';
   const { error } = await sb.auth.signInWithPassword({ email, password });
   if (error) { showMsg(error.message, 'error'); btn.disabled = false; btn.textContent = 'Sign In →'; }
-  else { window.location.href = 'dashboard.html'; }
+  else { window.location.href = 'onboarding.html'; }
 }
 
 async function signUp() {
@@ -157,11 +157,11 @@ async function signUp() {
 }
 
 async function signInGoogle() {
-  await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin + '/dashboard.html' } });
+  await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin + '/onboarding.html' } });
 }
 
 sb.auth.onAuthStateChange((event, session) => {
-  if (event === 'SIGNED_IN' && session) window.location.href = 'dashboard.html';
+  if (event === 'SIGNED_IN' && session) window.location.href = 'onboarding.html';
 });
 </script>
 </body>
