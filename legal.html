@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitMind AI – Legal</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--muted:#888;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
+body{background:var(--black);color:var(--white);font-family:var(--font-body);min-height:100vh}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.2rem 3rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff10;backdrop-filter:blur(12px);background:#0a0a0acc}
+.logo{font-family:var(--font-head);font-weight:800;font-size:1.2rem;text-decoration:none;color:var(--white)}
+.logo span{color:var(--lime)}
+.nav-cta{background:var(--lime);color:var(--black);padding:0.5rem 1.4rem;border-radius:100px;font-family:var(--font-head);font-weight:700;font-size:0.85rem;text-decoration:none}
+.container{max-width:780px;margin:0 auto;padding:8rem 2rem 4rem}
+.tabs{display:flex;gap:0.5rem;margin-bottom:3rem;flex-wrap:wrap}
+.tab{padding:0.5rem 1.2rem;border-radius:100px;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer;border:1px solid #ffffff20;background:transparent;color:var(--muted);transition:all 0.2s}
+.tab.active{background:var(--lime);color:var(--black);border-color:var(--lime)}
+.section{display:none}
+.section.active{display:block}
+h1{font-family:var(--font-head);font-size:2.5rem;font-weight:800;margin-bottom:0.5rem;letter-spacing:-0.02em}
+.date{color:var(--muted);font-size:0.85rem;margin-bottom:2.5rem}
+h2{font-family:var(--font-head);font-size:1.2rem;font-weight:700;margin:2rem 0 0.75rem;color:var(--lime)}
+p{color:#ffffffcc;line-height:1.8;font-weight:300;margin-bottom:1rem;font-size:0.95rem}
+ul{color:#ffffffcc;line-height:1.8;font-weight:300;margin-bottom:1rem;padding-left:1.5rem;font-size:0.95rem}
+ul li{margin-bottom:0.4rem}
+footer{text-align:center;padding:3rem 2rem;border-top:1px solid #ffffff0f;color:var(--muted);font-size:0.85rem}
+footer a{color:var(--muted);text-decoration:none;margin:0 0.5rem}
+footer a:hover{color:var(--white)}
+.footer-logo{font-family:var(--font-head);font-weight:800;font-size:1.1rem;margin-bottom:0.5rem}
+.footer-logo span{color:var(--lime)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Fit<span>Mind</span> AI</a>
+  <a href="index.html#pricing" class="nav-cta">Start Free Trial →</a>
+</nav>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('privacy',this)">Privacy Policy</button>
+    <button class="tab" onclick="showTab('terms',this)">Terms & Conditions</button>
+    <button class="tab" onclick="showTab('refund',this)">Refund Policy</button>
+  </div>
+
+  <!-- PRIVACY POLICY -->
+  <div class="section active" id="privacy">
+    <h1>Privacy Policy</h1>
+    <div class="date">Last updated: April 10, 2025</div>
+    <p>FitMind AI ("we", "us", or "our") is committed to protecting your personal information. This Privacy Policy explains how we collect, use, and safeguard your data when you use our service.</p>
+    <h2>1. Information We Collect</h2>
+    <p>We collect information you provide directly to us, including:</p>
+    <ul>
+      <li>Name and email address when you register</li>
+      <li>Fitness goals, body measurements, and health information you choose to share</li>
+      <li>Usage data and interactions with our AI coach</li>
+      <li>Payment information (processed securely by Paddle — we do not store card details)</li>
+    </ul>
+    <h2>2. How We Use Your Information</h2>
+    <p>We use your information to:</p>
+    <ul>
+      <li>Provide and personalize our AI coaching service</li>
+      <li>Process payments and manage your subscription</li>
+      <li>Send you important updates about your account</li>
+      <li>Improve our services and user experience</li>
+    </ul>
+    <h2>3. Data Storage</h2>
+    <p>Your data is stored securely using Supabase infrastructure hosted in the EU (Frankfurt, Germany). We implement industry-standard security measures to protect your information.</p>
+    <h2>4. Data Sharing</h2>
+    <p>We do not sell your personal data. We may share data with trusted service providers (Supabase, Paddle, Anthropic) solely to operate our service. We never share your data with advertisers.</p>
+    <h2>5. Your Rights</h2>
+    <p>You have the right to access, correct, or delete your personal data at any time. To exercise these rights, contact us at privacy@fitmindai.com.</p>
+    <h2>6. Cookies</h2>
+    <p>We use essential cookies to keep you logged in and to analyze site usage. You can disable cookies in your browser settings, but this may affect functionality.</p>
+    <h2>7. Contact</h2>
+    <p>For privacy-related questions, email us at privacy@fitmindai.com.</p>
+  </div>
+
+  <!-- TERMS & CONDITIONS -->
+  <div class="section" id="terms">
+    <h1>Terms & Conditions</h1>
+    <div class="date">Last updated: April 10, 2025</div>
+    <p>By accessing or using FitMind AI, you agree to be bound by these Terms and Conditions. Please read them carefully.</p>
+    <h2>1. Service Description</h2>
+    <p>FitMind AI provides an AI-powered fitness coaching platform. Our service includes personalized workout plans, nutrition tracking, and 24/7 AI coach interactions. All coaching is automated and powered by artificial intelligence — no human coaches are involved.</p>
+    <h2>2. Eligibility</h2>
+    <p>You must be at least 18 years old to use FitMind AI. By using our service, you confirm that you are 18 or older.</p>
+    <h2>3. Subscriptions</h2>
+    <p>FitMind AI offers monthly and annual subscription plans. Your subscription will automatically renew unless cancelled before the renewal date. You can cancel anytime from your account settings.</p>
+    <h2>4. Health Disclaimer</h2>
+    <p>FitMind AI provides general fitness and nutrition information for educational purposes only. Our AI-generated content is not a substitute for professional medical advice. Always consult a qualified healthcare provider before starting any new exercise or diet program.</p>
+    <h2>5. Acceptable Use</h2>
+    <p>You agree not to misuse our service. Prohibited activities include attempting to reverse-engineer our AI, sharing your account credentials, or using our service for any unlawful purpose.</p>
+    <h2>6. Intellectual Property</h2>
+    <p>All content, features, and functionality of FitMind AI are owned by us and protected by intellectual property laws.</p>
+    <h2>7. Limitation of Liability</h2>
+    <p>To the maximum extent permitted by law, FitMind AI shall not be liable for any indirect, incidental, or consequential damages arising from your use of our service.</p>
+    <h2>8. Changes to Terms</h2>
+    <p>We may update these terms at any time. Continued use of our service after changes constitutes acceptance of the new terms.</p>
+    <h2>9. Contact</h2>
+    <p>For questions about these terms, email us at legal@fitmindai.com.</p>
+  </div>
+
+  <!-- REFUND POLICY -->
+  <div class="section" id="refund">
+    <h1>Refund Policy</h1>
+    <div class="date">Last updated: April 10, 2025</div>
+    <p>We want you to be completely satisfied with FitMind AI. Here is our refund policy.</p>
+    <h2>1. Free Trial</h2>
+    <p>All new subscribers receive a 7-day free trial. You will not be charged during your trial period. Cancel anytime before the trial ends to avoid being charged.</p>
+    <h2>2. Refund Eligibility</h2>
+    <p>If you are not satisfied with FitMind AI, you may request a full refund within 14 days of your first payment. To request a refund, email us at support@fitmindai.com with your account email and reason for the refund.</p>
+    <h2>3. How Refunds Are Processed</h2>
+    <p>Approved refunds are processed within 5-10 business days. Refunds are returned to the original payment method. Refunds are handled by our payment processor, Paddle.</p>
+    <h2>4. Exceptions</h2>
+    <p>Refunds are not available after the 14-day window has passed, or if we detect abuse of our refund policy (e.g., repeated refund requests).</p>
+    <h2>5. Cancellation</h2>
+    <p>You can cancel your subscription at any time from your account settings. Cancellation stops future charges but does not automatically trigger a refund for the current billing period.</p>
+    <h2>6. Contact</h2>
+    <p>For refund requests or questions, email us at support@fitmindai.com.</p>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">Fit<span>Mind</span> AI</div>
+  <div style="margin-bottom:0.5rem">
+    <a href="legal.html#privacy">Privacy Policy</a>
+    <a href="legal.html#terms">Terms & Conditions</a>
+    <a href="legal.html#refund">Refund Policy</a>
+  </div>
+  <p>© 2025 FitMind AI. All rights reserved.</p>
+</footer>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+const hash = window.location.hash.replace('#','');
+if(hash) { const btn = document.querySelector(`[onclick*="${hash}"]`); if(btn) showTab(hash, btn); }
+</script>
+</body>
+</html>
