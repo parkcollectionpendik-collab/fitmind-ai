@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitMind AI – Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--lime2:#a8d92e;--gray:#111;--muted:#888;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
+body{background:var(--black);color:var(--white);font-family:var(--font-body);min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:#0d0d0d;border-right:1px solid #ffffff0f;padding:1.5rem;display:flex;flex-direction:column;z-index:10}
+.logo{font-family:var(--font-head);font-weight:800;font-size:1.1rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid #ffffff0f}
+.logo span{color:var(--lime)}
+.nav{display:flex;flex-direction:column;gap:0.3rem;flex:1}
+.nav-item{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 1rem;border-radius:12px;cursor:pointer;transition:all 0.2s;font-size:0.9rem;color:var(--muted);border:none;background:transparent;width:100%;text-align:left;font-family:var(--font-body)}
+.nav-item:hover{background:#ffffff08;color:var(--white)}
+.nav-item.active{background:#c8f54215;color:var(--lime)}
+.nav-item .icon{width:18px;text-align:center;font-size:1rem}
+.sidebar-bottom{padding-top:1rem;border-top:1px solid #ffffff0f}
+.user-info{display:flex;align-items:center;gap:0.75rem;padding:0.5rem}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--lime),#4af);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.85rem;color:var(--black);flex-shrink:0}
+.user-name{font-size:0.85rem;font-weight:400;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.signout-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0.25rem;transition:color 0.2s}
+.signout-btn:hover{color:#ff6b6b}
+
+/* MAIN */
+.main{margin-left:240px;padding:2rem;min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}
+.page-title{font-family:var(--font-head);font-size:1.5rem;font-weight:800}
+.greeting{color:var(--muted);font-size:0.9rem;margin-top:0.2rem}
+.badge-live{display:inline-flex;align-items:center;gap:0.4rem;background:#c8f54215;border:1px solid #c8f54230;color:var(--lime);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.75rem;font-family:var(--font-head);font-weight:700}
+.badge-dot{width:6px;height:6px;background:var(--lime);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* CARDS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+@media(max-width:1100px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+.stat-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:16px;padding:1.5rem;transition:border-color 0.3s}
+.stat-card:hover{border-color:#c8f54225}
+.stat-label{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:0.5rem}
+.stat-value{font-family:var(--font-head);font-size:2rem;font-weight:800;line-height:1}
+.stat-value.lime{color:var(--lime)}
+.stat-change{font-size:0.78rem;color:var(--muted);margin-top:0.3rem}
+.stat-change.up{color:#4ade80}
+
+/* GRID */
+.content-grid{display:grid;grid-template-columns:1fr 380px;gap:1.5rem}
+@media(max-width:1100px){.content-grid{grid-template-columns:1fr}}
+
+/* AI CHAT */
+.chat-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;display:flex;flex-direction:column;height:520px}
+.card-title{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem}
+.card-title .dot{width:8px;height:8px;background:var(--lime);border-radius:50%;animation:pulse 2s infinite}
+.messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1rem;padding-right:0.25rem}
+.messages::-webkit-scrollbar{width:3px}
+.messages::-webkit-scrollbar-thumb{background:#ffffff15;border-radius:10px}
+.msg-bubble{max-width:85%;padding:0.75rem 1rem;border-radius:16px;font-size:0.9rem;line-height:1.6}
+.msg-bubble.ai{background:#ffffff0a;border:1px solid #ffffff0f;align-self:flex-start;border-bottom-left-radius:4px}
+.msg-bubble.user{background:var(--lime);color:var(--black);align-self:flex-end;border-bottom-right-radius:4px;font-weight:400}
+.msg-bubble.typing{background:#ffffff0a;border:1px solid #ffffff0f;align-self:flex-start}
+.typing-dots{display:flex;gap:4px;align-items:center;padding:0.2rem 0}
+.typing-dots span{width:6px;height:6px;background:var(--muted);border-radius:50%;animation:bounce 1.2s infinite}
+.typing-dots span:nth-child(2){animation-delay:0.2s}
+.typing-dots span:nth-child(3){animation-delay:0.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.chat-input-wrap{display:flex;gap:0.5rem}
+.chat-input{flex:1;background:#ffffff08;border:1px solid #ffffff15;border-radius:100px;padding:0.7rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.9rem;outline:none;transition:border-color 0.2s}
+.chat-input::placeholder{color:#ffffff40}
+.chat-input:focus{border-color:#c8f54240}
+.send-btn{background:var(--lime);color:var(--black);border:none;border-radius:50%;width:38px;height:38px;cursor:pointer;font-size:1rem;transition:all 0.2s;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.send-btn:hover{background:var(--lime2);transform:scale(1.05)}
+.send-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+
+/* RIGHT PANEL */
+.right-panel{display:flex;flex-direction:column;gap:1rem}
+.panel-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem}
+
+/* WORKOUT */
+.workout-list{display:flex;flex-direction:column;gap:0.6rem;margin-top:0.75rem}
+.workout-item{display:flex;align-items:center;gap:0.75rem;padding:0.75rem;background:#ffffff05;border-radius:12px;transition:background 0.2s;cursor:pointer}
+.workout-item:hover{background:#ffffff0a}
+.workout-check{width:20px;height:20px;border-radius:6px;border:2px solid #ffffff20;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s}
+.workout-check.done{background:var(--lime);border-color:var(--lime);color:var(--black)}
+.workout-info{flex:1}
+.workout-name{font-size:0.85rem;font-weight:400}
+.workout-sets{font-size:0.75rem;color:var(--muted);margin-top:0.1rem}
+.workout-item.done-item .workout-name{text-decoration:line-through;opacity:0.5}
+
+/* PROGRESS */
+.progress-bar-wrap{margin-top:0.75rem}
+.progress-label{display:flex;justify-content:space-between;font-size:0.8rem;color:var(--muted);margin-bottom:0.4rem}
+.progress-bar{height:6px;background:#ffffff10;border-radius:100px;overflow:hidden}
+.progress-fill{height:100%;background:var(--lime);border-radius:100px;transition:width 1s ease}
+
+/* UPGRADE */
+.upgrade-card{background:linear-gradient(135deg,#0f1a06,#111);border:1px solid #c8f54225;border-radius:20px;padding:1.5rem;text-align:center}
+.upgrade-card h3{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:0.4rem}
+.upgrade-card p{font-size:0.82rem;color:var(--muted);margin-bottom:1rem;line-height:1.5}
+.upgrade-btn{background:var(--lime);color:var(--black);border:none;border-radius:100px;padding:0.6rem 1.4rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s;width:100%}
+.upgrade-btn:hover{background:var(--lime2)}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="logo">Fit<span>Mind</span> AI</div>
+  <nav class="nav">
+    <button class="nav-item active"><span class="icon">🏠</span> Dashboard</button>
+    <button class="nav-item"><span class="icon">🤖</span> AI Coach</button>
+    <button class="nav-item"><span class="icon">🏋️</span> Workouts</button>
+    <button class="nav-item"><span class="icon">🥗</span> Nutrition</button>
+    <button class="nav-item"><span class="icon">📈</span> Progress</button>
+    <button class="nav-item"><span class="icon">👥</span> Community</button>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="user-info">
+      <div class="avatar" id="avatarInitial">?</div>
+      <div class="user-name" id="userName">Loading...</div>
+      <button class="signout-btn" onclick="signOut()" title="Sign out">⏻</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title" id="welcomeMsg">Good morning! 👋</div>
+      <div class="greeting">Here's your fitness overview for today</div>
+    </div>
+    <div class="badge-live"><span class="badge-dot"></span> AI Coach Online</div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Workouts done</div>
+      <div class="stat-value lime" id="workoutCount">0</div>
+      <div class="stat-change up">↑ This week</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Calories burned</div>
+      <div class="stat-value">0</div>
+      <div class="stat-change">kcal today</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Streak</div>
+      <div class="stat-value lime">1🔥</div>
+      <div class="stat-change up">Keep it up!</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Plan progress</div>
+      <div class="stat-value">0%</div>
+      <div class="stat-change">This week</div>
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <!-- AI CHAT -->
+    <div class="chat-card">
+      <div class="card-title"><span class="dot"></span> AI Coach Chat</div>
+      <div class="messages" id="messages">
+        <div class="msg-bubble ai">Hey! I'm your personal AI fitness coach 🤖 I'm here to help you with workouts, nutrition, motivation — anything you need. What are your goals today?</div>
+      </div>
+      <div class="chat-input-wrap">
+        <input class="chat-input" id="chatInput" placeholder="Ask your AI coach anything..." onkeydown="if(event.key==='Enter')sendMsg()">
+        <button class="send-btn" onclick="sendMsg()" id="sendBtn">➤</button>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+      <!-- TODAY'S WORKOUT -->
+      <div class="panel-card">
+        <div class="card-title">💪 Today's Workout</div>
+        <div class="workout-list">
+          <div class="workout-item" onclick="toggleWorkout(this)">
+            <div class="workout-check">✓</div>
+            <div class="workout-info"><div class="workout-name">Push-ups</div><div class="workout-sets">3 sets × 15 reps</div></div>
+          </div>
+          <div class="workout-item" onclick="toggleWorkout(this)">
+            <div class="workout-check">✓</div>
+            <div class="workout-info"><div class="workout-name">Squats</div><div class="workout-sets">4 sets × 12 reps</div></div>
+          </div>
+          <div class="workout-item" onclick="toggleWorkout(this)">
+            <div class="workout-check">✓</div>
+            <div class="workout-info"><div class="workout-name">Plank</div><div class="workout-sets">3 sets × 45 sec</div></div>
+          </div>
+          <div class="workout-item" onclick="toggleWorkout(this)">
+            <div class="workout-check">✓</div>
+            <div class="workout-info"><div class="workout-name">Lunges</div><div class="workout-sets">3 sets × 10 each</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEKLY PROGRESS -->
+      <div class="panel-card">
+        <div class="card-title">📈 Weekly Progress</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-label"><span>Workouts</span><span>0/5</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+        </div>
+        <div class="progress-bar-wrap" style="margin-top:1rem">
+          <div class="progress-label"><span>Nutrition</span><span>0/7 days</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+        </div>
+        <div class="progress-bar-wrap" style="margin-top:1rem">
+          <div class="progress-label"><span>Water intake</span><span>0/8 glasses</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <!-- UPGRADE -->
+      <div class="upgrade-card">
+        <h3>🚀 Unlock Full Access</h3>
+        <p>Get unlimited AI coaching, custom meal plans, and advanced analytics with Pro.</p>
+        <button class="upgrade-btn">Upgrade to Pro — $19/mo</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://cypmmayxwbkarvheqoxu.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_AWcGQ3cCWOrHntiOCvvGgw_XpHUmUpT';
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let currentUser = null;
+
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = 'auth.html'; return; }
+  currentUser = session.user;
+  const name = currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
+  const initial = name.charAt(0).toUpperCase();
+  document.getElementById('avatarInitial').textContent = initial;
+  document.getElementById('userName').textContent = name;
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('welcomeMsg').textContent = greeting + ', ' + name.split(' ')[0] + '! 👋';
+}
+
+async function signOut() {
+  await sb.auth.signOut();
+  window.location.href = 'index.html';
+}
+
+let doneCount = 0;
+function toggleWorkout(el) {
+  const check = el.querySelector('.workout-check');
+  const isDone = check.classList.contains('done');
+  if (isDone) { check.classList.remove('done'); el.classList.remove('done-item'); doneCount = Math.max(0, doneCount-1); }
+  else { check.classList.add('done'); el.classList.add('done-item'); doneCount++; }
+  document.getElementById('workoutCount').textContent = doneCount;
+}
+
+async function sendMsg() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  document.getElementById('sendBtn').disabled = true;
+  const msgs = document.getElementById('messages');
+  msgs.innerHTML += `<div class="msg-bubble user">${text}</div>`;
+  msgs.innerHTML += `<div class="msg-bubble typing"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  msgs.scrollTop = msgs.scrollHeight;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 300,
+        system: 'You are FitMind AI, a friendly and motivating personal fitness coach. Give short, practical, encouraging advice about workouts, nutrition, and wellness. Keep responses under 3 sentences.',
+        messages: [{ role: 'user', content: text }]
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || "Great question! Keep pushing — consistency is key to reaching your goals! 💪";
+    document.querySelector('.msg-bubble.typing').remove();
+    msgs.innerHTML += `<div class="msg-bubble ai">${reply}</div>`;
+  } catch(e) {
+    document.querySelector('.msg-bubble.typing').remove();
+    msgs.innerHTML += `<div class="msg-bubble ai">You're doing amazing! Stay consistent with your workouts and nutrition — small daily actions lead to big results! 💪</div>`;
+  }
+  msgs.scrollTop = msgs.scrollHeight;
+  document.getElementById('sendBtn').disabled = false;
+}
+
+init();
+</script>
+</body>
+</html>
