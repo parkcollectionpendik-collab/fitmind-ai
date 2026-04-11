@@ -113,12 +113,19 @@ const SUPABASE_KEY = 'sb_publishable_AWcGQ3cCWOrHntiOCvvGgw_XpHUmUpT';
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Profil varsa dashboard, yoksa onboarding'e yönlendir
+let redirecting = false;
+
 async function smartRedirect(userId) {
-  const { data: profile } = await sb.from('profiles').select('goal').eq('id', userId).single();
-  if (profile && profile.goal) {
-    window.location.href = 'dashboard.html';
-  } else {
+  if (redirecting) return;
+  redirecting = true;
+  try {
+    const { data: profile } = await sb.from('profiles').select('goal').eq('id', userId).single();
+    if (profile && profile.goal) {
+      window.location.href = 'dashboard.html';
+    } else {
+      window.location.href = 'onboarding.html';
+    }
+  } catch(e) {
     window.location.href = 'onboarding.html';
   }
 }
@@ -143,11 +150,12 @@ function hideMsg() {
 }
 
 async function signIn() {
-  const email = document.getElementById('signinEmail').value;
+  const email = document.getElementById('signinEmail').value.trim();
   const password = document.getElementById('signinPassword').value;
   if (!email || !password) { showMsg('Please fill in all fields.', 'error'); return; }
   const btn = document.getElementById('signinBtn');
-  btn.disabled = true; btn.textContent = 'Signing in...';
+  btn.disabled = true;
+  btn.textContent = 'Signing in...';
   const { data, error } = await sb.auth.signInWithPassword({ email, password });
   if (error) {
     showMsg(error.message, 'error');
@@ -159,21 +167,27 @@ async function signIn() {
 }
 
 async function signUp() {
-  const name = document.getElementById('signupName').value;
-  const email = document.getElementById('signupEmail').value;
+  const name = document.getElementById('signupName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
   const password = document.getElementById('signupPassword').value;
   if (!name || !email || !password) { showMsg('Please fill in all fields.', 'error'); return; }
   if (password.length < 8) { showMsg('Password must be at least 8 characters.', 'error'); return; }
   const btn = document.getElementById('signupBtn');
-  btn.disabled = true; btn.textContent = 'Creating account...';
-  const { data, error } = await sb.auth.signUp({ email, password, options: { data: { full_name: name } } });
+  btn.disabled = true;
+  btn.textContent = 'Creating account...';
+  const { data, error } = await sb.auth.signUp({
+    email, password,
+    options: { data: { full_name: name } }
+  });
   if (error) {
     showMsg(error.message, 'error');
     btn.disabled = false;
     btn.textContent = 'Create Account →';
   } else if (data?.session) {
+    // Email confirmation kapalı — direkt giriş oldu
     await smartRedirect(data.user.id);
   } else {
+    // Email confirmation açık
     document.getElementById('authForm').style.display = 'none';
     document.getElementById('checkEmail').style.display = 'block';
   }
@@ -182,21 +196,19 @@ async function signUp() {
 async function signInGoogle() {
   await sb.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: window.location.origin + '/auth.html' }
+    options: { redirectTo: 'https://fitmindai.ai/auth.html' }
   });
 }
 
 // Sayfa açılışında zaten giriş yapmışsa yönlendir
-sb.auth.getSession().then(({ data: { session } }) => {
-  if (session) smartRedirect(session.user.id);
-});
-
-// Google login sonrası
-sb.auth.onAuthStateChange(async (event, session) => {
-  if (event === 'SIGNED_IN' && session) {
+async function checkExistingSession() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
     await smartRedirect(session.user.id);
   }
-});
+}
+
+checkExistingSession();
 </script>
 </body>
 </html>
