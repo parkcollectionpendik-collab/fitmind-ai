@@ -13,6 +13,9 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);ove
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.2rem 3rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff10;backdrop-filter:blur(12px);background:#0a0a0acc}
 .logo{font-family:var(--font-head);font-weight:800;font-size:1.2rem;letter-spacing:-0.02em}
 .logo span{color:var(--lime)}
+.nav-right{display:flex;align-items:center;gap:1rem}
+.lang-btn{background:#ffffff10;border:1px solid #ffffff20;color:var(--white);padding:0.4rem 0.9rem;border-radius:100px;font-family:var(--font-head);font-weight:700;font-size:0.8rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem}
+.lang-btn:hover{background:#ffffff20}
 .nav-cta{background:var(--lime);color:var(--black);padding:0.5rem 1.4rem;border-radius:100px;font-family:var(--font-head);font-weight:700;font-size:0.85rem;text-decoration:none;transition:all 0.2s}
 .nav-cta:hover{background:var(--lime2);transform:scale(1.04)}
 .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6rem 2rem 4rem;position:relative;overflow:hidden}
@@ -63,7 +66,7 @@ h1 .line2{display:block;font-weight:400;font-size:0.72em;opacity:0.6}
 .pricing-cards{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin-top:4rem}
 .price-card{background:#111;border:1px solid #ffffff0f;border-radius:24px;padding:2.5rem;width:300px;position:relative;transition:all 0.3s}
 .price-card.featured{border-color:var(--lime);background:#0f160a}
-.price-card.featured::before{content:'Most popular';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--lime);color:var(--black);font-family:var(--font-head);font-size:0.72rem;font-weight:700;padding:0.25rem 1rem;border-radius:100px;white-space:nowrap}
+.price-card.featured::before{content:attr(data-popular);position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--lime);color:var(--black);font-family:var(--font-head);font-size:0.72rem;font-weight:700;padding:0.25rem 1rem;border-radius:100px;white-space:nowrap}
 .price-name{font-family:var(--font-head);font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
 .price-amount{font-family:var(--font-head);font-size:3.5rem;font-weight:800;line-height:1;margin-bottom:0.3rem}
 .price-amount span{font-size:1rem;font-weight:400;color:var(--muted)}
@@ -71,7 +74,7 @@ h1 .line2{display:block;font-weight:400;font-size:0.72em;opacity:0.6}
 .price-features{list-style:none;margin-bottom:2rem;display:flex;flex-direction:column;gap:0.8rem}
 .price-features li{font-size:0.9rem;color:#ffffffbb;display:flex;align-items:flex-start;gap:0.6rem;font-weight:300}
 .price-features li::before{content:'✓';color:var(--lime);font-weight:700;flex-shrink:0;margin-top:0.05rem}
-.price-btn{width:100%;padding:0.9rem;border-radius:100px;font-family:var(--font-head);font-weight:700;font-size:0.95rem;border:none;cursor:pointer;transition:all 0.25s}
+.price-btn{width:100%;padding:0.9rem;border-radius:100px;font-family:var(--font-head);font-weight:700;font-size:0.95rem;border:none;cursor:pointer;transition:all 0.25s;text-decoration:none;display:block;text-align:center}
 .price-btn.dark{background:#ffffff15;color:var(--white)}
 .price-btn.dark:hover{background:#ffffff25}
 .price-btn.lime{background:var(--lime);color:var(--black)}
@@ -97,88 +100,209 @@ footer{padding:3rem 2rem;border-top:1px solid #ffffff0f;text-align:center}
 .footer-logo{font-family:var(--font-head);font-weight:800;font-size:1.3rem;margin-bottom:0.5rem}
 .footer-logo span{color:var(--lime)}
 footer p{color:var(--muted);font-size:0.85rem}
+footer a{color:var(--muted);text-decoration:none;margin:0 0.5rem}
+footer a:hover{color:var(--white)}
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
+
 <nav>
   <div class="logo">Fit<span>Mind</span> AI</div>
-  <a href="http://eepurl.com/jDHFkA" target="_blank" class="nav-cta">Start Free Trial →</a>
+  <div class="nav-right">
+    <button class="lang-btn" onclick="toggleLang()" id="langBtn">🇹🇷 Türkçe</button>
+    <a href="http://eepurl.com/jDHFkA" target="_blank" class="nav-cta" data-en="Start Free Trial →" data-tr="Ücretsiz Dene →">Start Free Trial →</a>
+  </div>
 </nav>
+
 <section class="hero">
   <div class="hero-bg"><div class="orb orb1"></div><div class="orb orb2"></div></div>
-  <div class="hero-badge"><span class="badge-dot"></span>AI-Powered Fitness Coach</div>
-  <h1>Your body,<br><em>smarter.</em><span class="line2">Powered by AI. Built for results.</span></h1>
-  <p class="hero-sub">FitMind AI is your personal coach, nutritionist, and accountability partner — all in one. Available 24/7. No judgment. Just results.</p>
+  <div class="hero-badge"><span class="badge-dot"></span><span data-en="AI-Powered Fitness Coach" data-tr="Yapay Zeka Destekli Fitness Koçu">AI-Powered Fitness Coach</span></div>
+  <h1>
+    <span data-en="Your body," data-tr="Vücudun,">Your body,</span><br>
+    <em data-en="smarter." data-tr="daha zeki.">smarter.</em>
+    <span class="line2" data-en="Powered by AI. Built for results." data-tr="Yapay Zeka Gücüyle. Sonuç Odaklı.">Powered by AI. Built for results.</span>
+  </h1>
+  <p class="hero-sub" data-en="FitMind AI is your personal coach, nutritionist, and accountability partner — all in one. Available 24/7. No judgment. Just results." data-tr="FitMind AI, kişisel koçun, beslenme uzmanın ve motivasyon ortağın — hepsi bir arada. 7/24 erişim. Yargılamaz. Sadece sonuç.">FitMind AI is your personal coach, nutritionist, and accountability partner — all in one. Available 24/7. No judgment. Just results.</p>
   <div class="hero-actions">
-    <a href="http://eepurl.com/jDHFkA" target="_blank" class="btn-primary">Start Free Trial →</a>
-    <a href="#how" class="btn-secondary">See how it works</a>
+    <a href="http://eepurl.com/jDHFkA" target="_blank" class="btn-primary" data-en="Start Free Trial →" data-tr="Ücretsiz Dene →">Start Free Trial →</a>
+    <a href="#how" class="btn-secondary" data-en="See how it works" data-tr="Nasıl çalışır?">See how it works</a>
   </div>
   <div class="hero-stats">
-    <div class="stat"><div class="stat-num">50K+</div><div class="stat-label">Active members</div></div>
-    <div class="stat"><div class="stat-num">4.9★</div><div class="stat-label">App rating</div></div>
-    <div class="stat"><div class="stat-num">2.1M</div><div class="stat-label">Workouts completed</div></div>
+    <div class="stat"><div class="stat-num">50K+</div><div class="stat-label" data-en="Active members" data-tr="Aktif üye">Active members</div></div>
+    <div class="stat"><div class="stat-num">4.9★</div><div class="stat-label" data-en="App rating" data-tr="Uygulama puanı">App rating</div></div>
+    <div class="stat"><div class="stat-num">2.1M</div><div class="stat-label" data-en="Workouts completed" data-tr="Tamamlanan antrenman">Workouts completed</div></div>
   </div>
 </section>
+
 <section class="section" id="how">
   <div class="section-inner">
-    <div class="section-tag">How it works</div>
-    <div class="section-title">Three steps to<br>transform your body</div>
-    <p class="section-sub">No complicated setup. No generic plans. Just tell us about yourself and your AI coach gets to work.</p>
+    <div class="section-tag" data-en="How it works" data-tr="Nasıl çalışır">How it works</div>
+    <div class="section-title" data-en="Three steps to transform your body" data-tr="Vücudunu dönüştürmek için üç adım">Three steps to<br>transform your body</div>
+    <p class="section-sub" data-en="No complicated setup. No generic plans. Just tell us about yourself and your AI coach gets to work." data-tr="Karmaşık kurulum yok. Genel planlar yok. Sadece kendin hakkında anlat, AI koçun hemen işe koyulsun.">No complicated setup. No generic plans. Just tell us about yourself and your AI coach gets to work.</p>
     <div class="steps">
-      <div class="step"><div class="step-num">01</div><div class="step-icon">🧬</div><h3>Tell us about you</h3><p>Answer a quick questionnaire about your goals, body type, schedule, and fitness level. Takes 3 minutes.</p></div>
-      <div class="step"><div class="step-num">02</div><div class="step-icon">🤖</div><h3>Meet your AI coach</h3><p>Your personal AI coach analyzes your data and builds a custom workout + nutrition plan just for you.</p></div>
-      <div class="step"><div class="step-num">03</div><div class="step-icon">🔥</div><h3>Train, track, transform</h3><p>Follow your plan, chat with your coach anytime, and watch your body change week by week.</p></div>
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-icon">🧬</div>
+        <h3 data-en="Tell us about you" data-tr="Kendin hakkında anlat">Tell us about you</h3>
+        <p data-en="Answer a quick questionnaire about your goals, body type, schedule, and fitness level. Takes 3 minutes." data-tr="Hedeflerin, vücut tipinle, programın ve fitness seviyenle ilgili kısa bir anket doldur. 3 dakika sürer.">Answer a quick questionnaire about your goals, body type, schedule, and fitness level. Takes 3 minutes.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-icon">🤖</div>
+        <h3 data-en="Meet your AI coach" data-tr="AI koçunla tanış">Meet your AI coach</h3>
+        <p data-en="Your personal AI coach analyzes your data and builds a custom workout + nutrition plan just for you." data-tr="Kişisel AI koçun verilerini analiz eder ve sana özel bir antrenman + beslenme planı oluşturur.">Your personal AI coach analyzes your data and builds a custom workout + nutrition plan just for you.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-icon">🔥</div>
+        <h3 data-en="Train, track, transform" data-tr="Antren, takip et, dönüş">Train, track, transform</h3>
+        <p data-en="Follow your plan, chat with your coach anytime, and watch your body change week by week." data-tr="Planını takip et, koçunla istediğin zaman sohbet et ve vücudunun hafta hafta değişimini izle.">Follow your plan, chat with your coach anytime, and watch your body change week by week.</p>
+      </div>
     </div>
   </div>
 </section>
+
 <section class="section" style="padding-top:0" id="features">
   <div class="section-inner">
-    <div class="section-tag">Features</div>
-    <div class="section-title">Everything you need.<br>Nothing you don't.</div>
+    <div class="section-tag" data-en="Features" data-tr="Özellikler">Features</div>
+    <div class="section-title" data-en="Everything you need. Nothing you don't." data-tr="İhtiyacın olan her şey. Fazlası değil.">Everything you need.<br>Nothing you don't.</div>
     <div class="features-grid">
-      <div class="feature-card big"><div class="feature-icon">💬</div><h3>24/7 AI Coach Chat</h3><p>Ask anything, anytime. "Should I work out with sore muscles?" "What can I eat at a restaurant?" Your AI coach always answers — no waiting, no judgment.</p><span class="feature-tag">Core feature</span></div>
-      <div class="feature-card"><div class="feature-icon">🏋️</div><h3>Custom Workout Plans</h3><p>Weekly programs built around your schedule, equipment, and goals. Adapts as you progress.</p></div>
-      <div class="feature-card"><div class="feature-icon">🥗</div><h3>Smart Nutrition Tracking</h3><p>Log meals in seconds. Get macro breakdowns. AI suggests what to eat based on your daily activity.</p></div>
-      <div class="feature-card"><div class="feature-icon">📈</div><h3>Progress Analytics</h3><p>See your transformation with beautiful charts. Weight, strength, body measurements — all tracked.</p></div>
-      <div class="feature-card"><div class="feature-icon">👥</div><h3>Community Challenges</h3><p>Join weekly challenges with thousands of members. Stay motivated, compete, celebrate wins together.</p></div>
+      <div class="feature-card big">
+        <div class="feature-icon">💬</div>
+        <h3 data-en="24/7 AI Coach Chat" data-tr="7/24 AI Koç Sohbeti">24/7 AI Coach Chat</h3>
+        <p data-en='Ask anything, anytime. "Should I work out with sore muscles?" "What can I eat at a restaurant?" Your AI coach always answers — no waiting, no judgment.' data-tr='"Kas ağrısıyla antrenman yapmalı mıyım?" "Restoranda ne yiyebilirim?" AI koçun her zaman cevaplar — bekleme yok, yargılama yok.'>Ask anything, anytime. Your AI coach always answers — no waiting, no judgment.</p>
+        <span class="feature-tag" data-en="Core feature" data-tr="Ana özellik">Core feature</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏋️</div>
+        <h3 data-en="Custom Workout Plans" data-tr="Kişisel Antrenman Planları">Custom Workout Plans</h3>
+        <p data-en="Weekly programs built around your schedule, equipment, and goals. Adapts as you progress." data-tr="Programına, ekipmanına ve hedeflerine göre haftalık planlar. İlerlendikçe adapte olur.">Weekly programs built around your schedule, equipment, and goals. Adapts as you progress.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🥗</div>
+        <h3 data-en="Smart Nutrition Tracking" data-tr="Akıllı Beslenme Takibi">Smart Nutrition Tracking</h3>
+        <p data-en="Log meals in seconds. Get macro breakdowns. AI suggests what to eat based on your daily activity." data-tr="Saniyeler içinde yemek kaydet. Makro dağılımını gör. AI günlük aktivitene göre ne yiyeceğini önerir.">Log meals in seconds. Get macro breakdowns. AI suggests what to eat based on your daily activity.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📈</div>
+        <h3 data-en="Progress Analytics" data-tr="İlerleme Analitiği">Progress Analytics</h3>
+        <p data-en="See your transformation with beautiful charts. Weight, strength, body measurements — all tracked." data-tr="Dönüşümünü güzel grafiklerle takip et. Kilo, güç, vücut ölçüleri — hepsi kaydedilir.">See your transformation with beautiful charts. Weight, strength, body measurements — all tracked.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👥</div>
+        <h3 data-en="Community Challenges" data-tr="Topluluk Meydan Okumaları">Community Challenges</h3>
+        <p data-en="Join weekly challenges with thousands of members. Stay motivated, compete, celebrate wins together." data-tr="Binlerce üyeyle haftalık meydan okumalara katıl. Motive kal, yarış, başarıları birlikte kutla.">Join weekly challenges with thousands of members. Stay motivated, compete, celebrate wins together.</p>
+      </div>
     </div>
   </div>
 </section>
+
 <section class="section" style="padding-top:0">
   <div class="section-inner">
-    <div class="section-tag">Results</div>
-    <div class="section-title">Real people.<br>Real results.</div>
+    <div class="section-tag" data-en="Results" data-tr="Sonuçlar">Results</div>
+    <div class="section-title" data-en="Real people. Real results." data-tr="Gerçek insanlar. Gerçek sonuçlar.">Real people.<br>Real results.</div>
     <div class="testimonials">
-      <div class="testi"><div class="stars">★★★★★</div><div class="testi-text">"I've tried every fitness app out there. FitMind is the first one that actually feels like talking to a real coach who knows me."</div><div class="testi-author"><div class="avatar">SL</div><div><div class="author-name">Sarah L.</div><div class="author-meta">Lost 18 lbs in 3 months</div></div></div></div>
-      <div class="testi"><div class="stars">★★★★★</div><div class="testi-text">"The nutrition tracking changed everything for me. My AI coach literally texts me reminders and adjusts my plan when I'm traveling."</div><div class="testi-author"><div class="avatar">MK</div><div><div class="author-name">Marcus K.</div><div class="author-meta">Gained 12 lbs of muscle</div></div></div></div>
-      <div class="testi"><div class="stars">★★★★★</div><div class="testi-text">"I asked my AI coach a question at 2am when I couldn't sleep and it answered instantly. This is the future of fitness."</div><div class="testi-author"><div class="avatar">JR</div><div><div class="author-name">Jamie R.</div><div class="author-meta">Member since Jan 2024</div></div></div></div>
+      <div class="testi">
+        <div class="stars">★★★★★</div>
+        <div class="testi-text" data-en='"I\'ve tried every fitness app out there. FitMind is the first one that actually feels like talking to a real coach who knows me."' data-tr='"Piyasadaki tüm fitness uygulamalarını denedim. FitMind, gerçekten beni tanıyan bir koçla konuşuyormuşum gibi hissettiren ilk uygulama."'>"I've tried every fitness app out there. FitMind is the first one that actually feels like talking to a real coach who knows me."</div>
+        <div class="testi-author"><div class="avatar">SL</div><div><div class="author-name">Sarah L.</div><div class="author-meta" data-en="Lost 18 lbs in 3 months" data-tr="3 ayda 8 kg verdi">Lost 18 lbs in 3 months</div></div></div>
+      </div>
+      <div class="testi">
+        <div class="stars">★★★★★</div>
+        <div class="testi-text" data-en='"The nutrition tracking changed everything for me. My AI coach adjusts my plan when I\'m traveling."' data-tr='"Beslenme takibi her şeyi değiştirdi. AI koçum seyahatte olduğumda planımı ayarlıyor."'>"The nutrition tracking changed everything for me. My AI coach adjusts my plan when I'm traveling."</div>
+        <div class="testi-author"><div class="avatar">MK</div><div><div class="author-name">Marcus K.</div><div class="author-meta" data-en="Gained 12 lbs of muscle" data-tr="5 kg kas kütlesi kazandı">Gained 12 lbs of muscle</div></div></div>
+      </div>
+      <div class="testi">
+        <div class="stars">★★★★★</div>
+        <div class="testi-text" data-en='"I asked my AI coach a question at 2am when I couldn\'t sleep and it answered instantly. This is the future of fitness."' data-tr='"Uyuyamadığımda gece 2\'de AI koçuma soru sordum ve anında cevap verdi. Bu fitness\'ın geleceği."'>"I asked my AI coach a question at 2am and it answered instantly. This is the future of fitness."</div>
+        <div class="testi-author"><div class="avatar">JR</div><div><div class="author-name">Jamie R.</div><div class="author-meta" data-en="Member since Jan 2024" data-tr="Ocak 2024'ten beri üye">Member since Jan 2024</div></div></div>
+      </div>
     </div>
   </div>
 </section>
+
 <section class="section" id="pricing">
   <div class="section-inner" style="text-align:center">
-    <div class="section-tag">Pricing</div>
-    <div class="section-title">Simple pricing.<br>Cancel anytime.</div>
+    <div class="section-tag" data-en="Pricing" data-tr="Fiyatlandırma">Pricing</div>
+    <div class="section-title" data-en="Simple pricing. Cancel anytime." data-tr="Sade fiyatlar. İstediğinde iptal et.">Simple pricing.<br>Cancel anytime.</div>
     <div class="pricing-cards">
-      <div class="price-card"><div class="price-name">Starter</div><div class="price-amount">$9<span>/mo</span></div><div class="price-period">Billed monthly</div><ul class="price-features"><li>AI coach chat (50 messages/mo)</li><li>Basic workout plans</li><li>Calorie tracker</li><li>Progress logging</li></ul><a href="http://eepurl.com/jDHFkA" target="_blank" class="price-btn dark" style="display:block;text-align:center;text-decoration:none;">Get started</a></div>
-      <div class="price-card featured"><div class="price-name">Pro</div><div class="price-amount">$19<span>/mo</span></div><div class="price-period">Billed monthly</div><ul class="price-features"><li>Unlimited AI coach chat</li><li>Custom weekly workout plans</li><li>Full nutrition &amp; macro tracking</li><li>Progress analytics &amp; charts</li><li>Community access &amp; challenges</li><li>Priority support</li></ul><a href="http://eepurl.com/jDHFkA" target="_blank" class="price-btn lime" style="display:block;text-align:center;text-decoration:none;">Start 7-day free trial</a></div>
-      <div class="price-card"><div class="price-name">Annual Pro</div><div class="price-amount">$12<span>/mo</span></div><div class="price-period">Billed $144/year — save 37%</div><ul class="price-features"><li>Everything in Pro</li><li>2 months free</li><li>Early access to new features</li><li>1-on-1 monthly check-in call</li></ul><a href="http://eepurl.com/jDHFkA" target="_blank" class="price-btn dark" style="display:block;text-align:center;text-decoration:none;">Get annual plan</a></div>
+      <div class="price-card">
+        <div class="price-name">Starter</div>
+        <div class="price-amount">$9<span>/mo</span></div>
+        <div class="price-period" data-en="Billed monthly" data-tr="Aylık faturalandırılır">Billed monthly</div>
+        <ul class="price-features">
+          <li data-en="AI coach chat (50 messages/mo)" data-tr="AI koç sohbeti (ayda 50 mesaj)">AI coach chat (50 messages/mo)</li>
+          <li data-en="Basic workout plans" data-tr="Temel antrenman planları">Basic workout plans</li>
+          <li data-en="Calorie tracker" data-tr="Kalori takibi">Calorie tracker</li>
+          <li data-en="Progress logging" data-tr="İlerleme kaydı">Progress logging</li>
+        </ul>
+        <a href="http://eepurl.com/jDHFkA" target="_blank" class="price-btn dark" data-en="Get started" data-tr="Başla">Get started</a>
+      </div>
+      <div class="price-card featured" data-popular="Most popular">
+        <div class="price-name">Pro</div>
+        <div class="price-amount">$19<span>/mo</span></div>
+        <div class="price-period" data-en="Billed monthly" data-tr="Aylık faturalandırılır">Billed monthly</div>
+        <ul class="price-features">
+          <li data-en="Unlimited AI coach chat" data-tr="Sınırsız AI koç sohbeti">Unlimited AI coach chat</li>
+          <li data-en="Custom weekly workout plans" data-tr="Kişisel haftalık antrenman planları">Custom weekly workout plans</li>
+          <li data-en="Full nutrition & macro tracking" data-tr="Tam beslenme ve makro takibi">Full nutrition &amp; macro tracking</li>
+          <li data-en="Progress analytics & charts" data-tr="İlerleme analitiği ve grafikler">Progress analytics &amp; charts</li>
+          <li data-en="Community access & challenges" data-tr="Topluluk erişimi ve meydan okumalar">Community access &amp; challenges</li>
+          <li data-en="Priority support" data-tr="Öncelikli destek">Priority support</li>
+        </ul>
+        <a href="http://eepurl.com/jDHFkA" target="_blank" class="price-btn lime" data-en="Start 7-day free trial" data-tr="7 günlük ücretsiz denemeyi başlat">Start 7-day free trial</a>
+      </div>
+      <div class="price-card">
+        <div class="price-name" data-en="Annual Pro" data-tr="Yıllık Pro">Annual Pro</div>
+        <div class="price-amount">$12<span>/mo</span></div>
+        <div class="price-period" data-en="Billed $144/year — save 37%" data-tr="Yılda $144 — %37 tasarruf">Billed $144/year — save 37%</div>
+        <ul class="price-features">
+          <li data-en="Everything in Pro" data-tr="Pro'daki her şey">Everything in Pro</li>
+          <li data-en="2 months free" data-tr="2 ay ücretsiz">2 months free</li>
+          <li data-en="Early access to new features" data-tr="Yeni özelliklere erken erişim">Early access to new features</li>
+          <li data-en="1-on-1 monthly check-in call" data-tr="Aylık birebir görüşme">1-on-1 monthly check-in call</li>
+        </ul>
+        <a href="http://eepurl.com/jDHFkA" target="_blank" class="price-btn dark" data-en="Get annual plan" data-tr="Yıllık planı al">Get annual plan</a>
+      </div>
     </div>
   </div>
 </section>
+
 <section class="cta-section">
   <div class="cta-box">
-    <h2>Start your transformation today.</h2>
-    <p>Join 50,000+ members already crushing their goals with FitMind AI. First 7 days are free.</p>
+    <h2 data-en="Start your transformation today." data-tr="Dönüşümüne bugün başla.">Start your transformation today.</h2>
+    <p data-en="Join 50,000+ members already crushing their goals with FitMind AI. First 7 days are free." data-tr="FitMind AI ile hedeflerini çoktan aşan 50.000+ üyeye katıl. İlk 7 gün ücretsiz.">Join 50,000+ members already crushing their goals with FitMind AI. First 7 days are free.</p>
     <div class="cta-form">
-      <a href="http://eepurl.com/jDHFkA" target="_blank" class="btn-primary">Get started free →</a>
+      <a href="http://eepurl.com/jDHFkA" target="_blank" class="btn-primary" data-en="Get started free →" data-tr="Ücretsiz başla →">Get started free →</a>
     </div>
   </div>
 </section>
+
 <footer>
   <div class="footer-logo">Fit<span>Mind</span> AI</div>
-<p>© 2025 FitMind AI · <a href="/legal.html#privacy" style="color:#888;text-decoration:none">Privacy Policy</a> · <a href="/legal.html#terms" style="color:#888;text-decoration:none">Terms</a> · <a href="/legal.html#refund" style="color:#888;text-decoration:none">Refund Policy</a></p>
+  <p>© 2025 FitMind AI · <a href="/legal.html#privacy">Privacy Policy</a> · <a href="/legal.html#terms">Terms</a> · <a href="/legal.html#refund">Refund Policy</a></p>
 </footer>
+
+<script>
+let currentLang = localStorage.getItem('fitmind_lang') || 'en';
+
+function applyLang(lang) {
+  document.querySelectorAll('[data-en]').forEach(el => {
+    el.textContent = lang === 'tr' ? el.getAttribute('data-tr') : el.getAttribute('data-en');
+  });
+  document.getElementById('langBtn').textContent = lang === 'tr' ? '🇬🇧 English' : '🇹🇷 Türkçe';
+  document.querySelector('.price-card.featured').setAttribute('data-popular', lang === 'tr' ? 'En popüler' : 'Most popular');
+  document.documentElement.lang = lang;
+  localStorage.setItem('fitmind_lang', lang);
+  currentLang = lang;
+}
+
+function toggleLang() {
+  applyLang(currentLang === 'en' ? 'tr' : 'en');
+}
+
+applyLang(currentLang);
+</script>
 </body>
 </html>
