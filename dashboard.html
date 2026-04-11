@@ -42,6 +42,12 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .stat-value.lime{color:var(--lime)}
 .stat-change{font-size:0.78rem;color:var(--muted);margin-top:0.3rem}
 .stat-change.up{color:#4ade80}
+
+/* TAB SYSTEM */
+.tab-section{display:none}
+.tab-section.active{display:block}
+
+/* DASHBOARD TAB */
 .content-grid{display:grid;grid-template-columns:1fr 380px;gap:1.5rem}
 .chat-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;display:flex;flex-direction:column;height:520px}
 .card-title{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem}
@@ -92,15 +98,29 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .profile-tag{display:inline-flex;align-items:center;gap:0.3rem;background:#c8f54210;border:1px solid #c8f54220;color:var(--lime);padding:0.2rem 0.6rem;border-radius:100px;font-size:0.7rem;font-family:var(--font-head);font-weight:700;margin-right:0.3rem;margin-bottom:0.3rem}
 .pro-badge{display:inline-flex;align-items:center;gap:0.3rem;background:linear-gradient(135deg,#c8f542,#a8d92e);color:var(--black);padding:0.2rem 0.7rem;border-radius:100px;font-size:0.7rem;font-family:var(--font-head);font-weight:800}
 .free-badge{display:inline-flex;align-items:center;gap:0.3rem;background:#ffffff15;color:var(--muted);padding:0.2rem 0.7rem;border-radius:100px;font-size:0.7rem;font-family:var(--font-head);font-weight:800}
+
+/* AI COACH TAB */
+.ai-coach-full{display:flex;flex-direction:column;height:calc(100vh - 200px);background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem}
+.ai-coach-full .messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1rem}
+
+/* WORKOUTS TAB */
+.workouts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.workout-day-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem}
+.workout-day-card h3{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1rem;color:var(--lime)}
+.exercise-item{display:flex;align-items:center;gap:0.75rem;padding:0.75rem;background:#ffffff05;border-radius:12px;margin-bottom:0.5rem}
+.exercise-num{width:28px;height:28px;background:var(--lime);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.75rem;color:var(--black);flex-shrink:0}
+.exercise-info{flex:1}
+.exercise-name{font-size:0.88rem;font-weight:500}
+.exercise-detail{font-size:0.75rem;color:var(--muted);margin-top:0.1rem}
 </style>
 </head>
 <body>
 <div class="sidebar">
   <div class="logo">Fit<span>Mind</span> AI</div>
   <nav class="nav">
-    <a class="nav-item active" href="dashboard.html"><span class="icon">🏠</span> Dashboard</a>
-    <a class="nav-item" href="dashboard.html"><span class="icon">🤖</span> AI Coach</a>
-    <a class="nav-item" href="dashboard.html"><span class="icon">🏋️</span> Workouts</a>
+    <button class="nav-item active" onclick="switchTab('dashboard', this)"><span class="icon">🏠</span> Dashboard</button>
+    <button class="nav-item" onclick="switchTab('aicoach', this)"><span class="icon">🤖</span> AI Coach</button>
+    <button class="nav-item" onclick="switchTab('workouts', this)"><span class="icon">🏋️</span> Workouts</button>
     <a class="nav-item" href="nutrition.html" id="navNutrition"><span class="icon">🥗</span> Nutrition</a>
     <a class="nav-item" href="progress.html" id="navProgress"><span class="icon">📈</span> Progress</a>
     <a class="nav-item" href="community.html"><span class="icon">👥</span> Community</a>
@@ -149,50 +169,75 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
     </div>
   </div>
 
-  <div class="content-grid">
-    <div class="chat-card">
-      <div class="card-title"><span class="dot"></span> AI Coach Chat <span id="msgCounter" style="margin-left:auto;font-size:0.75rem;color:var(--muted);font-weight:400"></span></div>
-      <div class="messages" id="messages">
-        <div class="msg-bubble ai" id="welcomeAiMsg">Hey! Loading your personalized plan... 🤖</div>
+  <!-- DASHBOARD TAB -->
+  <div class="tab-section active" id="tab-dashboard">
+    <div class="content-grid">
+      <div class="chat-card">
+        <div class="card-title"><span class="dot"></span> AI Coach Chat <span id="msgCounter" style="margin-left:auto;font-size:0.75rem;color:var(--muted);font-weight:400"></span></div>
+        <div class="messages" id="messages">
+          <div class="msg-bubble ai" id="welcomeAiMsg">Hey! Loading your personalized plan... 🤖</div>
+        </div>
+        <div class="chat-input-wrap">
+          <input class="chat-input" id="chatInput" placeholder="Ask your AI coach anything..." onkeydown="if(event.key==='Enter')sendMsg()">
+          <button class="send-btn" onclick="sendMsg()" id="sendBtn">➤</button>
+        </div>
       </div>
-      <div class="chat-input-wrap">
-        <input class="chat-input" id="chatInput" placeholder="Ask your AI coach anything..." onkeydown="if(event.key==='Enter')sendMsg()">
-        <button class="send-btn" onclick="sendMsg()" id="sendBtn">➤</button>
-      </div>
-    </div>
-
-    <div class="right-panel">
-      <div class="panel-card">
-        <div class="card-title">💪 Today's Workout</div>
-        <div class="workout-list" id="workoutList">
-          <div class="loading-plan">
-            <div class="spin"></div>
-            <div>Building your plan...</div>
+      <div class="right-panel">
+        <div class="panel-card">
+          <div class="card-title">💪 Today's Workout</div>
+          <div class="workout-list" id="workoutList">
+            <div class="loading-plan"><div class="spin"></div><div>Building your plan...</div></div>
           </div>
         </div>
-      </div>
-      <div class="panel-card">
-        <div class="card-title">📈 Weekly Progress</div>
-        <div class="progress-bar-wrap">
-          <div class="progress-label"><span>Workouts</span><span id="wProgress">0/5</span></div>
-          <div class="progress-bar"><div class="progress-fill" id="wFill" style="width:0%"></div></div>
+        <div class="panel-card">
+          <div class="card-title">📈 Weekly Progress</div>
+          <div class="progress-bar-wrap">
+            <div class="progress-label"><span>Workouts</span><span id="wProgress">0/5</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="wFill" style="width:0%"></div></div>
+          </div>
+          <div class="progress-bar-wrap" style="margin-top:1rem">
+            <div class="progress-label"><span>Nutrition</span><span>0/7 days</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+          </div>
+          <div class="progress-bar-wrap" style="margin-top:1rem">
+            <div class="progress-label"><span>Water intake</span><span>0/8 glasses</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+          </div>
         </div>
-        <div class="progress-bar-wrap" style="margin-top:1rem">
-          <div class="progress-label"><span>Nutrition</span><span>0/7 days</span></div>
-          <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+        <div class="upgrade-card" id="upgradeCard">
+          <h3>🚀 Unlock Full Access</h3>
+          <p>Get unlimited AI coaching, custom meal plans, and advanced analytics with Pro.</p>
+          <button class="upgrade-btn" onclick="openCheckout()">Upgrade to Pro — $19/mo</button>
         </div>
-        <div class="progress-bar-wrap" style="margin-top:1rem">
-          <div class="progress-label"><span>Water intake</span><span>0/8 glasses</span></div>
-          <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
-        </div>
-      </div>
-      <div class="upgrade-card" id="upgradeCard">
-        <h3>🚀 Unlock Full Access</h3>
-        <p>Get unlimited AI coaching, custom meal plans, and advanced analytics with Pro.</p>
-        <button class="upgrade-btn" onclick="openCheckout()">Upgrade to Pro — $19/mo</button>
       </div>
     </div>
   </div>
+
+  <!-- AI COACH TAB -->
+  <div class="tab-section" id="tab-aicoach">
+    <div class="ai-coach-full">
+      <div class="card-title"><span class="dot"></span> AI Coach — Full Chat <span id="msgCounter2" style="margin-left:auto;font-size:0.75rem;color:var(--muted);font-weight:400"></span></div>
+      <div class="messages" id="messages2">
+        <div class="msg-bubble ai">Hey! I'm your personal AI fitness coach 🤖 Ask me anything about training, nutrition, recovery, or motivation!</div>
+      </div>
+      <div class="chat-input-wrap">
+        <input class="chat-input" id="chatInput2" placeholder="Ask your AI coach anything..." onkeydown="if(event.key==='Enter')sendMsg2()">
+        <button class="send-btn" onclick="sendMsg2()" id="sendBtn2">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKOUTS TAB -->
+  <div class="tab-section" id="tab-workouts">
+    <div class="panel-card" style="margin-bottom:1.5rem">
+      <div class="card-title">💪 Your Weekly Training Plan</div>
+      <p style="color:var(--muted);font-size:0.88rem;margin-top:0.25rem" id="workoutPlanDesc">Loading your personalized plan...</p>
+    </div>
+    <div class="workouts-grid" id="weeklyPlanGrid">
+      <div class="loading-plan"><div class="spin"></div><div>Building your weekly plan...</div></div>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -209,10 +254,22 @@ let freeMessageCount = 0;
 const FREE_MSG_LIMIT = 3;
 let doneCount = 0;
 let chatHistory = [];
+let chatHistory2 = [];
+let weeklyPlanLoaded = false;
 
 const goalLabels = { lose_weight:'Lose Weight', build_muscle:'Build Muscle', get_fit:'Get Fit', improve_health:'Improve Health' };
 const levelLabels = { beginner:'Beginner', intermediate:'Intermediate', advanced:'Advanced' };
 const equipLabels = { home_no:'Home', home_basic:'Home+Equipment', gym:'Gym', outdoor:'Outdoor' };
+
+function switchTab(tab, el) {
+  document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  el.classList.add('active');
+  if (tab === 'workouts' && !weeklyPlanLoaded && userProfile) {
+    loadWeeklyPlan(userProfile);
+  }
+}
 
 function openCheckout() {
   Paddle.Checkout.open({
@@ -229,6 +286,7 @@ function applyProUI() {
   document.getElementById('navNutrition').classList.remove('locked');
   document.getElementById('navProgress').classList.remove('locked');
   document.getElementById('msgCounter').textContent = '';
+  document.getElementById('msgCounter2').textContent = '';
 }
 
 function applyFreeUI() {
@@ -242,21 +300,19 @@ function applyFreeUI() {
 function updateMsgCounter() {
   if (!isPro) {
     const remaining = FREE_MSG_LIMIT - freeMessageCount;
-    document.getElementById('msgCounter').textContent = remaining > 0 ? `${remaining} free messages left` : 'Upgrade for unlimited';
+    const txt = remaining > 0 ? `${remaining} free messages left` : 'Upgrade for unlimited';
+    document.getElementById('msgCounter').textContent = txt;
+    document.getElementById('msgCounter2').textContent = txt;
   }
 }
 
 async function init() {
   const { data: { session } } = await sb.auth.getSession();
-  if (!session) {
-    window.location.replace('auth.html');
-    return;
-  }
+  if (!session) { window.location.replace('auth.html'); return; }
 
   const user = session.user;
   const name = user.user_metadata?.full_name || user.email.split('@')[0];
-  const initial = name.charAt(0).toUpperCase();
-  document.getElementById('avatarInitial').textContent = initial;
+  document.getElementById('avatarInitial').textContent = name.charAt(0).toUpperCase();
   document.getElementById('userName').textContent = name;
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
@@ -286,38 +342,56 @@ async function init() {
 async function loadPersonalizedPlan(profile, name) {
   const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
   const isTrainingDay = profile.training_days?.some(d => today.includes(d));
-  const prompt = `You are FitMind AI, a personal fitness coach. 
-User profile: Goal: ${profile.goal}, Level: ${profile.fitness_level}, Equipment: ${profile.equipment}, Training days: ${profile.training_days?.join(', ')}, Duration: ${profile.workout_duration} minutes, Age: ${profile.age}, Weight: ${profile.weight}kg.
-Today is ${today}. ${isTrainingDay ? 'Today IS a training day.' : 'Today is a REST day.'}
-${isTrainingDay ? `Create today's workout. Respond with ONLY a JSON array of exercises, no other text:
-[{"name":"Exercise Name","sets":"3 sets × 12 reps","calories":50},...]
-Include 4-5 exercises appropriate for their level and equipment.` :
-`Today is their rest day. Respond with ONLY this JSON:
-[{"name":"Active Recovery","sets":"Light stretching, 10 min","calories":30},{"name":"Hydration Goal","sets":"Drink 8 glasses of water","calories":0},{"name":"Sleep","sets":"Get 7-8 hours tonight","calories":0}]`}`;
+  const prompt = `You are FitMind AI. User: Goal: ${profile.goal}, Level: ${profile.fitness_level}, Equipment: ${profile.equipment}, Training days: ${profile.training_days?.join(', ')}, Duration: ${profile.workout_duration} min, Age: ${profile.age}, Weight: ${profile.weight}kg. Today is ${today}. ${isTrainingDay ? 'Training day.' : 'Rest day.'}
+${isTrainingDay ? `Respond ONLY with JSON array: [{"name":"Exercise","sets":"3 sets × 12 reps","calories":50},...]` : `Respond ONLY with JSON: [{"name":"Active Recovery","sets":"Light stretching, 10 min","calories":30},{"name":"Hydration Goal","sets":"Drink 8 glasses","calories":0}]`}`;
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 500, messages: [{ role: 'user', content: prompt }] })
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:500, messages:[{role:'user',content:prompt}] })
     });
     const data = await res.json();
-    const text = data.content?.[0]?.text || '[]';
-    const exercises = JSON.parse(text.replace(/```json|```/g, '').trim());
+    const exercises = JSON.parse((data.content?.[0]?.text || '[]').replace(/```json|```/g,'').trim());
     renderWorkout(exercises);
-    document.getElementById('calorieCount').textContent = exercises.reduce((sum, e) => sum + (e.calories || 0), 0);
-    const welcomePrompt = `You are FitMind AI. Greet ${name.split(' ')[0]} warmly. Their goal is ${profile.goal}, level: ${profile.fitness_level}. Today is ${isTrainingDay ? 'a training day' : 'a rest day'}. Give a short, motivating 2-sentence message.`;
+    document.getElementById('calorieCount').textContent = exercises.reduce((s,e)=>s+(e.calories||0),0);
     const res2 = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 150, messages: [{ role: 'user', content: welcomePrompt }] })
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:150, messages:[{role:'user',content:`Greet ${name.split(' ')[0]} warmly. Goal: ${profile.goal}, level: ${profile.fitness_level}. Today is ${isTrainingDay?'training':'rest'} day. 2 motivating sentences.`}] })
     });
     const data2 = await res2.json();
     const welcomeText = data2.content?.[0]?.text || `Hey ${name.split(' ')[0]}! Ready to crush today's workout? 💪`;
     document.getElementById('welcomeAiMsg').textContent = welcomeText;
-    chatHistory = [{ role: 'user', content: welcomePrompt }, { role: 'assistant', content: welcomeText }];
+    chatHistory = [{role:'user',content:'greeting'},{role:'assistant',content:welcomeText}];
   } catch(e) {
     loadDefaultPlan();
     document.getElementById('welcomeAiMsg').textContent = `Hey ${name}! I'm your AI coach — ask me anything! 💪`;
+  }
+}
+
+async function loadWeeklyPlan(profile) {
+  weeklyPlanLoaded = true;
+  document.getElementById('workoutPlanDesc').textContent = `Personalized for ${profile.fitness_level} level · ${equipLabels[profile.equipment] || profile.equipment} · Goal: ${goalLabels[profile.goal] || profile.goal}`;
+  const prompt = `Create a weekly workout plan for: Goal: ${profile.goal}, Level: ${profile.fitness_level}, Equipment: ${profile.equipment}, Training days: ${profile.training_days?.join(', ')}, Duration: ${profile.workout_duration} min.
+Respond ONLY with JSON: [{"day":"Monday","type":"Training","exercises":[{"name":"Exercise","sets":"3×12","muscles":"Chest"},...]},...] Include only their training days plus rest days. Max 4 exercises per day.`;
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, messages:[{role:'user',content:prompt}] })
+    });
+    const data = await res.json();
+    const plan = JSON.parse((data.content?.[0]?.text || '[]').replace(/```json|```/g,'').trim());
+    const grid = document.getElementById('weeklyPlanGrid');
+    grid.innerHTML = '';
+    plan.forEach(day => {
+      const card = document.createElement('div');
+      card.className = 'workout-day-card';
+      const isRest = day.type === 'Rest';
+      card.innerHTML = `<h3>${day.day} <span style="font-size:0.75rem;font-weight:400;color:var(--muted)">${day.type}</span></h3>` +
+        (isRest ? `<div style="color:var(--muted);font-size:0.88rem;padding:1rem 0">🧘 Rest & Recovery day. Light stretching recommended.</div>` :
+        (day.exercises||[]).map((ex,i) => `<div class="exercise-item"><div class="exercise-num">${i+1}</div><div class="exercise-info"><div class="exercise-name">${ex.name}</div><div class="exercise-detail">${ex.sets} · ${ex.muscles}</div></div></div>`).join(''));
+      grid.appendChild(card);
+    });
+  } catch(e) {
+    document.getElementById('weeklyPlanGrid').innerHTML = '<div style="color:var(--muted)">Could not load plan. Try again later.</div>';
   }
 }
 
@@ -334,18 +408,13 @@ function renderWorkout(exercises) {
 }
 
 function loadDefaultPlan() {
-  renderWorkout([
-    { name: 'Push-ups', sets: '3 sets × 15 reps' },
-    { name: 'Squats', sets: '4 sets × 12 reps' },
-    { name: 'Plank', sets: '3 sets × 45 sec' },
-    { name: 'Lunges', sets: '3 sets × 10 each' }
-  ]);
+  renderWorkout([{name:'Push-ups',sets:'3 sets × 15 reps'},{name:'Squats',sets:'4 sets × 12 reps'},{name:'Plank',sets:'3 sets × 45 sec'},{name:'Lunges',sets:'3 sets × 10 each'}]);
 }
 
 function toggleWorkout(el) {
   const check = el.querySelector('.workout-check');
   const isDone = check.classList.contains('done');
-  if (isDone) { check.classList.remove('done'); el.classList.remove('done-item'); doneCount = Math.max(0, doneCount-1); }
+  if (isDone) { check.classList.remove('done'); el.classList.remove('done-item'); doneCount = Math.max(0,doneCount-1); }
   else { check.classList.add('done'); el.classList.add('done-item'); doneCount++; }
   document.getElementById('workoutCount').textContent = doneCount;
   const total = document.querySelectorAll('.workout-item').length;
@@ -360,36 +429,53 @@ async function sendMsg() {
   if (!text) return;
   if (!isPro && freeMessageCount >= FREE_MSG_LIMIT) {
     const msgs = document.getElementById('messages');
-    msgs.innerHTML += `<div class="msg-bubble limit">🔒 <strong>Free limit reached (${FREE_MSG_LIMIT} messages)</strong><br><span style="font-size:0.82rem;color:var(--muted)">Upgrade to Pro for unlimited AI coaching</span><br><button onclick="openCheckout()" style="margin-top:0.6rem;background:var(--lime);color:#000;border:none;padding:0.4rem 1.2rem;border-radius:100px;font-family:var(--font-head);font-weight:700;cursor:pointer;font-size:0.85rem">Upgrade to Pro → $19/mo</button></div>`;
+    msgs.innerHTML += `<div class="msg-bubble limit">🔒 <strong>Free limit reached</strong><br><button onclick="openCheckout()" style="margin-top:0.6rem;background:var(--lime);color:#000;border:none;padding:0.4rem 1.2rem;border-radius:100px;font-family:var(--font-head);font-weight:700;cursor:pointer">Upgrade to Pro → $19/mo</button></div>`;
     msgs.scrollTop = msgs.scrollHeight;
     return;
   }
-  input.value = '';
-  document.getElementById('sendBtn').disabled = true;
-  const msgs = document.getElementById('messages');
+  await sendToAI(text, 'messages', 'chatInput', 'sendBtn', chatHistory);
+  if (!isPro) { freeMessageCount++; updateMsgCounter(); }
+}
+
+async function sendMsg2() {
+  const input = document.getElementById('chatInput2');
+  const text = input.value.trim();
+  if (!text) return;
+  if (!isPro && freeMessageCount >= FREE_MSG_LIMIT) {
+    const msgs = document.getElementById('messages2');
+    msgs.innerHTML += `<div class="msg-bubble limit">🔒 <strong>Free limit reached</strong><br><button onclick="openCheckout()" style="margin-top:0.6rem;background:var(--lime);color:#000;border:none;padding:0.4rem 1.2rem;border-radius:100px;font-family:var(--font-head);font-weight:700;cursor:pointer">Upgrade to Pro → $19/mo</button></div>`;
+    msgs.scrollTop = msgs.scrollHeight;
+    return;
+  }
+  await sendToAI(text, 'messages2', 'chatInput2', 'sendBtn2', chatHistory2);
+  if (!isPro) { freeMessageCount++; updateMsgCounter(); }
+}
+
+async function sendToAI(text, msgsId, inputId, btnId, history) {
+  document.getElementById(inputId).value = '';
+  document.getElementById(btnId).disabled = true;
+  const msgs = document.getElementById(msgsId);
   msgs.innerHTML += `<div class="msg-bubble user">${text}</div>`;
   msgs.innerHTML += `<div class="msg-bubble typing"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
   msgs.scrollTop = msgs.scrollHeight;
-  chatHistory.push({ role: 'user', content: text });
-  const systemPrompt = userProfile ? `You are FitMind AI, a personal fitness coach. User profile: Goal: ${userProfile.goal}, Level: ${userProfile.fitness_level}, Equipment: ${userProfile.equipment}, Age: ${userProfile.age}, Weight: ${userProfile.weight}kg. Give personalized, practical advice in 2-3 sentences max.` : `You are FitMind AI, a friendly personal fitness coach. Give practical, encouraging advice in 2-3 sentences max.`;
+  history.push({role:'user',content:text});
+  const systemPrompt = userProfile ? `You are FitMind AI, a personal fitness coach. User: Goal: ${userProfile.goal}, Level: ${userProfile.fitness_level}, Equipment: ${userProfile.equipment}, Age: ${userProfile.age}, Weight: ${userProfile.weight}kg. Give personalized advice in 2-3 sentences max.` : `You are FitMind AI, a friendly fitness coach. Give practical advice in 2-3 sentences max.`;
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 300, system: systemPrompt, messages: chatHistory.slice(-10) })
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:300,system:systemPrompt,messages:history.slice(-10)})
     });
     const data = await res.json();
     const reply = data.content?.[0]?.text || "Keep pushing — consistency is key! 💪";
-    chatHistory.push({ role: 'assistant', content: reply });
-    document.querySelector('.msg-bubble.typing').remove();
+    history.push({role:'assistant',content:reply});
+    document.querySelector(`#${msgsId} .msg-bubble.typing`).remove();
     msgs.innerHTML += `<div class="msg-bubble ai">${reply}</div>`;
-    if (!isPro) { freeMessageCount++; updateMsgCounter(); }
   } catch(e) {
-    document.querySelector('.msg-bubble.typing').remove();
+    document.querySelector(`#${msgsId} .msg-bubble.typing`).remove();
     msgs.innerHTML += `<div class="msg-bubble ai">Stay consistent and trust the process! 💪</div>`;
   }
   msgs.scrollTop = msgs.scrollHeight;
-  document.getElementById('sendBtn').disabled = false;
+  document.getElementById(btnId).disabled = false;
 }
 
 async function signOut() {
