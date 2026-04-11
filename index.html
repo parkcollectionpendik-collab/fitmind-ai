@@ -10,18 +10,16 @@
 :root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--lime2:#a8d92e;--gray:#1a1a1a;--muted:#888;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
 html{scroll-behavior:smooth}
 body{background:var(--black);color:var(--white);font-family:var(--font-body);overflow-x:hidden}
-
-/* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff10;backdrop-filter:blur(12px);background:#0a0a0acc}
 .logo{font-family:var(--font-head);font-weight:800;font-size:1.1rem;letter-spacing:-0.02em;white-space:nowrap}
 .logo span{color:var(--lime)}
 .nav-right{display:flex;align-items:center;gap:0.6rem}
 .lang-btn{background:#ffffff10;border:1px solid #ffffff20;color:var(--white);padding:0.35rem 0.7rem;border-radius:100px;font-family:var(--font-head);font-weight:700;font-size:0.72rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.3rem;white-space:nowrap}
 .lang-btn:hover{background:#ffffff20}
+.nav-signin{padding:0.4rem 0.9rem;border-radius:100px;font-family:var(--font-head);font-weight:700;font-size:0.78rem;text-decoration:none;border:1px solid #ffffff30;color:var(--white);white-space:nowrap;transition:all 0.2s}
+.nav-signin:hover{background:#ffffff10;border-color:#ffffff60}
 .nav-cta{background:var(--lime);color:var(--black);padding:0.45rem 1rem;border-radius:100px;font-family:var(--font-head);font-weight:700;font-size:0.78rem;text-decoration:none;transition:all 0.2s;white-space:nowrap}
 .nav-cta:hover{background:var(--lime2);transform:scale(1.04)}
-
-/* HERO */
 .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:5rem 1.5rem 3rem;position:relative;overflow:hidden}
 .hero-bg{position:absolute;inset:0;z-index:0}
 .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.18}
@@ -45,15 +43,11 @@ h1 .line2{display:block;font-weight:400;font-size:0.72em;opacity:0.6}
 .stat{text-align:center}
 .stat-num{font-family:var(--font-head);font-size:1.8rem;font-weight:800;color:var(--lime)}
 .stat-label{font-size:0.75rem;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;margin-top:0.2rem}
-
-/* SECTIONS */
 .section{padding:5rem 1.5rem}
 .section-inner{max-width:1100px;margin:0 auto}
 .section-tag{font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--lime);margin-bottom:1rem;font-weight:700}
 .section-title{font-family:var(--font-head);font-size:clamp(1.8rem,5vw,3.5rem);font-weight:800;line-height:1;letter-spacing:-0.02em;margin-bottom:1rem}
 .section-sub{color:#ffffffaa;font-size:1rem;line-height:1.7;font-weight:300;max-width:500px}
-
-/* HOW IT WORKS */
 .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem;margin-top:3rem}
 .step{background:#111;border:1px solid #ffffff0f;border-radius:20px;padding:1.8rem;position:relative;overflow:hidden;transition:border-color 0.3s}
 .step:hover{border-color:#c8f54230}
@@ -61,8 +55,6 @@ h1 .line2{display:block;font-weight:400;font-size:0.72em;opacity:0.6}
 .step-icon{width:44px;height:44px;background:var(--lime);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem;font-size:1.2rem}
 .step h3{font-family:var(--font-head);font-size:1.05rem;font-weight:700;margin-bottom:0.5rem}
 .step p{color:#ffffffaa;font-size:0.88rem;line-height:1.6;font-weight:300}
-
-/* FEATURES */
 .features-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:3rem}
 .feature-card{background:#111;border:1px solid #ffffff0f;border-radius:20px;padding:1.8rem;transition:all 0.3s}
 .feature-card:hover{border-color:#c8f54230;transform:translateY(-3px)}
@@ -71,8 +63,6 @@ h1 .line2{display:block;font-weight:400;font-size:0.72em;opacity:0.6}
 .feature-card h3{font-family:var(--font-head);font-size:1.1rem;font-weight:700;margin-bottom:0.5rem}
 .feature-card p{color:#ffffffaa;font-size:0.88rem;line-height:1.6;font-weight:300}
 .feature-tag{display:inline-block;background:#c8f54215;color:var(--lime);font-size:0.72rem;padding:0.25rem 0.7rem;border-radius:100px;letter-spacing:0.06em;text-transform:uppercase;margin-top:1rem;font-weight:700}
-
-/* PRICING */
 .pricing-cards{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;margin-top:3rem}
 .price-card{background:#111;border:1px solid #ffffff0f;border-radius:24px;padding:2rem;width:280px;position:relative;transition:all 0.3s}
 .price-card.featured{border-color:var(--lime);background:#0f160a}
@@ -89,8 +79,6 @@ h1 .line2{display:block;font-weight:400;font-size:0.72em;opacity:0.6}
 .price-btn.dark:hover{background:#ffffff25}
 .price-btn.lime{background:var(--lime);color:var(--black)}
 .price-btn.lime:hover{background:var(--lime2)}
-
-/* TESTIMONIALS */
 .testimonials{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.2rem;margin-top:3rem}
 .testi{background:#111;border:1px solid #ffffff0f;border-radius:20px;padding:1.8rem}
 .testi-text{font-size:0.92rem;line-height:1.7;color:#ffffffcc;font-weight:300;font-style:italic;margin-bottom:1.2rem}
@@ -99,34 +87,25 @@ h1 .line2{display:block;font-weight:400;font-size:0.72em;opacity:0.6}
 .author-name{font-family:var(--font-head);font-weight:700;font-size:0.88rem}
 .author-meta{font-size:0.75rem;color:var(--muted)}
 .stars{color:var(--lime);font-size:0.85rem;margin-bottom:0.8rem}
-
-/* CTA */
 .cta-section{padding:5rem 1.5rem;text-align:center}
 .cta-box{max-width:700px;margin:0 auto;background:#111;border:1px solid #c8f54225;border-radius:32px;padding:3rem 2rem;position:relative;overflow:hidden}
 .cta-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,#c8f54210,transparent 70%);pointer-events:none}
 .cta-box h2{font-family:var(--font-head);font-size:clamp(1.6rem,4vw,3rem);font-weight:800;letter-spacing:-0.02em;margin-bottom:1rem;position:relative;z-index:1}
 .cta-box p{color:#ffffffaa;font-weight:300;margin-bottom:2rem;position:relative;z-index:1;font-size:0.95rem}
 .cta-form{display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
-
-/* FOOTER */
 footer{padding:2.5rem 1.5rem;border-top:1px solid #ffffff0f;text-align:center}
 .footer-logo{font-family:var(--font-head);font-weight:800;font-size:1.2rem;margin-bottom:0.5rem}
 .footer-logo span{color:var(--lime)}
 footer p{color:var(--muted);font-size:0.82rem}
 footer a{color:var(--muted);text-decoration:none;margin:0 0.4rem}
 footer a:hover{color:var(--white)}
-
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-
-/* ===================== MOBİL ===================== */
 @media(max-width:768px){
-  /* Nav */
   nav{padding:0.9rem 1rem}
   .logo{font-size:1rem}
   .lang-btn{font-size:0.68rem;padding:0.3rem 0.6rem}
+  .nav-signin{display:none}
   .nav-cta{font-size:0.72rem;padding:0.4rem 0.8rem}
-
-  /* Hero */
   .hero{padding:5rem 1.2rem 2.5rem}
   h1{font-size:clamp(2.2rem,12vw,3.5rem)}
   .hero-sub{font-size:0.92rem}
@@ -135,43 +114,26 @@ footer a:hover{color:var(--white)}
   .hero-stats{gap:1.5rem;margin-top:2.5rem}
   .stat-num{font-size:1.5rem}
   .stat-label{font-size:0.68rem}
-
-  /* Sections */
   .section{padding:4rem 1.2rem}
   .section-title{font-size:clamp(1.6rem,8vw,2.5rem)}
-
-  /* Steps */
   .steps{grid-template-columns:1fr;gap:1rem}
-
-  /* Features */
   .features-grid{grid-template-columns:1fr;gap:1rem}
   .feature-card.big{grid-column:span 1}
-
-  /* Pricing */
   .pricing-cards{flex-direction:column;align-items:center}
   .price-card{width:100%;max-width:340px}
-
-  /* Testimonials */
   .testimonials{grid-template-columns:1fr}
-
-  /* CTA */
   .cta-section{padding:4rem 1.2rem}
   .cta-box{padding:2.5rem 1.5rem;border-radius:24px}
-
-  /* Orbs — küçük ekranda daha küçük */
   .orb1{width:300px;height:300px}
   .orb2{width:200px;height:200px}
 }
-
 @media(max-width:400px){
   h1{font-size:2rem}
-  .nav-cta{display:none} /* çok küçük ekranda nav butonu gizle */
+  .nav-cta{display:none}
 }
 </style>
 <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
-<script>
-  Paddle.Initialize({ token: 'live_eefc76e39bd2263417b9b9ff52b' });
-</script>
+<script>Paddle.Initialize({ token: 'live_eefc76e39bd2263417b9b9ff52b' });</script>
 </head>
 <body>
 
@@ -179,7 +141,8 @@ footer a:hover{color:var(--white)}
   <div class="logo">Fit<span>Mind</span> AI</div>
   <div class="nav-right">
     <button class="lang-btn" onclick="toggleLang()" id="langBtn">🇹🇷 Türkçe</button>
-    <a href="http://eepurl.com/jDHFkA" target="_blank" class="nav-cta" data-en="Start Free Trial →" data-tr="Ücretsiz Dene →">Start Free Trial →</a>
+    <a href="auth.html" class="nav-signin" data-en="Sign In" data-tr="Giriş Yap">Sign In</a>
+    <a href="auth.html" class="nav-cta" data-en="Start Free →" data-tr="Ücretsiz Dene →">Start Free →</a>
   </div>
 </nav>
 
@@ -193,7 +156,7 @@ footer a:hover{color:var(--white)}
   </h1>
   <p class="hero-sub" data-en="FitMind AI is your personal coach, nutritionist, and accountability partner — all in one. Available 24/7. No judgment. Just results." data-tr="FitMind AI, kişisel koçun, beslenme uzmanın ve motivasyon ortağın — hepsi bir arada. 7/24 erişim. Yargılamaz. Sadece sonuç.">FitMind AI is your personal coach, nutritionist, and accountability partner — all in one. Available 24/7. No judgment. Just results.</p>
   <div class="hero-actions">
-    <a href="http://eepurl.com/jDHFkA" target="_blank" class="btn-primary" data-en="Start Free Trial →" data-tr="Ücretsiz Dene →">Start Free Trial →</a>
+    <a href="auth.html" class="btn-primary" data-en="Start Free Trial →" data-tr="Ücretsiz Dene →">Start Free Trial →</a>
     <a href="#how" class="btn-secondary" data-en="See how it works" data-tr="Nasıl çalışır?">See how it works</a>
   </div>
   <div class="hero-stats">
@@ -305,7 +268,7 @@ footer a:hover{color:var(--white)}
           <li data-en="Calorie tracker" data-tr="Kalori takibi">Calorie tracker</li>
           <li data-en="Progress logging" data-tr="İlerleme kaydı">Progress logging</li>
         </ul>
-        <a href="http://eepurl.com/jDHFkA" target="_blank" class="price-btn dark" data-en="Get started" data-tr="Başla">Get started</a>
+        <a href="auth.html" class="price-btn dark" data-en="Get started" data-tr="Başla">Get started</a>
       </div>
       <div class="price-card featured" data-popular="Most popular">
         <div class="price-name">Pro</div>
@@ -331,7 +294,7 @@ footer a:hover{color:var(--white)}
           <li data-en="Early access to new features" data-tr="Yeni özelliklere erken erişim">Early access to new features</li>
           <li data-en="1-on-1 monthly check-in call" data-tr="Aylık birebir görüşme">1-on-1 monthly check-in call</li>
         </ul>
-        <a href="http://eepurl.com/jDHFkA" target="_blank" class="price-btn dark" data-en="Get annual plan" data-tr="Yıllık planı al">Get annual plan</a>
+        <a href="auth.html" class="price-btn dark" data-en="Get annual plan" data-tr="Yıllık planı al">Get annual plan</a>
       </div>
     </div>
   </div>
@@ -342,7 +305,7 @@ footer a:hover{color:var(--white)}
     <h2 data-en="Start your transformation today." data-tr="Dönüşümüne bugün başla.">Start your transformation today.</h2>
     <p data-en="Join 50,000+ members already crushing their goals with FitMind AI. First 7 days are free." data-tr="FitMind AI ile hedeflerini çoktan aşan 50.000+ üyeye katıl. İlk 7 gün ücretsiz.">Join 50,000+ members already crushing their goals with FitMind AI. First 7 days are free.</p>
     <div class="cta-form">
-      <a href="http://eepurl.com/jDHFkA" target="_blank" class="btn-primary" data-en="Get started free →" data-tr="Ücretsiz başla →">Get started free →</a>
+      <a href="auth.html" class="btn-primary" data-en="Get started free →" data-tr="Ücretsiz başla →">Get started free →</a>
     </div>
   </div>
 </section>
@@ -354,7 +317,6 @@ footer a:hover{color:var(--white)}
 
 <script>
 let currentLang = localStorage.getItem('fitmind_lang') || 'en';
-
 function applyLang(lang) {
   document.querySelectorAll('[data-en]').forEach(el => {
     el.textContent = lang === 'tr' ? el.getAttribute('data-tr') : el.getAttribute('data-en');
@@ -365,17 +327,12 @@ function applyLang(lang) {
   localStorage.setItem('fitmind_lang', lang);
   currentLang = lang;
 }
-
-function toggleLang() {
-  applyLang(currentLang === 'en' ? 'tr' : 'en');
-}
-
+function toggleLang() { applyLang(currentLang === 'en' ? 'tr' : 'en'); }
 applyLang(currentLang);
-
 function openCheckout() {
   Paddle.Checkout.open({
     items: [{ priceId: 'pri_01knxscbw8bwh1rrg8byx2cgf0', quantity: 1 }],
-    successUrl: 'https://fitmind-ai-topaz.vercel.app/onboarding.html',
+    successUrl: 'https://fitmindai.ai/onboarding.html',
   });
 }
 </script>
