@@ -43,10 +43,6 @@ input:focus{border-color:#c8f54250}
 .back{text-align:center;margin-top:1.5rem}
 .back a{color:var(--muted);font-size:0.85rem;text-decoration:none;transition:color 0.2s}
 .back a:hover{color:var(--white)}
-.check-email{text-align:center;display:none}
-.check-email .icon{font-size:3rem;margin-bottom:1rem}
-.check-email h3{font-family:var(--font-head);font-size:1.3rem;font-weight:700;margin-bottom:0.5rem}
-.check-email p{color:var(--muted);font-size:0.9rem;line-height:1.6}
 </style>
 </head>
 <body>
@@ -98,12 +94,6 @@ input:focus{border-color:#c8f54250}
     <div class="msg" id="authMsg"></div>
   </div>
 
-  <div class="check-email" id="checkEmail">
-    <div class="icon">📬</div>
-    <h3>Check your email!</h3>
-    <p>We sent a confirmation link to your email. Click it to activate your account and start your fitness journey!</p>
-  </div>
-
   <div class="back"><a href="index.html">← Back to FitMind AI</a></div>
 </div>
 
@@ -112,23 +102,6 @@ const SUPABASE_URL = 'https://cypmmayxwbkarvheqoxu.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_AWcGQ3cCWOrHntiOCvvGgw_XpHUmUpT';
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-let redirecting = false;
-
-async function smartRedirect(userId) {
-  if (redirecting) return;
-  redirecting = true;
-  try {
-    const { data: profile } = await sb.from('profiles').select('goal').eq('id', userId).maybeSingle();
-    if (profile && profile.goal) {
-      window.location.href = 'dashboard.html';
-    } else {
-      window.location.href = 'onboarding.html';
-    }
-  } catch(e) {
-    window.location.href = 'onboarding.html';
-  }
-}
 
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -156,13 +129,13 @@ async function signIn() {
   const btn = document.getElementById('signinBtn');
   btn.disabled = true;
   btn.textContent = 'Signing in...';
-  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  const { error } = await sb.auth.signInWithPassword({ email, password });
   if (error) {
     showMsg(error.message, 'error');
     btn.disabled = false;
     btn.textContent = 'Sign In →';
   } else {
-    await smartRedirect(data.user.id);
+    window.location.href = 'dashboard.html';
   }
 }
 
@@ -175,7 +148,7 @@ async function signUp() {
   const btn = document.getElementById('signupBtn');
   btn.disabled = true;
   btn.textContent = 'Creating account...';
-  const { data, error } = await sb.auth.signUp({
+  const { error } = await sb.auth.signUp({
     email, password,
     options: { data: { full_name: name } }
   });
@@ -183,32 +156,17 @@ async function signUp() {
     showMsg(error.message, 'error');
     btn.disabled = false;
     btn.textContent = 'Create Account →';
-  } else if (data?.session) {
-    // Email confirmation kapalı — direkt giriş oldu
-    await smartRedirect(data.user.id);
   } else {
-    // Email confirmation açık
-    document.getElementById('authForm').style.display = 'none';
-    document.getElementById('checkEmail').style.display = 'block';
+    window.location.href = 'onboarding.html';
   }
 }
 
 async function signInGoogle() {
   await sb.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: 'https://fitmindai.ai/auth.html' }
+    options: { redirectTo: 'https://fitmindai.ai/dashboard.html' }
   });
 }
-
-// Sayfa açılışında zaten giriş yapmışsa yönlendir
-async function checkExistingSession() {
-  const { data: { session } } = await sb.auth.getSession();
-  if (session) {
-    await smartRedirect(session.user.id);
-  }
-}
-
-checkExistingSession();
 </script>
 </body>
 </html>
