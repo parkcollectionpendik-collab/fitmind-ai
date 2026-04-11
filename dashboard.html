@@ -6,6 +6,7 @@
 <title>FitMind AI – Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--lime2:#a8d92e;--gray:#111;--muted:#888;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
@@ -17,7 +18,9 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .nav-item{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 1rem;border-radius:12px;cursor:pointer;transition:all 0.2s;font-size:0.9rem;color:var(--muted);border:none;background:transparent;width:100%;text-align:left;font-family:var(--font-body);text-decoration:none}
 .nav-item:hover{background:#ffffff08;color:var(--white)}
 .nav-item.active{background:#c8f54215;color:var(--lime)}
+.nav-item.locked{opacity:0.5;cursor:not-allowed;pointer-events:none}
 .nav-item .icon{width:18px;text-align:center;font-size:1rem}
+.nav-item .lock{font-size:0.7rem;margin-left:auto;color:var(--muted)}
 .sidebar-bottom{padding-top:1rem;border-top:1px solid #ffffff0f}
 .user-info{display:flex;align-items:center;gap:0.75rem;padding:0.5rem}
 .avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--lime),#4af);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.85rem;color:var(--black);flex-shrink:0}
@@ -50,6 +53,7 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .msg-bubble.ai{background:#ffffff0a;border:1px solid #ffffff0f;align-self:flex-start;border-bottom-left-radius:4px}
 .msg-bubble.user{background:var(--lime);color:var(--black);align-self:flex-end;border-bottom-right-radius:4px}
 .msg-bubble.typing{background:#ffffff0a;border:1px solid #ffffff0f;align-self:flex-start}
+.msg-bubble.limit{background:#1a0a0a;border:1px solid #ff6b6b30;align-self:stretch;text-align:center;max-width:100%}
 .typing-dots{display:flex;gap:4px;align-items:center;padding:0.2rem 0}
 .typing-dots span{width:6px;height:6px;background:var(--muted);border-radius:50%;animation:bounce 1.2s infinite}
 .typing-dots span:nth-child(2){animation-delay:0.2s}
@@ -86,6 +90,8 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .loading-plan .spin{display:inline-block;width:20px;height:20px;border:2px solid #ffffff15;border-top-color:var(--lime);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:0.5rem}
 @keyframes spin{to{transform:rotate(360deg)}}
 .profile-tag{display:inline-flex;align-items:center;gap:0.3rem;background:#c8f54210;border:1px solid #c8f54220;color:var(--lime);padding:0.2rem 0.6rem;border-radius:100px;font-size:0.7rem;font-family:var(--font-head);font-weight:700;margin-right:0.3rem;margin-bottom:0.3rem}
+.pro-badge{display:inline-flex;align-items:center;gap:0.3rem;background:linear-gradient(135deg,#c8f542,#a8d92e);color:var(--black);padding:0.2rem 0.7rem;border-radius:100px;font-size:0.7rem;font-family:var(--font-head);font-weight:800}
+.free-badge{display:inline-flex;align-items:center;gap:0.3rem;background:#ffffff15;color:var(--muted);padding:0.2rem 0.7rem;border-radius:100px;font-size:0.7rem;font-family:var(--font-head);font-weight:800}
 </style>
 </head>
 <body>
@@ -93,11 +99,11 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
   <div class="logo">Fit<span>Mind</span> AI</div>
   <nav class="nav">
     <a class="nav-item active" href="dashboard.html"><span class="icon">🏠</span> Dashboard</a>
-<a class="nav-item" href="dashboard.html"><span class="icon">🤖</span> AI Coach</a>
-<a class="nav-item" href="dashboard.html"><span class="icon">🏋️</span> Workouts</a>
-<a class="nav-item" href="nutrition.html"><span class="icon">🥗</span> Nutrition</a>
-<a class="nav-item" href="progress.html"><span class="icon">📈</span> Progress</a>
-<a class="nav-item" href="community.html"><span class="icon">👥</span> Community</a>
+    <a class="nav-item" href="dashboard.html"><span class="icon">🤖</span> AI Coach</a>
+    <a class="nav-item" href="dashboard.html"><span class="icon">🏋️</span> Workouts</a>
+    <a class="nav-item" href="nutrition.html" id="navNutrition"><span class="icon">🥗</span> Nutrition</a>
+    <a class="nav-item" href="progress.html" id="navProgress"><span class="icon">📈</span> Progress</a>
+    <a class="nav-item" href="community.html"><span class="icon">👥</span> Community</a>
   </nav>
   <div class="sidebar-bottom">
     <div class="user-info">
@@ -114,7 +120,10 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
       <div class="page-title" id="welcomeMsg">Loading...</div>
       <div class="greeting" id="profileTags"></div>
     </div>
-    <div class="badge-live"><span class="badge-dot"></span> AI Coach Online</div>
+    <div style="display:flex;align-items:center;gap:0.75rem">
+      <span id="planBadge" class="free-badge">FREE</span>
+      <div class="badge-live"><span class="badge-dot"></span> AI Coach Online</div>
+    </div>
   </div>
 
   <div class="stats-grid">
@@ -142,7 +151,7 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 
   <div class="content-grid">
     <div class="chat-card">
-      <div class="card-title"><span class="dot"></span> AI Coach Chat</div>
+      <div class="card-title"><span class="dot"></span> AI Coach Chat <span id="msgCounter" style="margin-left:auto;font-size:0.75rem;color:var(--muted);font-weight:400"></span></div>
       <div class="messages" id="messages">
         <div class="msg-bubble ai" id="welcomeAiMsg">Hey! Loading your personalized plan... 🤖</div>
       </div>
@@ -179,10 +188,10 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
         </div>
       </div>
 
-      <div class="upgrade-card">
+      <div class="upgrade-card" id="upgradeCard">
         <h3>🚀 Unlock Full Access</h3>
         <p>Get unlimited AI coaching, custom meal plans, and advanced analytics with Pro.</p>
-        <button class="upgrade-btn">Upgrade to Pro — $19/mo</button>
+        <button class="upgrade-btn" onclick="openCheckout()">Upgrade to Pro — $19/mo</button>
       </div>
     </div>
   </div>
@@ -194,13 +203,55 @@ const SUPABASE_KEY = 'sb_publishable_AWcGQ3cCWOrHntiOCvvGgw_XpHUmUpT';
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+Paddle.Initialize({ token: 'live_eefc76e39bd2263417b9b9ff52b' });
+
 let userProfile = null;
+let isPro = false;
+let freeMessageCount = 0;
+const FREE_MSG_LIMIT = 3;
 let doneCount = 0;
 let chatHistory = [];
 
 const goalLabels = { lose_weight:'Lose Weight', build_muscle:'Build Muscle', get_fit:'Get Fit', improve_health:'Improve Health' };
 const levelLabels = { beginner:'Beginner', intermediate:'Intermediate', advanced:'Advanced' };
 const equipLabels = { home_no:'Home', home_basic:'Home+Equipment', gym:'Gym', outdoor:'Outdoor' };
+
+function openCheckout() {
+  Paddle.Checkout.open({
+    items: [{ priceId: 'pri_01knxscbw8bwh1rrg8byx2cgf0', quantity: 1 }],
+    successUrl: 'https://fitmind-ai-topaz.vercel.app/dashboard.html',
+  });
+}
+
+function applyProUI() {
+  // Pro badge
+  const badge = document.getElementById('planBadge');
+  badge.textContent = '⚡ PRO';
+  badge.className = 'pro-badge';
+  // Upgrade card gizle
+  document.getElementById('upgradeCard').style.display = 'none';
+  // Nav kilitlerini kaldır
+  document.getElementById('navNutrition').classList.remove('locked');
+  document.getElementById('navProgress').classList.remove('locked');
+  // Mesaj sayacını gizle
+  document.getElementById('msgCounter').textContent = '';
+}
+
+function applyFreeUI() {
+  // Nav kilitle
+  document.getElementById('navNutrition').classList.add('locked');
+  document.getElementById('navNutrition').innerHTML += '<span class="lock">🔒</span>';
+  document.getElementById('navProgress').classList.add('locked');
+  document.getElementById('navProgress').innerHTML += '<span class="lock">🔒</span>';
+  updateMsgCounter();
+}
+
+function updateMsgCounter() {
+  if (!isPro) {
+    const remaining = FREE_MSG_LIMIT - freeMessageCount;
+    document.getElementById('msgCounter').textContent = remaining > 0 ? `${remaining} free messages left` : 'Upgrade for unlimited';
+  }
+}
 
 async function init() {
   const { data: { session } } = await sb.auth.getSession();
@@ -217,6 +268,13 @@ async function init() {
 
   const { data: profile } = await sb.from('profiles').select('*').eq('id', user.id).single();
   userProfile = profile;
+  isPro = profile?.is_pro === true;
+
+  if (isPro) {
+    applyProUI();
+  } else {
+    applyFreeUI();
+  }
 
   if (profile) {
     const tags = document.getElementById('profileTags');
@@ -328,6 +386,19 @@ async function sendMsg() {
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
   if (!text) return;
+
+  // FREE LIMIT KONTROLÜ
+  if (!isPro && freeMessageCount >= FREE_MSG_LIMIT) {
+    const msgs = document.getElementById('messages');
+    msgs.innerHTML += `<div class="msg-bubble limit">
+      🔒 <strong>Free limit reached (${FREE_MSG_LIMIT} messages)</strong><br>
+      <span style="font-size:0.82rem;color:var(--muted)">Upgrade to Pro for unlimited AI coaching</span><br>
+      <button onclick="openCheckout()" style="margin-top:0.6rem;background:var(--lime);color:#000;border:none;padding:0.4rem 1.2rem;border-radius:100px;font-family:var(--font-head);font-weight:700;cursor:pointer;font-size:0.85rem">Upgrade to Pro → $19/mo</button>
+    </div>`;
+    msgs.scrollTop = msgs.scrollHeight;
+    return;
+  }
+
   input.value = '';
   document.getElementById('sendBtn').disabled = true;
   const msgs = document.getElementById('messages');
@@ -357,6 +428,12 @@ async function sendMsg() {
     chatHistory.push({ role: 'assistant', content: reply });
     document.querySelector('.msg-bubble.typing').remove();
     msgs.innerHTML += `<div class="msg-bubble ai">${reply}</div>`;
+
+    // Mesaj sayacını artır
+    if (!isPro) {
+      freeMessageCount++;
+      updateMsgCounter();
+    }
   } catch(e) {
     document.querySelector('.msg-bubble.typing').remove();
     msgs.innerHTML += `<div class="msg-bubble ai">Stay consistent and trust the process — every rep counts! 💪</div>`;
