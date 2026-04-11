@@ -104,6 +104,10 @@ footer a{color:var(--muted);text-decoration:none;margin:0 0.5rem}
 footer a:hover{color:var(--white)}
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 </style>
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<script>
+  Paddle.Initialize({ token: 'live_eefc76e39bd2263417b9b9ff52b' });
+</script>
 </head>
 <body>
 
@@ -251,7 +255,7 @@ footer a:hover{color:var(--white)}
           <li data-en="Community access & challenges" data-tr="Topluluk erişimi ve meydan okumalar">Community access &amp; challenges</li>
           <li data-en="Priority support" data-tr="Öncelikli destek">Priority support</li>
         </ul>
-        <a href="http://eepurl.com/jDHFkA" target="_blank" class="price-btn lime" data-en="Start 7-day free trial" data-tr="7 günlük ücretsiz denemeyi başlat">Start 7-day free trial</a>
+        <button class="price-btn lime" onclick="openCheckout()" data-en="Start 7-day free trial" data-tr="7 günlük ücretsiz denemeyi başlat">Start 7-day free trial</button>
       </div>
       <div class="price-card">
         <div class="price-name" data-en="Annual Pro" data-tr="Yıllık Pro">Annual Pro</div>
@@ -303,6 +307,14 @@ function toggleLang() {
 }
 
 applyLang(currentLang);
+
+function openCheckout() {
+  Paddle.Checkout.open({
+    items: [{ priceId: 'pri_01knxscbw8bwh1rrg8byx2cgf0', quantity: 1 }],
+    successUrl: 'https://fitmind-ai-topaz.vercel.app/onboarding.html',
+  });
+}
+
 </script>
 </body>
 </html>
