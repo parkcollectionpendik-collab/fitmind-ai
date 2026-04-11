@@ -3,198 +3,108 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FitMind AI – Dashboard</title>
+<title>FitMind AI – Sign In</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--lime2:#a8d92e;--gray:#111;--muted:#888;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
-body{background:var(--black);color:var(--white);font-family:var(--font-body);min-height:100vh}
-.sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:#0d0d0d;border-right:1px solid #ffffff0f;padding:1.5rem;display:flex;flex-direction:column;z-index:10}
-.logo{font-family:var(--font-head);font-weight:800;font-size:1.1rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid #ffffff0f}
+:root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--lime2:#a8d92e;--muted:#888;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
+body{background:var(--black);color:var(--white);font-family:var(--font-body);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;overflow:hidden}
+.bg{position:fixed;inset:0;z-index:0}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.15}
+.orb1{width:500px;height:500px;background:var(--lime);top:-150px;left:-150px;animation:float1 8s ease-in-out infinite}
+.orb2{width:300px;height:300px;background:#4af;bottom:-50px;right:-50px;animation:float2 10s ease-in-out infinite}
+@keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,20px)}}
+@keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-20px,-15px)}}
+.card{position:relative;z-index:1;background:#111;border:1px solid #ffffff15;border-radius:24px;padding:3rem;width:100%;max-width:440px;animation:fadeUp 0.6s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.logo{font-family:var(--font-head);font-weight:800;font-size:1.4rem;text-align:center;margin-bottom:2rem}
 .logo span{color:var(--lime)}
-.nav{display:flex;flex-direction:column;gap:0.3rem;flex:1}
-.nav-item{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 1rem;border-radius:12px;cursor:pointer;transition:all 0.2s;font-size:0.9rem;color:var(--muted);border:none;background:transparent;width:100%;text-align:left;font-family:var(--font-body);text-decoration:none}
-.nav-item:hover{background:#ffffff08;color:var(--white)}
-.nav-item.active{background:#c8f54215;color:var(--lime)}
-.nav-item.locked{opacity:0.5;cursor:not-allowed;pointer-events:none}
-.nav-item .icon{width:18px;text-align:center;font-size:1rem}
-.nav-item .lock{font-size:0.7rem;margin-left:auto;color:var(--muted)}
-.sidebar-bottom{padding-top:1rem;border-top:1px solid #ffffff0f}
-.user-info{display:flex;align-items:center;gap:0.75rem;padding:0.5rem}
-.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--lime),#4af);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.85rem;color:var(--black);flex-shrink:0}
-.user-name{font-size:0.85rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.signout-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0.25rem;transition:color 0.2s}
-.signout-btn:hover{color:#ff6b6b}
-.main{margin-left:240px;padding:2rem;min-height:100vh}
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}
-.page-title{font-family:var(--font-head);font-size:1.5rem;font-weight:800}
-.greeting{color:var(--muted);font-size:0.9rem;margin-top:0.2rem}
-.badge-live{display:inline-flex;align-items:center;gap:0.4rem;background:#c8f54215;border:1px solid #c8f54230;color:var(--lime);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.75rem;font-family:var(--font-head);font-weight:700}
-.badge-dot{width:6px;height:6px;background:var(--lime);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
-.stat-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:16px;padding:1.5rem;transition:border-color 0.3s}
-.stat-card:hover{border-color:#c8f54225}
-.stat-label{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:0.5rem}
-.stat-value{font-family:var(--font-head);font-size:2rem;font-weight:800;line-height:1}
-.stat-value.lime{color:var(--lime)}
-.stat-change{font-size:0.78rem;color:var(--muted);margin-top:0.3rem}
-.stat-change.up{color:#4ade80}
-.content-grid{display:grid;grid-template-columns:1fr 380px;gap:1.5rem}
-.chat-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;display:flex;flex-direction:column;height:520px}
-.card-title{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem}
-.card-title .dot{width:8px;height:8px;background:var(--lime);border-radius:50%;animation:pulse 2s infinite}
-.messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1rem;padding-right:0.25rem}
-.messages::-webkit-scrollbar{width:3px}
-.messages::-webkit-scrollbar-thumb{background:#ffffff15;border-radius:10px}
-.msg-bubble{max-width:85%;padding:0.75rem 1rem;border-radius:16px;font-size:0.9rem;line-height:1.6}
-.msg-bubble.ai{background:#ffffff0a;border:1px solid #ffffff0f;align-self:flex-start;border-bottom-left-radius:4px}
-.msg-bubble.user{background:var(--lime);color:var(--black);align-self:flex-end;border-bottom-right-radius:4px}
-.msg-bubble.typing{background:#ffffff0a;border:1px solid #ffffff0f;align-self:flex-start}
-.msg-bubble.limit{background:#1a0a0a;border:1px solid #ff6b6b30;align-self:stretch;text-align:center;max-width:100%}
-.typing-dots{display:flex;gap:4px;align-items:center;padding:0.2rem 0}
-.typing-dots span{width:6px;height:6px;background:var(--muted);border-radius:50%;animation:bounce 1.2s infinite}
-.typing-dots span:nth-child(2){animation-delay:0.2s}
-.typing-dots span:nth-child(3){animation-delay:0.4s}
-@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
-.chat-input-wrap{display:flex;gap:0.5rem}
-.chat-input{flex:1;background:#ffffff08;border:1px solid #ffffff15;border-radius:100px;padding:0.7rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.9rem;outline:none;transition:border-color 0.2s}
-.chat-input::placeholder{color:#ffffff40}
-.chat-input:focus{border-color:#c8f54240}
-.send-btn{background:var(--lime);color:var(--black);border:none;border-radius:50%;width:38px;height:38px;cursor:pointer;font-size:1rem;transition:all 0.2s;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.send-btn:hover{background:var(--lime2)}
-.send-btn:disabled{opacity:0.4;cursor:not-allowed}
-.right-panel{display:flex;flex-direction:column;gap:1rem}
-.panel-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem}
-.workout-list{display:flex;flex-direction:column;gap:0.6rem;margin-top:0.75rem}
-.workout-item{display:flex;align-items:center;gap:0.75rem;padding:0.75rem;background:#ffffff05;border-radius:12px;transition:background 0.2s;cursor:pointer}
-.workout-item:hover{background:#ffffff0a}
-.workout-check{width:20px;height:20px;border-radius:6px;border:2px solid #ffffff20;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;font-size:0.75rem}
-.workout-check.done{background:var(--lime);border-color:var(--lime);color:var(--black)}
-.workout-info{flex:1}
-.workout-name{font-size:0.85rem;font-weight:400}
-.workout-sets{font-size:0.75rem;color:var(--muted);margin-top:0.1rem}
-.workout-item.done-item .workout-name{text-decoration:line-through;opacity:0.5}
-.progress-bar-wrap{margin-top:0.75rem}
-.progress-label{display:flex;justify-content:space-between;font-size:0.8rem;color:var(--muted);margin-bottom:0.4rem}
-.progress-bar{height:6px;background:#ffffff10;border-radius:100px;overflow:hidden}
-.progress-fill{height:100%;background:var(--lime);border-radius:100px;transition:width 1s ease}
-.upgrade-card{background:linear-gradient(135deg,#0f1a06,#111);border:1px solid #c8f54225;border-radius:20px;padding:1.5rem;text-align:center}
-.upgrade-card h3{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:0.4rem}
-.upgrade-card p{font-size:0.82rem;color:var(--muted);margin-bottom:1rem;line-height:1.5}
-.upgrade-btn{background:var(--lime);color:var(--black);border:none;border-radius:100px;padding:0.6rem 1.4rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s;width:100%}
-.upgrade-btn:hover{background:var(--lime2)}
-.loading-plan{text-align:center;padding:1.5rem;color:var(--muted);font-size:0.85rem}
-.loading-plan .spin{display:inline-block;width:20px;height:20px;border:2px solid #ffffff15;border-top-color:var(--lime);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:0.5rem}
-@keyframes spin{to{transform:rotate(360deg)}}
-.profile-tag{display:inline-flex;align-items:center;gap:0.3rem;background:#c8f54210;border:1px solid #c8f54220;color:var(--lime);padding:0.2rem 0.6rem;border-radius:100px;font-size:0.7rem;font-family:var(--font-head);font-weight:700;margin-right:0.3rem;margin-bottom:0.3rem}
-.pro-badge{display:inline-flex;align-items:center;gap:0.3rem;background:linear-gradient(135deg,#c8f542,#a8d92e);color:var(--black);padding:0.2rem 0.7rem;border-radius:100px;font-size:0.7rem;font-family:var(--font-head);font-weight:800}
-.free-badge{display:inline-flex;align-items:center;gap:0.3rem;background:#ffffff15;color:var(--muted);padding:0.2rem 0.7rem;border-radius:100px;font-size:0.7rem;font-family:var(--font-head);font-weight:800}
+.tabs{display:flex;background:#0a0a0a;border-radius:100px;padding:4px;margin-bottom:2rem;gap:4px}
+.tab{flex:1;padding:0.6rem;border:none;background:transparent;color:var(--muted);font-family:var(--font-head);font-weight:700;font-size:0.85rem;border-radius:100px;cursor:pointer;transition:all 0.2s}
+.tab.active{background:var(--lime);color:var(--black)}
+.form-group{margin-bottom:1.2rem}
+label{display:block;font-size:0.8rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.5rem;font-weight:700}
+input{width:100%;background:#ffffff08;border:1px solid #ffffff15;border-radius:12px;padding:0.85rem 1rem;color:var(--white);font-family:var(--font-body);font-size:1rem;outline:none;transition:border-color 0.2s}
+input::placeholder{color:#ffffff30}
+input:focus{border-color:#c8f54250}
+.btn{width:100%;background:var(--lime);color:var(--black);border:none;border-radius:100px;padding:0.9rem;font-family:var(--font-head);font-weight:700;font-size:1rem;cursor:pointer;transition:all 0.25s;margin-top:0.5rem}
+.btn:hover{background:var(--lime2);transform:translateY(-1px)}
+.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.divider{text-align:center;color:var(--muted);font-size:0.8rem;margin:1.2rem 0;position:relative}
+.divider::before,.divider::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:#ffffff15}
+.divider::before{left:0}
+.divider::after{right:0}
+.btn-google{width:100%;background:#ffffff10;color:var(--white);border:1px solid #ffffff15;border-radius:100px;padding:0.9rem;font-family:var(--font-head);font-weight:700;font-size:0.95rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.6rem}
+.btn-google:hover{background:#ffffff18;border-color:#ffffff30}
+.msg{padding:0.8rem 1rem;border-radius:12px;font-size:0.9rem;margin-top:1rem;display:none}
+.msg.error{background:#ff444415;border:1px solid #ff444430;color:#ff8888}
+.msg.success{background:#c8f54215;border:1px solid #c8f54230;color:var(--lime)}
+.back{text-align:center;margin-top:1.5rem}
+.back a{color:var(--muted);font-size:0.85rem;text-decoration:none;transition:color 0.2s}
+.back a:hover{color:var(--white)}
+.check-email{text-align:center;display:none}
+.check-email .icon{font-size:3rem;margin-bottom:1rem}
+.check-email h3{font-family:var(--font-head);font-size:1.3rem;font-weight:700;margin-bottom:0.5rem}
+.check-email p{color:var(--muted);font-size:0.9rem;line-height:1.6}
 </style>
 </head>
 <body>
-<div class="sidebar">
+<div class="bg"><div class="orb orb1"></div><div class="orb orb2"></div></div>
+
+<div class="card">
   <div class="logo">Fit<span>Mind</span> AI</div>
-  <nav class="nav">
-    <a class="nav-item active" href="dashboard.html"><span class="icon">🏠</span> Dashboard</a>
-    <a class="nav-item" href="dashboard.html"><span class="icon">🤖</span> AI Coach</a>
-    <a class="nav-item" href="dashboard.html"><span class="icon">🏋️</span> Workouts</a>
-    <a class="nav-item" href="nutrition.html" id="navNutrition"><span class="icon">🥗</span> Nutrition</a>
-    <a class="nav-item" href="progress.html" id="navProgress"><span class="icon">📈</span> Progress</a>
-    <a class="nav-item" href="community.html"><span class="icon">👥</span> Community</a>
-  </nav>
-  <div class="sidebar-bottom">
-    <div class="user-info">
-      <div class="avatar" id="avatarInitial">?</div>
-      <div class="user-name" id="userName">Loading...</div>
-      <button class="signout-btn" onclick="signOut()" title="Sign out">⏻</button>
-    </div>
-  </div>
-</div>
 
-<div class="main">
-  <div class="topbar">
-    <div>
-      <div class="page-title" id="welcomeMsg">Loading...</div>
-      <div class="greeting" id="profileTags"></div>
+  <div id="authForm">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('signin')">Sign In</button>
+      <button class="tab" onclick="switchTab('signup')">Sign Up</button>
     </div>
-    <div style="display:flex;align-items:center;gap:0.75rem">
-      <span id="planBadge" class="free-badge">FREE</span>
-      <div class="badge-live"><span class="badge-dot"></span> AI Coach Online</div>
-    </div>
-  </div>
 
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-label">Workouts done</div>
-      <div class="stat-value lime" id="workoutCount">0</div>
-      <div class="stat-change up">↑ This week</div>
+    <div id="signinForm">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="signinEmail" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="signinPassword" placeholder="••••••••">
+      </div>
+      <button class="btn" onclick="signIn()" id="signinBtn">Sign In →</button>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">Calories burned</div>
-      <div class="stat-value" id="calorieCount">0</div>
-      <div class="stat-change">kcal today</div>
+
+    <div id="signupForm" style="display:none">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="signupName" placeholder="John Doe">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="signupEmail" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="signupPassword" placeholder="Min. 8 characters">
+      </div>
+      <button class="btn" onclick="signUp()" id="signupBtn">Create Account →</button>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">Streak</div>
-      <div class="stat-value lime">1🔥</div>
-      <div class="stat-change up">Keep it up!</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Plan progress</div>
-      <div class="stat-value" id="planProgress">0%</div>
-      <div class="stat-change">This week</div>
-    </div>
+
+    <div class="divider">or</div>
+    <button class="btn-google" onclick="signInGoogle()">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
+      Continue with Google
+    </button>
+
+    <div class="msg" id="authMsg"></div>
   </div>
 
-  <div class="content-grid">
-    <div class="chat-card">
-      <div class="card-title"><span class="dot"></span> AI Coach Chat <span id="msgCounter" style="margin-left:auto;font-size:0.75rem;color:var(--muted);font-weight:400"></span></div>
-      <div class="messages" id="messages">
-        <div class="msg-bubble ai" id="welcomeAiMsg">Hey! Loading your personalized plan... 🤖</div>
-      </div>
-      <div class="chat-input-wrap">
-        <input class="chat-input" id="chatInput" placeholder="Ask your AI coach anything..." onkeydown="if(event.key==='Enter')sendMsg()">
-        <button class="send-btn" onclick="sendMsg()" id="sendBtn">➤</button>
-      </div>
-    </div>
-
-    <div class="right-panel">
-      <div class="panel-card">
-        <div class="card-title">💪 Today's Workout</div>
-        <div class="workout-list" id="workoutList">
-          <div class="loading-plan">
-            <div class="spin"></div>
-            <div>Building your plan...</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel-card">
-        <div class="card-title">📈 Weekly Progress</div>
-        <div class="progress-bar-wrap">
-          <div class="progress-label"><span>Workouts</span><span id="wProgress">0/5</span></div>
-          <div class="progress-bar"><div class="progress-fill" id="wFill" style="width:0%"></div></div>
-        </div>
-        <div class="progress-bar-wrap" style="margin-top:1rem">
-          <div class="progress-label"><span>Nutrition</span><span>0/7 days</span></div>
-          <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
-        </div>
-        <div class="progress-bar-wrap" style="margin-top:1rem">
-          <div class="progress-label"><span>Water intake</span><span>0/8 glasses</span></div>
-          <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
-        </div>
-      </div>
-
-      <div class="upgrade-card" id="upgradeCard">
-        <h3>🚀 Unlock Full Access</h3>
-        <p>Get unlimited AI coaching, custom meal plans, and advanced analytics with Pro.</p>
-        <button class="upgrade-btn" onclick="openCheckout()">Upgrade to Pro — $19/mo</button>
-      </div>
-    </div>
+  <div class="check-email" id="checkEmail">
+    <div class="icon">📬</div>
+    <h3>Check your email!</h3>
+    <p>We sent a confirmation link to your email. Click it to activate your account and start your fitness journey!</p>
   </div>
+
+  <div class="back"><a href="index.html">← Back to FitMind AI</a></div>
 </div>
 
 <script>
@@ -203,251 +113,88 @@ const SUPABASE_KEY = 'sb_publishable_AWcGQ3cCWOrHntiOCvvGgw_XpHUmUpT';
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-Paddle.Initialize({ token: 'live_eefc76e39bd2263417b9b9ff52b' });
+// Profil varsa dashboard, yoksa onboarding'e yönlendir
+async function smartRedirect(userId) {
+  const { data: profile } = await sb.from('profiles').select('goal').eq('id', userId).single();
+  if (profile && profile.goal) {
+    window.location.href = 'dashboard.html';
+  } else {
+    window.location.href = 'onboarding.html';
+  }
+}
 
-let userProfile = null;
-let isPro = false;
-let freeMessageCount = 0;
-const FREE_MSG_LIMIT = 3;
-let doneCount = 0;
-let chatHistory = [];
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('signinForm').style.display = tab === 'signin' ? 'block' : 'none';
+  document.getElementById('signupForm').style.display = tab === 'signup' ? 'block' : 'none';
+  hideMsg();
+}
 
-const goalLabels = { lose_weight:'Lose Weight', build_muscle:'Build Muscle', get_fit:'Get Fit', improve_health:'Improve Health' };
-const levelLabels = { beginner:'Beginner', intermediate:'Intermediate', advanced:'Advanced' };
-const equipLabels = { home_no:'Home', home_basic:'Home+Equipment', gym:'Gym', outdoor:'Outdoor' };
+function showMsg(text, type) {
+  const el = document.getElementById('authMsg');
+  el.textContent = text;
+  el.className = 'msg ' + type;
+  el.style.display = 'block';
+}
 
-function openCheckout() {
-  Paddle.Checkout.open({
-    items: [{ priceId: 'pri_01knxscbw8bwh1rrg8byx2cgf0', quantity: 1 }],
-    successUrl: 'https://fitmind-ai-topaz.vercel.app/dashboard.html',
+function hideMsg() {
+  document.getElementById('authMsg').style.display = 'none';
+}
+
+async function signIn() {
+  const email = document.getElementById('signinEmail').value;
+  const password = document.getElementById('signinPassword').value;
+  if (!email || !password) { showMsg('Please fill in all fields.', 'error'); return; }
+  const btn = document.getElementById('signinBtn');
+  btn.disabled = true; btn.textContent = 'Signing in...';
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) {
+    showMsg(error.message, 'error');
+    btn.disabled = false;
+    btn.textContent = 'Sign In →';
+  } else {
+    await smartRedirect(data.user.id);
+  }
+}
+
+async function signUp() {
+  const name = document.getElementById('signupName').value;
+  const email = document.getElementById('signupEmail').value;
+  const password = document.getElementById('signupPassword').value;
+  if (!name || !email || !password) { showMsg('Please fill in all fields.', 'error'); return; }
+  if (password.length < 8) { showMsg('Password must be at least 8 characters.', 'error'); return; }
+  const btn = document.getElementById('signupBtn');
+  btn.disabled = true; btn.textContent = 'Creating account...';
+  const { error } = await sb.auth.signUp({ email, password, options: { data: { full_name: name } } });
+  if (error) {
+    showMsg(error.message, 'error');
+    btn.disabled = false;
+    btn.textContent = 'Create Account →';
+  } else {
+    document.getElementById('authForm').style.display = 'none';
+    document.getElementById('checkEmail').style.display = 'block';
+  }
+}
+
+async function signInGoogle() {
+  await sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.origin + '/auth.html' }
   });
 }
 
-function applyProUI() {
-  // Pro badge
-  const badge = document.getElementById('planBadge');
-  badge.textContent = '⚡ PRO';
-  badge.className = 'pro-badge';
-  // Upgrade card gizle
-  document.getElementById('upgradeCard').style.display = 'none';
-  // Nav kilitlerini kaldır
-  document.getElementById('navNutrition').classList.remove('locked');
-  document.getElementById('navProgress').classList.remove('locked');
-  // Mesaj sayacını gizle
-  document.getElementById('msgCounter').textContent = '';
-}
+// Sayfa açılışında zaten giriş yapmışsa yönlendir
+sb.auth.getSession().then(({ data: { session } }) => {
+  if (session) smartRedirect(session.user.id);
+});
 
-function applyFreeUI() {
-  // Nav kilitle
-  document.getElementById('navNutrition').classList.add('locked');
-  document.getElementById('navNutrition').innerHTML += '<span class="lock">🔒</span>';
-  document.getElementById('navProgress').classList.add('locked');
-  document.getElementById('navProgress').innerHTML += '<span class="lock">🔒</span>';
-  updateMsgCounter();
-}
-
-function updateMsgCounter() {
-  if (!isPro) {
-    const remaining = FREE_MSG_LIMIT - freeMessageCount;
-    document.getElementById('msgCounter').textContent = remaining > 0 ? `${remaining} free messages left` : 'Upgrade for unlimited';
+// Google login sonrası
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (event === 'SIGNED_IN' && session) {
+    await smartRedirect(session.user.id);
   }
-}
-
-async function init() {
-  const { data: { session } } = await sb.auth.getSession();
-  if (!session) { window.location.href = 'auth.html'; return; }
-
-  const user = session.user;
-  const name = user.user_metadata?.full_name || user.email.split('@')[0];
-  const initial = name.charAt(0).toUpperCase();
-  document.getElementById('avatarInitial').textContent = initial;
-  document.getElementById('userName').textContent = name;
-  const hour = new Date().getHours();
-  const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
-  document.getElementById('welcomeMsg').textContent = greeting + ', ' + name.split(' ')[0] + '! 👋';
-
-  const { data: profile } = await sb.from('profiles').select('*').eq('id', user.id).single();
-  userProfile = profile;
-  isPro = profile?.is_pro === true;
-
-  if (isPro) {
-    applyProUI();
-  } else {
-    applyFreeUI();
-  }
-
-  if (profile) {
-    const tags = document.getElementById('profileTags');
-    tags.innerHTML = '';
-    if (profile.goal) tags.innerHTML += `<span class="profile-tag">🎯 ${goalLabels[profile.goal] || profile.goal}</span>`;
-    if (profile.fitness_level) tags.innerHTML += `<span class="profile-tag">⚡ ${levelLabels[profile.fitness_level] || profile.fitness_level}</span>`;
-    if (profile.equipment) tags.innerHTML += `<span class="profile-tag">🏋️ ${equipLabels[profile.equipment] || profile.equipment}</span>`;
-    if (profile.training_days?.length) tags.innerHTML += `<span class="profile-tag">📅 ${profile.training_days.join(', ')}</span>`;
-    await loadPersonalizedPlan(profile, name);
-  } else {
-    document.getElementById('profileTags').textContent = "Here's your fitness overview for today";
-    loadDefaultPlan();
-    document.getElementById('welcomeAiMsg').textContent = "Hey! I'm your personal AI fitness coach 🤖 Complete your profile to get a personalized plan!";
-  }
-}
-
-async function loadPersonalizedPlan(profile, name) {
-  const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
-  const isTrainingDay = profile.training_days?.some(d => today.includes(d));
-
-  const prompt = `You are FitMind AI, a personal fitness coach. 
-User profile: Goal: ${profile.goal}, Level: ${profile.fitness_level}, Equipment: ${profile.equipment}, Training days: ${profile.training_days?.join(', ')}, Duration: ${profile.workout_duration} minutes, Age: ${profile.age}, Weight: ${profile.weight}kg.
-Today is ${today}. ${isTrainingDay ? 'Today IS a training day.' : 'Today is a REST day.'}
-
-${isTrainingDay ? 
-`Create today's workout. Respond with ONLY a JSON array of exercises, no other text:
-[{"name":"Exercise Name","sets":"3 sets × 12 reps","calories":50},...]
-Include 4-5 exercises appropriate for their level and equipment. Calories should be realistic per exercise.` :
-`Today is their rest day. Respond with ONLY this JSON:
-[{"name":"Active Recovery","sets":"Light stretching, 10 min","calories":30},{"name":"Hydration Goal","sets":"Drink 8 glasses of water","calories":0},{"name":"Sleep","sets":"Get 7-8 hours tonight","calories":0}]`}`;
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 500,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-    const data = await res.json();
-    const text = data.content?.[0]?.text || '[]';
-    const clean = text.replace(/```json|```/g, '').trim();
-    const exercises = JSON.parse(clean);
-    renderWorkout(exercises);
-
-    const totalCal = exercises.reduce((sum, e) => sum + (e.calories || 0), 0);
-    document.getElementById('calorieCount').textContent = totalCal;
-
-    const welcomePrompt = `You are FitMind AI. Greet ${name.split(' ')[0]} warmly. Their goal is ${profile.goal}, level: ${profile.fitness_level}. Today is ${isTrainingDay ? 'a training day' : 'a rest day'}. Give a short, motivating 2-sentence message about today's plan.`;
-    const res2 = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 150,
-        messages: [{ role: 'user', content: welcomePrompt }]
-      })
-    });
-    const data2 = await res2.json();
-    document.getElementById('welcomeAiMsg').textContent = data2.content?.[0]?.text || `Hey ${name.split(' ')[0]}! Ready to crush today's workout? 💪`;
-    chatHistory = [{ role: 'user', content: welcomePrompt }, { role: 'assistant', content: data2.content?.[0]?.text || '' }];
-  } catch(e) {
-    loadDefaultPlan();
-    document.getElementById('welcomeAiMsg').textContent = `Hey ${name}! I'm your AI coach — ask me anything about your fitness journey! 💪`;
-  }
-}
-
-function renderWorkout(exercises) {
-  const list = document.getElementById('workoutList');
-  list.innerHTML = '';
-  exercises.forEach(ex => {
-    const item = document.createElement('div');
-    item.className = 'workout-item';
-    item.onclick = () => toggleWorkout(item);
-    item.innerHTML = `
-      <div class="workout-check">✓</div>
-      <div class="workout-info">
-        <div class="workout-name">${ex.name}</div>
-        <div class="workout-sets">${ex.sets}</div>
-      </div>`;
-    list.appendChild(item);
-  });
-}
-
-function loadDefaultPlan() {
-  renderWorkout([
-    { name: 'Push-ups', sets: '3 sets × 15 reps' },
-    { name: 'Squats', sets: '4 sets × 12 reps' },
-    { name: 'Plank', sets: '3 sets × 45 sec' },
-    { name: 'Lunges', sets: '3 sets × 10 each' }
-  ]);
-}
-
-function toggleWorkout(el) {
-  const check = el.querySelector('.workout-check');
-  const isDone = check.classList.contains('done');
-  if (isDone) { check.classList.remove('done'); el.classList.remove('done-item'); doneCount = Math.max(0, doneCount-1); }
-  else { check.classList.add('done'); el.classList.add('done-item'); doneCount++; }
-  document.getElementById('workoutCount').textContent = doneCount;
-  const total = document.querySelectorAll('.workout-item').length;
-  const pct = Math.round((doneCount/total)*100);
-  document.getElementById('planProgress').textContent = pct + '%';
-  document.getElementById('wFill').style.width = pct + '%';
-}
-
-async function sendMsg() {
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  if (!text) return;
-
-  // FREE LIMIT KONTROLÜ
-  if (!isPro && freeMessageCount >= FREE_MSG_LIMIT) {
-    const msgs = document.getElementById('messages');
-    msgs.innerHTML += `<div class="msg-bubble limit">
-      🔒 <strong>Free limit reached (${FREE_MSG_LIMIT} messages)</strong><br>
-      <span style="font-size:0.82rem;color:var(--muted)">Upgrade to Pro for unlimited AI coaching</span><br>
-      <button onclick="openCheckout()" style="margin-top:0.6rem;background:var(--lime);color:#000;border:none;padding:0.4rem 1.2rem;border-radius:100px;font-family:var(--font-head);font-weight:700;cursor:pointer;font-size:0.85rem">Upgrade to Pro → $19/mo</button>
-    </div>`;
-    msgs.scrollTop = msgs.scrollHeight;
-    return;
-  }
-
-  input.value = '';
-  document.getElementById('sendBtn').disabled = true;
-  const msgs = document.getElementById('messages');
-  msgs.innerHTML += `<div class="msg-bubble user">${text}</div>`;
-  msgs.innerHTML += `<div class="msg-bubble typing"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
-  msgs.scrollTop = msgs.scrollHeight;
-
-  chatHistory.push({ role: 'user', content: text });
-
-  const systemPrompt = userProfile ? 
-    `You are FitMind AI, a personal fitness coach. User profile: Goal: ${userProfile.goal}, Level: ${userProfile.fitness_level}, Equipment: ${userProfile.equipment}, Age: ${userProfile.age}, Weight: ${userProfile.weight}kg. Give personalized, practical advice in 2-3 sentences max.` :
-    `You are FitMind AI, a friendly personal fitness coach. Give practical, encouraging advice in 2-3 sentences max.`;
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 300,
-        system: systemPrompt,
-        messages: chatHistory.slice(-10)
-      })
-    });
-    const data = await res.json();
-    const reply = data.content?.[0]?.text || "Keep pushing — consistency is key! 💪";
-    chatHistory.push({ role: 'assistant', content: reply });
-    document.querySelector('.msg-bubble.typing').remove();
-    msgs.innerHTML += `<div class="msg-bubble ai">${reply}</div>`;
-
-    // Mesaj sayacını artır
-    if (!isPro) {
-      freeMessageCount++;
-      updateMsgCounter();
-    }
-  } catch(e) {
-    document.querySelector('.msg-bubble.typing').remove();
-    msgs.innerHTML += `<div class="msg-bubble ai">Stay consistent and trust the process — every rep counts! 💪</div>`;
-  }
-  msgs.scrollTop = msgs.scrollHeight;
-  document.getElementById('sendBtn').disabled = false;
-}
-
-async function signOut() {
-  await sb.auth.signOut();
-  window.location.href = 'index.html';
-}
-
-init();
+});
 </script>
 </body>
 </html>
