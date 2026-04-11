@@ -345,7 +345,7 @@ async function loadPersonalizedPlan(profile, name) {
   const prompt = `You are FitMind AI. User: Goal: ${profile.goal}, Level: ${profile.fitness_level}, Equipment: ${profile.equipment}, Training days: ${profile.training_days?.join(', ')}, Duration: ${profile.workout_duration} min, Age: ${profile.age}, Weight: ${profile.weight}kg. Today is ${today}. ${isTrainingDay ? 'Training day.' : 'Rest day.'}
 ${isTrainingDay ? `Respond ONLY with JSON array: [{"name":"Exercise","sets":"3 sets × 12 reps","calories":50},...]` : `Respond ONLY with JSON: [{"name":"Active Recovery","sets":"Light stretching, 10 min","calories":30},{"name":"Hydration Goal","sets":"Drink 8 glasses","calories":0}]`}`;
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('/api/chat', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:500, messages:[{role:'user',content:prompt}] })
     });
@@ -353,7 +353,7 @@ ${isTrainingDay ? `Respond ONLY with JSON array: [{"name":"Exercise","sets":"3 s
     const exercises = JSON.parse((data.content?.[0]?.text || '[]').replace(/```json|```/g,'').trim());
     renderWorkout(exercises);
     document.getElementById('calorieCount').textContent = exercises.reduce((s,e)=>s+(e.calories||0),0);
-    const res2 = await fetch('https://api.anthropic.com/v1/messages', {
+    const res2 = await fetch('/api/chat', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:150, messages:[{role:'user',content:`Greet ${name.split(' ')[0]} warmly. Goal: ${profile.goal}, level: ${profile.fitness_level}. Today is ${isTrainingDay?'training':'rest'} day. 2 motivating sentences.`}] })
     });
@@ -373,7 +373,7 @@ async function loadWeeklyPlan(profile) {
   const prompt = `Create a weekly workout plan for: Goal: ${profile.goal}, Level: ${profile.fitness_level}, Equipment: ${profile.equipment}, Training days: ${profile.training_days?.join(', ')}, Duration: ${profile.workout_duration} min.
 Respond ONLY with JSON: [{"day":"Monday","type":"Training","exercises":[{"name":"Exercise","sets":"3×12","muscles":"Chest"},...]},...] Include only their training days plus rest days. Max 4 exercises per day.`;
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('/api/chat', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, messages:[{role:'user',content:prompt}] })
     });
@@ -461,7 +461,7 @@ async function sendToAI(text, msgsId, inputId, btnId, history) {
   history.push({role:'user',content:text});
   const systemPrompt = userProfile ? `You are FitMind AI, a personal fitness coach. User: Goal: ${userProfile.goal}, Level: ${userProfile.fitness_level}, Equipment: ${userProfile.equipment}, Age: ${userProfile.age}, Weight: ${userProfile.weight}kg. Give personalized advice in 2-3 sentences max.` : `You are FitMind AI, a friendly fitness coach. Give practical advice in 2-3 sentences max.`;
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('/api/chat', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:300,system:systemPrompt,messages:history.slice(-10)})
     });
