@@ -113,6 +113,16 @@ const SUPABASE_KEY = 'sb_publishable_AWcGQ3cCWOrHntiOCvvGgw_XpHUmUpT';
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+// Profil varsa dashboard, yoksa onboarding'e yönlendir
+async function smartRedirect(userId) {
+  const { data: profile } = await sb.from('profiles').select('goal').eq('id', userId).single();
+  if (profile && profile.goal) {
+    window.location.href = 'dashboard.html';
+  } else {
+    window.location.href = 'onboarding.html';
+  }
+}
+
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   event.target.classList.add('active');
@@ -138,9 +148,14 @@ async function signIn() {
   if (!email || !password) { showMsg('Please fill in all fields.', 'error'); return; }
   const btn = document.getElementById('signinBtn');
   btn.disabled = true; btn.textContent = 'Signing in...';
-  const { error } = await sb.auth.signInWithPassword({ email, password });
-  if (error) { showMsg(error.message, 'error'); btn.disabled = false; btn.textContent = 'Sign In →'; }
-  else { window.location.href = 'onboarding.html'; }
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) {
+    showMsg(error.message, 'error');
+    btn.disabled = false;
+    btn.textContent = 'Sign In →';
+  } else {
+    await smartRedirect(data.user.id);
+  }
 }
 
 async function signUp() {
@@ -152,16 +167,33 @@ async function signUp() {
   const btn = document.getElementById('signupBtn');
   btn.disabled = true; btn.textContent = 'Creating account...';
   const { error } = await sb.auth.signUp({ email, password, options: { data: { full_name: name } } });
-  if (error) { showMsg(error.message, 'error'); btn.disabled = false; btn.textContent = 'Create Account →'; }
-  else { document.getElementById('authForm').style.display = 'none'; document.getElementById('checkEmail').style.display = 'block'; }
+  if (error) {
+    showMsg(error.message, 'error');
+    btn.disabled = false;
+    btn.textContent = 'Create Account →';
+  } else {
+    document.getElementById('authForm').style.display = 'none';
+    document.getElementById('checkEmail').style.display = 'block';
+  }
 }
 
 async function signInGoogle() {
-  await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin + '/onboarding.html' } });
+  await sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.origin + '/auth.html' }
+  });
 }
 
-sb.auth.onAuthStateChange((event, session) => {
-  if (event === 'SIGNED_IN' && session) window.location.href = 'onboarding.html';
+// Sayfa açılışında zaten giriş yapmışsa yönlendir
+sb.auth.getSession().then(({ data: { session } }) => {
+  if (session) smartRedirect(session.user.id);
+});
+
+// Google login sonrası
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (event === 'SIGNED_IN' && session) {
+    await smartRedirect(session.user.id);
+  }
 });
 </script>
 </body>
