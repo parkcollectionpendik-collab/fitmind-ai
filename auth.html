@@ -166,11 +166,13 @@ async function signUp() {
   if (password.length < 8) { showMsg('Password must be at least 8 characters.', 'error'); return; }
   const btn = document.getElementById('signupBtn');
   btn.disabled = true; btn.textContent = 'Creating account...';
-  const { error } = await sb.auth.signUp({ email, password, options: { data: { full_name: name } } });
+  const { data, error } = await sb.auth.signUp({ email, password, options: { data: { full_name: name } } });
   if (error) {
     showMsg(error.message, 'error');
     btn.disabled = false;
     btn.textContent = 'Create Account →';
+  } else if (data?.session) {
+    await smartRedirect(data.user.id);
   } else {
     document.getElementById('authForm').style.display = 'none';
     document.getElementById('checkEmail').style.display = 'block';
