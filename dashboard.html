@@ -468,10 +468,12 @@ async function sendToAI(text, msgsId, inputId, btnId, history) {
     const data = await res.json();
     const reply = data.content?.[0]?.text || "Keep pushing — consistency is key! 💪";
     history.push({role:'assistant',content:reply});
-    document.querySelector(`#${msgsId} .msg-bubble.typing`).remove();
+    const typingEl = document.querySelector('#' + msgsId + ' .msg-bubble.typing');
+if (typingEl) typingEl.remove();
     msgs.innerHTML += `<div class="msg-bubble ai">${reply}</div>`;
   } catch(e) {
-    document.querySelector(`#${msgsId} .msg-bubble.typing`).remove();
+    const typingEl = document.querySelector('#' + msgsId + ' .msg-bubble.typing');
+if (typingEl) typingEl.remove();
     msgs.innerHTML += `<div class="msg-bubble ai">Stay consistent and trust the process! 💪</div>`;
   }
   msgs.scrollTop = msgs.scrollHeight;
