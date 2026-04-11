@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitMind AI – Progress</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--lime2:#a8d92e;--gray:#111;--muted:#888;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
+body{background:var(--black);color:var(--white);font-family:var(--font-body);min-height:100vh}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:#0d0d0d;border-right:1px solid #ffffff0f;padding:1.5rem;display:flex;flex-direction:column;z-index:10}
+.logo{font-family:var(--font-head);font-weight:800;font-size:1.1rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid #ffffff0f}
+.logo span{color:var(--lime)}
+.nav{display:flex;flex-direction:column;gap:0.3rem;flex:1}
+.nav-item{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 1rem;border-radius:12px;cursor:pointer;transition:all 0.2s;font-size:0.9rem;color:var(--muted);border:none;background:transparent;width:100%;text-align:left;font-family:var(--font-body);text-decoration:none}
+.nav-item:hover{background:#ffffff08;color:var(--white)}
+.nav-item.active{background:#c8f54215;color:var(--lime)}
+.nav-item .icon{width:18px;text-align:center;font-size:1rem}
+.sidebar-bottom{padding-top:1rem;border-top:1px solid #ffffff0f}
+.user-info{display:flex;align-items:center;gap:0.75rem;padding:0.5rem}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--lime),#4af);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.85rem;color:var(--black);flex-shrink:0}
+.user-name{font-size:0.85rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.signout-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0.25rem;transition:color 0.2s}
+.signout-btn:hover{color:#ff6b6b}
+.main{margin-left:240px;padding:2rem;min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}
+.page-title{font-family:var(--font-head);font-size:1.5rem;font-weight:800}
+.page-sub{color:var(--muted);font-size:0.9rem;margin-top:0.2rem}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
+.stat-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:16px;padding:1.5rem;transition:border-color 0.3s}
+.stat-card:hover{border-color:#c8f54225}
+.stat-label{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:0.5rem}
+.stat-value{font-family:var(--font-head);font-size:2rem;font-weight:800;line-height:1}
+.stat-value.lime{color:var(--lime)}
+.stat-change{font-size:0.78rem;margin-top:0.3rem}
+.stat-change.up{color:#4ade80}
+.stat-change.down{color:#ff6b6b}
+.stat-change.neutral{color:var(--muted)}
+
+/* CONTENT */
+.content-grid{display:grid;grid-template-columns:1fr 320px;gap:1.5rem}
+.panel-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
+.card-title{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1rem}
+
+/* LOG FORM */
+.log-form{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem}
+.input-group{display:flex;flex-direction:column;gap:0.4rem}
+label{font-size:0.75rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;font-weight:700}
+input[type=number],input[type=date],textarea{background:#ffffff08;border:1.5px solid #ffffff12;border-radius:12px;padding:0.75rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.95rem;outline:none;transition:border-color 0.2s;width:100%}
+input:focus,textarea:focus{border-color:#c8f54250}
+textarea{resize:none;height:70px}
+.log-btn{background:var(--lime);color:var(--black);border:none;border-radius:12px;padding:0.8rem 1.5rem;font-family:var(--font-head);font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.2s;width:100%}
+.log-btn:hover{background:var(--lime2)}
+
+/* CHART */
+.chart-wrap{position:relative;height:220px;margin-top:0.5rem}
+
+/* HISTORY */
+.history-list{display:flex;flex-direction:column;gap:0.5rem;margin-top:0.5rem;max-height:300px;overflow-y:auto}
+.history-list::-webkit-scrollbar{width:3px}
+.history-list::-webkit-scrollbar-thumb{background:#ffffff15;border-radius:10px}
+.history-item{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem;background:#ffffff05;border-radius:12px}
+.history-date{font-size:0.82rem;color:var(--muted)}
+.history-weight{font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--lime)}
+.history-measures{font-size:0.75rem;color:var(--muted);margin-top:0.1rem}
+.delete-log{background:transparent;border:none;color:#ffffff15;cursor:pointer;font-size:0.85rem;transition:color 0.2s}
+.delete-log:hover{color:#ff6b6b}
+.empty-state{text-align:center;padding:2rem;color:var(--muted);font-size:0.875rem}
+.empty-state .big{font-size:2.5rem;margin-bottom:0.5rem}
+
+/* BADGES */
+.badges-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-top:0.5rem}
+.badge-item{background:#ffffff06;border:1px solid #ffffff0a;border-radius:14px;padding:0.8rem;display:flex;align-items:center;gap:0.6rem;transition:all 0.3s}
+.badge-item.earned{background:#c8f54210;border-color:#c8f54225}
+.badge-item.locked{opacity:0.4}
+.badge-emoji{font-size:1.4rem}
+.badge-name{font-family:var(--font-head);font-size:0.78rem;font-weight:700}
+.badge-desc{font-size:0.7rem;color:var(--muted);margin-top:0.1rem}
+
+/* AI INSIGHT */
+.ai-insight{background:#c8f54208;border:1px solid #c8f54218;border-radius:14px;padding:1rem;font-size:0.85rem;color:#ffffffcc;line-height:1.6;display:flex;gap:0.75rem;margin-top:1rem}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid #ffffff15;border-top-color:var(--lime);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="logo">Fit<span>Mind</span> AI</div>
+  <nav class="nav">
+    <a href="dashboard.html" class="nav-item"><span class="icon">🏠</span> Dashboard</a>
+    <a href="dashboard.html" class="nav-item"><span class="icon">🤖</span> AI Coach</a>
+    <a href="dashboard.html" class="nav-item"><span class="icon">🏋️</span> Workouts</a>
+    <a href="nutrition.html" class="nav-item"><span class="icon">🥗</span> Nutrition</a>
+    <a href="progress.html" class="nav-item active"><span class="icon">📈</span> Progress</a>
+    <a href="dashboard.html" class="nav-item"><span class="icon">👥</span> Community</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="user-info">
+      <div class="avatar" id="avatarInitial">?</div>
+      <div class="user-name" id="userName">Loading...</div>
+      <button class="signout-btn" onclick="signOut()">⏻</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title">📈 Progress Tracker</div>
+      <div class="page-sub">Track your transformation over time</div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Current Weight</div>
+      <div class="stat-value lime" id="currentWeight">—</div>
+      <div class="stat-change neutral" id="weightChange">No data yet</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Lost/Gained</div>
+      <div class="stat-value" id="totalChange">—</div>
+      <div class="stat-change neutral" id="totalChangeLabel">Since start</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Logs recorded</div>
+      <div class="stat-value lime" id="logCount">0</div>
+      <div class="stat-change neutral">Total entries</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Trend</div>
+      <div class="stat-value" id="trendVal">—</div>
+      <div class="stat-change neutral" id="trendLabel">Per week</div>
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <div>
+      <!-- LOG FORM -->
+      <div class="panel-card">
+        <div class="card-title">📝 Log Today's Measurements</div>
+        <div class="log-form">
+          <div class="input-group">
+            <label>Date</label>
+            <input type="date" id="logDate">
+          </div>
+          <div class="input-group">
+            <label>Weight (kg)</label>
+            <input type="number" id="logWeight" placeholder="75.5" step="0.1">
+          </div>
+          <div class="input-group">
+            <label>Chest (cm)</label>
+            <input type="number" id="logChest" placeholder="95" step="0.5">
+          </div>
+          <div class="input-group">
+            <label>Waist (cm)</label>
+            <input type="number" id="logWaist" placeholder="80" step="0.5">
+          </div>
+          <div class="input-group">
+            <label>Hips (cm)</label>
+            <input type="number" id="logHips" placeholder="95" step="0.5">
+          </div>
+          <div class="input-group">
+            <label>Notes</label>
+            <input type="number" id="logNotes" placeholder="Feeling great!" style="display:none">
+            <textarea id="logNotesText" placeholder="How are you feeling? Any observations..."></textarea>
+          </div>
+        </div>
+        <button class="log-btn" onclick="saveLog()" id="saveBtn">Save Progress Log</button>
+        <div class="ai-insight" id="aiInsight" style="display:none">
+          <span>🤖</span>
+          <span id="aiInsightText"></span>
+        </div>
+      </div>
+
+      <!-- WEIGHT CHART -->
+      <div class="panel-card">
+        <div class="card-title">⚖️ Weight Over Time</div>
+        <div class="chart-wrap">
+          <canvas id="weightChart"></canvas>
+        </div>
+      </div>
+
+      <!-- HISTORY -->
+      <div class="panel-card">
+        <div class="card-title">🗓️ Log History</div>
+        <div class="history-list" id="historyList">
+          <div class="empty-state"><div class="big">📊</div><div>No logs yet. Start tracking today!</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div>
+      <div class="panel-card">
+        <div class="card-title">🏆 Achievements</div>
+        <div class="badges-grid" id="badgesGrid">
+          <div class="badge-item locked" id="badge-first">
+            <div class="badge-emoji">🌱</div>
+            <div><div class="badge-name">First Log</div><div class="badge-desc">Log your first entry</div></div>
+          </div>
+          <div class="badge-item locked" id="badge-week">
+            <div class="badge-emoji">📅</div>
+            <div><div class="badge-name">Week Warrior</div><div class="badge-desc">7 days of logging</div></div>
+          </div>
+          <div class="badge-item locked" id="badge-loss">
+            <div class="badge-emoji">🔥</div>
+            <div><div class="badge-name">Fat Burner</div><div class="badge-desc">Lost 2kg+</div></div>
+          </div>
+          <div class="badge-item locked" id="badge-streak">
+            <div class="badge-emoji">⚡</div>
+            <div><div class="badge-name">Consistent</div><div class="badge-desc">5 logs in a row</div></div>
+          </div>
+          <div class="badge-item locked" id="badge-month">
+            <div class="badge-emoji">🌟</div>
+            <div><div class="badge-name">Month Master</div><div class="badge-desc">30 days of logging</div></div>
+          </div>
+          <div class="badge-item locked" id="badge-goal">
+            <div class="badge-emoji">🎯</div>
+            <div><div class="badge-name">Goal Crusher</div><div class="badge-desc">Reached target weight</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div class="card-title">📏 Body Measurements</div>
+        <div style="margin-top:0.5rem" id="measuresList">
+          <div style="color:var(--muted);font-size:0.875rem;text-align:center;padding:1rem">Log measurements to see them here</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://cypmmayxwbkarvheqoxu.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_AWcGQ3cCWOrHntiOCvvGgw_XpHUmUpT';
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let logs = [];
+let chart = null;
+let userProfile = null;
+let currentUserId = null;
+
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = 'auth.html'; return; }
+  const user = session.user;
+  currentUserId = user.id;
+  const name = user.user_metadata?.full_name || user.email.split('@')[0];
+  document.getElementById('avatarInitial').textContent = name.charAt(0).toUpperCase();
+  document.getElementById('userName').textContent = name;
+  document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
+
+  const { data: profile } = await sb.from('profiles').select('*').eq('id', user.id).single();
+  userProfile = profile;
+
+  await loadLogs();
+  initChart();
+}
+
+async function loadLogs() {
+  const { data } = await sb.from('progress_logs').select('*').eq('user_id', currentUserId).order('log_date', { ascending: true });
+  logs = data || [];
+  renderStats();
+  renderHistory();
+  updateChart();
+  updateBadges();
+  updateMeasurements();
+}
+
+function renderStats() {
+  if (logs.length === 0) return;
+  const weightLogs = logs.filter(l => l.weight);
+  if (weightLogs.length === 0) return;
+  const latest = weightLogs[weightLogs.length - 1];
+  const first = weightLogs[0];
+  document.getElementById('currentWeight').textContent = latest.weight + ' kg';
+  document.getElementById('logCount').textContent = logs.length;
+  const diff = (latest.weight - first.weight).toFixed(1);
+  const diffEl = document.getElementById('totalChange');
+  diffEl.textContent = (diff > 0 ? '+' : '') + diff + ' kg';
+  diffEl.className = 'stat-value ' + (diff < 0 ? 'lime' : diff > 0 ? '' : '');
+  document.getElementById('totalChangeLabel').textContent = 'Since ' + new Date(first.log_date).toLocaleDateString('en-US', {month:'short', day:'numeric'});
+  if (weightLogs.length >= 2) {
+    const days = (new Date(latest.log_date) - new Date(first.log_date)) / (1000*60*60*24);
+    const weeks = days / 7 || 1;
+    const perWeek = ((latest.weight - first.weight) / weeks).toFixed(2);
+    document.getElementById('trendVal').textContent = (perWeek > 0 ? '+' : '') + perWeek + ' kg';
+    document.getElementById('trendLabel').textContent = 'Per week average';
+    const trendEl = document.getElementById('trendVal');
+    if (userProfile?.goal === 'lose_weight') trendEl.className = 'stat-value ' + (perWeek < 0 ? 'lime' : '');
+    else if (userProfile?.goal === 'build_muscle') trendEl.className = 'stat-value ' + (perWeek > 0 ? 'lime' : '');
+  }
+  if (weightLogs.length >= 2) {
+    const prev = weightLogs[weightLogs.length - 2];
+    const chg = (latest.weight - prev.weight).toFixed(1);
+    document.getElementById('weightChange').textContent = (chg > 0 ? '↑ +' : '↓ ') + chg + ' kg from last';
+    document.getElementById('weightChange').className = 'stat-change ' + (chg < 0 ? 'down' : chg > 0 ? 'up' : 'neutral');
+  }
+}
+
+function renderHistory() {
+  const list = document.getElementById('historyList');
+  if (logs.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="big">📊</div><div>No logs yet. Start tracking today!</div></div>';
+    return;
+  }
+  list.innerHTML = [...logs].reverse().map(log => `
+    <div class="history-item">
+      <div>
+        <div class="history-date">${new Date(log.log_date + 'T12:00:00').toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric'})}</div>
+        ${log.waist || log.chest ? `<div class="history-measures">${log.chest ? 'Chest: '+log.chest+'cm ' : ''}${log.waist ? 'Waist: '+log.waist+'cm ' : ''}${log.hips ? 'Hips: '+log.hips+'cm' : ''}</div>` : ''}
+        ${log.notes ? `<div class="history-measures" style="font-style:italic">"${log.notes}"</div>` : ''}
+      </div>
+      <div style="display:flex;align-items:center;gap:0.5rem">
+        <div class="history-weight">${log.weight ? log.weight + ' kg' : '—'}</div>
+        <button class="delete-log" onclick="deleteLog('${log.id}')">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+function initChart() {
+  const ctx = document.getElementById('weightChart').getContext('2d');
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: { labels: [], datasets: [{ label: 'Weight (kg)', data: [], borderColor: '#c8f542', backgroundColor: '#c8f54215', borderWidth: 2.5, pointBackgroundColor: '#c8f542', pointRadius: 5, tension: 0.4, fill: true }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: '#ffffff08' }, ticks: { color: '#888', font: { family: 'DM Sans', size: 11 } } },
+        y: { grid: { color: '#ffffff08' }, ticks: { color: '#888', font: { family: 'DM Sans', size: 11 }, callback: v => v + ' kg' } }
+      }
+    }
+  });
+}
+
+function updateChart() {
+  if (!chart) return;
+  const weightLogs = logs.filter(l => l.weight);
+  chart.data.labels = weightLogs.map(l => new Date(l.log_date + 'T12:00:00').toLocaleDateString('en-US', {month:'short', day:'numeric'}));
+  chart.data.datasets[0].data = weightLogs.map(l => l.weight);
+  chart.update();
+}
+
+function updateBadges() {
+  if (logs.length >= 1) document.getElementById('badge-first').classList.replace('locked', 'earned');
+  if (logs.length >= 7) document.getElementById('badge-week').classList.replace('locked', 'earned');
+  if (logs.length >= 30) document.getElementById('badge-month').classList.replace('locked', 'earned');
+  if (logs.length >= 5) document.getElementById('badge-streak').classList.replace('locked', 'earned');
+  const weightLogs = logs.filter(l => l.weight);
+  if (weightLogs.length >= 2) {
+    const diff = weightLogs[0].weight - weightLogs[weightLogs.length-1].weight;
+    if (diff >= 2) document.getElementById('badge-loss').classList.replace('locked', 'earned');
+  }
+}
+
+function updateMeasurements() {
+  const latest = [...logs].reverse().find(l => l.chest || l.waist || l.hips);
+  if (!latest) return;
+  const el = document.getElementById('measuresList');
+  el.innerHTML = `
+    ${latest.chest ? `<div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #ffffff08;font-size:0.875rem"><span style="color:var(--muted)">Chest</span><span>${latest.chest} cm</span></div>` : ''}
+    ${latest.waist ? `<div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #ffffff08;font-size:0.875rem"><span style="color:var(--muted)">Waist</span><span>${latest.waist} cm</span></div>` : ''}
+    ${latest.hips ? `<div style="display:flex;justify-content:space-between;padding:0.5rem 0;font-size:0.875rem"><span style="color:var(--muted)">Hips</span><span>${latest.hips} cm</span></div>` : ''}
+    <div style="font-size:0.75rem;color:var(--muted);margin-top:0.75rem">Last updated: ${new Date(latest.log_date + 'T12:00:00').toLocaleDateString('en-US', {month:'short', day:'numeric'})}</div>`;
+}
+
+async function saveLog() {
+  const btn = document.getElementById('saveBtn');
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+  const logData = {
+    user_id: currentUserId,
+    log_date: document.getElementById('logDate').value,
+    weight: parseFloat(document.getElementById('logWeight').value) || null,
+    chest: parseFloat(document.getElementById('logChest').value) || null,
+    waist: parseFloat(document.getElementById('logWaist').value) || null,
+    hips: parseFloat(document.getElementById('logHips').value) || null,
+    notes: document.getElementById('logNotesText').value || null
+  };
+  if (!logData.log_date) { alert('Please select a date'); btn.disabled = false; btn.textContent = 'Save Progress Log'; return; }
+  const { error } = await sb.from('progress_logs').insert(logData);
+  if (error) { alert('Error: ' + error.message); }
+  else {
+    document.getElementById('logWeight').value = '';
+    document.getElementById('logChest').value = '';
+    document.getElementById('logWaist').value = '';
+    document.getElementById('logHips').value = '';
+    document.getElementById('logNotesText').value = '';
+    await loadLogs();
+    if (logData.weight && logs.length >= 2) generateAiInsight(logData.weight);
+  }
+  btn.disabled = false;
+  btn.textContent = 'Save Progress Log';
+}
+
+async function generateAiInsight(newWeight) {
+  const weightLogs = logs.filter(l => l.weight);
+  if (weightLogs.length < 2) return;
+  const first = weightLogs[0];
+  const diff = (newWeight - first.weight).toFixed(1);
+  const insightEl = document.getElementById('aiInsight');
+  const insightText = document.getElementById('aiInsightText');
+  insightEl.style.display = 'flex';
+  insightText.innerHTML = '<span class="spin"></span> AI is analyzing your progress...';
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 120,
+        messages: [{ role: 'user', content: `User's goal: ${userProfile?.goal}. They started at ${first.weight}kg and now weigh ${newWeight}kg (${diff > 0 ? '+' : ''}${diff}kg change). Give a 2-sentence motivating and specific insight about their progress.` }]
+      })
+    });
+    const data = await res.json();
+    insightText.textContent = data.content?.[0]?.text || 'Great job tracking your progress! Consistency is the key to long-term results.';
+  } catch(e) {
+    insightText.textContent = 'Great job logging your progress! Keep it up — consistency is everything.';
+  }
+}
+
+async function deleteLog(id) {
+  if (!confirm('Delete this log?')) return;
+  await sb.from('progress_logs').delete().eq('id', id);
+  await loadLogs();
+}
+
+async function signOut() {
+  await sb.auth.signOut();
+  window.location.href = 'index.html';
+}
+
+init();
+</script>
+</body>
+</html>
