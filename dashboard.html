@@ -106,8 +106,40 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .exercise-detail{font-size:0.75rem;color:var(--muted);margin-top:0.1rem}
 .error-msg{color:#ff6b6b;font-size:0.8rem;padding:0.5rem 1rem;background:#ff6b6b10;border-radius:8px;margin-top:0.5rem;display:none}
 </style>
+  @media (max-width: 768px) {
+  .sidebar{
+    position:fixed;left:-240px;top:0;bottom:0;width:240px;
+    transition:left 0.3s ease;z-index:100
+  }
+  .sidebar.open{left:0}
+  .main{margin-left:0;padding:1rem}
+  .mobile-menu-btn{
+    display:flex;position:fixed;top:1rem;left:1rem;z-index:200;
+    background:var(--lime);color:var(--black);border:none;
+    border-radius:10px;width:40px;height:40px;
+    align-items:center;justify-content:center;
+    font-size:1.2rem;cursor:pointer
+  }
+  .overlay{
+    display:none;position:fixed;inset:0;
+    background:#00000080;z-index:99
+  }
+  .overlay.open{display:block}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .content-grid{grid-template-columns:1fr}
+  .right-panel{display:none}
+  .workouts-grid{grid-template-columns:1fr}
+  .topbar{margin-top:3rem}
+  .page-title{font-size:1.2rem}
+}
+@media (min-width: 769px) {
+  .mobile-menu-btn{display:none}
+  .overlay{display:none}
+}
 </head>
 <body>
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+<button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
 <div class="sidebar">
   <div class="logo">Fit<span>Mind</span> AI</div>
   <nav class="nav">
