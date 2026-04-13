@@ -286,7 +286,12 @@ div.dataset.day=day;
 }
 
 function selectDay(dayName) {
-  document.querySelectorAll('.day-card').forEach(d => d.classList.remove('selected-day'));
+ document.querySelectorAll('.day-card').forEach(d => {
+  d.classList.remove('selected-day');
+  d.classList.remove('today');
+});
+const todayIdx = (new Date().getDay()+6)%7;
+document.querySelectorAll('.day-card')[todayIdx]?.classList.add('today');
   const idx = days.indexOf(dayName);
   if (idx >= 0) document.querySelectorAll('.day-card')[idx].classList.add('selected-day');
   const dayPlan = planData.days?.find(d => d.day === dayName);
