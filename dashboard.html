@@ -473,7 +473,15 @@ async function signOut(){
   await sb.auth.signOut();
   window.location.replace('auth.html');
 }
-
+function formatAIReply(text) {
+  return text
+    .replace(/#{1,3} /g, '')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/^- /gm, '• ')
+    .replace(/\n\n/g, '<br><br>')
+    .replace(/\n/g, '<br>');
+}
 init();
 </script>
 </body>
