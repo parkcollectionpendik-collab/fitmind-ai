@@ -431,25 +431,28 @@ async function loadQuickWorkoutPreview() {
     cards.appendChild(card);
 
     // ExerciseDB'den GIF çek
-    try{
-      const searchName = ex.name.toLowerCase().replace(/ş/g,'s').replace(/ç/g,'c').replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ö/g,'o').replace(/ı/g,'i');
-const res = await fetch(`https://exercisedb.p.rapidapi.com/exercises/name/${encodeURIComponent(searchName)}?limit=1&offset=0`,{
-        headers:{
-          'x-rapidapi-key':'fbbfaada2dmshc5e5f202fe10454p1e4735jsn7c3223f10af2',
-          'x-rapidapi-host':'exercisedb.p.rapidapi.com'
-        }
-      });
-      const exData = await res.json();
-      const gifEl = document.getElementById('gif_'+i);
-      if(exData?.[0]?.gifUrl && gifEl){
-        gifEl.innerHTML=`<img src="${exData[0].gifUrl}" style="width:70px;height:70px;object-fit:cover;border-radius:12px" alt="${ex.name}">`;
-      } else if(gifEl){
-        gifEl.innerHTML=`<span style="font-size:1.5rem">💪</span>`;
-      }
-    } catch(e){
-      const gifEl = document.getElementById('gif_'+i);
-      if(gifEl) gifEl.innerHTML=`<span style="font-size:1.5rem">💪</span>`;
+   try{
+  const searchName = ex.name.toLowerCase().replace(/ş/g,'s').replace(/ç/g,'c').replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ö/g,'o').replace(/ı/g,'i');
+  const res = await fetch(`https://wger.de/api/v2/exercise/search/?term=${encodeURIComponent(searchName)}&language=english&format=json`);
+  const wgerData = await res.json();
+  const gifEl = document.getElementById('gif_'+i);
+  
+  if(wgerData?.suggestions?.[0]?.data?.id && gifEl){
+    const exId = wgerData.suggestions[0].data.id;
+    const imgRes = await fetch(`https://wger.de/api/v2/exerciseimage/?exercise=${exId}&format=json`);
+    const imgData = await imgRes.json();
+    if(imgData?.results?.[0]?.image){
+      gifEl.innerHTML=`<img src="${imgData.results[0].image}" style="width:70px;height:70px;object-fit:cover;border-radius:12px" alt="${ex.name}">`;
+    } else if(gifEl){
+      gifEl.innerHTML=`<span style="font-size:1.8rem">💪</span>`;
     }
+  } else if(gifEl){
+    gifEl.innerHTML=`<span style="font-size:1.8rem">💪</span>`;
+  }
+} catch(e){
+  const gifEl = document.getElementById('gif_'+i);
+  if(gifEl) gifEl.innerHTML=`<span style="font-size:1.8rem">💪</span>`;
+}
   }
 }
 
