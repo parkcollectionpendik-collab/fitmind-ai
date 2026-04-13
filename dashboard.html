@@ -428,8 +428,8 @@ async function sendToAI(text,msgsId,inputId,btnId,history){
   msgs.scrollTop=msgs.scrollHeight;
   history.push({role:'user',content:text});
   if (detectPlanRequest(text)) {
-    const planSystem = `Sen FitMind AI'sın. Kullanıcı için kısa ve net bir kişisel plan oluştur. SADECE şu JSON formatında yanıt ver, başka metin olmasın:
-{"workout":"haftalık antrenman planı kısa açıklama","nutrition":"günlük beslenme planı kısa açıklama","tips":"3 pratik ipucu"}`;
+    const planSystem = `Sen FitMind AI'sın. Kullanıcı için kişisel plan oluştur. SADECE şu JSON formatında yanıt ver, başka metin olmasın:
+{"workout":"genel haftalık antrenman özeti","nutrition":"günlük beslenme planı","tips":"1) ipucu 2) ipucu 3) ipucu","days":[{"day":"Pazartesi","type":"Antrenman","exercises":"egzersiz listesi"},{"day":"Salı","type":"Dinlenme","exercises":"Hafif germe ve yürüyüş"},{"day":"Çarşamba","type":"Antrenman","exercises":"egzersiz listesi"},{"day":"Perşembe","type":"Antrenman","exercises":"egzersiz listesi"},{"day":"Cuma","type":"Dinlenme","exercises":"Hafif germe ve yürüyüş"},{"day":"Cumartesi","type":"Antrenman","exercises":"egzersiz listesi"},{"day":"Pazar","type":"Dinlenme","exercises":"Tam dinlenme"}]}`;
     try {
       const planReply = await callAI([{role:'user',content:text}], planSystem, 400);
       const clean = planReply.replace(/```json|```/g,'').trim();
