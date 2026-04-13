@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -131,17 +131,17 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
   <div class="logo">Fit<span>Mind</span> AI</div>
   <nav class="nav">
     <button class="nav-item active" onclick="switchTab('dashboard', this)"><span class="icon">🏠</span> Dashboard</button>
-    <button class="nav-item" onclick="switchTab('aicoach', this)"><span class="icon">🤖</span> AI Coach</button>
-    <button class="nav-item" onclick="switchTab('workouts', this)"><span class="icon">🏋️</span> Workouts</button>
-    <a class="nav-item" href="nutrition.html" id="navNutrition"><span class="icon">🥗</span> Nutrition</a>
-    <a class="nav-item" href="progress.html" id="navProgress"><span class="icon">📈</span> Progress</a>
-    <a class="nav-item" href="community.html"><span class="icon">👥</span> Community</a>
+    <button class="nav-item" onclick="switchTab('aicoach', this)"><span class="icon">🤖</span> AI Koç</button>
+    <button class="nav-item" onclick="switchTab('workouts', this)"><span class="icon">🏋️</span> Antrenmanlar</button>
+    <a class="nav-item" href="nutrition.html" id="navNutrition"><span class="icon">🥗</span> Beslenme</a>
+    <a class="nav-item" href="progress.html" id="navProgress"><span class="icon">📈</span> İlerleme</a>
+    <a class="nav-item" href="community.html"><span class="icon">👥</span> Topluluk</a>
   </nav>
   <div class="sidebar-bottom">
     <div class="user-info">
       <div class="avatar" id="avatarInitial">?</div>
-      <div class="user-name" id="userName">Loading...</div>
-      <button class="signout-btn" onclick="signOut()" title="Sign out">⏻</button>
+      <div class="user-name" id="userName">Yükleniyor...</div>
+      <button class="signout-btn" onclick="signOut()" title="Çıkış Yap">⏻</button>
     </div>
   </div>
 </div>
@@ -149,76 +149,76 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 <div class="main">
   <div class="topbar">
     <div>
-      <div class="page-title" id="welcomeMsg">Loading...</div>
+      <div class="page-title" id="welcomeMsg">Yükleniyor...</div>
       <div class="greeting" id="profileTags"></div>
     </div>
     <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap">
-      <span id="planBadge" class="free-badge">FREE</span>
-      <div class="badge-live"><span class="badge-dot"></span> AI Coach Online</div>
+      <span id="planBadge" class="free-badge">ÜCRETSİZ</span>
+      <div class="badge-live"><span class="badge-dot"></span> AI Koç Çevrimiçi</div>
     </div>
   </div>
 
   <div class="stats-grid">
     <div class="stat-card">
-      <div class="stat-label">Workouts done</div>
+      <div class="stat-label">Tamamlanan Antrenman</div>
       <div class="stat-value lime" id="workoutCount">0</div>
-      <div class="stat-change up">↑ This week</div>
+      <div class="stat-change up">↑ Bu hafta</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Calories burned</div>
+      <div class="stat-label">Yakılan Kalori</div>
       <div class="stat-value" id="calorieCount">0</div>
-      <div class="stat-change">kcal today</div>
+      <div class="stat-change">kcal bugün</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Streak</div>
+      <div class="stat-label">Seri</div>
       <div class="stat-value lime">1🔥</div>
-      <div class="stat-change up">Keep it up!</div>
+      <div class="stat-change up">Devam et!</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Plan progress</div>
-      <div class="stat-value" id="planProgress">0%</div>
-      <div class="stat-change">This week</div>
+      <div class="stat-label">Plan İlerlemesi</div>
+      <div class="stat-value" id="planProgress">%0</div>
+      <div class="stat-change">Bu hafta</div>
     </div>
   </div>
 
   <div class="tab-section active" id="tab-dashboard">
     <div class="content-grid">
       <div class="chat-card">
-        <div class="card-title"><span class="dot"></span> AI Coach Chat <span id="msgCounter" style="margin-left:auto;font-size:0.75rem;color:var(--muted);font-weight:400"></span></div>
+        <div class="card-title"><span class="dot"></span> AI Koç Sohbeti <span id="msgCounter" style="margin-left:auto;font-size:0.75rem;color:var(--muted);font-weight:400"></span></div>
         <div class="messages" id="messages">
-          <div class="msg-bubble ai" id="welcomeAiMsg">Hey! Loading your personalized plan... 🤖</div>
+          <div class="msg-bubble ai" id="welcomeAiMsg">Merhaba! Kişisel planınız yükleniyor... 🤖</div>
         </div>
         <div class="chat-input-wrap">
-          <input class="chat-input" id="chatInput" placeholder="Ask your AI coach anything..." onkeydown="if(event.key==='Enter')sendMsg()">
+          <input class="chat-input" id="chatInput" placeholder="AI koçunuza herhangi bir şey sorun..." onkeydown="if(event.key==='Enter')sendMsg()">
           <button class="send-btn" onclick="sendMsg()" id="sendBtn">➤</button>
         </div>
       </div>
       <div class="right-panel">
         <div class="panel-card">
-          <div class="card-title">💪 Today's Workout</div>
+          <div class="card-title">💪 Bugünün Antrenmanı</div>
           <div class="workout-list" id="workoutList">
-            <div class="loading-plan"><div class="spin"></div><div>Building your plan...</div></div>
+            <div class="loading-plan"><div class="spin"></div><div>Planınız oluşturuluyor...</div></div>
           </div>
         </div>
         <div class="panel-card">
-          <div class="card-title">📈 Weekly Progress</div>
+          <div class="card-title">📈 Haftalık İlerleme</div>
           <div class="progress-bar-wrap">
-            <div class="progress-label"><span>Workouts</span><span id="wProgress">0/5</span></div>
+            <div class="progress-label"><span>Antrenmanlar</span><span id="wProgress">0/5</span></div>
             <div class="progress-bar"><div class="progress-fill" id="wFill" style="width:0%"></div></div>
           </div>
           <div class="progress-bar-wrap" style="margin-top:1rem">
-            <div class="progress-label"><span>Nutrition</span><span>0/7 days</span></div>
+            <div class="progress-label"><span>Beslenme</span><span>0/7 gün</span></div>
             <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
           </div>
           <div class="progress-bar-wrap" style="margin-top:1rem">
-            <div class="progress-label"><span>Water intake</span><span>0/8 glasses</span></div>
+            <div class="progress-label"><span>Su tüketimi</span><span>0/8 bardak</span></div>
             <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
           </div>
         </div>
         <div class="upgrade-card" id="upgradeCard">
-          <h3>🚀 Unlock Full Access</h3>
-          <p>Get unlimited AI coaching, custom meal plans, and advanced analytics with Pro.</p>
-          <button class="upgrade-btn" onclick="openCheckout()">Upgrade to Pro — $19/mo</button>
+          <h3>🚀 Tam Erişimi Aç</h3>
+          <p>Pro ile sınırsız AI koçluğu, özel beslenme planları ve gelişmiş analizlere sahip olun.</p>
+          <button class="upgrade-btn" onclick="openCheckout()">Pro'ya Yükselt — $19/ay</button>
         </div>
       </div>
     </div>
@@ -226,12 +226,12 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 
   <div class="tab-section" id="tab-aicoach">
     <div class="ai-coach-full">
-      <div class="card-title"><span class="dot"></span> AI Coach — Full Chat <span id="msgCounter2" style="margin-left:auto;font-size:0.75rem;color:var(--muted);font-weight:400"></span></div>
+      <div class="card-title"><span class="dot"></span> AI Koç — Tam Sohbet <span id="msgCounter2" style="margin-left:auto;font-size:0.75rem;color:var(--muted);font-weight:400"></span></div>
       <div class="messages" id="messages2">
-        <div class="msg-bubble ai">Hey! I'm your personal AI fitness coach 🤖 Ask me anything about training, nutrition, recovery, or motivation!</div>
+        <div class="msg-bubble ai">Merhaba! Ben sizin kişisel AI fitness koçunuzum 🤖 Antrenman, beslenme, toparlanma veya motivasyon hakkında her şeyi sorabilirsiniz!</div>
       </div>
       <div class="chat-input-wrap">
-        <input class="chat-input" id="chatInput2" placeholder="Ask your AI coach anything..." onkeydown="if(event.key==='Enter')sendMsg2()">
+        <input class="chat-input" id="chatInput2" placeholder="AI koçunuza herhangi bir şey sorun..." onkeydown="if(event.key==='Enter')sendMsg2()">
         <button class="send-btn" onclick="sendMsg2()" id="sendBtn2">➤</button>
       </div>
     </div>
@@ -239,28 +239,28 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 
   <div class="tab-section" id="tab-workouts">
     <div class="panel-card" style="margin-bottom:1.5rem">
-      <div class="card-title">💪 Your Weekly Training Plan</div>
-      <p style="color:var(--muted);font-size:0.88rem;margin-top:0.25rem" id="workoutPlanDesc">Loading your personalized plan...</p>
+      <div class="card-title">💪 Haftalık Antrenman Planınız</div>
+      <p style="color:var(--muted);font-size:0.88rem;margin-top:0.25rem" id="workoutPlanDesc">Kişisel planınız yükleniyor...</p>
     </div>
     <div class="workouts-grid" id="weeklyPlanGrid">
-      <div class="loading-plan"><div class="spin"></div><div>Building your weekly plan...</div></div>
+      <div class="loading-plan"><div class="spin"></div><div>Haftalık planınız oluşturuluyor...</div></div>
     </div>
   </div>
 </div>
 
 <script>
-const SUPABASE_URL = 'https://cypmmayxwbkarvheqoxu.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
-const {createClient} = supabase;
-const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL='https://cypmmayxwbkarvheqoxu.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
+const {createClient}=supabase;
+const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
 Paddle.Initialize({token:'live_eefc76e39bd2263417b9b9ff52b'});
 
 let userProfile=null,isPro=false,freeMessageCount=0;
 const FREE_MSG_LIMIT=3;
 let doneCount=0,chatHistory=[],chatHistory2=[],weeklyPlanLoaded=false;
-const goalLabels={lose_weight:'Lose Weight',build_muscle:'Build Muscle',get_fit:'Get Fit',improve_health:'Improve Health'};
-const levelLabels={beginner:'Beginner',intermediate:'Intermediate',advanced:'Advanced'};
-const equipLabels={home_no:'Home',home_basic:'Home+Equipment',gym:'Gym',outdoor:'Outdoor'};
+const goalLabels={lose_weight:'Kilo Vermek',build_muscle:'Kas Yapmak',get_fit:'Forma Girmek',improve_health:'Sağlığı İyileştirmek'};
+const levelLabels={beginner:'Başlangıç',intermediate:'Orta Seviye',advanced:'İleri Seviye'};
+const equipLabels={home_no:'Ev',home_basic:'Ev+Ekipman',gym:'Spor Salonu',outdoor:'Açık Hava'};
 
 function toggleSidebar(){
   document.querySelector('.sidebar').classList.toggle('open');
@@ -305,7 +305,7 @@ function applyFreeUI(){
 function updateMsgCounter(){
   if(!isPro){
     const remaining=Math.max(0,FREE_MSG_LIMIT-freeMessageCount);
-    const txt=remaining>0?`${remaining} free messages left`:'Upgrade for unlimited';
+    const txt=remaining>0?`${remaining} ücretsiz mesaj kaldı`:'Sınırsız için Pro\'ya geç';
     document.getElementById('msgCounter').textContent=txt;
     document.getElementById('msgCounter2').textContent=txt;
   }
@@ -315,7 +315,7 @@ async function callAI(messages,system,max_tokens){
   const body={messages,max_tokens:max_tokens||500};
   if(system)body.system=system;
   const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  if(!res.ok){const err=await res.json().catch(()=>({}));throw new Error(err.error||'API error '+res.status);}
+  if(!res.ok){const err=await res.json().catch(()=>({}));throw new Error(err.error||'API hatası '+res.status);}
   const data=await res.json();
   return data.content?.[0]?.text||'';
 }
@@ -328,7 +328,7 @@ async function init(){
   document.getElementById('avatarInitial').textContent=name.charAt(0).toUpperCase();
   document.getElementById('userName').textContent=name;
   const hour=new Date().getHours();
-  const greeting=hour<12?'Good morning':hour<18?'Good afternoon':'Good evening';
+  const greeting=hour<12?'Günaydın':hour<18?'İyi günler':'İyi akşamlar';
   document.getElementById('welcomeMsg').textContent=greeting+', '+name.split(' ')[0]+'! 👋';
   const {data:profile}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
   userProfile=profile;isPro=profile?.is_pro===true;
@@ -342,38 +342,38 @@ async function init(){
     if(profile.training_days?.length)tags.innerHTML+=`<span class="profile-tag">📅 ${profile.training_days.join(', ')}</span>`;
     await loadPersonalizedPlan(profile,name);
   }else{
-    document.getElementById('profileTags').textContent='Complete your profile to get a personalized plan!';
+    document.getElementById('profileTags').textContent='Kişisel plan almak için profilinizi tamamlayın!';
     loadDefaultPlan();
-    document.getElementById('welcomeAiMsg').textContent="Hey! I'm your personal AI fitness coach 🤖 Complete your profile to get a personalized plan!";
+    document.getElementById('welcomeAiMsg').textContent='Merhaba! Ben sizin kişisel AI fitness koçunuzum 🤖 Kişisel plan almak için profilinizi tamamlayın!';
   }
 }
 
 async function loadPersonalizedPlan(profile,name){
-  const today=new Date().toLocaleDateString('en-US',{weekday:'long'});
-  const isTrainingDay=profile.training_days?.some(d=>today.includes(d));
+  const today=new Date().toLocaleDateString('tr-TR',{weekday:'long'});
+  const isTrainingDay=profile.training_days?.some(d=>today.toLowerCase().includes(d.toLowerCase()));
   const workoutPrompt=isTrainingDay
-    ?`Create a workout for: Goal: ${profile.goal}, Level: ${profile.fitness_level}, Equipment: ${profile.equipment}, Duration: ${profile.workout_duration} min. Respond ONLY with a JSON array, no markdown: [{"name":"Exercise","sets":"3 sets x 12 reps","calories":50}]`
-    :`Respond ONLY with this JSON array, no markdown: [{"name":"Active Recovery","sets":"Light stretching, 10 min","calories":30},{"name":"Hydration Goal","sets":"Drink 8 glasses of water","calories":0}]`;
+    ?`Şu kullanıcı için antrenman oluştur: Hedef: ${profile.goal}, Seviye: ${profile.fitness_level}, Ekipman: ${profile.equipment}, Süre: ${profile.workout_duration} dk. SADECE JSON dizisi ile yanıt ver, markdown olmasın: [{"name":"Egzersiz","sets":"3 set x 12 tekrar","calories":50}]`
+    :`SADECE bu JSON dizisi ile yanıt ver, markdown olmasın: [{"name":"Aktif Toparlanma","sets":"Hafif germe, 10 dk","calories":30},{"name":"Su İçme Hedefi","sets":"8 bardak su iç","calories":0}]`;
   try{
     const workoutText=await callAI([{role:'user',content:workoutPrompt}],null,500);
     const exercises=JSON.parse(workoutText.replace(/```json|```/g,'').trim());
     renderWorkout(exercises);
     document.getElementById('calorieCount').textContent=exercises.reduce((s,e)=>s+(e.calories||0),0);
   }catch(e){loadDefaultPlan();}
-  const greetPrompt=`Greet ${name.split(' ')[0]} warmly in 2 sentences. Their fitness goal is ${profile.goal}, level: ${profile.fitness_level}. Today is ${isTrainingDay?'a training day':'a rest day'}. Be motivating. Always respond in the same language the user writes in — if Turkish, respond in Turkish.`;
+  const greetPrompt=`${name.split(' ')[0]} adlı kullanıcıyı Türkçe olarak sıcak bir şekilde karşıla, 2 cümle. Fitness hedefi: ${profile.goal}, seviye: ${profile.fitness_level}. Bugün ${isTrainingDay?'antrenman günü':'dinlenme günü'}. Motive edici ol.`;
   try{
     const welcomeText=await callAI([{role:'user',content:greetPrompt}],null,150);
     document.getElementById('welcomeAiMsg').textContent=welcomeText;
-    chatHistory=[{role:'user',content:'greeting'},{role:'assistant',content:welcomeText}];
+    chatHistory=[{role:'user',content:'selamlama'},{role:'assistant',content:welcomeText}];
   }catch(e){
-    document.getElementById('welcomeAiMsg').textContent=`Hey ${name.split(' ')[0]}! Ready to crush today's session? 💪`;
+    document.getElementById('welcomeAiMsg').textContent=`Merhaba ${name.split(' ')[0]}! Bugünkü antrenmanı geçmeye hazır mısın? 💪`;
   }
 }
 
 async function loadWeeklyPlan(profile){
   weeklyPlanLoaded=true;
-  document.getElementById('workoutPlanDesc').textContent=`Personalized for ${profile.fitness_level} level · ${equipLabels[profile.equipment]||profile.equipment} · Goal: ${goalLabels[profile.goal]||profile.goal}`;
-  const prompt=`Create a weekly workout plan for: Goal: ${profile.goal}, Level: ${profile.fitness_level}, Equipment: ${profile.equipment}, Training days: ${profile.training_days?.join(', ')}, Duration: ${profile.workout_duration} min. Respond ONLY with a JSON array, no markdown: [{"day":"Monday","type":"Training","exercises":[{"name":"Push-ups","sets":"3x12","muscles":"Chest"}]}] Include all 7 days. Rest days have empty exercises array and type "Rest". Max 4 exercises per training day.`;
+  document.getElementById('workoutPlanDesc').textContent=`${levelLabels[profile.fitness_level]||profile.fitness_level} seviyesi için · ${equipLabels[profile.equipment]||profile.equipment} · Hedef: ${goalLabels[profile.goal]||profile.goal}`;
+  const prompt=`Şu kullanıcı için haftalık antrenman planı oluştur: Hedef: ${profile.goal}, Seviye: ${profile.fitness_level}, Ekipman: ${profile.equipment}, Antrenman günleri: ${profile.training_days?.join(', ')}, Süre: ${profile.workout_duration} dk. SADECE JSON dizisi ile yanıt ver, markdown olmasın: [{"day":"Pazartesi","type":"Antrenman","exercises":[{"name":"Şınav","sets":"3x12","muscles":"Göğüs"}]}] 7 günün hepsini dahil et. Dinlenme günlerinde boş exercises dizisi ve "Dinlenme" type kullan. Antrenman günü başına max 4 egzersiz.`;
   try{
     const text=await callAI([{role:'user',content:prompt}],null,1000);
     const plan=JSON.parse(text.replace(/```json|```/g,'').trim());
@@ -382,13 +382,13 @@ async function loadWeeklyPlan(profile){
     plan.forEach(day=>{
       const card=document.createElement('div');
       card.className='workout-day-card';
-      const isRest=day.type==='Rest'||!day.exercises?.length;
+      const isRest=day.type==='Dinlenme'||day.type==='Rest'||!day.exercises?.length;
       card.innerHTML=`<h3>${day.day} <span style="font-size:0.75rem;font-weight:400;color:var(--muted)">${day.type}</span></h3>`+
-        (isRest?`<div style="color:var(--muted);font-size:0.88rem;padding:1rem 0">🧘 Rest & Recovery. Light stretching recommended.</div>`:
+        (isRest?`<div style="color:var(--muted);font-size:0.88rem;padding:1rem 0">🧘 Dinlenme & Toparlanma. Hafif germe önerilir.</div>`:
         (day.exercises||[]).map((ex,i)=>`<div class="exercise-item"><div class="exercise-num">${i+1}</div><div class="exercise-info"><div class="exercise-name">${ex.name}</div><div class="exercise-detail">${ex.sets} · ${ex.muscles}</div></div></div>`).join(''));
       grid.appendChild(card);
     });
-  }catch(e){document.getElementById('weeklyPlanGrid').innerHTML='<div style="color:var(--muted);padding:1rem">Could not load plan. Try again later.</div>';}
+  }catch(e){document.getElementById('weeklyPlanGrid').innerHTML='<div style="color:var(--muted);padding:1rem">Plan yüklenemedi. Daha sonra tekrar deneyin.</div>';}
 }
 
 function renderWorkout(exercises){
@@ -404,7 +404,7 @@ function renderWorkout(exercises){
 }
 
 function loadDefaultPlan(){
-  renderWorkout([{name:'Push-ups',sets:'3 sets × 15 reps'},{name:'Squats',sets:'4 sets × 12 reps'},{name:'Plank',sets:'3 sets × 45 sec'},{name:'Lunges',sets:'3 sets × 10 each'}]);
+  renderWorkout([{name:'Şınav',sets:'3 set × 15 tekrar'},{name:'Squat',sets:'4 set × 12 tekrar'},{name:'Plank',sets:'3 set × 45 sn'},{name:'Çıkış',sets:'3 set × 10 tekrar'}]);
 }
 
 function toggleWorkout(el){
@@ -415,7 +415,7 @@ function toggleWorkout(el){
   document.getElementById('workoutCount').textContent=doneCount;
   const total=document.querySelectorAll('.workout-item').length;
   const pct=total>0?Math.round((doneCount/total)*100):0;
-  document.getElementById('planProgress').textContent=pct+'%';
+  document.getElementById('planProgress').textContent='%'+pct;
   document.getElementById('wFill').style.width=pct+'%';
 }
 
@@ -428,8 +428,8 @@ async function sendToAI(text,msgsId,inputId,btnId,history){
   msgs.scrollTop=msgs.scrollHeight;
   history.push({role:'user',content:text});
   const system=userProfile
-    ?`You are FitMind AI, a personal fitness and nutrition coach. Always respond in the same language the user writes in. If the user writes in Turkish, respond in Turkish. If in English, respond in English. User profile: Goal: ${userProfile.goal}, Fitness level: ${userProfile.fitness_level}, Equipment: ${userProfile.equipment}, Age: ${userProfile.age}, Weight: ${userProfile.weight}kg. Give personalized, practical advice. Keep replies to 2-3 sentences.`
-    :`You are FitMind AI, a friendly and motivating fitness coach. Always respond in the same language the user writes in. Give practical, encouraging advice. Keep replies to 2-3 sentences.`;
+    ?`Sen FitMind AI'sın, kişisel bir fitness ve beslenme koçusun. Her zaman Türkçe yanıt ver. Kullanıcı profili: Hedef: ${userProfile.goal}, Fitness seviyesi: ${userProfile.fitness_level}, Ekipman: ${userProfile.equipment}, Yaş: ${userProfile.age}, Kilo: ${userProfile.weight}kg. Kişisel ve pratik tavsiyeler ver. Yanıtları 2-3 cümle tut.`
+    :`Sen FitMind AI'sın, samimi ve motive edici bir fitness koçusun. Her zaman Türkçe yanıt ver. Pratik ve cesaretlendirici tavsiyeler ver. Yanıtları 2-3 cümle tut.`;
   try{
     const reply=await callAI(history.slice(-10),system,300);
     history.push({role:'assistant',content:reply});
@@ -439,7 +439,7 @@ async function sendToAI(text,msgsId,inputId,btnId,history){
   }catch(e){
     const typingEl=msgs.querySelector('.msg-bubble.typing');
     if(typingEl)typingEl.remove();
-    msgs.innerHTML+=`<div class="msg-bubble ai">Stay consistent and trust the process! 💪</div>`;
+    msgs.innerHTML+=`<div class="msg-bubble ai">Tutarlı ol ve sürece güven! 💪</div>`;
   }
   msgs.scrollTop=msgs.scrollHeight;
   document.getElementById(btnId).disabled=false;
@@ -450,7 +450,7 @@ async function sendMsg(){
   if(!text)return;
   if(!isPro&&freeMessageCount>=FREE_MSG_LIMIT){
     const msgs=document.getElementById('messages');
-    msgs.innerHTML+=`<div class="msg-bubble limit">🔒 <strong>Free limit reached</strong><br><button onclick="openCheckout()" style="margin-top:0.6rem;background:var(--lime);color:#000;border:none;padding:0.4rem 1.2rem;border-radius:100px;font-family:var(--font-head);font-weight:700;cursor:pointer">Upgrade to Pro → $19/mo</button></div>`;
+    msgs.innerHTML+=`<div class="msg-bubble limit">🔒 <strong>Ücretsiz limit doldu</strong><br><button onclick="openCheckout()" style="margin-top:0.6rem;background:var(--lime);color:#000;border:none;padding:0.4rem 1.2rem;border-radius:100px;font-family:var(--font-head);font-weight:700;cursor:pointer">Pro'ya Yükselt → $19/ay</button></div>`;
     msgs.scrollTop=msgs.scrollHeight;return;
   }
   await sendToAI(text,'messages','chatInput','sendBtn',chatHistory);
@@ -462,7 +462,7 @@ async function sendMsg2(){
   if(!text)return;
   if(!isPro&&freeMessageCount>=FREE_MSG_LIMIT){
     const msgs=document.getElementById('messages2');
-    msgs.innerHTML+=`<div class="msg-bubble limit">🔒 <strong>Free limit reached</strong><br><button onclick="openCheckout()" style="margin-top:0.6rem;background:var(--lime);color:#000;border:none;padding:0.4rem 1.2rem;border-radius:100px;font-family:var(--font-head);font-weight:700;cursor:pointer">Upgrade to Pro → $19/mo</button></div>`;
+    msgs.innerHTML+=`<div class="msg-bubble limit">🔒 <strong>Ücretsiz limit doldu</strong><br><button onclick="openCheckout()" style="margin-top:0.6rem;background:var(--lime);color:#000;border:none;padding:0.4rem 1.2rem;border-radius:100px;font-family:var(--font-head);font-weight:700;cursor:pointer">Pro'ya Yükselt → $19/ay</button></div>`;
     msgs.scrollTop=msgs.scrollHeight;return;
   }
   await sendToAI(text,'messages2','chatInput2','sendBtn2',chatHistory2);
