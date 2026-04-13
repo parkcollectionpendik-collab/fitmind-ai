@@ -30,25 +30,24 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .page-sub{color:var(--muted);font-size:0.9rem;margin-top:0.2rem}
 .panel-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
 .card-title{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:0.5rem}
-.section-label{font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:0.75rem}
 .plan-section{background:#ffffff06;border-radius:14px;padding:1.2rem;margin-bottom:1rem;border-left:3px solid var(--lime)}
 .plan-section.blue{border-left-color:#4af}
-.plan-section.orange{border-left-color:#f5a623}
 .plan-section-title{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:0.6rem;color:var(--lime)}
 .plan-section.blue .plan-section-title{color:#4af}
-.plan-section.orange .plan-section-title{color:#f5a623}
 .plan-section-text{font-size:0.88rem;line-height:1.7;color:#ffffffdd}
 .days-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:0.75rem;margin-bottom:1.5rem}
-.day-card{background:#ffffff06;border:1.5px solid #ffffff10;border-radius:16px;padding:1rem 0.5rem;text-align:center;cursor:pointer;transition:all 0.2s}
+.day-card{background:#ffffff06;border:2px solid #ffffff10;border-radius:16px;padding:1rem 0.5rem;text-align:center;cursor:pointer;transition:all 0.2s}
 .day-card:hover{border-color:#c8f54230;background:#ffffff0a}
 .day-card.today{border-color:var(--lime);background:#c8f54210}
-.day-card.done{border-color:#4ade80;background:#4ade8015}
+.day-card.done{border-color:#4ade80 !important;background:#4ade8015 !important}
+.day-card.active-day{border-color:var(--lime) !important;background:#c8f54225 !important;transform:scale(1.05)}
 .day-name{font-family:var(--font-head);font-size:0.7rem;font-weight:700;color:var(--muted);margin-bottom:0.4rem}
 .day-card.today .day-name{color:var(--lime)}
+.day-card.active-day .day-name{color:var(--lime)}
 .day-icon{font-size:1.4rem;margin-bottom:0.3rem}
 .day-status{font-size:0.65rem;color:var(--muted)}
 .day-card.done .day-status{color:#4ade80}
-.workout-list{display:flex;flex-direction:column;gap:0.5rem}
+.day-card.active-day .day-status{color:var(--lime)}
 .workout-item{display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1rem;background:#ffffff05;border-radius:12px;cursor:pointer;transition:all 0.2s;border:1.5px solid transparent}
 .workout-item:hover{background:#ffffff08;border-color:#ffffff10}
 .workout-item.done{background:#4ade8010;border-color:#4ade8025}
@@ -56,7 +55,6 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .workout-check.done{background:#4ade80;border-color:#4ade80;color:#000}
 .workout-info{flex:1}
 .workout-name{font-size:0.9rem;font-weight:500}
-.workout-detail{font-size:0.75rem;color:var(--muted);margin-top:0.1rem}
 .workout-item.done .workout-name{text-decoration:line-through;opacity:0.6}
 .progress-ring{display:flex;align-items:center;gap:1.5rem;padding:1rem;background:#ffffff06;border-radius:14px;margin-bottom:1rem}
 .ring-wrap{position:relative;width:72px;height:72px;flex-shrink:0}
@@ -89,9 +87,6 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
   .days-grid{grid-template-columns:repeat(4,1fr)}
   .content-grid{grid-template-columns:1fr}
 }
-.day-card.selected-day{border-color:var(--lime);background:#c8f54215;transform:scale(1.03)}
-.day-card.selected-day{border-color:var(--lime) !important;background:#c8f54230 !important;transform:scale(1.05)}
-.day-card.today.selected-day{border-color:var(--lime) !important}
 </style>
 </head>
 <body>
@@ -140,7 +135,6 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
   </div>
 
   <div id="planContent" style="display:none">
-    <!-- HAFTALIK TAKVİM -->
     <div class="panel-card">
       <div class="card-title">
         <span>📅 Haftalık Takvim</span>
@@ -151,27 +145,22 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 
     <div class="content-grid">
       <div>
-        <!-- BUGÜNÜN ANTRENMANı -->
         <div class="panel-card">
           <div class="card-title">
-            <span>💪 Bugünün Antrenmanı</span>
+            <span>💪 Antrenman</span>
             <span id="todayLabel" style="font-size:0.8rem;color:var(--lime);font-weight:400"></span>
           </div>
           <div id="todayWorkout"></div>
         </div>
-
-        <!-- BESLENME PLANI -->
         <div class="panel-card">
           <div class="card-title">🥗 Günlük Beslenme Planı</div>
           <div id="nutritionPlan"></div>
         </div>
       </div>
-
       <div>
-        <!-- HAFTALIK İLERLEME -->
         <div class="panel-card">
           <div class="card-title">📈 Haftalık İlerleme</div>
-          <div class="progress-ring" id="progressRing">
+          <div class="progress-ring">
             <div class="ring-wrap">
               <svg width="72" height="72" viewBox="0 0 72 72">
                 <circle cx="36" cy="36" r="30" fill="none" stroke="#ffffff08" stroke-width="6"/>
@@ -185,19 +174,15 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
               </div>
             </div>
             <div class="ring-info">
-              <h4 id="progressTitle">Bu hafta</h4>
-              <p id="progressDesc">Antrenmanlarınızı tamamlayın</p>
+              <h4>Bu hafta</h4>
+              <p id="progressDesc">Antrenmanlarını tamamla!</p>
             </div>
           </div>
         </div>
-
-        <!-- İPUÇLARI -->
         <div class="panel-card">
           <div class="card-title">⚡ Günlük İpuçları</div>
           <div id="tipsList"></div>
         </div>
-
-        <!-- PLAN BİLGİSİ -->
         <div class="panel-card">
           <div class="card-title">ℹ️ Plan Bilgisi</div>
           <div id="planInfo" style="font-size:0.85rem;color:var(--muted);line-height:1.8"></div>
@@ -220,20 +205,16 @@ const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
 
 let currentUser=null;
 let planData=null;
-let completedToday=JSON.parse(localStorage.getItem('completedToday_'+new Date().toDateString())||'[]');
+let selectedDay=null;
 let completedDays=JSON.parse(localStorage.getItem('completedDays')||'{}');
 
 const days=['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
 const dayEmojis=['💪','🏃','🧘','⚡','🔥','🌟','😴'];
+const todayIdx=(new Date().getDay()+6)%7;
+const todayName=days[todayIdx];
 
-function toggleSidebar(){
-  document.querySelector('.sidebar').classList.toggle('open');
-  document.getElementById('overlay').classList.toggle('open');
-}
-function closeSidebar(){
-  document.querySelector('.sidebar').classList.remove('open');
-  document.getElementById('overlay').classList.remove('open');
-}
+function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open');}
+function closeSidebar(){document.querySelector('.sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
 
 async function init(){
   const {data:{session}}=await sb.auth.getSession();
@@ -249,18 +230,11 @@ async function init(){
 async function loadPlan(){
   const {data}=await sb.from('user_plans').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
   document.getElementById('loadingState').style.display='none';
-  if(!data){
-    document.getElementById('emptyState').style.display='block';
-    return;
-  }
+  if(!data){document.getElementById('emptyState').style.display='block';return;}
   planData=data.plan_data;
   document.getElementById('planContent').style.display='block';
-  renderPlan();
-}
-
-function renderPlan(){
   renderDaysGrid();
-  renderTodayWorkout();
+  selectDay(todayName);
   renderNutrition();
   renderTips();
   renderPlanInfo();
@@ -270,93 +244,63 @@ function renderPlan(){
 function renderDaysGrid(){
   const grid=document.getElementById('daysGrid');
   grid.innerHTML='';
-  const todayIdx=(new Date().getDay()+6)%7;
   days.forEach((day,i)=>{
     const isDone=completedDays[day]===new Date().toDateString();
     const isToday=i===todayIdx;
+    const isSelected=day===selectedDay;
     const div=document.createElement('div');
-    div.className='day-card'+(isToday?' today':'')+(isDone?' done':'');
-div.dataset.day=day;
+    let cls='day-card';
+    if(isSelected) cls+=' active-day';
+    else if(isDone) cls+=' done';
+    else if(isToday) cls+=' today';
+    div.className=cls;
     div.onclick=()=>selectDay(day);
-    div.innerHTML=`<div class="day-name">${day.slice(0,3)}</div><div class="day-icon">${isDone?'✅':dayEmojis[i]}</div><div class="day-status">${isDone?'Tamamlandı':isToday?'Bugün':'Bekliyor'}</div>`;
+    let statusText=isSelected?'Seçili':isDone?'Tamamlandı':isToday?'Bugün':'Bekliyor';
+    let statusColor=isSelected?'var(--lime)':isDone?'#4ade80':'var(--muted)';
+    div.innerHTML=`
+      <div class="day-name" style="${isSelected||isToday?'color:var(--lime)':''}">${day.slice(0,3)}</div>
+      <div class="day-icon">${isDone&&!isSelected?'✅':dayEmojis[i]}</div>
+      <div class="day-status" style="color:${statusColor}">${statusText}</div>`;
     grid.appendChild(div);
   });
-  const todayName=days[(new Date().getDay()+6)%7];
-  document.getElementById('todayLabel').textContent=todayName;
+  const doneDays=Object.values(completedDays).filter(d=>d===new Date().toDateString()).length;
+  document.getElementById('weekProgress').textContent=doneDays+'/7 gün tamamlandı';
 }
 
-function selectDay(dayName) {
- document.querySelectorAll('.day-card').forEach(d => {
-  d.classList.remove('selected-day');
-  d.classList.remove('today');
-});
-const todayIdx = (new Date().getDay()+6)%7;
-document.querySelectorAll('.day-card')[todayIdx]?.classList.add('today');
-  const idx = days.indexOf(dayName);
-  if (idx >= 0) document.querySelectorAll('.day-card')[idx].classList.add('selected-day');
-  const dayPlan = planData.days?.find(d => d.day === dayName);
-  const container = document.getElementById('todayWorkout');
-  document.getElementById('todayLabel').textContent = dayName;
-  if (!dayPlan) {
-    container.innerHTML = '<div style="color:var(--muted);font-size:0.88rem">Bu gün için plan bulunamadı.</div>';
+function selectDay(dayName){
+  selectedDay=dayName;
+  document.getElementById('todayLabel').textContent=dayName+(dayName===todayName?' (Bugün)':'');
+  renderDaysGrid();
+  const dayPlan=planData.days?.find(d=>d.day===dayName);
+  const container=document.getElementById('todayWorkout');
+  if(!dayPlan){
+    container.innerHTML='<div style="color:var(--muted);font-size:0.88rem;padding:1rem 0">Bu gün için plan bulunamadı.</div>';
     return;
   }
-  const isDone = completedDays[dayName] === new Date().toDateString();
-  const typeColor = dayPlan.type === 'Dinlenme' ? '#888' : 'var(--lime)';
-  container.innerHTML = `
-    <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem">
-      <span style="font-size:0.75rem;color:${typeColor};font-family:var(--font-head);font-weight:700;letter-spacing:0.08em;text-transform:uppercase">${dayPlan.type}</span>
+  const isDone=completedDays[dayName]===new Date().toDateString();
+  const isRest=dayPlan.type==='Dinlenme'||dayPlan.type==='Rest';
+  const typeColor=isRest?'#888':'var(--lime)';
+  container.innerHTML=`
+    <div style="margin-bottom:1rem">
+      <span style="font-size:0.72rem;color:${typeColor};font-family:var(--font-head);font-weight:700;letter-spacing:0.08em;text-transform:uppercase;background:${isRest?'#ffffff08':'#c8f54215'};padding:0.2rem 0.6rem;border-radius:100px">${dayPlan.type}</span>
     </div>
-    <div class="workout-item ${isDone ? 'done' : ''}" onclick="toggleDayComplete('${dayName}', this)" style="cursor:pointer">
-      <div class="workout-check ${isDone ? 'done' : ''}">✓</div>
-      <div class="workout-info">
-        <div class="workout-name" style="font-size:0.88rem;line-height:1.6">${dayPlan.exercises}</div>
-      </div>
+    <div style="background:#ffffff06;border-radius:12px;padding:1rem;margin-bottom:1rem;border-left:3px solid ${isRest?'#888':'var(--lime)'};line-height:1.7;font-size:0.88rem;color:#ffffffdd">
+      ${dayPlan.exercises}
     </div>
-    <button onclick="toggleDayComplete('${dayName}', null)" style="margin-top:1rem;width:100%;background:${isDone ? '#4ade8020' : 'var(--lime)'};color:${isDone ? '#4ade80' : '#000'};border:${isDone ? '1px solid #4ade8040' : 'none'};border-radius:100px;padding:0.7rem;font-family:var(--font-head);font-weight:700;font-size:0.88rem;cursor:pointer;">
-      ${isDone ? '✅ Tamamlandı' : '✅ Tamamlandı İşaretle'}
-    </button>`;
+    ${!isRest?`
+    <button onclick="toggleDayComplete('${dayName}')" style="width:100%;background:${isDone?'#4ade8020':'var(--lime)'};color:${isDone?'#4ade80':'#000'};border:${isDone?'1px solid #4ade8040':'none'};border-radius:100px;padding:0.75rem;font-family:var(--font-head);font-weight:700;font-size:0.88rem;cursor:pointer;transition:all 0.2s">
+      ${isDone?'✅ Tamamlandı — Geri Al':'✅ Tamamlandı İşaretle'}
+    </button>`:'<div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:0.5rem">🧘 Dinlenme günü — vücudunun iyileşmesine izin ver</div>'}`;
 }
 
-function toggleDayComplete(day, el) {
-  if (completedDays[day] === new Date().toDateString()) {
+function toggleDayComplete(day){
+  if(completedDays[day]===new Date().toDateString()){
     delete completedDays[day];
-  } else {
-    completedDays[day] = new Date().toDateString();
-  }
-  localStorage.setItem('completedDays', JSON.stringify(completedDays));
-  renderDaysGrid();
-  selectDay(day);
-  updateProgress();
-}
-
-function toggleDayDone(day, el) {
-  toggleDayComplete(day, el);
-}
-
-function renderTodayWorkout(){
-  const container=document.getElementById('todayWorkout');
-  if(!planData.workout){container.innerHTML='<div style="color:var(--muted);font-size:0.88rem">Antrenman bilgisi bulunamadı.</div>';return;}
-  const lines=planData.workout.split('\n').filter(l=>l.trim());
-  container.innerHTML=lines.map((line,i)=>`
-    <div class="workout-item ${completedToday.includes(i)?'done':''}" onclick="toggleWorkoutItem(this,${i})">
-      <div class="workout-check ${completedToday.includes(i)?'done':''}">✓</div>
-      <div class="workout-info">
-        <div class="workout-name">${line.replace(/^[•\-\d\.]+\s*/,'')}</div>
-      </div>
-    </div>`).join('');
-}
-
-function toggleWorkoutItem(el,idx){
-  const check=el.querySelector('.workout-check');
-  if(completedToday.includes(idx)){
-    completedToday=completedToday.filter(i=>i!==idx);
-    el.classList.remove('done');check.classList.remove('done');
   }else{
-    completedToday.push(idx);
-    el.classList.add('done');check.classList.add('done');
+    completedDays[day]=new Date().toDateString();
   }
-  localStorage.setItem('completedToday_'+new Date().toDateString(),JSON.stringify(completedToday));
+  localStorage.setItem('completedDays',JSON.stringify(completedDays));
+  selectDay(day);
   updateProgress();
 }
 
@@ -368,8 +312,8 @@ function renderNutrition(){
 
 function renderTips(){
   const container=document.getElementById('tipsList');
-  if(!planData.tips){return;}
-  const tips=planData.tips.split(/\d+\)/).filter(t=>t.trim());
+  if(!planData.tips)return;
+  const tips=planData.tips.split(/\d+[.)]\s*/).filter(t=>t.trim());
   container.innerHTML=tips.map((tip,i)=>`
     <div style="display:flex;gap:0.6rem;padding:0.6rem 0;border-bottom:1px solid #ffffff06;font-size:0.85rem;color:#ffffffcc;line-height:1.5">
       <span style="color:var(--lime);font-family:var(--font-head);font-weight:700;flex-shrink:0">${i+1}.</span>
@@ -379,31 +323,32 @@ function renderTips(){
 
 function renderPlanInfo(){
   const container=document.getElementById('planInfo');
+  const goalMap={lose_weight:'Kilo Vermek',build_muscle:'Kas Yapmak',get_fit:'Forma Girmek',improve_health:'Sağlığı İyileştirmek'};
+  const levelMap={beginner:'Başlangıç',intermediate:'Orta Seviye',advanced:'İleri Seviye'};
   container.innerHTML=`
-    <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #ffffff06"><span>Hedef</span><span style="color:var(--white)">${planData.goal||'—'}</span></div>
-    <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #ffffff06"><span>Seviye</span><span style="color:var(--white)">${planData.level||'—'}</span></div>
+    <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #ffffff06"><span>Hedef</span><span style="color:var(--white)">${goalMap[planData.goal]||planData.goal||'—'}</span></div>
+    <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #ffffff06"><span>Seviye</span><span style="color:var(--white)">${levelMap[planData.level]||planData.level||'—'}</span></div>
     <div style="display:flex;justify-content:space-between;padding:0.4rem 0"><span>Oluşturulma</span><span style="color:var(--white)">${planData.createdAt?new Date(planData.createdAt).toLocaleDateString('tr-TR'):'—'}</span></div>`;
 }
 
 function updateProgress(){
-  const totalDays=7;
   const doneDays=Object.values(completedDays).filter(d=>d===new Date().toDateString()).length;
-  const pct=Math.round((doneDays/totalDays)*100);
+  const pct=Math.round((doneDays/7)*100);
   document.getElementById('progressPct').textContent='%'+pct;
-  document.getElementById('progressCircle').style.strokeDashoffset=188.5*(1-doneDays/totalDays);
-  document.getElementById('weekProgress').textContent=doneDays+'/'+totalDays+' gün tamamlandı';
-  document.getElementById('progressDesc').textContent=doneDays>0?doneDays+' gün tamamlandı, harika gidiyorsun!':'Antrenmanlarını tamamlamaya başla!';
+  document.getElementById('progressCircle').style.strokeDashoffset=188.5*(1-doneDays/7);
+  document.getElementById('progressDesc').textContent=doneDays>0?doneDays+' gün tamamlandı, harika gidiyorsun! 🔥':'Antrenmanlarını tamamlamaya başla!';
 }
 
 function resetToday(){
-  completedToday=[];
-  localStorage.setItem('completedToday_'+new Date().toDateString(),'[]');
-  renderTodayWorkout();
+  if(confirm('Bugünün tamamlanma işaretlerini sıfırlamak istiyor musunuz?')){
+    delete completedDays[selectedDay||todayName];
+    localStorage.setItem('completedDays',JSON.stringify(completedDays));
+    selectDay(selectedDay||todayName);
+    updateProgress();
+  }
 }
 
-function goToCoach(){
-  window.location.href='dashboard.html#aicoach';
-}
+function goToCoach(){window.location.href='dashboard.html';}
 
 async function signOut(){
   await sb.auth.signOut();
