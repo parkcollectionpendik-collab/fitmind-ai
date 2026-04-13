@@ -432,7 +432,7 @@ async function sendToAI(text,msgsId,inputId,btnId,history){
 SADECE aşağıdaki JSON formatında yanıt ver. Başka hiçbir metin, açıklama veya markdown kullanma:
 {"workout":"genel haftalık antrenman özeti 1-2 cümle","nutrition":"günlük beslenme planı 1-2 cümle","tips":"1) ipucu 2) ipucu 3) ipucu","days":[{"day":"Pazartesi","type":"Antrenman","exercises":"egzersizler"},{"day":"Salı","type":"Dinlenme","exercises":"Hafif yürüyüş"},{"day":"Çarşamba","type":"Antrenman","exercises":"egzersizler"},{"day":"Perşembe","type":"Antrenman","exercises":"egzersizler"},{"day":"Cuma","type":"Dinlenme","exercises":"Hafif germe"},{"day":"Cumartesi","type":"Antrenman","exercises":"egzersizler"},{"day":"Pazar","type":"Dinlenme","exercises":"Tam dinlenme"}]}`;
     try {
-      const planReply = await callAI([{role:'user',content:text}], planSystem, 400);
+      const planReply = await callAI([{role:'user',content:text}], planSystem, 1200);
       const clean = planReply.replace(/```json|```/g,'').trim();
       const plan = JSON.parse(clean);
       const typingEl = document.getElementById(msgsId).querySelector('.msg-bubble.typing');
