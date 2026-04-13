@@ -591,20 +591,20 @@ function renderNutrition(){
 
   // Makro özeti
   mealCards+=`
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-top:0.75rem">
-      <div style="background:#ffffff06;border-radius:10px;padding:0.75rem;text-align:center">
-        <div style="font-size:0.65rem;color:var(--muted);text-transform:uppercase;font-weight:700;margin-bottom:0.2rem">Protein</div>
-        <div style="font-family:var(--font-head);font-weight:800;color:#4af;font-size:1rem">${Math.round((cal*0.3)/4)}g</div>
-      </div>
-      <div style="background:#ffffff06;border-radius:10px;padding:0.75rem;text-align:center">
-        <div style="font-size:0.65rem;color:var(--muted);text-transform:uppercase;font-weight:700;margin-bottom:0.2rem">Karbonhidrat</div>
-        <div style="font-family:var(--font-head);font-weight:800;color:#f5a623;font-size:1rem">${Math.round((cal*0.4)/4)}g</div>
-      </div>
-      <div style="background:#ffffff06;border-radius:10px;padding:0.75rem;text-align:center">
-        <div style="font-size:0.65rem;color:var(--muted);text-transform:uppercase;font-weight:700;margin-bottom:0.2rem">Yağ</div>
-        <div style="font-family:var(--font-head);font-weight:800;color:var(--lime);font-size:1rem">${Math.round((cal*0.3)/9)}g</div>
-      </div>
-    </div>`;
+  <div style="display:flex;gap:0.75rem;margin-top:1rem">
+    <div style="flex:1;background:#4af15;border:1px solid #4af30;border-radius:12px;padding:1rem;text-align:center">
+      <div style="font-size:0.65rem;color:#4af;text-transform:uppercase;font-weight:700;margin-bottom:0.4rem">Protein</div>
+      <div style="font-family:var(--font-head);font-weight:800;color:#4af;font-size:1.4rem">${Math.round((cal*0.3)/4)}g</div>
+    </div>
+    <div style="flex:1;background:#f5a62315;border:1px solid #f5a62330;border-radius:12px;padding:1rem;text-align:center">
+      <div style="font-size:0.65rem;color:#f5a623;text-transform:uppercase;font-weight:700;margin-bottom:0.4rem">Karbonhidrat</div>
+      <div style="font-family:var(--font-head);font-weight:800;color:#f5a623;font-size:1.4rem">${Math.round((cal*0.4)/4)}g</div>
+    </div>
+    <div style="flex:1;background:#c8f54215;border:1px solid #c8f54230;border-radius:12px;padding:1rem;text-align:center">
+      <div style="font-size:0.65rem;color:var(--lime);text-transform:uppercase;font-weight:700;margin-bottom:0.4rem">Yağ</div>
+      <div style="font-family:var(--font-head);font-weight:800;color:var(--lime);font-size:1.4rem">${Math.round((cal*0.3)/9)}g</div>
+    </div>
+  </div>`;
 
   document.getElementById('nutritionBody').innerHTML=mealCards;
 }
