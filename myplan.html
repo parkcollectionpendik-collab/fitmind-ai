@@ -26,7 +26,6 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .signout-btn:hover{color:#ff6b6b}
 .main{margin-left:240px;padding:2rem;min-height:100vh}
 
-/* TOPBAR */
 .topbar{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
 .page-title{font-family:var(--font-head);font-size:1.6rem;font-weight:800;display:flex;align-items:center;gap:0.5rem}
 .page-sub{color:var(--muted);font-size:0.88rem;margin-top:0.3rem}
@@ -35,7 +34,6 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .btn-ghost{background:transparent;color:var(--muted);border:1.5px solid #ffffff15;border-radius:100px;padding:0.65rem 1.4rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s}
 .btn-ghost:hover{border-color:#ffffff30;color:var(--white)}
 
-/* STATS BAR */
 .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
 .stat-box{background:var(--gray);border:1px solid #ffffff0f;border-radius:16px;padding:1.2rem 1.5rem;transition:border-color 0.2s}
 .stat-box:hover{border-color:#c8f54220}
@@ -44,7 +42,6 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .stat-box-value.lime{color:var(--lime)}
 .stat-box-sub{font-size:0.72rem;color:var(--muted);margin-top:0.2rem}
 
-/* HAFTALIK TAKVİM */
 .week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:0.6rem;margin-bottom:2rem}
 .day-pill{border-radius:18px;padding:1.1rem 0.4rem;text-align:center;cursor:pointer;transition:all 0.25s;border:2px solid #ffffff0a;background:#0d0d0d;position:relative;overflow:hidden}
 .day-pill::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent,#ffffff03);pointer-events:none}
@@ -54,7 +51,6 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .day-pill .dp-type{font-size:0.62rem;color:var(--muted);font-weight:600;margin-bottom:0.3rem}
 .day-pill .dp-status{font-size:0.6rem;font-weight:700;font-family:var(--font-head)}
 
-/* GÜN DURUMLARI */
 .day-pill.state-today{border-color:var(--lime);background:linear-gradient(135deg,#0f1a06,#111)}
 .day-pill.state-today .dp-name{color:var(--lime)}
 .day-pill.state-done{border-color:#4ade8060;background:linear-gradient(135deg,#051205,#0d0d0d)}
@@ -63,17 +59,14 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .day-pill.state-selected .dp-name{color:var(--white)}
 .day-pill.state-selected::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--lime);border-radius:0 0 16px 16px}
 
-/* ANA LAYOUT */
 .main-grid{display:grid;grid-template-columns:1fr 320px;gap:1.5rem}
 
-/* PANEL */
 .panel{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
 .panel:last-child{margin-bottom:0}
 .panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
 .panel-title{font-family:var(--font-head);font-size:1rem;font-weight:700;display:flex;align-items:center;gap:0.5rem}
 .panel-badge{font-size:0.72rem;color:var(--muted);font-weight:400;background:#ffffff08;padding:0.2rem 0.7rem;border-radius:100px}
 
-/* EGZERSİZ LİSTESİ */
 .exercise-list{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem}
 .ex-item{display:flex;align-items:center;gap:0.9rem;padding:0.9rem 1rem;background:#ffffff05;border-radius:14px;border:1.5px solid transparent;transition:all 0.2s;cursor:pointer}
 .ex-item:hover{background:#ffffff08;border-color:#ffffff10}
@@ -88,24 +81,16 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .ex-check{width:20px;height:20px;border-radius:6px;border:2px solid #ffffff15;display:flex;align-items:center;justify-content:center;font-size:0.7rem;flex-shrink:0;transition:all 0.2s}
 .ex-item.ex-done .ex-check{background:#4ade80;border-color:#4ade80;color:#000}
 
-/* TAMAMLA BUTONU */
 .finish-btn{width:100%;padding:1rem;border:none;border-radius:14px;font-family:var(--font-head);font-weight:700;font-size:0.95rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.5rem}
 .finish-btn.pending{background:linear-gradient(135deg,var(--lime),var(--lime2));color:#000}
 .finish-btn.pending:hover{transform:translateY(-1px);box-shadow:0 6px 20px #c8f54240}
 .finish-btn.done{background:#4ade8015;color:#4ade80;border:1px solid #4ade8030}
 
-/* DİNLENME KUTUSU */
 .rest-box{background:linear-gradient(135deg,#0d0d0d,#111);border:1px solid #ffffff08;border-radius:16px;padding:2rem;text-align:center}
 .rest-box .rest-icon{font-size:3rem;margin-bottom:0.75rem}
 .rest-box h3{font-family:var(--font-head);font-size:1.1rem;font-weight:700;margin-bottom:0.4rem}
 .rest-box p{font-size:0.85rem;color:var(--muted);line-height:1.6}
 
-/* BESLENME */
-.nutrition-block{background:#ffffff06;border-radius:14px;padding:1.1rem 1.2rem;border-left:3px solid #4af;margin-bottom:0.75rem}
-.nutrition-label{font-size:0.68rem;color:#4af;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:0.5rem}
-.nutrition-text{font-size:0.88rem;line-height:1.75;color:#ffffffdd}
-
-/* TRACKER KARTLARI */
 .tracker-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem}
 .tracker-card{background:#ffffff06;border-radius:14px;padding:1rem;text-align:center;cursor:pointer;transition:all 0.2s;border:1.5px solid transparent}
 .tracker-card:hover{border-color:#ffffff15}
@@ -118,7 +103,6 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .tracker-fill.lime{background:var(--lime)}
 .tracker-fill.blue{background:#4af}
 
-/* İLERLEME HALKASI */
 .prog-ring-wrap{display:flex;align-items:center;gap:1.2rem;padding:1rem;background:#ffffff06;border-radius:14px;margin-bottom:1rem}
 .ring-svg-wrap{position:relative;width:68px;height:68px;flex-shrink:0}
 .ring-svg-wrap svg{transform:rotate(-90deg)}
@@ -128,34 +112,37 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .ring-info h4{font-family:var(--font-head);font-size:0.9rem;font-weight:700;margin-bottom:0.2rem}
 .ring-info p{font-size:0.78rem;color:var(--muted);line-height:1.4}
 
-/* STREAK */
 .streak-row{display:flex;gap:0.4rem;margin-top:0.5rem}
 .streak-dot{width:28px;height:28px;border-radius:8px;border:1.5px solid #ffffff10;display:flex;align-items:center;justify-content:center;font-size:0.7rem;flex:1;transition:all 0.2s}
 .streak-dot.done{background:#c8f54220;border-color:var(--lime);color:var(--lime)}
-.streak-dot.today{border-color:#ffffff30}
+.streak-dot.today{border-color:var(--lime)}
 
-/* İPUÇLARI */
 .tip-row{display:flex;gap:0.75rem;padding:0.65rem 0;border-bottom:1px solid #ffffff07;font-size:0.84rem;color:#ffffffcc;line-height:1.5}
 .tip-row:last-child{border:none}
 .tip-n{color:var(--lime);font-family:var(--font-head);font-weight:700;flex-shrink:0;min-width:18px}
 
-/* BİLGİ */
 .info-row{display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid #ffffff07;font-size:0.85rem}
 .info-row:last-child{border:none}
 .info-key{color:var(--muted)}
 .info-val{font-weight:500}
 
-/* BOŞTA */
 .empty-state{text-align:center;padding:4rem 2rem}
 .empty-icon{font-size:4rem;margin-bottom:1rem}
 .empty-title{font-family:var(--font-head);font-size:1.3rem;font-weight:700;margin-bottom:0.5rem}
 .empty-sub{font-size:0.88rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;max-width:340px;margin-inline:auto}
 
-/* SPIN */
 .spin{display:inline-block;width:22px;height:22px;border:2px solid #ffffff15;border-top-color:var(--lime);border-radius:50%;animation:spin 0.8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* MOBİL */
+/* PLAN YENİLE MODAL */
+.modal-overlay{position:fixed;inset:0;background:#00000090;z-index:1000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-box{background:#161616;border:1px solid #ffffff15;border-radius:24px;padding:2rem;max-width:400px;width:90%;text-align:center}
+.modal-title{font-family:var(--font-head);font-size:1.2rem;font-weight:800;margin-bottom:0.75rem}
+.modal-sub{font-size:0.88rem;color:var(--muted);line-height:1.6;margin-bottom:1.5rem}
+.modal-btns{display:flex;gap:0.75rem}
+.modal-btns .btn{flex:1}
+.modal-btns .btn-ghost{flex:1}
+
 .mobile-menu-btn{display:none}
 .overlay{display:none;position:fixed;inset:0;background:#00000080;z-index:99}
 .overlay.open{display:block}
@@ -202,7 +189,7 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
       <div class="page-sub" id="planDate"></div>
     </div>
     <div style="display:flex;gap:0.75rem;align-items:center">
-      <button class="btn-ghost" onclick="goToCoach()">🤖 Planı Yenile</button>
+      <button class="btn-ghost" onclick="showRenewModal()">🔄 Planı Yenile</button>
     </div>
   </div>
 
@@ -227,7 +214,6 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
   <!-- ANA İÇERİK -->
   <div id="statePlan" style="display:none">
 
-    <!-- STATS BAR -->
     <div class="stats-bar">
       <div class="stat-box">
         <div class="stat-box-label">Haftalık Seri</div>
@@ -251,7 +237,6 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
       </div>
     </div>
 
-    <!-- HAFTALIK TAKVİM -->
     <div class="panel" style="padding:1.2rem 1.5rem">
       <div class="panel-head">
         <div class="panel-title">📅 Haftalık Takvim</div>
@@ -260,10 +245,8 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
       <div class="week-grid" id="weekGrid"></div>
     </div>
 
-    <!-- BUGÜN + SAĞ KOLON -->
     <div class="main-grid">
       <div>
-        <!-- ANTRENMAN PANELİ -->
         <div class="panel" id="workoutPanel">
           <div class="panel-head">
             <div class="panel-title" id="workoutTitle">💪 Antrenman</div>
@@ -272,7 +255,6 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
           <div id="workoutBody"></div>
         </div>
 
-        <!-- BESLENME PANELİ -->
         <div class="panel">
           <div class="panel-head">
             <div class="panel-title">🥗 Beslenme Planı</div>
@@ -281,7 +263,6 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
           <div id="nutritionBody"></div>
         </div>
 
-        <!-- TRACKER -->
         <div class="panel">
           <div class="panel-head">
             <div class="panel-title">📊 Günlük Takip</div>
@@ -309,7 +290,6 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
       </div>
 
       <div>
-        <!-- İLERLEME -->
         <div class="panel">
           <div class="panel-head"><div class="panel-title">📈 Haftalık İlerleme</div></div>
           <div class="prog-ring-wrap">
@@ -334,18 +314,29 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
           <div class="streak-row" id="streakRow"></div>
         </div>
 
-        <!-- İPUÇLARI -->
         <div class="panel">
           <div class="panel-head"><div class="panel-title">⚡ AI İpuçları</div></div>
           <div id="tipsBody"></div>
         </div>
 
-        <!-- PLAN BİLGİSİ -->
         <div class="panel">
           <div class="panel-head"><div class="panel-title">ℹ️ Plan Bilgisi</div></div>
           <div id="planInfoBody"></div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- PLAN YENİLE MODAL -->
+<div class="modal-overlay" id="renewModal" style="display:none">
+  <div class="modal-box">
+    <div style="font-size:2.5rem;margin-bottom:1rem">🔄</div>
+    <div class="modal-title">Planı Yenile</div>
+    <div class="modal-sub">Mevcut planınız silinecek ve AI Koç'a yönlendirileceksiniz. Bu hafta yaptığınız antrenman ilerlemeniz de sıfırlanacak.<br><br>Emin misiniz?</div>
+    <div class="modal-btns">
+      <button class="btn-ghost" onclick="closeRenewModal()">İptal</button>
+      <button class="btn" onclick="confirmRenew()">Evet, Yenile</button>
     </div>
   </div>
 </div>
@@ -356,31 +347,58 @@ const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSI
 const {createClient}=supabase;
 const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
 
+// Pazartesi=0 ... Pazar=6
 const DAYS=['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
+const DAY_SHORTS=['PAZ','SAL','ÇAR','PER','CUM','CMT','PAZ'];
 const DAY_EMOJIS=['💪','🏃','🧘','⚡','🔥','🌟','😴'];
-const TODAY_IDX=(new Date().getDay()+6)%7;
-const TODAY_NAME=DAYS[TODAY_IDX];
-const TODAY_STR=new Date().toDateString();
+
+// Bugünün indeksini doğru hesapla (JS: 0=Pazar, 1=Paz... biz Pazartesi=0 istiyoruz)
+const jsDay = new Date().getDay(); // 0=Pazar,1=Pazartesi,...,6=Cumartesi
+const TODAY_IDX = jsDay === 0 ? 6 : jsDay - 1; // Pazartesi=0, Pazar=6
+const TODAY_NAME = DAYS[TODAY_IDX];
+const TODAY_STR = new Date().toDateString();
+
+// Hafta başını kontrol et — yeni haftada storage sıfırla
+function getMonday(d){
+  const date=new Date(d);
+  const day=date.getDay();
+  const diff=date.getDate()-(day===0?6:day-1);
+  date.setDate(diff);
+  date.setHours(0,0,0,0);
+  return date;
+}
+const WEEK_START=getMonday(new Date()).toDateString();
+if(localStorage.getItem('fp_weekStart')!==WEEK_START){
+  localStorage.removeItem('fp_doneDays');
+  localStorage.removeItem('fp_doneEx');
+  localStorage.setItem('fp_weekStart',WEEK_START);
+}
 
 let planData=null;
-let selectedDay=TODAY_NAME;
+let selectedDay=TODAY_NAME; // Sayfa açılınca BUGÜN seçili
+
 let storage={
   doneDays: JSON.parse(localStorage.getItem('fp_doneDays')||'{}'),
-  doneEx: JSON.parse(localStorage.getItem('fp_doneEx_'+TODAY_STR)||'{}'),
+  doneEx: JSON.parse(localStorage.getItem('fp_doneEx')||'{}'),
   calories: parseInt(localStorage.getItem('fp_cal_'+TODAY_STR)||'0'),
   water: parseInt(localStorage.getItem('fp_water_'+TODAY_STR)||'0')
 };
 
 function save(){
   localStorage.setItem('fp_doneDays',JSON.stringify(storage.doneDays));
-  localStorage.setItem('fp_doneEx_'+TODAY_STR,JSON.stringify(storage.doneEx));
+  localStorage.setItem('fp_doneEx',JSON.stringify(storage.doneEx));
   localStorage.setItem('fp_cal_'+TODAY_STR,storage.calories);
   localStorage.setItem('fp_water_'+TODAY_STR,storage.water);
 }
 
 function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open')}
 function closeSidebar(){document.querySelector('.sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open')}
-function show(id){['stateLoading','stateEmpty','statePlan'].forEach(s=>document.getElementById(s).style.display=s===id?'block':'none')}
+
+function show(id){
+  ['stateLoading','stateEmpty','statePlan'].forEach(s=>{
+    document.getElementById(s).style.display=s===id?'block':'none';
+  });
+}
 
 async function init(){
   const {data:{session}}=await sb.auth.getSession();
@@ -390,6 +408,7 @@ async function init(){
   document.getElementById('avatarInitial').textContent=name.charAt(0).toUpperCase();
   document.getElementById('userName').textContent=name;
   document.getElementById('planDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
   const {data}=await sb.from('user_plans').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
   if(!data){show('stateEmpty');return}
   planData=data.plan_data;
@@ -409,8 +428,12 @@ function renderAll(){
   renderPlanInfo();
 }
 
+function getDoneCount(){
+  return Object.keys(storage.doneDays).length;
+}
+
 function renderStatsBar(){
-  const done=Object.values(storage.doneDays).filter(d=>d===TODAY_STR).length;
+  const done=getDoneCount();
   document.getElementById('statStreak').textContent=done+'🔥';
   document.getElementById('statCalories').textContent=planData.calories||'2000';
   document.getElementById('statWater').textContent=(planData.water||3)+'L';
@@ -420,29 +443,44 @@ function renderStatsBar(){
 function renderWeekGrid(){
   const grid=document.getElementById('weekGrid');
   grid.innerHTML='';
-  const done=Object.values(storage.doneDays).filter(d=>d===TODAY_STR).length;
+  const done=getDoneCount();
   document.getElementById('weekLabel').textContent=done+'/7 tamamlandı';
 
   DAYS.forEach((day,i)=>{
-    const isDone=storage.doneDays[day]===TODAY_STR;
+    const isDone=!!storage.doneDays[day];
     const isToday=i===TODAY_IDX;
     const isSelected=day===selectedDay;
     const dayPlan=planData.days?.find(d=>d.day===day);
     const isRest=!dayPlan||dayPlan.type==='Dinlenme'||dayPlan.type==='Rest';
 
     const el=document.createElement('div');
-    el.className='day-pill'+(isSelected?' state-selected':isDone?' state-done':isToday?' state-today':'');
+
+    // Öncelik: selected > done > today > normal
+    let stateClass='';
+    if(isSelected) stateClass=' state-selected';
+    else if(isDone) stateClass=' state-done';
+    else if(isToday) stateClass=' state-today';
+
+    el.className='day-pill'+stateClass;
     el.onclick=()=>{selectedDay=day;renderWeekGrid();renderWorkout(day)};
 
     const emoji=isDone?'✅':(isRest?'🧘':DAY_EMOJIS[i]);
     const typeText=isRest?'Dinlenme':(dayPlan?.focus||'Antrenman');
-    const statusText=isSelected?'◉ Seçili':isDone?'Tamam':isToday?'Bugün':'—';
-    const statusColor=isSelected?'var(--white)':isDone?'#4ade80':isToday?'var(--lime)':'var(--muted)';
+    const shortType=typeText.length>10?typeText.slice(0,10)+'...':typeText;
+
+    let statusText='—';
+    let statusColor='var(--muted)';
+    if(isSelected){statusText='◉ Seçili';statusColor='var(--white)';}
+    else if(isDone){statusText='Tamam';statusColor='#4ade80';}
+    else if(isToday){statusText='Bugün';statusColor='var(--lime)';}
+
+    // Gün kısaltmaları düzgün Türkçe
+    const shortNames=['PAZ','SAL','ÇAR','PER','CUM','CMT','PAZ'];
 
     el.innerHTML=`
-      <div class="dp-name">${day.slice(0,3).toUpperCase()}</div>
+      <div class="dp-name">${shortNames[i]}</div>
       <span class="dp-icon">${emoji}</span>
-      <div class="dp-type" style="color:${isRest?'var(--muted)':'var(--white)'}">${typeText.length>10?typeText.slice(0,10)+'...':typeText}</div>
+      <div class="dp-type" style="color:${isRest?'var(--muted)':'var(--white)'}">${shortType}</div>
       <div class="dp-status" style="color:${statusColor}">${statusText}</div>`;
     grid.appendChild(el);
   });
@@ -451,7 +489,7 @@ function renderWeekGrid(){
 function renderWorkout(dayName){
   const dayPlan=planData.days?.find(d=>d.day===dayName);
   const isToday=dayName===TODAY_NAME;
-  const isDayDone=storage.doneDays[dayName]===TODAY_STR;
+  const isDayDone=!!storage.doneDays[dayName];
   const isRest=!dayPlan||dayPlan.type==='Dinlenme'||dayPlan.type==='Rest';
 
   const badge=dayName+(isToday?' · Bugün':'')+(dayPlan?.duration?' · '+dayPlan.duration+' dk':'');
@@ -471,9 +509,8 @@ function renderWorkout(dayName){
   }
 
   const exercises=dayPlan?.exercises||[];
-  const doneKey=dayName+'_exercises';
+  const doneKey=dayName+'_ex';
   const doneExes=storage.doneEx[doneKey]||[];
-  const allDone=exercises.length>0&&doneExes.length>=exercises.length;
 
   let html='';
   if(dayPlan?.focus){
@@ -512,7 +549,7 @@ function renderWorkout(dayName){
 }
 
 function toggleExercise(dayName,idx,total){
-  const key=dayName+'_exercises';
+  const key=dayName+'_ex';
   if(!storage.doneEx[key]) storage.doneEx[key]=[];
   const arr=storage.doneEx[key];
   const pos=arr.indexOf(idx);
@@ -520,8 +557,9 @@ function toggleExercise(dayName,idx,total){
   else arr.push(idx);
   save();
   renderWorkout(dayName);
-  if(arr.length>=total&&storage.doneDays[dayName]!==TODAY_STR){
-    storage.doneDays[dayName]=TODAY_STR;
+  // Tüm egzersizler tamamlandıysa günü otomatik tamamla
+  if(arr.length>=total&&!storage.doneDays[dayName]){
+    storage.doneDays[dayName]=true;
     save();
     renderWeekGrid();
     renderProgress();
@@ -531,8 +569,8 @@ function toggleExercise(dayName,idx,total){
 }
 
 function toggleDayDone(dayName){
-  if(storage.doneDays[dayName]===TODAY_STR) delete storage.doneDays[dayName];
-  else storage.doneDays[dayName]=TODAY_STR;
+  if(storage.doneDays[dayName]) delete storage.doneDays[dayName];
+  else storage.doneDays[dayName]=true;
   save();
   renderWeekGrid();
   renderWorkout(dayName);
@@ -545,20 +583,18 @@ function renderNutrition(){
   const cal=planData.calories||2000;
   document.getElementById('calBadge').textContent=cal+' kcal/gün';
   document.getElementById('calTarget').textContent=cal;
-  document.getElementById('waterTarget').textContent=(planData.water||3)*2.67|0;
+  document.getElementById('waterTarget').textContent=Math.round((planData.water||3)*2.67);
 
   const nutrition=planData.nutrition||'';
-  
-  // Öğünleri ayır
+
   const meals=[
     {key:'sabah',label:'🌅 Kahvaltı',color:'#f5a623',keywords:['sabah','kahvaltı','breakfast']},
-    {key:'öğle',label:'☀️ Öğle',color:'#4af',keywords:['öğle','lunch','ara öğün']},
+    {key:'öğle',label:'☀️ Öğle',color:'#4af',keywords:['öğle','lunch']},
     {key:'akşam',label:'🌙 Akşam',color:'#c8f542',keywords:['akşam','dinner','supper']},
     {key:'ara',label:'🍎 Ara Öğün',color:'#a78bfa',keywords:['ara öğün','snack','atıştırma']}
   ];
 
   const lines=nutrition.split(/[,\.\n]/).map(l=>l.trim()).filter(l=>l.length>3);
-  
   let mealCards='';
   let usedLines=new Set();
 
@@ -567,7 +603,6 @@ function renderNutrition(){
       if(usedLines.has(i))return false;
       return meal.keywords.some(k=>l.toLowerCase().includes(k));
     });
-    
     if(matched.length>0){
       matched.forEach(l=>usedLines.add(lines.indexOf(l)));
       const content=matched.map(l=>l.replace(/^[^:]+:\s*/,'')).join(', ');
@@ -579,7 +614,6 @@ function renderNutrition(){
     }
   });
 
-  // Eşleşmeyen satırlar varsa genel kısım ekle
   const remaining=lines.filter((_,i)=>!usedLines.has(i));
   if(remaining.length>0||mealCards===''){
     mealCards+=`
@@ -589,7 +623,6 @@ function renderNutrition(){
       </div>`;
   }
 
-  // Makro özeti
   mealCards+=`
   <div style="display:flex;gap:0.75rem;margin-top:1rem">
     <div style="flex:1;background:#4af15;border:1px solid #4af30;border-radius:12px;padding:1rem;text-align:center">
@@ -608,9 +641,10 @@ function renderNutrition(){
 
   document.getElementById('nutritionBody').innerHTML=mealCards;
 }
+
 function renderTrackers(){
   const calTarget=planData.calories||2000;
-  const waterTarget=(planData.water||3)*2.67|0;
+  const waterTarget=Math.round((planData.water||3)*2.67);
   document.getElementById('calLogged').textContent=storage.calories;
   document.getElementById('waterLogged').textContent=storage.water;
   document.getElementById('calBar').style.width=Math.min(storage.calories/calTarget*100,100)+'%';
@@ -619,18 +653,12 @@ function renderTrackers(){
   document.getElementById('waterTracker').className='tracker-card'+(storage.water>=waterTarget?' active':'');
 }
 
-function logCalories(){
-  storage.calories+=200;save();renderTrackers();
-}
-function logWater(){
-  storage.water+=1;save();renderTrackers();
-}
-function resetTrackers(){
-  storage.calories=0;storage.water=0;save();renderTrackers();
-}
+function logCalories(){storage.calories+=200;save();renderTrackers();}
+function logWater(){storage.water+=1;save();renderTrackers();}
+function resetTrackers(){storage.calories=0;storage.water=0;save();renderTrackers();}
 
 function renderProgress(){
-  const done=Object.values(storage.doneDays).filter(d=>d===TODAY_STR).length;
+  const done=getDoneCount();
   const pct=Math.round(done/7*100);
   document.getElementById('ringPct').textContent='%'+pct;
   document.getElementById('ringCircle').style.strokeDashoffset=175.9*(1-done/7);
@@ -640,19 +668,20 @@ function renderProgress(){
 function renderStreak(){
   const row=document.getElementById('streakRow');
   row.innerHTML='';
+  const shortNames=['P','S','Ç','P','C','C','P'];
   DAYS.forEach((day,i)=>{
-    const done=storage.doneDays[day]===TODAY_STR;
+    const done=!!storage.doneDays[day];
     const isToday=i===TODAY_IDX;
     const el=document.createElement('div');
     el.className='streak-dot'+(done?' done':isToday?' today':'');
-    el.textContent=done?'✓':day.slice(0,1);
+    el.textContent=done?'✓':shortNames[i];
     el.title=day;
     row.appendChild(el);
   });
 }
 
 function renderTips(){
-  if(!planData.tips){document.getElementById('tipsBody').innerHTML='';return}
+  if(!planData.tips){document.getElementById('tipsBody').innerHTML='<div style="color:var(--muted);font-size:0.85rem">Henüz ipucu yok.</div>';return}
   const tips=planData.tips.split(/\d+[.)]\s*/).filter(t=>t.trim());
   document.getElementById('tipsBody').innerHTML=tips.map((t,i)=>`
     <div class="tip-row"><span class="tip-n">${i+1}.</span><span>${t.trim()}</span></div>`).join('');
@@ -669,16 +698,35 @@ function renderPlanInfo(){
     <div class="info-row"><span class="info-key">Oluşturulma</span><span class="info-val">${planData.createdAt?new Date(planData.createdAt).toLocaleDateString('tr-TR'):'—'}</span></div>`;
 }
 
-async function goToCoach(){
-  if(confirm('Mevcut planınızı silip yeni plan oluşturmak istiyor musunuz?\n\nEvet: Plan silinir, AI Koç\'a yönlendirilirsiniz\nHayır: İptal')){
-    const {data:{session}}=await sb.auth.getSession();
-    if(session){
-      await sb.from('user_plans').delete().eq('user_id',session.user.id);
-    }
-    window.location.href='dashboard.html';
-  }
+// PLAN YENİLE MODAL
+function showRenewModal(){
+  document.getElementById('renewModal').style.display='flex';
 }
-async function signOut(){await sb.auth.signOut();window.location.replace('auth.html')}
+function closeRenewModal(){
+  document.getElementById('renewModal').style.display='none';
+}
+async function confirmRenew(){
+  closeRenewModal();
+  // Storage sıfırla
+  localStorage.removeItem('fp_doneDays');
+  localStorage.removeItem('fp_doneEx');
+  localStorage.removeItem('fp_weekStart');
+  // Supabase'den planı sil
+  const {data:{session}}=await sb.auth.getSession();
+  if(session){
+    await sb.from('user_plans').delete().eq('user_id',session.user.id);
+  }
+  window.location.href='dashboard.html';
+}
+
+function goToCoach(){
+  window.location.href='dashboard.html';
+}
+
+async function signOut(){
+  await sb.auth.signOut();
+  window.location.replace('auth.html');
+}
 
 init();
 </script>
