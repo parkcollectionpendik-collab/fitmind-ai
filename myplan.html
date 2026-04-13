@@ -273,7 +273,7 @@ function renderDaysGrid(){
     const isToday=i===todayIdx;
     const div=document.createElement('div');
     div.className='day-card'+(isToday?' today':'')+(isDone?' done':'');
-    div.onclick=()=>toggleDayDone(day,div);
+    div.onclick=()=>selectDay(day);
     div.innerHTML=`<div class="day-name">${day.slice(0,3)}</div><div class="day-icon">${isDone?'✅':dayEmojis[i]}</div><div class="day-status">${isDone?'Tamamlandı':isToday?'Bugün':'Bekliyor'}</div>`;
     grid.appendChild(div);
   });
