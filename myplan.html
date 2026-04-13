@@ -3,153 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitMind AI – Benim Planım</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>FitMind AI - Benim Planım</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* CSS Değişkenleri ve Font Ayarları */
-        :root {
-            --black: #0a0a0a;
-            --white: #f5f2eb;
-            --lime: #c8f542;
-            --lime2: #a8d92e;
-            --gray: #111;
-            --muted: #888;
-            --font-head: 'Syne', sans-serif;
-            --font-body: 'DM Sans', sans-serif;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body { 
-            background: var(--black); 
-            color: var(--white); 
-            font-family: var(--font-body); 
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* Başlık Font Düzeltmesi */
-        .page-title {
-            font-family: var(--font-head);
-            font-size: 1.8rem;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            text-transform: uppercase;
-        }
-
-        /* Kenar Çubuğu ve Diğerleri (Mevcut stillerini korudum) */
-        .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 240px; background: #0d0d0d; border-right: 1px solid #ffffff0f; padding: 1.5rem; display: flex; flex-direction: column; z-index: 10; }
-        .logo { font-family: var(--font-head); font-weight: 800; font-size: 1.1rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid #ffffff0f; text-decoration: none; color: inherit; display: block; }
-        .logo span { color: var(--lime); }
-        .main { margin-left: 240px; padding: 2rem; min-height: 100vh; }
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{ --black:#0a0a0a; --white:#f5f2eb; --lime:#c8f542; --lime2:rgba(200,245,66,0.2); --gray:#111; --muted:#888; --font-head:'Syne',sans-serif; --font-body:'DM Sans',sans-serif }
+        body{background:var(--black);color:var(--white);font-family:var(--font-body);min-height:100vh}
         
-        .panel { background: var(--gray); border: 1px solid #ffffff0f; border-radius: 20px; padding: 1.5rem; margin-bottom: 1.5rem; }
-        .spin { display: inline-block; width: 30px; height: 30px; border: 3px solid #ffffff15; border-top-color: var(--lime); border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Takvim ve Antrenman Stilleri (Mevcut olanların devamı...) */
-        .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.6rem; margin-bottom: 2rem; }
-        .day-pill { border-radius: 18px; padding: 1.1rem 0.4rem; text-align: center; cursor: pointer; transition: all 0.25s; border: 2px solid #ffffff0a; background: #0d0d0d; }
-        .day-pill.state-selected { border-color: var(--lime); background: #1a1a1a; transform: translateY(-4px); }
-        .nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 1rem; border-radius: 12px; transition: all 0.2s; font-size: 0.9rem; color: var(--muted); text-decoration: none; }
-        .nav-item.active { background: #c8f54215; color: var(--lime); }
-        .btn { background: var(--lime); color: #000; border: none; border-radius: 100px; padding: 0.65rem 1.4rem; font-family: var(--font-head); font-weight: 700; cursor: pointer; }
+        .sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:#0d0d0d;border-right:1px solid #ffffff0f;padding:1.5rem;display:flex;flex-direction:column;z-index:10}
+        .logo{font-family:var(--font-head);font-weight:800;font-size:1.1rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid #ffffff0f;text-decoration:none;color:inherit;display:block}
+        .logo span{color:var(--lime)}
+        .nav{display:flex;flex-direction:column;gap:0.3rem;flex:1}
+        .nav-item{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 1rem;border-radius:12px;transition:all 0.2s;font-size:0.9rem;color:var(--muted);text-decoration:none}
+        .nav-item:hover{background:#ffffff08;color:var(--white)}
+        .nav-item.active{background:var(--lime2);color:var(--lime)}
+        
+        main{margin-left:240px;padding:2rem;min-height:100vh}
+        .topbar{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2rem}
+        .page-title{font-family:var(--font-head);font-size:1.6rem;font-weight:800;display:flex;align-items:center;gap:0.5rem}
+        
+        .plan-grid{display:grid;grid-template-columns:1fr 300px;gap:1.5rem}
+        .card{background:#111;border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
+        
+        /* Günlük Slotlar */
+        .day-slots{display:grid;grid-template-columns:repeat(7, 1fr);gap:0.5rem;margin-bottom:1.5rem}
+        .day-card{background:#111;border:1px solid #ffffff0f;border-radius:12px;padding:0.75rem;text-align:center;cursor:pointer;transition:0.2s}
+        .day-card.active{border-color:var(--lime);background:var(--lime2)}
+        .day-name{font-size:0.6rem;text-transform:uppercase;font-weight:700;margin-bottom:0.4rem;color:var(--muted)}
+        .day-card.active .day-name{color:var(--lime)}
+        
+        /* Beslenme Kartları Tasarımı */
+        .meal-card{background:#ffffff06;border-radius:14px;padding:1rem 1.2rem;margin-bottom:0.6rem;transition:0.2s}
+        .meal-card:hover{background:#ffffff0a}
+        .meal-label{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:0.4rem}
+        
+        /* Makro Kutuları */
+        .macro-box{flex:1;min-width:80px;border-radius:12px;padding:0.9rem;text-align:center;border:1px solid transparent}
+        .macro-val{font-family:var(--font-head);font-weight:800;font-size:1.3rem}
+        
+        /* Takip Barları */
+        .track-item{background:#ffffff06;border-radius:14px;padding:1.2rem;flex:1}
+        .btn-track{background:#ffffff0a;border:none;color:white;padding:0.4rem 0.8rem;border-radius:8px;font-size:0.75rem;cursor:pointer}
+        
+        #loadingOverlay{position:fixed;inset:0;background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100}
+        .spinner{width:30px;height:30px;border:3px solid var(--lime2);border-top-color:var(--lime);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:1rem}
+        @keyframes spin{to{transform:rotate(360deg)}}
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <a class="logo" href="dashboard.html">Fit<span>Mind</span> AI</a>
-        <nav class="nav">
-            <a class="nav-item" href="dashboard.html">🏠 Ana Sayfa</a>
-            <a class="nav-item active" href="myplan.html">📋 Benim Planım</a>
-            <a class="nav-item" href="nutrition.html">🥗 Beslenme</a>
-        </nav>
+
+<div id="loadingOverlay">
+    <div class="spinner"></div>
+    <div style="font-size:0.9rem; color:var(--muted)">Planınız yükleniyor...</div>
+</div>
+
+<div class="sidebar">
+    <a href="dashboard.html" class="logo">FIT<span>MIND AI</span></a>
+    <nav class="nav">
+        <a href="dashboard.html" class="nav-item">🏠 Ana Sayfa</a>
+        <a href="ai-coach.html" class="nav-item">🤖 AI Koç</a>
+        <a href="myplan.html" class="nav-item active">📋 Benim Planım</a>
+        <a href="workout.html" class="nav-item">🏋️ Antrenmanlar</a>
+        <a href="nutrition.html" class="nav-item">🥗 Beslenme</a>
+    </nav>
+</div>
+
+<main>
+    <div class="topbar">
+        <div>
+            <h1 class="page-title">📋 BENİM PLANIM</h1>
+            <p id="planSubtitle" style="color:var(--muted); font-size:0.85rem; margin-top:0.3rem">Yükleniyor...</p>
+        </div>
+        <button onclick="window.location.href='onboarding.html'" style="background:#111; border:1px solid #ffffff0f; color:white; padding:0.6rem 1rem; border-radius:100px; font-size:0.75rem; cursor:pointer">🔄 Planı Yenile</button>
     </div>
 
-    <div class="main">
-        <div class="topbar">
-            <h1 class="page-title">Benim Planım</h1>
-            <p id="planDate" style="color: var(--muted);"></p>
+    <div class="day-slots" id="daySlots">
         </div>
 
-        <div id="stateLoading" style="text-align:center; padding: 5rem;">
-            <div class="spin"></div>
-            <p style="margin-top: 1rem; color: var(--muted);">Planınız hazırlanıyor...</p>
-        </div>
-
-        <div id="stateEmpty" style="display:none; text-align: center; padding: 5rem;">
-            <h2>Henüz bir planın yok.</h2>
-            <button class="btn" onclick="window.location.href='dashboard.html'" style="margin-top: 1rem;">AI Koç ile Plan Oluştur</button>
-        </div>
-
-        <div id="statePlan" style="display:none;">
-            <div class="panel">
-                <div class="week-grid" id="weekGrid"></div>
+    <div class="plan-grid">
+        <div class="plan-main">
+            <div class="card">
+                <h3 style="font-family:var(--font-head); font-size:1.1rem; margin-bottom:1.2rem">Bugünkü Antrenman</h3>
+                <div id="workoutContent" style="color:#ffffffdd; line-height:1.6; font-size:0.95rem">Yükleniyor...</div>
+                <button style="width:100%; background:var(--lime); color:var(--black); border:none; padding:1rem; border-radius:12px; font-weight:800; margin-top:1.5rem; cursor:pointer">🚩 Antrenmanı Tamamla</button>
             </div>
-            <div id="workoutBody" class="panel">
+
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.2rem">
+                    <h3 style="font-family:var(--font-head); font-size:1.1rem">🥗 Beslenme Planı</h3>
+                    <span id="calBadge" style="font-size:0.75rem; color:var(--muted)">... kcal/gün</span>
                 </div>
+                <div id="nutritionBody">
+                    </div>
+            </div>
+
+            <div style="display:flex; gap:1rem">
+                <div class="track-item">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:1rem">
+                        <span style="font-size:0.8rem">🔥 Kalori</span>
+                        <span style="font-size:0.8rem; color:var(--lime)"><span id="currCal">0</span> / <span id="targetCal">2000</span></span>
+                    </div>
+                    <button class="btn-track" onclick="updateTrack('cal')">+200 kcal</button>
+                </div>
+                <div class="track-item">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:1rem">
+                        <span style="font-size:0.8rem">💧 Su Takibi</span>
+                        <span style="font-size:0.8rem; color:#4af"><span id="currWater">0</span> / <span id="targetWater">8</span></span>
+                    </div>
+                    <button class="btn-track" onclick="updateTrack('water')">+1 Bardak Su</button>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <script>
-        // Supabase Bağlantısı
-        const SUPABASE_URL = 'https://cypmmayxwbkarvheqoxu.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
-        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        async function init() {
-            try {
-                const { data: { session } } = await sb.auth.getSession();
-                if (!session) {
-                    window.location.replace('auth.html');
-                    return;
-                }
-
-                // Planı Getir
-                const { data, error } = await sb
-                    .from('user_plans')
-                    .select('*')
-                    .eq('user_id', session.user.id)
-                    .order('created_at', { ascending: false })
-                    .limit(1)
-                    .maybeSingle();
-
-                if (error) throw error;
-
-                if (!data) {
-                    document.getElementById('stateLoading').style.display = 'none';
-                    document.getElementById('stateEmpty').style.display = 'block';
-                } else {
-                    document.getElementById('stateLoading').style.display = 'none';
-                    document.getElementById('statePlan').style.display = 'block';
-                    renderPlan(data.plan_data);
-                }
-            } catch (err) {
-                console.error("Hata:", err);
-                alert("Plan yüklenirken bir sorun oluştu.");
-            }
-        }
-
-        function renderPlan(plan) {
-            const grid = document.getElementById('weekGrid');
-            const days = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
+        <aside>
+            <div class="card" style="padding:1.2rem">
+                <h4 style="font-size:0.8rem; color:var(--lime); margin-bottom:1rem">✨ AI İpuçları</h4>
+                <ul id="aiTips" style="list-style:none; font-size:0.8rem; color:#ffffffaa; display:flex; flex-direction:column; gap:0.8rem">
+                    <li>• Antrenman öncesi ısınmayı unutma.</li>
+                    <li>• Gece uykusu toparlanma için kritiktir.</li>
+                </ul>
+            </div>
             
-            grid.innerHTML = days.map(day => `
-                <div class="day-pill ${new Date().toLocaleDateString('tr-TR', {weekday: 'long'}) === day ? 'state-selected' : ''}">
-                    <div style="font-size: 0.7rem; font-weight: 800;">${day.substring(0,3).toUpperCase()}</div>
-                    <div style="font-size: 1.2rem; margin: 5px 0;">⚡</div>
+            <div class="card" id="planStats" style="font-size:0.85rem">
+                <h4 style="margin-bottom:1rem">ℹ️ Plan Bilgisi</h4>
                 </div>
-            `).join('');
+        </aside>
+    </div>
+</main>
 
-            // Antrenman içeriği (Örnek)
-            document.getElementById('workoutBody').innerHTML = `
-                <h3 style="font-family: var(--font-head); margin-bottom: 1rem;">Bugünkü Antrenman</h3>
-                <p style="color: var(--muted);">${plan.nutrition || 'Plan detayları yüklenemedi.'}</p>
-            `;
+<script>
+    // SUPABASE AYARLARI (Seninkileri buraya yazmalısın)
+    const SUPABASE_URL = 'https://cypmmayxwbkarvheqoxu.supabase.co';
+    const SUPABASE_KEY = 'EY...'; // Kendi anahtarını buraya koy
+    const supabase = typeof supabase !== 'undefined' ? supabase : window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let planData = null;
+    const days = ['PAZ', 'PTES', 'SAL', 'ÇAR', 'PER', 'CUM', 'CMT'];
+
+    async function init() {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) { window.location.href = 'auth.html'; return; }
+
+        const { data, error } = await supabase.from('user_plans').select('*').eq('user_id', user.id).single();
+        
+        if (data) {
+            planData = data;
+            renderAll();
+            document.getElementById('loadingOverlay').style.display = 'none';
+        } else {
+            window.location.href = 'onboarding.html';
         }
+    }
 
-        document.addEventListener('DOMContentLoaded', init);
-    </script>
+    function renderAll() {
+        renderDays();
+        renderWorkout();
+        renderNutrition();
+        renderStats();
+    }
+
+    function renderDays() {
+        const container = document.getElementById('daySlots');
+        const today = new Date().getDay();
+        container.innerHTML = days.map((day, i) => `
+            <div class="day-card ${i === today ? 'active' : ''}">
+                <div class="day-name">${day}</div>
+                <div style="font-size:1.2rem">${i === today ? '⚡' : '🔒'}</div>
+            </div>
+        `).join('');
+    }
+
+    function renderWorkout() {
+        document.getElementById('workoutContent').innerHTML = planData.workout_plan || "Bugün dinlenme günü veya plan oluşturulmamış.";
+    }
+
+    function renderNutrition() {
+        const cal = planData.calories || 2000;
+        document.getElementById('calBadge').textContent = cal + ' kcal/gün';
+        document.getElementById('targetCal').textContent = cal;
+        
+        const nutrition = planData.nutrition || '';
+        const meals = [
+            {label:'🌅 Kahvaltı', color:'#f5a623', keywords:['kahvaltı','sabah','breakfast']},
+            {label:'☀️ Öğle', color:'#4af', keywords:['öğle','lunch']},
+            {label:'🌙 Akşam', color: '#c8f542', keywords:['akşam','dinner']},
+            {label:'🍎 Ara Öğün', color:'#a78bfa', keywords:['ara','atıştırma','snack']}
+        ];
+
+        const lines = nutrition.split(/[,\.\n]/).filter(l => l.trim().length > 3);
+        let html = '';
+        let used = new Set();
+
+        meals.forEach(m => {
+            const match = lines.find((l, i) => !used.has(i) && m.keywords.some(k => l.toLowerCase().includes(k)));
+            if(match) {
+                used.add(lines.indexOf(match));
+                html += `
+                <div class="meal-card" style="border-left:3px solid ${m.color}">
+                    <div class="meal-label" style="color:${m.color}">${m.label}</div>
+                    <div style="font-size:0.88rem; color:#ffffffdd">${match}</div>
+                </div>`;
+            }
+        });
+
+        // Makro Görünümü
+        html += `
+        <div style="display:flex; gap:0.75rem; margin-top:1.2rem">
+            <div class="macro-box" style="background:#4af15; border-color:#4af30">
+                <div class="meal-label" style="color:#4af">Protein</div>
+                <div class="macro-val" style="color:#4af">${Math.round(cal*0.3/4)}g</div>
+            </div>
+            <div class="macro-box" style="background:#f5a62315; border-color:#f5a62330">
+                <div class="meal-label" style="color:#f5a623">Karb</div>
+                <div class="macro-val" style="color:#f5a623">${Math.round(cal*0.4/4)}g</div>
+            </div>
+            <div class="macro-box" style="background:#c8f54215; border-color:#c8f54230">
+                <div class="meal-label" style="color:var(--lime)">Yağ</div>
+                <div class="macro-val" style="color:var(--lime)">${Math.round(cal*0.3/9)}g</div>
+            </div>
+        </div>`;
+
+        document.getElementById('nutritionBody').innerHTML = html;
+    }
+
+    function renderStats() {
+        const date = new Date(planData.created_at).toLocaleDateString('tr-TR');
+        document.getElementById('planSubtitle').textContent = `${planData.goal || 'Fitness'} Yolculuğu`;
+        document.getElementById('planStats').innerHTML = `
+            <div style="display:flex; justify-content:space-between; margin-bottom:0.6rem"><span>Hedef:</span><span style="color:var(--lime)">${planData.goal}</span></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:0.6rem"><span>Seviye:</span><span>${planData.level || 'Orta'}</span></div>
+            <div style="display:flex; justify-content:space-between"><span>Oluşturulma:</span><span>${date}</span></div>
+        `;
+    }
+
+    function updateTrack(type) {
+        if(type === 'cal') {
+            const el = document.getElementById('currCal');
+            el.textContent = parseInt(el.textContent) + 200;
+        } else {
+            const el = document.getElementById('currWater');
+            el.textContent = parseInt(el.textContent) + 1;
+        }
+    }
+
+    init();
+</script>
+
 </body>
 </html>
