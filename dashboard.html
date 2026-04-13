@@ -281,7 +281,7 @@ function switchTab(tab,el){
   document.getElementById('tab-'+tab).classList.add('active');
   el.classList.add('active');
   closeSidebar();
-  if(tab==='workouts'&&!weeklyPlanLoaded&&userProfile)loadWeeklyPlan(userProfile);
+  if(tab==='workouts') loadQuickWorkoutPreview();
 }
 
 function openCheckout(){
