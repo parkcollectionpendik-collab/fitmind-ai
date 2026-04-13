@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FitMind AI – Let's get started</title>
+<title>FitMind AI – Hadi Başlayalım</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -16,29 +16,21 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .orb2{width:300px;height:300px;background:#4af;bottom:-50px;right:-50px;animation:float2 10s ease-in-out infinite}
 @keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,20px)}}
 @keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-20px,-15px)}}
-
 .card{position:relative;z-index:1;background:#111;border:1px solid #ffffff15;border-radius:24px;padding:2.5rem;width:100%;max-width:560px;animation:fadeUp 0.6s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-
 .logo{font-family:var(--font-head);font-weight:800;font-size:1.1rem;text-align:center;margin-bottom:2rem}
 .logo span{color:var(--lime)}
-
-/* PROGRESS BAR */
 .progress-wrap{margin-bottom:2rem}
 .progress-steps{display:flex;justify-content:space-between;margin-bottom:0.5rem}
 .progress-step{font-size:0.75rem;color:var(--muted);font-family:var(--font-head);font-weight:700}
 .progress-step.active{color:var(--lime)}
 .progress-bar{height:4px;background:#ffffff10;border-radius:100px}
 .progress-fill{height:100%;background:var(--lime);border-radius:100px;transition:width 0.4s ease}
-
-/* STEPS */
 .step{display:none}
 .step.active{display:block}
 .step-tag{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--lime);font-weight:700;margin-bottom:0.5rem}
 .step-title{font-family:var(--font-head);font-size:1.6rem;font-weight:800;line-height:1.1;margin-bottom:0.4rem;letter-spacing:-0.02em}
 .step-sub{color:var(--muted);font-size:0.875rem;margin-bottom:1.8rem;line-height:1.6}
-
-/* OPTIONS */
 .options{display:grid;gap:0.75rem;margin-bottom:1.5rem}
 .options.cols2{grid-template-columns:1fr 1fr}
 .option{background:#ffffff06;border:1.5px solid #ffffff12;border-radius:14px;padding:1rem 1.2rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.75rem}
@@ -47,30 +39,22 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .option-icon{font-size:1.4rem;flex-shrink:0}
 .option-label{font-family:var(--font-head);font-size:0.9rem;font-weight:700}
 .option-desc{font-size:0.75rem;color:var(--muted);margin-top:0.1rem}
-
-/* INPUTS */
 .input-row{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem}
 .input-group{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem}
 label{font-size:0.78rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;font-weight:700}
 input[type=number],input[type=text],select{background:#ffffff08;border:1.5px solid #ffffff12;border-radius:12px;padding:0.8rem 1rem;color:var(--white);font-family:var(--font-body);font-size:1rem;outline:none;transition:border-color 0.2s;width:100%}
 input:focus,select:focus{border-color:#c8f54250}
 select option{background:#1a1a1a}
-
-/* DAYS */
 .days-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:0.4rem;margin-bottom:1.5rem}
 .day-btn{background:#ffffff06;border:1.5px solid #ffffff12;border-radius:10px;padding:0.6rem 0.3rem;cursor:pointer;transition:all 0.2s;text-align:center;font-family:var(--font-head);font-weight:700;font-size:0.75rem;color:var(--muted)}
 .day-btn:hover{border-color:#ffffff25}
 .day-btn.selected{border-color:var(--lime);background:#c8f54215;color:var(--lime)}
-
-/* BUTTONS */
 .btn-row{display:flex;gap:0.75rem;align-items:center}
 .btn-next{background:var(--lime);color:var(--black);border:none;border-radius:100px;padding:0.85rem 2rem;font-family:var(--font-head);font-weight:700;font-size:0.95rem;cursor:pointer;transition:all 0.25s;flex:1}
 .btn-next:hover{background:var(--lime2);transform:translateY(-1px)}
 .btn-next:disabled{opacity:0.4;cursor:not-allowed;transform:none}
 .btn-back{background:transparent;color:var(--muted);border:1.5px solid #ffffff15;border-radius:100px;padding:0.85rem 1.4rem;font-family:var(--font-head);font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.2s}
 .btn-back:hover{border-color:#ffffff30;color:var(--white)}
-
-/* FINAL */
 .final-screen{text-align:center;display:none}
 .final-screen .big-icon{font-size:4rem;margin-bottom:1rem}
 .final-screen h2{font-family:var(--font-head);font-size:1.8rem;font-weight:800;margin-bottom:0.5rem}
@@ -86,188 +70,187 @@ select option{background:#1a1a1a}
 
 <div class="card" id="mainCard">
   <div class="logo">Fit<span>Mind</span> AI</div>
-
   <div class="progress-wrap">
     <div class="progress-steps">
-      <span class="progress-step active" id="ps1">Goal</span>
-      <span class="progress-step" id="ps2">Body</span>
-      <span class="progress-step" id="ps3">Level</span>
-      <span class="progress-step" id="ps4">Equipment</span>
-      <span class="progress-step" id="ps5">Schedule</span>
+      <span class="progress-step active" id="ps1">Hedef</span>
+      <span class="progress-step" id="ps2">Vücut</span>
+      <span class="progress-step" id="ps3">Seviye</span>
+      <span class="progress-step" id="ps4">Ekipman</span>
+      <span class="progress-step" id="ps5">Program</span>
     </div>
     <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:20%"></div></div>
   </div>
 
-  <!-- STEP 1: GOAL -->
+  <!-- ADIM 1: HEDEF -->
   <div class="step active" id="step1">
-    <div class="step-tag">Step 1 of 5</div>
-    <div class="step-title">What's your main goal?</div>
-    <div class="step-sub">We'll build your entire plan around this.</div>
+    <div class="step-tag">Adım 1 / 5</div>
+    <div class="step-title">Ana hedefiniz ne?</div>
+    <div class="step-sub">Tüm planınızı bu hedefe göre oluşturacağız.</div>
     <div class="options">
       <div class="option" onclick="select(this,'goal','lose_weight')">
         <div class="option-icon">🔥</div>
-        <div><div class="option-label">Lose weight</div><div class="option-desc">Burn fat, get leaner</div></div>
+        <div><div class="option-label">Kilo vermek</div><div class="option-desc">Yağ yak, forma gir</div></div>
       </div>
       <div class="option" onclick="select(this,'goal','build_muscle')">
         <div class="option-icon">💪</div>
-        <div><div class="option-label">Build muscle</div><div class="option-desc">Get stronger, gain mass</div></div>
+        <div><div class="option-label">Kas yapmak</div><div class="option-desc">Güçlen, hacim kazan</div></div>
       </div>
       <div class="option" onclick="select(this,'goal','get_fit')">
         <div class="option-icon">⚡</div>
-        <div><div class="option-label">Get fit & toned</div><div class="option-desc">Improve overall fitness</div></div>
+        <div><div class="option-label">Forma girmek</div><div class="option-desc">Genel kondisyonu artır</div></div>
       </div>
       <div class="option" onclick="select(this,'goal','improve_health')">
         <div class="option-icon">❤️</div>
-        <div><div class="option-label">Improve health</div><div class="option-desc">Feel better, more energy</div></div>
+        <div><div class="option-label">Sağlığı iyileştirmek</div><div class="option-desc">Daha iyi hisset, enerji kazan</div></div>
       </div>
     </div>
     <div class="btn-row">
-      <button class="btn-next" onclick="nextStep(2)" id="btn1" disabled>Continue →</button>
+      <button class="btn-next" onclick="nextStep(2)" id="btn1" disabled>Devam Et →</button>
     </div>
   </div>
 
-  <!-- STEP 2: BODY -->
+  <!-- ADIM 2: VÜCUT -->
   <div class="step" id="step2">
-    <div class="step-tag">Step 2 of 5</div>
-    <div class="step-title">Tell us about your body</div>
-    <div class="step-sub">This helps us calculate your ideal plan.</div>
+    <div class="step-tag">Adım 2 / 5</div>
+    <div class="step-title">Vücudunuz hakkında bilgi verin</div>
+    <div class="step-sub">İdeal planınızı hesaplamamıza yardımcı olur.</div>
     <div class="input-row">
       <div class="input-group">
-        <label>Age</label>
+        <label>Yaş</label>
         <input type="number" id="age" placeholder="25" min="16" max="80">
       </div>
       <div class="input-group">
-        <label>Gender</label>
+        <label>Cinsiyet</label>
         <select id="gender">
-          <option value="">Select...</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="other">Prefer not to say</option>
+          <option value="">Seçin...</option>
+          <option value="male">Erkek</option>
+          <option value="female">Kadın</option>
+          <option value="other">Belirtmek istemiyorum</option>
         </select>
       </div>
     </div>
     <div class="input-row">
       <div class="input-group">
-        <label>Height (cm)</label>
+        <label>Boy (cm)</label>
         <input type="number" id="height" placeholder="175" min="140" max="220">
       </div>
       <div class="input-group">
-        <label>Weight (kg)</label>
+        <label>Kilo (kg)</label>
         <input type="number" id="weight" placeholder="75" min="40" max="200">
       </div>
     </div>
     <div class="btn-row">
-      <button class="btn-back" onclick="prevStep(1)">← Back</button>
-      <button class="btn-next" onclick="nextStep(3)">Continue →</button>
+      <button class="btn-back" onclick="prevStep(1)">← Geri</button>
+      <button class="btn-next" onclick="nextStep(3)">Devam Et →</button>
     </div>
   </div>
 
-  <!-- STEP 3: FITNESS LEVEL -->
+  <!-- ADIM 3: FİTNES SEVİYESİ -->
   <div class="step" id="step3">
-    <div class="step-tag">Step 3 of 5</div>
-    <div class="step-title">What's your fitness level?</div>
-    <div class="step-sub">Be honest — we'll adapt your plan accordingly.</div>
+    <div class="step-tag">Adım 3 / 5</div>
+    <div class="step-title">Fitness seviyeniz nedir?</div>
+    <div class="step-sub">Dürüst olun — planınızı buna göre ayarlayacağız.</div>
     <div class="options">
       <div class="option" onclick="select(this,'level','beginner')">
         <div class="option-icon">🌱</div>
-        <div><div class="option-label">Beginner</div><div class="option-desc">Little or no experience</div></div>
+        <div><div class="option-label">Başlangıç</div><div class="option-desc">Az ya da hiç deneyim yok</div></div>
       </div>
       <div class="option" onclick="select(this,'level','intermediate')">
         <div class="option-icon">🏃</div>
-        <div><div class="option-label">Intermediate</div><div class="option-desc">Workout 1-3x per week</div></div>
+        <div><div class="option-label">Orta Seviye</div><div class="option-desc">Haftada 1-3 kez egzersiz</div></div>
       </div>
       <div class="option" onclick="select(this,'level','advanced')">
         <div class="option-icon">🏆</div>
-        <div><div class="option-label">Advanced</div><div class="option-desc">Train regularly, 4+ times</div></div>
+        <div><div class="option-label">İleri Seviye</div><div class="option-desc">Düzenli antrenman, haftada 4+</div></div>
       </div>
     </div>
     <div class="btn-row">
-      <button class="btn-back" onclick="prevStep(2)">← Back</button>
-      <button class="btn-next" onclick="nextStep(4)" id="btn3" disabled>Continue →</button>
+      <button class="btn-back" onclick="prevStep(2)">← Geri</button>
+      <button class="btn-next" onclick="nextStep(4)" id="btn3" disabled>Devam Et →</button>
     </div>
   </div>
 
-  <!-- STEP 4: EQUIPMENT -->
+  <!-- ADIM 4: EKİPMAN -->
   <div class="step" id="step4">
-    <div class="step-tag">Step 4 of 5</div>
-    <div class="step-title">Where do you work out?</div>
-    <div class="step-sub">We'll only give you exercises you can actually do.</div>
+    <div class="step-tag">Adım 4 / 5</div>
+    <div class="step-title">Nerede antrenman yapıyorsunuz?</div>
+    <div class="step-sub">Sadece yapabileceğiniz egzersizleri vereceğiz.</div>
     <div class="options">
       <div class="option" onclick="select(this,'equipment','home_no')">
         <div class="option-icon">🏠</div>
-        <div><div class="option-label">Home — no equipment</div><div class="option-desc">Bodyweight only</div></div>
+        <div><div class="option-label">Evde — ekipmansız</div><div class="option-desc">Sadece vücut ağırlığı</div></div>
       </div>
       <div class="option" onclick="select(this,'equipment','home_basic')">
         <div class="option-icon">🏋️</div>
-        <div><div class="option-label">Home — basic equipment</div><div class="option-desc">Dumbbells, resistance bands</div></div>
+        <div><div class="option-label">Evde — temel ekipman</div><div class="option-desc">Dumbbell, direnç bandı</div></div>
       </div>
       <div class="option" onclick="select(this,'equipment','gym')">
         <div class="option-icon">🏢</div>
-        <div><div class="option-label">Gym</div><div class="option-desc">Full equipment access</div></div>
+        <div><div class="option-label">Spor Salonu</div><div class="option-desc">Tam ekipman erişimi</div></div>
       </div>
       <div class="option" onclick="select(this,'equipment','outdoor')">
         <div class="option-icon">🌳</div>
-        <div><div class="option-label">Outdoor</div><div class="option-desc">Park, running, calisthenics</div></div>
+        <div><div class="option-label">Açık Hava</div><div class="option-desc">Park, koşu, kalistenik</div></div>
       </div>
     </div>
     <div class="btn-row">
-      <button class="btn-back" onclick="prevStep(3)">← Back</button>
-      <button class="btn-next" onclick="nextStep(5)" id="btn4" disabled>Continue →</button>
+      <button class="btn-back" onclick="prevStep(3)">← Geri</button>
+      <button class="btn-next" onclick="nextStep(5)" id="btn4" disabled>Devam Et →</button>
     </div>
   </div>
 
-  <!-- STEP 5: SCHEDULE -->
+  <!-- ADIM 5: PROGRAM -->
   <div class="step" id="step5">
-    <div class="step-tag">Step 5 of 5</div>
-    <div class="step-title">When do you want to train?</div>
-    <div class="step-sub">Pick the days that work for you.</div>
+    <div class="step-tag">Adım 5 / 5</div>
+    <div class="step-title">Ne zaman antrenman yapmak istiyorsunuz?</div>
+    <div class="step-sub">Size uygun günleri seçin.</div>
     <div class="days-grid">
-      <div class="day-btn" onclick="toggleDay(this,'Mon')">Mon</div>
-      <div class="day-btn" onclick="toggleDay(this,'Tue')">Tue</div>
-      <div class="day-btn" onclick="toggleDay(this,'Wed')">Wed</div>
-      <div class="day-btn" onclick="toggleDay(this,'Thu')">Thu</div>
-      <div class="day-btn" onclick="toggleDay(this,'Fri')">Fri</div>
-      <div class="day-btn" onclick="toggleDay(this,'Sat')">Sat</div>
-      <div class="day-btn" onclick="toggleDay(this,'Sun')">Sun</div>
+      <div class="day-btn" onclick="toggleDay(this,'Pzt')">Pzt</div>
+      <div class="day-btn" onclick="toggleDay(this,'Sal')">Sal</div>
+      <div class="day-btn" onclick="toggleDay(this,'Çar')">Çar</div>
+      <div class="day-btn" onclick="toggleDay(this,'Per')">Per</div>
+      <div class="day-btn" onclick="toggleDay(this,'Cum')">Cum</div>
+      <div class="day-btn" onclick="toggleDay(this,'Cmt')">Cmt</div>
+      <div class="day-btn" onclick="toggleDay(this,'Paz')">Paz</div>
     </div>
     <div class="input-group">
-      <label>Preferred workout duration</label>
+      <label>Tercih ettiğiniz antrenman süresi</label>
       <select id="duration">
-        <option value="20">20 minutes — Quick session</option>
-        <option value="30">30 minutes — Standard</option>
-        <option value="45" selected>45 minutes — Solid workout</option>
-        <option value="60">60 minutes — Full session</option>
-        <option value="90">90 minutes — Serious training</option>
+        <option value="20">20 dakika — Hızlı seans</option>
+        <option value="30">30 dakika — Standart</option>
+        <option value="45" selected>45 dakika — Sağlam antrenman</option>
+        <option value="60">60 dakika — Tam seans</option>
+        <option value="90">90 dakika — Ciddi antrenman</option>
       </select>
     </div>
     <div class="btn-row">
-      <button class="btn-back" onclick="prevStep(4)">← Back</button>
-      <button class="btn-next" onclick="finish()" id="btn5">Build my plan! 🚀</button>
+      <button class="btn-back" onclick="prevStep(4)">← Geri</button>
+      <button class="btn-next" onclick="finish()" id="btn5">Planımı oluştur! 🚀</button>
     </div>
   </div>
 </div>
 
-<!-- FINAL SCREEN -->
+<!-- SON EKRAN -->
 <div class="card final-screen" id="finalCard">
   <div class="big-icon">🎉</div>
-  <h2>Your plan is ready!</h2>
-  <p>Your AI coach has built a personalized program just for you based on your answers.</p>
+  <h2>Planınız hazır!</h2>
+  <p>Yapay zeka koçunuz, verdiğiniz cevaplara göre size özel bir program oluşturdu.</p>
   <div class="plan-preview" id="planPreview"></div>
-  <button class="btn-next" style="width:100%" onclick="goToDashboard()">Start training now →</button>
+  <button class="btn-next" style="width:100%" onclick="goToDashboard()">Antrenmana başla →</button>
 </div>
 
 <script>
 const SUPABASE_URL = 'https://cypmmayxwbkarvheqoxu.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
-const { createClient } = supabase;
+const {createClient} = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const data = { goal: '', level: '', equipment: '', days: [], duration: 45 };
-const progressMap = { 1: 20, 2: 40, 3: 60, 4: 80, 5: 100 };
+const data = {goal:'',level:'',equipment:'',days:[],duration:45};
+const progressMap = {1:20,2:40,3:60,4:80,5:100};
 
 async function checkAuth() {
-  const { data: { session } } = await sb.auth.getSession();
-  if (!session) { window.location.href = 'auth.html'; return; }
+  const {data:{session}} = await sb.auth.getSession();
+  if (!session) {window.location.href='auth.html';return;}
 }
 checkAuth();
 
@@ -276,27 +259,27 @@ function select(el, key, val) {
   parent.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
   data[key] = val;
-  const btnMap = { goal: 'btn1', level: 'btn3', equipment: 'btn4' };
+  const btnMap = {goal:'btn1',level:'btn3',equipment:'btn4'};
   if (btnMap[key]) document.getElementById(btnMap[key]).disabled = false;
 }
 
 function toggleDay(el, day) {
   el.classList.toggle('selected');
-  if (el.classList.contains('selected')) { data.days.push(day); }
-  else { data.days = data.days.filter(d => d !== day); }
+  if (el.classList.contains('selected')) {data.days.push(day);}
+  else {data.days = data.days.filter(d => d !== day);}
 }
 
 function nextStep(n) {
   document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-  document.getElementById('step' + n).classList.add('active');
-  document.getElementById('progressFill').style.width = progressMap[n] + '%';
-  document.querySelectorAll('.progress-step').forEach((s, i) => {
+  document.getElementById('step'+n).classList.add('active');
+  document.getElementById('progressFill').style.width = progressMap[n]+'%';
+  document.querySelectorAll('.progress-step').forEach((s,i) => {
     s.classList.toggle('active', i < n);
   });
-  if (n === 2) { data.age = document.getElementById('age').value; data.height = document.getElementById('height').value; data.weight = document.getElementById('weight').value; }
+  if (n===2) {data.age=document.getElementById('age').value;data.height=document.getElementById('height').value;data.weight=document.getElementById('weight').value;}
 }
 
-function prevStep(n) { nextStep(n); }
+function prevStep(n) {nextStep(n);}
 
 function finish() {
   data.duration = document.getElementById('duration').value;
@@ -308,7 +291,7 @@ function finish() {
 }
 
 async function saveAndShowPlan() {
-  const { data: { session } } = await sb.auth.getSession();
+  const {data:{session}} = await sb.auth.getSession();
   if (session) {
     try {
       await sb.from('profiles').upsert({
@@ -318,29 +301,29 @@ async function saveAndShowPlan() {
         equipment: data.equipment,
         training_days: data.days,
         workout_duration: parseInt(data.duration),
-        age: parseInt(data.age) || null,
-        height: parseInt(data.height) || null,
-        weight: parseFloat(data.weight) || null,
+        age: parseInt(data.age)||null,
+        height: parseInt(data.height)||null,
+        weight: parseFloat(data.weight)||null,
         gender: data.gender,
         onboarding_done: true,
         updated_at: new Date().toISOString()
       });
-    } catch(e) { console.log('Profile save:', e); }
+    } catch(e) {console.log('Profil kayıt:', e);}
   }
 
-  const goalLabels = { lose_weight: 'Lose Weight', build_muscle: 'Build Muscle', get_fit: 'Get Fit & Toned', improve_health: 'Improve Health' };
-  const levelLabels = { beginner: 'Beginner', intermediate: 'Intermediate', advanced: 'Advanced' };
-  const equipLabels = { home_no: 'Home (no equipment)', home_basic: 'Home (basic equipment)', gym: 'Gym', outdoor: 'Outdoor' };
-  const daysText = data.days.length > 0 ? data.days.join(', ') : 'Flexible schedule';
+  const goalLabels = {lose_weight:'Kilo Vermek',build_muscle:'Kas Yapmak',get_fit:'Forma Girmek',improve_health:'Sağlığı İyileştirmek'};
+  const levelLabels = {beginner:'Başlangıç',intermediate:'Orta Seviye',advanced:'İleri Seviye'};
+  const equipLabels = {home_no:'Evde (ekipmansız)',home_basic:'Evde (temel ekipman)',gym:'Spor Salonu',outdoor:'Açık Hava'};
+  const daysText = data.days.length > 0 ? data.days.join(', ') : 'Esnek program';
 
   document.getElementById('planPreview').innerHTML = `
-    <h4>Your personalized plan</h4>
-    <div class="plan-item">Goal: ${goalLabels[data.goal] || 'Custom'}</div>
-    <div class="plan-item">Level: ${levelLabels[data.level] || 'Custom'}</div>
-    <div class="plan-item">Location: ${equipLabels[data.equipment] || 'Custom'}</div>
-    <div class="plan-item">Training days: ${daysText}</div>
-    <div class="plan-item">Session length: ${data.duration} minutes</div>
-    <div class="plan-item">AI coach ready to guide you 24/7</div>
+    <h4>Kişisel planınız</h4>
+    <div class="plan-item">Hedef: ${goalLabels[data.goal]||'Özel'}</div>
+    <div class="plan-item">Seviye: ${levelLabels[data.level]||'Özel'}</div>
+    <div class="plan-item">Konum: ${equipLabels[data.equipment]||'Özel'}</div>
+    <div class="plan-item">Antrenman günleri: ${daysText}</div>
+    <div class="plan-item">Seans süresi: ${data.duration} dakika</div>
+    <div class="plan-item">Yapay zeka koçunuz 7/24 hazır</div>
   `;
   document.getElementById('mainCard').style.display = 'none';
   document.getElementById('finalCard').style.display = 'block';
