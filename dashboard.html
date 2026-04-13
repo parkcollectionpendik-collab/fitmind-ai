@@ -239,14 +239,17 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
   </div>
 
   <div class="tab-section" id="tab-workouts">
-    <div class="panel-card" style="margin-bottom:1.5rem">
-      <div class="card-title">💪 Haftalık Antrenman Planınız</div>
-      <p style="color:var(--muted);font-size:0.88rem;margin-top:0.25rem" id="workoutPlanDesc">Kişisel planınız yükleniyor...</p>
+      <div class="panel-card" style="margin-bottom:1.5rem;text-align:center;padding:2.5rem">
+        <div style="font-size:3rem;margin-bottom:1rem">📋</div>
+        <div class="card-title" style="justify-content:center;margin-bottom:0.5rem">Haftalık Antrenman Planınız</div>
+        <p style="color:var(--muted);font-size:0.88rem;margin-bottom:1.5rem;line-height:1.6">Antrenman planınız <strong>Benim Planım</strong> sayfasında takip edilir.<br>Her günün egzersizlerini görmek ve tamamlandı işaretlemek için oraya gidin.</p>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+          <a href="myplan.html" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.75rem 1.8rem;font-family:var(--font-head);font-weight:700;font-size:0.9rem;text-decoration:none">📋 Benim Planım'a Git</a>
+          <button onclick="switchTab('aicoach',document.querySelector('[onclick*=aicoach]'))" style="background:#ffffff10;color:var(--white);border:1px solid #ffffff20;border-radius:100px;padding:0.75rem 1.8rem;font-family:var(--font-head);font-weight:700;font-size:0.9rem;cursor:pointer">🤖 AI Koç ile Plan Yap</button>
+        </div>
+        <div id="quickWorkoutPreview" style="margin-top:2rem;text-align:left"></div>
+      </div>
     </div>
-    <div class="workouts-grid" id="weeklyPlanGrid">
-      <div class="loading-plan"><div class="spin"></div><div>Haftalık planınız oluşturuluyor...</div></div>
-    </div>
-  </div>
 </div>
 
 <script>
