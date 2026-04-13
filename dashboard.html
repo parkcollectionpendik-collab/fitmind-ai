@@ -482,7 +482,39 @@ function formatAIReply(text) {
     .replace(/\n\n/g, '<br><br>')
     .replace(/\n/g, '<br>');
 }
-init();
+function detectPlanRequest(text) {
+  const keywords = ['plan yap', 'antrenman planı', 'beslenme planı', 'program yap', 'plan oluştur', 'haftalık plan', 'diyet planı', 'egzersiz planı'];
+  return keywords.some(k => text.toLowerCase().includes(k));
+}
+
+function showPlanCard(msgsId, plan) {
+  const msgs = document.getElementById(msgsId);
+  const card = document.createElement('div');
+  card.className = 'msg-bubble ai';
+  card.style.cssText = 'max-width:100%;padding:0';
+  card.innerHTML = `
+    <div style="background:linear-gradient(135deg,#0f1a06,#111);border:1px solid #c8f54230;border-radius:16px;padding:1.2rem;">
+      <div style="font-family:var(--font-head);font-size:0.9rem;font-weight:700;color:var(--lime);margin-bottom:1rem;">🎯 Kişisel Planınız</div>
+      ${plan.workout ? `
+      <div style="margin-bottom:1rem;">
+        <div style="font-size:0.75rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:0.5rem;">💪 Antrenman</div>
+        <div style="font-size:0.85rem;line-height:1.6;color:#ffffffcc;">${plan.workout}</div>
+      </div>` : ''}
+      ${plan.nutrition ? `
+      <div style="margin-bottom:1rem;">
+        <div style="font-size:0.75rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:0.5rem;">🥗 Beslenme</div>
+        <div style="font-size:0.85rem;line-height:1.6;color:#ffffffcc;">${plan.nutrition}</div>
+      </div>` : ''}
+      ${plan.tips ? `
+      <div>
+        <div style="font-size:0.75rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:0.5rem;">⚡ İpuçları</div>
+        <div style="font-size:0.85rem;line-height:1.6;color:#ffffffcc;">${plan.tips}</div>
+      </div>` : ''}
+    </div>`;
+  msgs.appendChild(card);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+  init();
 </script>
 </body>
 </html>
