@@ -669,7 +669,15 @@ function renderPlanInfo(){
     <div class="info-row"><span class="info-key">Oluşturulma</span><span class="info-val">${planData.createdAt?new Date(planData.createdAt).toLocaleDateString('tr-TR'):'—'}</span></div>`;
 }
 
-function goToCoach(){window.location.href='dashboard.html'}
+async function goToCoach(){
+  if(confirm('Mevcut planınızı silip yeni plan oluşturmak istiyor musunuz?\n\nEvet: Plan silinir, AI Koç\'a yönlendirilirsiniz\nHayır: İptal')){
+    const {data:{session}}=await sb.auth.getSession();
+    if(session){
+      await sb.from('user_plans').delete().eq('user_id',session.user.id);
+    }
+    window.location.href='dashboard.html';
+  }
+}
 async function signOut(){await sb.auth.signOut();window.location.replace('auth.html')}
 
 init();
