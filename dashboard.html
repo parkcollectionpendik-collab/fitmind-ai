@@ -374,26 +374,6 @@ async function loadPersonalizedPlan(profile,name){
   }
 }
 
-async function loadWeeklyPlan(profile){
-  weeklyPlanLoaded=true;
-  document.getElementById('workoutPlanDesc').textContent=`${levelLabels[profile.fitness_level]||profile.fitness_level} seviyesi için · ${equipLabels[profile.equipment]||profile.equipment} · Hedef: ${goalLabels[profile.goal]||profile.goal}`;
-  const prompt=`Şu kullanıcı için haftalık antrenman planı oluştur: Hedef: ${profile.goal}, Seviye: ${profile.fitness_level}, Ekipman: ${profile.equipment}, Antrenman günleri: ${profile.training_days?.join(', ')}, Süre: ${profile.workout_duration} dk. SADECE JSON dizisi ile yanıt ver, markdown olmasın: [{"day":"Pazartesi","type":"Antrenman","exercises":[{"name":"Şınav","sets":"3x12","muscles":"Göğüs"}]}] 7 günün hepsini dahil et. Dinlenme günlerinde boş exercises dizisi ve "Dinlenme" type kullan. Antrenman günü başına max 4 egzersiz.`;
-  try{
-    const text=await callAI([{role:'user',content:prompt}],null,1000);
-    const plan=JSON.parse(text.replace(/```json|```/g,'').trim());
-    const grid=document.getElementById('weeklyPlanGrid');
-    grid.innerHTML='';
-    plan.forEach(day=>{
-      const card=document.createElement('div');
-      card.className='workout-day-card';
-      const isRest=day.type==='Dinlenme'||day.type==='Rest'||!day.exercises?.length;
-      card.innerHTML=`<h3>${day.day} <span style="font-size:0.75rem;font-weight:400;color:var(--muted)">${day.type}</span></h3>`+
-        (isRest?`<div style="color:var(--muted);font-size:0.88rem;padding:1rem 0">🧘 Dinlenme & Toparlanma. Hafif germe önerilir.</div>`:
-        (day.exercises||[]).map((ex,i)=>`<div class="exercise-item"><div class="exercise-num">${i+1}</div><div class="exercise-info"><div class="exercise-name">${ex.name}</div><div class="exercise-detail">${ex.sets} · ${ex.muscles}</div></div></div>`).join(''));
-      grid.appendChild(card);
-    });
-  }catch(e){document.getElementById('weeklyPlanGrid').innerHTML='<div style="color:var(--muted);padding:1rem">Plan yüklenemedi. Daha sonra tekrar deneyin.</div>';}
-}
 
 function renderWorkout(exercises){
   const list=document.getElementById('workoutList');
