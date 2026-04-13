@@ -373,7 +373,30 @@ async function loadPersonalizedPlan(profile,name){
     document.getElementById('welcomeAiMsg').textContent=`Merhaba ${name.split(' ')[0]}! Bugünkü antrenmanı geçmeye hazır mısın? 💪`;
   }
 }
-
+async function loadQuickWorkoutPreview() {
+  const {data:{session}} = await sb.auth.getSession();
+  if (!session) return;
+  const {data} = await sb.from('user_plans').select('*').eq('user_id', session.user.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+  if (!data) return;
+  const plan = data.plan_data;
+  const today = ['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'][(new Date().getDay()+6)%7];
+  const todayPlan = plan.days?.find(d => d.day === today);
+  const preview = document.getElementById('quickWorkoutPreview');
+  if (!todayPlan||!preview) return;
+  const isRest = todayPlan.type==='Dinlenme'||todayPlan.type==='Rest';
+  const exercises = todayPlan.exercises||[];
+  preview.innerHTML = `
+    <div style="background:#ffffff06;border-radius:16px;padding:1.2rem;border:1px solid #c8f54220">
+      <div style="font-family:var(--font-head);font-size:0.8rem;color:var(--lime);font-weight:700;margin-bottom:0.75rem">📅 BUGÜN · ${today.toUpperCase()} · ${isRest?'DİNLENME':todayPlan.focus||'ANTRENMAN'}</div>
+      ${isRest?'<div style="color:var(--muted);font-size:0.88rem">🧘 Dinlenme günü — vücudunun iyileşmesine izin ver.</div>':
+      exercises.map((ex,i)=>`
+        <div style="display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0;border-bottom:1px solid #ffffff07">
+          <div style="width:24px;height:24px;background:var(--lime);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.7rem;color:#000;flex-shrink:0">${i+1}</div>
+          <div style="flex:1;font-size:0.88rem">${ex.name}</div>
+          <div style="font-size:0.75rem;color:var(--muted)">${ex.sets} × ${ex.reps}</div>
+        </div>`).join('')}
+    </div>`;
+}
 
 function renderWorkout(exercises){
   const list=document.getElementById('workoutList');
