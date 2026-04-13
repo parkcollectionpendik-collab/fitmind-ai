@@ -505,24 +505,26 @@ function showPlanCard(msgsId, plan) {
   const msgs = document.getElementById(msgsId);
   const card = document.createElement('div');
   card.className = 'msg-bubble ai';
-  card.style.cssText = 'max-width:100%;padding:0';
+  card.style.cssText = 'max-width:100%;padding:0;background:transparent;border:none;';
   card.innerHTML = `
-    <div style="background:linear-gradient(135deg,#0f1a06,#111);border:1px solid #c8f54230;border-radius:16px;padding:1.2rem;">
-      <div style="font-family:var(--font-head);font-size:0.9rem;font-weight:700;color:var(--lime);margin-bottom:1rem;">🎯 Kişisel Planınız</div>
+    <div style="background:linear-gradient(135deg,#0f1a06,#0d0d0d);border:1px solid #c8f54230;border-radius:16px;padding:1.4rem;width:100%;">
+      <div style="font-family:var(--font-head);font-size:1rem;font-weight:800;color:var(--lime);margin-bottom:1.2rem;display:flex;align-items:center;gap:0.5rem;">
+        🎯 Kişisel Planınız
+      </div>
       ${plan.workout ? `
-      <div style="margin-bottom:1rem;">
-        <div style="font-size:0.75rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:0.5rem;">💪 Antrenman</div>
-        <div style="font-size:0.85rem;line-height:1.6;color:#ffffffcc;">${plan.workout}</div>
+      <div style="background:#ffffff08;border-radius:12px;padding:1rem;margin-bottom:0.75rem;border-left:3px solid var(--lime);">
+        <div style="font-size:0.72rem;color:var(--lime);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:0.5rem;">💪 Antrenman Planı</div>
+        <div style="font-size:0.88rem;line-height:1.7;color:#ffffffdd;">${formatAIReply(plan.workout)}</div>
       </div>` : ''}
       ${plan.nutrition ? `
-      <div style="margin-bottom:1rem;">
-        <div style="font-size:0.75rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:0.5rem;">🥗 Beslenme</div>
-        <div style="font-size:0.85rem;line-height:1.6;color:#ffffffcc;">${plan.nutrition}</div>
+      <div style="background:#ffffff08;border-radius:12px;padding:1rem;margin-bottom:0.75rem;border-left:3px solid #4af;">
+        <div style="font-size:0.72rem;color:#4af;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:0.5rem;">🥗 Beslenme Planı</div>
+        <div style="font-size:0.88rem;line-height:1.7;color:#ffffffdd;">${formatAIReply(plan.nutrition)}</div>
       </div>` : ''}
       ${plan.tips ? `
-      <div>
-        <div style="font-size:0.75rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:0.5rem;">⚡ İpuçları</div>
-        <div style="font-size:0.85rem;line-height:1.6;color:#ffffffcc;">${plan.tips}</div>
+      <div style="background:#ffffff08;border-radius:12px;padding:1rem;border-left:3px solid #f5a623;">
+        <div style="font-size:0.72rem;color:#f5a623;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:0.5rem;">⚡ İpuçları</div>
+        <div style="font-size:0.88rem;line-height:1.7;color:#ffffffdd;">${formatAIReply(plan.tips)}</div>
       </div>` : ''}
     </div>`;
   msgs.appendChild(card);
