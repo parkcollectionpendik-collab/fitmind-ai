@@ -281,20 +281,48 @@ function renderDaysGrid(){
   document.getElementById('todayLabel').textContent=todayName;
 }
 
-function toggleDayDone(day,el){
-  if(completedDays[day]===new Date().toDateString()){
-    delete completedDays[day];
-    el.classList.remove('done');
-    el.querySelector('.day-icon').textContent=dayEmojis[days.indexOf(day)];
-    el.querySelector('.day-status').textContent=day===(days[(new Date().getDay()+6)%7])?'Bugün':'Bekliyor';
-  }else{
-    completedDays[day]=new Date().toDateString();
-    el.classList.add('done');
-    el.querySelector('.day-icon').textContent='✅';
-    el.querySelector('.day-status').textContent='Tamamlandı';
+function selectDay(dayName) {
+  document.querySelectorAll('.day-card').forEach(d => d.classList.remove('selected-day'));
+  const idx = days.indexOf(dayName);
+  if (idx >= 0) document.querySelectorAll('.day-card')[idx].classList.add('selected-day');
+  const dayPlan = planData.days?.find(d => d.day === dayName);
+  const container = document.getElementById('todayWorkout');
+  document.getElementById('todayLabel').textContent = dayName;
+  if (!dayPlan) {
+    container.innerHTML = '<div style="color:var(--muted);font-size:0.88rem">Bu gün için plan bulunamadı.</div>';
+    return;
   }
-  localStorage.setItem('completedDays',JSON.stringify(completedDays));
+  const isDone = completedDays[dayName] === new Date().toDateString();
+  const typeColor = dayPlan.type === 'Dinlenme' ? '#888' : 'var(--lime)';
+  container.innerHTML = `
+    <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem">
+      <span style="font-size:0.75rem;color:${typeColor};font-family:var(--font-head);font-weight:700;letter-spacing:0.08em;text-transform:uppercase">${dayPlan.type}</span>
+    </div>
+    <div class="workout-item ${isDone ? 'done' : ''}" onclick="toggleDayComplete('${dayName}', this)" style="cursor:pointer">
+      <div class="workout-check ${isDone ? 'done' : ''}">✓</div>
+      <div class="workout-info">
+        <div class="workout-name" style="font-size:0.88rem;line-height:1.6">${dayPlan.exercises}</div>
+      </div>
+    </div>
+    <button onclick="toggleDayComplete('${dayName}', null)" style="margin-top:1rem;width:100%;background:${isDone ? '#4ade8020' : 'var(--lime)'};color:${isDone ? '#4ade80' : '#000'};border:${isDone ? '1px solid #4ade8040' : 'none'};border-radius:100px;padding:0.7rem;font-family:var(--font-head);font-weight:700;font-size:0.88rem;cursor:pointer;">
+      ${isDone ? '✅ Tamamlandı' : '✅ Tamamlandı İşaretle'}
+    </button>`;
+}
+
+function toggleDayComplete(day, el) {
+  if (completedDays[day] === new Date().toDateString()) {
+    delete completedDays[day];
+  } else {
+    completedDays[day] = new Date().toDateString();
+  }
+  localStorage.setItem('completedDays', JSON.stringify(completedDays));
+  renderDaysGrid();
+  selectDay(day);
   updateProgress();
+}
+
+function toggleDayDone(day, el) {
+  toggleDayComplete(day, el);
 }
 
 function renderTodayWorkout(){
