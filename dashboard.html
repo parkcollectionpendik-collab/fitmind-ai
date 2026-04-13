@@ -740,7 +740,7 @@ function formatAIReply(text){
 }
 
 function detectPlanRequest(text){
-  const keywords=['plan yap','antrenman planı','beslenme planı','program yap','plan oluştur','haftalık plan','diyet planı','egzersiz planı','benim için plan'];
+  const keywords=['plan yap','program yap','plan oluştur','haftalık plan yap','benim için plan yap'];
   return keywords.some(k=>text.toLowerCase().includes(k));
 }
 
