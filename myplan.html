@@ -547,11 +547,67 @@ function renderNutrition(){
   document.getElementById('calTarget').textContent=cal;
   document.getElementById('waterTarget').textContent=(planData.water||3)*2.67|0;
 
-  document.getElementById('nutritionBody').innerHTML=planData.nutrition
-    ?`<div class="nutrition-block"><div class="nutrition-label">🥗 Günlük Plan</div><div class="nutrition-text">${planData.nutrition.replace(/\n/g,'<br>')}</div></div>`
-    :'<div style="color:var(--muted);font-size:0.88rem">Beslenme bilgisi bulunamadı.</div>';
-}
+  const nutrition=planData.nutrition||'';
+  
+  // Öğünleri ayır
+  const meals=[
+    {key:'sabah',label:'🌅 Kahvaltı',color:'#f5a623',keywords:['sabah','kahvaltı','breakfast']},
+    {key:'öğle',label:'☀️ Öğle',color:'#4af',keywords:['öğle','lunch','ara öğün']},
+    {key:'akşam',label:'🌙 Akşam',color:'#c8f542',keywords:['akşam','dinner','supper']},
+    {key:'ara',label:'🍎 Ara Öğün',color:'#a78bfa',keywords:['ara öğün','snack','atıştırma']}
+  ];
 
+  const lines=nutrition.split(/[,\.\n]/).map(l=>l.trim()).filter(l=>l.length>3);
+  
+  let mealCards='';
+  let usedLines=new Set();
+
+  meals.forEach(meal=>{
+    const matched=lines.filter((l,i)=>{
+      if(usedLines.has(i))return false;
+      return meal.keywords.some(k=>l.toLowerCase().includes(k));
+    });
+    
+    if(matched.length>0){
+      matched.forEach(l=>usedLines.add(lines.indexOf(l)));
+      const content=matched.map(l=>l.replace(/^[^:]+:\s*/,'')).join(', ');
+      mealCards+=`
+        <div style="background:#ffffff06;border-radius:14px;padding:1rem 1.2rem;border-left:3px solid ${meal.color};margin-bottom:0.6rem">
+          <div style="font-size:0.7rem;color:${meal.color};letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:0.4rem">${meal.label}</div>
+          <div style="font-size:0.88rem;line-height:1.6;color:#ffffffdd">${content}</div>
+        </div>`;
+    }
+  });
+
+  // Eşleşmeyen satırlar varsa genel kısım ekle
+  const remaining=lines.filter((_,i)=>!usedLines.has(i));
+  if(remaining.length>0||mealCards===''){
+    mealCards+=`
+      <div style="background:#ffffff06;border-radius:14px;padding:1rem 1.2rem;border-left:3px solid #4af;margin-bottom:0.6rem">
+        <div style="font-size:0.7rem;color:#4af;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:0.4rem">🥗 Genel Plan</div>
+        <div style="font-size:0.88rem;line-height:1.6;color:#ffffffdd">${remaining.length>0?remaining.join(' · '):nutrition}</div>
+      </div>`;
+  }
+
+  // Makro özeti
+  mealCards+=`
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-top:0.75rem">
+      <div style="background:#ffffff06;border-radius:10px;padding:0.75rem;text-align:center">
+        <div style="font-size:0.65rem;color:var(--muted);text-transform:uppercase;font-weight:700;margin-bottom:0.2rem">Protein</div>
+        <div style="font-family:var(--font-head);font-weight:800;color:#4af;font-size:1rem">${Math.round((cal*0.3)/4)}g</div>
+      </div>
+      <div style="background:#ffffff06;border-radius:10px;padding:0.75rem;text-align:center">
+        <div style="font-size:0.65rem;color:var(--muted);text-transform:uppercase;font-weight:700;margin-bottom:0.2rem">Karbonhidrat</div>
+        <div style="font-family:var(--font-head);font-weight:800;color:#f5a623;font-size:1rem">${Math.round((cal*0.4)/4)}g</div>
+      </div>
+      <div style="background:#ffffff06;border-radius:10px;padding:0.75rem;text-align:center">
+        <div style="font-size:0.65rem;color:var(--muted);text-transform:uppercase;font-weight:700;margin-bottom:0.2rem">Yağ</div>
+        <div style="font-family:var(--font-head);font-weight:800;color:var(--lime);font-size:1rem">${Math.round((cal*0.3)/9)}g</div>
+      </div>
+    </div>`;
+
+  document.getElementById('nutritionBody').innerHTML=mealCards;
+}
 function renderTrackers(){
   const calTarget=planData.calories||2000;
   const waterTarget=(planData.water||3)*2.67|0;
