@@ -385,17 +385,71 @@ async function loadQuickWorkoutPreview() {
   if (!todayPlan||!preview) return;
   const isRest = todayPlan.type==='Dinlenme'||todayPlan.type==='Rest';
   const exercises = todayPlan.exercises||[];
-  preview.innerHTML = `
-    <div style="background:#ffffff06;border-radius:16px;padding:1.2rem;border:1px solid #c8f54220">
-      <div style="font-family:var(--font-head);font-size:0.8rem;color:var(--lime);font-weight:700;margin-bottom:0.75rem">📅 BUGÜN · ${today.toUpperCase()} · ${isRest?'DİNLENME':todayPlan.focus||'ANTRENMAN'}</div>
-      ${isRest?'<div style="color:var(--muted);font-size:0.88rem">🧘 Dinlenme günü — vücudunun iyileşmesine izin ver.</div>':
-      exercises.map((ex,i)=>`
-        <div style="display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0;border-bottom:1px solid #ffffff07">
-          <div style="width:24px;height:24px;background:var(--lime);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.7rem;color:#000;flex-shrink:0">${i+1}</div>
-          <div style="flex:1;font-size:0.88rem">${ex.name}</div>
-          <div style="font-size:0.75rem;color:var(--muted)">${ex.sets} × ${ex.reps}</div>
-        </div>`).join('')}
-    </div>`;
+
+  if(isRest){
+    preview.innerHTML=`
+      <div style="background:#ffffff06;border-radius:16px;padding:2rem;text-align:center;border:1px solid #ffffff08">
+        <div style="font-size:2.5rem;margin-bottom:0.75rem">🧘</div>
+        <div style="font-family:var(--font-head);font-weight:700;margin-bottom:0.3rem">Dinlenme Günü</div>
+        <div style="color:var(--muted);font-size:0.85rem">Vücudunun iyileşmesine izin ver.</div>
+      </div>`;
+    return;
+  }
+
+  // Önce skeleton göster
+  preview.innerHTML=`
+    <div style="font-family:var(--font-head);font-size:0.8rem;color:var(--lime);font-weight:700;margin-bottom:1rem;letter-spacing:0.05em">
+      📅 BUGÜN · ${today.toUpperCase()} · ${todayPlan.focus||'ANTRENMAN'}
+    </div>
+    <div id="exerciseCards" style="display:flex;flex-direction:column;gap:0.75rem"></div>`;
+
+  const cards = document.getElementById('exerciseCards');
+
+  // Her egzersiz için kart oluştur
+  for(let i=0; i<exercises.length; i++){
+    const ex = exercises[i];
+    const card = document.createElement('div');
+    card.style.cssText='background:#ffffff06;border-radius:16px;padding:1rem;border:1px solid #ffffff0a;display:flex;align-items:center;gap:1rem;transition:all 0.2s;cursor:pointer';
+    card.onmouseenter=()=>card.style.borderColor='#c8f54230';
+    card.onmouseleave=()=>card.style.borderColor='#ffffff0a';
+    card.onclick=()=>window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(ex.name+' nasıl yapılır'),'_blank');
+
+    card.innerHTML=`
+      <div style="width:70px;height:70px;border-radius:12px;background:#ffffff08;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden" id="gif_${i}">
+        <div style="width:20px;height:20px;border:2px solid #ffffff15;border-top-color:var(--lime);border-radius:50%;animation:spin 0.8s linear infinite"></div>
+      </div>
+      <div style="flex:1">
+        <div style="font-size:0.95rem;font-weight:600;margin-bottom:0.4rem">${ex.name}</div>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap">
+          <div style="background:#c8f54215;border:1px solid #c8f54225;border-radius:8px;padding:0.2rem 0.6rem;font-family:var(--font-head);font-weight:700;font-size:0.75rem;color:var(--lime)">${ex.sets} SET</div>
+          <div style="background:#ffffff08;border-radius:8px;padding:0.2rem 0.6rem;font-family:var(--font-head);font-weight:700;font-size:0.75rem;color:var(--white)">${ex.reps} TEKRAR</div>
+          ${ex.rest?`<div style="background:#ffffff08;border-radius:8px;padding:0.2rem 0.6rem;font-family:var(--font-head);font-weight:700;font-size:0.75rem;color:var(--muted)">⏱ ${ex.rest}</div>`:''}
+        </div>
+      </div>
+      <div style="color:var(--muted);font-size:0.8rem;flex-shrink:0">▶ Video</div>`;
+
+    cards.appendChild(card);
+
+    // ExerciseDB'den GIF çek
+    try{
+      const res = await fetch(`https://exercisedb.p.rapidapi.com/exercises/name/${encodeURIComponent(ex.name.toLowerCase())}?limit=1`,{
+        headers:{
+          'x-rapidapi-key':'fbbfaada2dmshc5e5f202fe10454p1e4735jsn7c3223f10af2',
+          'x-rapidapi-host':'exercisedb.p.rapidapi.com'
+        }
+      });
+      const exData = await res.json();
+      const gifEl = document.getElementById('gif_'+i);
+      if(exData?.[0]?.gifUrl && gifEl){
+        gifEl.innerHTML=`<img src="${exData[0].gifUrl}" style="width:70px;height:70px;object-fit:cover;border-radius:12px" alt="${ex.name}">`;
+      } else if(gifEl){
+        gifEl.innerHTML=`<span style="font-size:1.5rem">💪</span>`;
+      }
+    } catch(e){
+      const gifEl = document.getElementById('gif_'+i);
+      if(gifEl) gifEl.innerHTML=`<span style="font-size:1.5rem">💪</span>`;
+    }
+  }
 }
 
 function renderWorkout(exercises){
