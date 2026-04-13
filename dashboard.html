@@ -363,7 +363,7 @@ async function loadPersonalizedPlan(profile,name){
   const greetPrompt=`${name.split(' ')[0]} adlı kullanıcıyı Türkçe olarak sıcak bir şekilde karşıla, 2 cümle. Fitness hedefi: ${profile.goal}, seviye: ${profile.fitness_level}. Bugün ${isTrainingDay?'antrenman günü':'dinlenme günü'}. Motive edici ol.`;
   try{
     const welcomeText=await callAI([{role:'user',content:greetPrompt}],null,150);
-    document.getElementById('welcomeAiMsg').textContent=welcomeText;
+    document.getElementById('welcomeAiMsg').innerHTML=formatAIReply(welcomeText);
     chatHistory=[{role:'user',content:'selamlama'},{role:'assistant',content:welcomeText}];
   }catch(e){
     document.getElementById('welcomeAiMsg').textContent=`Merhaba ${name.split(' ')[0]}! Bugünkü antrenmanı geçmeye hazır mısın? 💪`;
