@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FitMind AI – Nutrition</title>
+<title>FitMind AI – Beslenme</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -28,8 +28,6 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}
 .page-title{font-family:var(--font-head);font-size:1.5rem;font-weight:800}
 .page-sub{color:var(--muted);font-size:0.9rem;margin-top:0.2rem}
-
-/* MACRO CIRCLES */
 .macro-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
 .macro-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:16px;padding:1.5rem;text-align:center;transition:border-color 0.3s}
 .macro-card:hover{border-color:#c8f54225}
@@ -40,13 +38,9 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .macro-unit{font-size:0.65rem;color:var(--muted)}
 .macro-label{font-size:0.78rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;font-weight:700;margin-bottom:0.2rem}
 .macro-target{font-size:0.75rem;color:var(--muted)}
-
-/* CONTENT GRID */
 .content-grid{display:grid;grid-template-columns:1fr 340px;gap:1.5rem}
 .panel-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
 .card-title{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between}
-
-/* LOG FOOD */
 .food-input-wrap{display:flex;gap:0.75rem;margin-bottom:1.5rem}
 .food-input{flex:1;background:#ffffff08;border:1.5px solid #ffffff15;border-radius:14px;padding:0.85rem 1.2rem;color:var(--white);font-family:var(--font-body);font-size:0.95rem;outline:none;transition:border-color 0.2s}
 .food-input::placeholder{color:#ffffff35}
@@ -54,8 +48,6 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .log-btn{background:var(--lime);color:var(--black);border:none;border-radius:14px;padding:0.85rem 1.5rem;font-family:var(--font-head);font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.2s;white-space:nowrap;display:flex;align-items:center;gap:0.4rem}
 .log-btn:hover{background:var(--lime2)}
 .log-btn:disabled{opacity:0.5;cursor:not-allowed}
-
-/* FOOD LOG */
 .food-log{display:flex;flex-direction:column;gap:0.6rem}
 .food-entry{background:#ffffff06;border:1px solid #ffffff0a;border-radius:14px;padding:1rem 1.2rem;display:flex;align-items:center;justify-content:space-between;animation:slideIn 0.3s ease}
 @keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
@@ -71,13 +63,9 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .delete-btn:hover{color:#ff6b6b}
 .empty-log{text-align:center;padding:2rem;color:var(--muted);font-size:0.9rem}
 .empty-log .big{font-size:2.5rem;margin-bottom:0.5rem}
-
-/* LOADING */
 .ai-loading{display:flex;align-items:center;gap:0.75rem;padding:1rem 1.2rem;background:#ffffff06;border-radius:14px;color:var(--muted);font-size:0.85rem}
 .spin{width:16px;height:16px;border:2px solid #ffffff15;border-top-color:var(--lime);border-radius:50%;animation:spin 0.8s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* RIGHT PANEL */
 .meal-section{margin-bottom:1.2rem}
 .meal-label{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.5rem}
 .meal-label::after{content:'';flex:1;height:1px;background:#ffffff08}
@@ -85,28 +73,40 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .suggestion-item:hover{background:#ffffff08}
 .suggestion-item .sug-emoji{font-size:1rem}
 .suggestion-item .sug-cal{margin-left:auto;font-size:0.75rem;color:var(--muted)}
-
-/* AI TIP */
 .ai-tip{background:#c8f54208;border:1px solid #c8f54218;border-radius:14px;padding:1rem 1.2rem;font-size:0.85rem;color:#ffffffcc;line-height:1.6;display:flex;gap:0.75rem}
 .ai-tip-icon{font-size:1.2rem;flex-shrink:0}
+.mobile-menu-btn{display:none}
+.overlay{display:none;position:fixed;inset:0;background:#00000080;z-index:99}
+.overlay.open{display:block}
+@media(max-width:768px){
+  .sidebar{position:fixed;left:-240px;top:0;bottom:0;width:240px;transition:left 0.3s ease;z-index:100}
+  .sidebar.open{left:0}
+  .main{margin-left:0;padding:1rem}
+  .mobile-menu-btn{display:flex;position:fixed;top:1rem;left:1rem;z-index:200;background:var(--lime);color:var(--black);border:none;border-radius:10px;width:40px;height:40px;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer}
+  .macro-grid{grid-template-columns:1fr 1fr}
+  .content-grid{grid-template-columns:1fr}
+  .topbar{margin-top:3.5rem}
+}
 </style>
 </head>
 <body>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+<button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
 
 <div class="sidebar">
   <div class="logo">Fit<span>Mind</span> AI</div>
   <nav class="nav">
     <a href="dashboard.html" class="nav-item"><span class="icon">🏠</span> Dashboard</a>
-    <a href="dashboard.html" class="nav-item"><span class="icon">🤖</span> AI Coach</a>
-    <a href="dashboard.html" class="nav-item"><span class="icon">🏋️</span> Workouts</a>
-    <a href="nutrition.html" class="nav-item active"><span class="icon">🥗</span> Nutrition</a>
-    <a href="dashboard.html" class="nav-item"><span class="icon">📈</span> Progress</a>
-    <a href="dashboard.html" class="nav-item"><span class="icon">👥</span> Community</a>
+    <a href="dashboard.html" class="nav-item"><span class="icon">🤖</span> AI Koç</a>
+    <a href="dashboard.html" class="nav-item"><span class="icon">🏋️</span> Antrenmanlar</a>
+    <a href="nutrition.html" class="nav-item active"><span class="icon">🥗</span> Beslenme</a>
+    <a href="progress.html" class="nav-item"><span class="icon">📈</span> İlerleme</a>
+    <a href="community.html" class="nav-item"><span class="icon">👥</span> Topluluk</a>
   </nav>
   <div class="sidebar-bottom">
     <div class="user-info">
       <div class="avatar" id="avatarInitial">?</div>
-      <div class="user-name" id="userName">Loading...</div>
+      <div class="user-name" id="userName">Yükleniyor...</div>
       <button class="signout-btn" onclick="signOut()">⏻</button>
     </div>
   </div>
@@ -115,15 +115,14 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 <div class="main">
   <div class="topbar">
     <div>
-      <div class="page-title">🥗 Nutrition Tracker</div>
-      <div class="page-sub" id="todayDate">Loading...</div>
+      <div class="page-title">🥗 Beslenme Takibi</div>
+      <div class="page-sub" id="todayDate">Yükleniyor...</div>
     </div>
   </div>
 
-  <!-- MACRO CIRCLES -->
   <div class="macro-grid">
     <div class="macro-card">
-      <div class="macro-label">Calories</div>
+      <div class="macro-label">Kalori</div>
       <div class="macro-circle">
         <svg width="80" height="80" viewBox="0 0 80 80">
           <circle cx="40" cy="40" r="34" fill="none" stroke="#ffffff08" stroke-width="6"/>
@@ -135,7 +134,7 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
           <div class="macro-unit">kcal</div>
         </div>
       </div>
-      <div class="macro-target">Goal: <span id="calGoal">2000</span> kcal</div>
+      <div class="macro-target">Hedef: <span id="calGoal">2000</span> kcal</div>
     </div>
     <div class="macro-card">
       <div class="macro-label">Protein</div>
@@ -150,10 +149,10 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
           <div class="macro-unit">g</div>
         </div>
       </div>
-      <div class="macro-target">Goal: <span id="protGoal">150</span>g</div>
+      <div class="macro-target">Hedef: <span id="protGoal">150</span>g</div>
     </div>
     <div class="macro-card">
-      <div class="macro-label">Carbs</div>
+      <div class="macro-label">Karbonhidrat</div>
       <div class="macro-circle">
         <svg width="80" height="80" viewBox="0 0 80 80">
           <circle cx="40" cy="40" r="34" fill="none" stroke="#ffffff08" stroke-width="6"/>
@@ -165,10 +164,10 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
           <div class="macro-unit">g</div>
         </div>
       </div>
-      <div class="macro-target">Goal: <span id="carbGoal">250</span>g</div>
+      <div class="macro-target">Hedef: <span id="carbGoal">250</span>g</div>
     </div>
     <div class="macro-card">
-      <div class="macro-label">Fat</div>
+      <div class="macro-label">Yağ</div>
       <div class="macro-circle">
         <svg width="80" height="80" viewBox="0 0 80 80">
           <circle cx="40" cy="40" r="34" fill="none" stroke="#ffffff08" stroke-width="6"/>
@@ -180,59 +179,55 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
           <div class="macro-unit">g</div>
         </div>
       </div>
-      <div class="macro-target">Goal: <span id="fatGoal">65</span>g</div>
+      <div class="macro-target">Hedef: <span id="fatGoal">65</span>g</div>
     </div>
   </div>
 
   <div class="content-grid">
     <div>
-      <!-- LOG FOOD -->
       <div class="panel-card">
-        <div class="card-title">
-          <span>Log a meal</span>
-        </div>
+        <div class="card-title"><span>Öğün Ekle</span></div>
         <div class="food-input-wrap">
-          <input class="food-input" id="foodInput" placeholder="e.g. 2 eggs with toast, 200g chicken breast, large latte..." onkeydown="if(event.key==='Enter')logFood()">
+          <input class="food-input" id="foodInput" placeholder="örn. 2 yumurta ve ekmek, 200g tavuk göğsü, büyük latte..." onkeydown="if(event.key==='Enter')logFood()">
           <button class="log-btn" onclick="logFood()" id="logBtn">
-            <span>🤖</span> Analyze
+            <span>🤖</span> Analiz Et
           </button>
         </div>
         <div class="food-log" id="foodLog">
           <div class="empty-log">
             <div class="big">🍽️</div>
-            <div>No meals logged yet today.<br>Type what you ate above!</div>
+            <div>Bugün henüz öğün eklenmedi.<br>Yukarıya ne yediğinizi yazın!</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- RIGHT PANEL -->
     <div>
       <div class="panel-card">
-        <div class="card-title">💡 AI Suggestions</div>
+        <div class="card-title">💡 AI Önerileri</div>
         <div class="meal-section">
-          <div class="meal-label">Breakfast ideas</div>
-          <div class="suggestion-item" onclick="fillInput('3 scrambled eggs with spinach')"><span class="sug-emoji">🥚</span> 3 scrambled eggs + spinach <span class="sug-cal">280 kcal</span></div>
-          <div class="suggestion-item" onclick="fillInput('oatmeal with banana and honey')"><span class="sug-emoji">🥣</span> Oatmeal + banana <span class="sug-cal">350 kcal</span></div>
-          <div class="suggestion-item" onclick="fillInput('Greek yogurt with berries')"><span class="sug-emoji">🫐</span> Greek yogurt + berries <span class="sug-cal">180 kcal</span></div>
+          <div class="meal-label">Kahvaltı fikirleri</div>
+          <div class="suggestion-item" onclick="fillInput('3 adet çırpılmış yumurta ve ıspanak')"><span class="sug-emoji">🥚</span> 3 yumurta + ıspanak <span class="sug-cal">280 kcal</span></div>
+          <div class="suggestion-item" onclick="fillInput('yulaf ezmesi muz ve bal ile')"><span class="sug-emoji">🥣</span> Yulaf ezmesi + muz <span class="sug-cal">350 kcal</span></div>
+          <div class="suggestion-item" onclick="fillInput('Yunan yoğurdu ve meyveler')"><span class="sug-emoji">🫐</span> Yunan yoğurdu + meyve <span class="sug-cal">180 kcal</span></div>
         </div>
         <div class="meal-section">
-          <div class="meal-label">Lunch ideas</div>
-          <div class="suggestion-item" onclick="fillInput('200g grilled chicken breast with rice and salad')"><span class="sug-emoji">🍗</span> Chicken + rice + salad <span class="sug-cal">480 kcal</span></div>
-          <div class="suggestion-item" onclick="fillInput('tuna sandwich on whole wheat')"><span class="sug-emoji">🥪</span> Tuna sandwich <span class="sug-cal">380 kcal</span></div>
+          <div class="meal-label">Öğle yemeği fikirleri</div>
+          <div class="suggestion-item" onclick="fillInput('200g ızgara tavuk göğsü pirinç ve salata ile')"><span class="sug-emoji">🍗</span> Tavuk + pirinç + salata <span class="sug-cal">480 kcal</span></div>
+          <div class="suggestion-item" onclick="fillInput('tam buğday ekmekli ton balıklı sandviç')"><span class="sug-emoji">🥪</span> Ton balıklı sandviç <span class="sug-cal">380 kcal</span></div>
         </div>
         <div class="meal-section">
-          <div class="meal-label">Dinner ideas</div>
-          <div class="suggestion-item" onclick="fillInput('150g salmon with broccoli and sweet potato')"><span class="sug-emoji">🐟</span> Salmon + veggies <span class="sug-cal">420 kcal</span></div>
-          <div class="suggestion-item" onclick="fillInput('150g beef stir fry with vegetables and rice')"><span class="sug-emoji">🥩</span> Beef stir fry + rice <span class="sug-cal">520 kcal</span></div>
+          <div class="meal-label">Akşam yemeği fikirleri</div>
+          <div class="suggestion-item" onclick="fillInput('150g somon balığı brokoli ve tatlı patates ile')"><span class="sug-emoji">🐟</span> Somon + sebze <span class="sug-cal">420 kcal</span></div>
+          <div class="suggestion-item" onclick="fillInput('150g dana eti sebzeli ve pirinçli')"><span class="sug-emoji">🥩</span> Dana eti + pirinç <span class="sug-cal">520 kcal</span></div>
         </div>
       </div>
 
       <div class="panel-card">
-        <div class="card-title">🤖 AI Nutrition Tip</div>
+        <div class="card-title">🤖 AI Beslenme İpucu</div>
         <div class="ai-tip" id="aiTip">
           <div class="ai-tip-icon">💬</div>
-          <div id="aiTipText">Loading your personalized tip...</div>
+          <div id="aiTipText">Kişisel ipucunuz yükleniyor...</div>
         </div>
       </div>
     </div>
@@ -242,59 +237,62 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 <script>
 const SUPABASE_URL = 'https://cypmmayxwbkarvheqoxu.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
-const { createClient } = supabase;
+const {createClient} = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-let totals = { cal: 0, prot: 0, carb: 0, fat: 0 };
-let goals = { cal: 2000, prot: 150, carb: 250, fat: 65 };
-let userProfile = null;
-let entries = [];
+let totals={cal:0,prot:0,carb:0,fat:0};
+let goals={cal:2000,prot:150,carb:250,fat:65};
+let userProfile=null;
 
-const foodEmojis = { protein: '🍗', carb: '🍚', fat: '🧀', vegetable: '🥗', fruit: '🍎', dairy: '🥛', default: '🍽️' };
+function toggleSidebar(){
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+function closeSidebar(){
+  document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
 
 async function init() {
-  const { data: { session } } = await sb.auth.getSession();
-  if (!session) { window.location.href = 'auth.html'; return; }
+  const {data:{session}} = await sb.auth.getSession();
+  if (!session) {window.location.href='auth.html';return;}
   const user = session.user;
   const name = user.user_metadata?.full_name || user.email.split('@')[0];
   document.getElementById('avatarInitial').textContent = name.charAt(0).toUpperCase();
   document.getElementById('userName').textContent = name;
-  document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  document.getElementById('todayDate').textContent = new Date().toLocaleDateString('tr-TR', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
 
-  const { data: profile } = await sb.from('profiles').select('*').eq('id', user.id).single();
+  const {data:profile} = await sb.from('profiles').select('*').eq('id',user.id).single();
   userProfile = profile;
 
   if (profile) {
-    if (profile.goal === 'lose_weight') { goals = { cal: 1600, prot: 140, carb: 150, fat: 55 }; }
-    else if (profile.goal === 'build_muscle') { goals = { cal: 2500, prot: 180, carb: 280, fat: 70 }; }
-    if (profile.weight) {
-      goals.prot = Math.round(profile.weight * 2);
-    }
-    document.getElementById('calGoal').textContent = goals.cal;
-    document.getElementById('protGoal').textContent = goals.prot;
-    document.getElementById('carbGoal').textContent = goals.carb;
-    document.getElementById('fatGoal').textContent = goals.fat;
-    loadAiTip(profile, name);
+    if (profile.goal==='lose_weight') {goals={cal:1600,prot:140,carb:150,fat:55};}
+    else if (profile.goal==='build_muscle') {goals={cal:2500,prot:180,carb:280,fat:70};}
+    if (profile.weight) {goals.prot=Math.round(profile.weight*2);}
+    document.getElementById('calGoal').textContent=goals.cal;
+    document.getElementById('protGoal').textContent=goals.prot;
+    document.getElementById('carbGoal').textContent=goals.carb;
+    document.getElementById('fatGoal').textContent=goals.fat;
+    loadAiTip(profile);
   } else {
-    document.getElementById('aiTipText').textContent = 'Complete your profile to get personalized nutrition advice!';
+    document.getElementById('aiTipText').textContent='Kişisel beslenme tavsiyesi almak için profilinizi tamamlayın!';
   }
 }
 
-async function loadAiTip(profile, name) {
+async function loadAiTip(profile) {
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const res = await fetch('/api/chat', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 100,
-        messages: [{ role: 'user', content: `Give a short, specific nutrition tip for someone whose goal is ${profile.goal}, weight ${profile.weight}kg. One sentence, practical and actionable.` }]
+        messages:[{role:'user',content:`Hedefi ${profile.goal === 'lose_weight' ? 'kilo vermek' : profile.goal === 'build_muscle' ? 'kas yapmak' : 'forma girmek'} olan, ${profile.weight}kg ağırlığındaki biri için kısa ve pratik bir beslenme ipucu ver. Türkçe olsun. Tek cümle.`}],
+        max_tokens:100
       })
     });
     const data = await res.json();
-    document.getElementById('aiTipText').textContent = data.content?.[0]?.text || 'Focus on hitting your protein goal first — everything else falls into place!';
+    document.getElementById('aiTipText').textContent = data.content?.[0]?.text || 'Önce protein hedefinize ulaşmaya odaklanın — geri kalanı kendiniliğinden yerine gelir!';
   } catch(e) {
-    document.getElementById('aiTipText').textContent = 'Focus on hitting your protein goal first — everything else falls into place!';
+    document.getElementById('aiTipText').textContent='Önce protein hedefinize ulaşmaya odaklanın — geri kalanı kendiliğinden yerine gelir!';
   }
 }
 
@@ -305,55 +303,48 @@ async function logFood() {
   input.value = '';
   const btn = document.getElementById('logBtn');
   btn.disabled = true;
-
   const log = document.getElementById('foodLog');
   const emptyMsg = log.querySelector('.empty-log');
   if (emptyMsg) emptyMsg.remove();
-
   const loadingEl = document.createElement('div');
   loadingEl.className = 'ai-loading';
-  loadingEl.innerHTML = '<div class="spin"></div> Analyzing with AI...';
+  loadingEl.innerHTML = '<div class="spin"></div> AI ile analiz ediliyor...';
   log.prepend(loadingEl);
-
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const res = await fetch('/api/chat', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 200,
-        messages: [{ role: 'user', content: `Analyze this food: "${food}". Respond ONLY with JSON, no other text:
-{"name":"short food name","emoji":"single relevant emoji","calories":number,"protein":number,"carbs":number,"fat":number}
-All numbers are integers. Be accurate.` }]
+        messages:[{role:'user',content:`Bu besini analiz et: "${food}". SADECE JSON ile yanıt ver, başka metin olmasın:\n{"name":"kısa besin adı","emoji":"tek emoji","calories":sayı,"protein":sayı,"carbs":sayı,"fat":sayı}\nTüm sayılar tam sayı olsun.`}],
+        max_tokens:200
       })
     });
     const data = await res.json();
-    const text = data.content?.[0]?.text || '{}';
-    const clean = text.replace(/```json|```/g, '').trim();
+    const text = data.content?.[0]?.text||'{}';
+    const clean = text.replace(/```json|```/g,'').trim();
     const result = JSON.parse(clean);
     loadingEl.remove();
     addEntry(result);
   } catch(e) {
     loadingEl.remove();
-    addEntry({ name: food, emoji: '🍽️', calories: 300, protein: 15, carbs: 30, fat: 10 });
+    addEntry({name:food,emoji:'🍽️',calories:300,protein:15,carbs:30,fat:10});
   }
   btn.disabled = false;
 }
 
 function addEntry(result) {
-  entries.push(result);
-  totals.cal += result.calories || 0;
-  totals.prot += result.protein || 0;
-  totals.carb += result.carbs || 0;
-  totals.fat += result.fat || 0;
+  totals.cal+=result.calories||0;
+  totals.prot+=result.protein||0;
+  totals.carb+=result.carbs||0;
+  totals.fat+=result.fat||0;
   updateCircles();
-  const now = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  const now = new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
   const log = document.getElementById('foodLog');
   const entry = document.createElement('div');
   entry.className = 'food-entry';
   entry.innerHTML = `
     <div class="food-entry-left">
-      <div class="food-emoji">${result.emoji || '🍽️'}</div>
+      <div class="food-emoji">${result.emoji||'🍽️'}</div>
       <div>
         <div class="food-name">${result.name}</div>
         <div class="food-time">${now}</div>
@@ -361,51 +352,50 @@ function addEntry(result) {
     </div>
     <div class="food-macros">
       <span class="macro-pill">P: <strong>${result.protein}g</strong></span>
-      <span class="macro-pill">C: <strong>${result.carbs}g</strong></span>
-      <span class="macro-pill">F: <strong>${result.fat}g</strong></span>
+      <span class="macro-pill">K: <strong>${result.carbs}g</strong></span>
+      <span class="macro-pill">Y: <strong>${result.fat}g</strong></span>
       <span class="cal-badge">${result.calories} kcal</span>
       <button class="delete-btn" onclick="deleteEntry(this,${result.calories},${result.protein},${result.carbs},${result.fat})">✕</button>
     </div>`;
   log.prepend(entry);
 }
 
-function deleteEntry(btn, cal, prot, carb, fat) {
+function deleteEntry(btn,cal,prot,carb,fat) {
   btn.closest('.food-entry').remove();
-  totals.cal = Math.max(0, totals.cal - cal);
-  totals.prot = Math.max(0, totals.prot - prot);
-  totals.carb = Math.max(0, totals.carb - carb);
-  totals.fat = Math.max(0, totals.fat - fat);
+  totals.cal=Math.max(0,totals.cal-cal);
+  totals.prot=Math.max(0,totals.prot-prot);
+  totals.carb=Math.max(0,totals.carb-carb);
+  totals.fat=Math.max(0,totals.fat-fat);
   updateCircles();
-  if (document.querySelectorAll('.food-entry').length === 0) {
-    document.getElementById('foodLog').innerHTML = '<div class="empty-log"><div class="big">🍽️</div><div>No meals logged yet today.<br>Type what you ate above!</div></div>';
+  if (document.querySelectorAll('.food-entry').length===0) {
+    document.getElementById('foodLog').innerHTML='<div class="empty-log"><div class="big">🍽️</div><div>Bugün henüz öğün eklenmedi.<br>Yukarıya ne yediğinizi yazın!</div></div>';
   }
 }
 
 function updateCircles() {
-  document.getElementById('calVal').textContent = totals.cal;
-  document.getElementById('protVal').textContent = totals.prot;
-  document.getElementById('carbVal').textContent = totals.carb;
-  document.getElementById('fatVal').textContent = totals.fat;
-  setCircle('calCircle', totals.cal, goals.cal);
-  setCircle('protCircle', totals.prot, goals.prot);
-  setCircle('carbCircle', totals.carb, goals.carb);
-  setCircle('fatCircle', totals.fat, goals.fat);
+  document.getElementById('calVal').textContent=totals.cal;
+  document.getElementById('protVal').textContent=totals.prot;
+  document.getElementById('carbVal').textContent=totals.carb;
+  document.getElementById('fatVal').textContent=totals.fat;
+  setCircle('calCircle',totals.cal,goals.cal);
+  setCircle('protCircle',totals.prot,goals.prot);
+  setCircle('carbCircle',totals.carb,goals.carb);
+  setCircle('fatCircle',totals.fat,goals.fat);
 }
 
-function setCircle(id, val, goal) {
-  const pct = Math.min(val / goal, 1);
-  const circumference = 213.6;
-  document.getElementById(id).style.strokeDashoffset = circumference * (1 - pct);
+function setCircle(id,val,goal) {
+  const pct=Math.min(val/goal,1);
+  document.getElementById(id).style.strokeDashoffset=213.6*(1-pct);
 }
 
 function fillInput(text) {
-  document.getElementById('foodInput').value = text;
+  document.getElementById('foodInput').value=text;
   document.getElementById('foodInput').focus();
 }
 
 async function signOut() {
   await sb.auth.signOut();
-  window.location.href = 'index.html';
+  window.location.href='index.html';
 }
 
 init();
