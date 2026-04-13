@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitMind AI – Benim Planım</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--lime2:#a8d92e;--gray:#111;--muted:#888;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
+body{background:var(--black);color:var(--white);font-family:var(--font-body);min-height:100vh}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:#0d0d0d;border-right:1px solid #ffffff0f;padding:1.5rem;display:flex;flex-direction:column;z-index:10}
+.logo{font-family:var(--font-head);font-weight:800;font-size:1.1rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid #ffffff0f;text-decoration:none;color:inherit}
+.logo span{color:var(--lime)}
+.nav{display:flex;flex-direction:column;gap:0.3rem;flex:1}
+.nav-item{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 1rem;border-radius:12px;cursor:pointer;transition:all 0.2s;font-size:0.9rem;color:var(--muted);border:none;background:transparent;width:100%;text-align:left;font-family:var(--font-body);text-decoration:none}
+.nav-item:hover{background:#ffffff08;color:var(--white)}
+.nav-item.active{background:#c8f54215;color:var(--lime)}
+.nav-item .icon{width:18px;text-align:center;font-size:1rem}
+.sidebar-bottom{padding-top:1rem;border-top:1px solid #ffffff0f}
+.user-info{display:flex;align-items:center;gap:0.75rem;padding:0.5rem}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--lime),#4af);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.85rem;color:var(--black);flex-shrink:0}
+.user-name{font-size:0.85rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.signout-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0.25rem;transition:color 0.2s}
+.signout-btn:hover{color:#ff6b6b}
+.main{margin-left:240px;padding:2rem;min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}
+.page-title{font-family:var(--font-head);font-size:1.5rem;font-weight:800}
+.page-sub{color:var(--muted);font-size:0.9rem;margin-top:0.2rem}
+.panel-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
+.card-title{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:0.5rem}
+.section-label{font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:0.75rem}
+.plan-section{background:#ffffff06;border-radius:14px;padding:1.2rem;margin-bottom:1rem;border-left:3px solid var(--lime)}
+.plan-section.blue{border-left-color:#4af}
+.plan-section.orange{border-left-color:#f5a623}
+.plan-section-title{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:0.6rem;color:var(--lime)}
+.plan-section.blue .plan-section-title{color:#4af}
+.plan-section.orange .plan-section-title{color:#f5a623}
+.plan-section-text{font-size:0.88rem;line-height:1.7;color:#ffffffdd}
+.days-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:0.75rem;margin-bottom:1.5rem}
+.day-card{background:#ffffff06;border:1.5px solid #ffffff10;border-radius:16px;padding:1rem 0.5rem;text-align:center;cursor:pointer;transition:all 0.2s}
+.day-card:hover{border-color:#c8f54230;background:#ffffff0a}
+.day-card.today{border-color:var(--lime);background:#c8f54210}
+.day-card.done{border-color:#4ade80;background:#4ade8015}
+.day-name{font-family:var(--font-head);font-size:0.7rem;font-weight:700;color:var(--muted);margin-bottom:0.4rem}
+.day-card.today .day-name{color:var(--lime)}
+.day-icon{font-size:1.4rem;margin-bottom:0.3rem}
+.day-status{font-size:0.65rem;color:var(--muted)}
+.day-card.done .day-status{color:#4ade80}
+.workout-list{display:flex;flex-direction:column;gap:0.5rem}
+.workout-item{display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1rem;background:#ffffff05;border-radius:12px;cursor:pointer;transition:all 0.2s;border:1.5px solid transparent}
+.workout-item:hover{background:#ffffff08;border-color:#ffffff10}
+.workout-item.done{background:#4ade8010;border-color:#4ade8025}
+.workout-check{width:22px;height:22px;border-radius:6px;border:2px solid #ffffff20;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;font-size:0.8rem}
+.workout-check.done{background:#4ade80;border-color:#4ade80;color:#000}
+.workout-info{flex:1}
+.workout-name{font-size:0.9rem;font-weight:500}
+.workout-detail{font-size:0.75rem;color:var(--muted);margin-top:0.1rem}
+.workout-item.done .workout-name{text-decoration:line-through;opacity:0.6}
+.progress-ring{display:flex;align-items:center;gap:1.5rem;padding:1rem;background:#ffffff06;border-radius:14px;margin-bottom:1rem}
+.ring-wrap{position:relative;width:72px;height:72px;flex-shrink:0}
+.ring-wrap svg{transform:rotate(-90deg)}
+.ring-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-pct{font-family:var(--font-head);font-size:1.1rem;font-weight:800;color:var(--lime);line-height:1}
+.ring-label{font-size:0.6rem;color:var(--muted)}
+.ring-info h4{font-family:var(--font-head);font-size:0.95rem;font-weight:700;margin-bottom:0.2rem}
+.ring-info p{font-size:0.8rem;color:var(--muted)}
+.btn{background:var(--lime);color:var(--black);border:none;border-radius:100px;padding:0.7rem 1.5rem;font-family:var(--font-head);font-weight:700;font-size:0.88rem;cursor:pointer;transition:all 0.2s}
+.btn:hover{background:var(--lime2)}
+.btn-outline{background:transparent;color:var(--muted);border:1.5px solid #ffffff15;border-radius:100px;padding:0.7rem 1.5rem;font-family:var(--font-head);font-weight:700;font-size:0.88rem;cursor:pointer;transition:all 0.2s}
+.btn-outline:hover{border-color:#ffffff30;color:var(--white)}
+.empty-plan{text-align:center;padding:3rem;color:var(--muted)}
+.empty-plan .big{font-size:3rem;margin-bottom:1rem}
+.empty-plan h3{font-family:var(--font-head);font-size:1.2rem;font-weight:700;margin-bottom:0.5rem;color:var(--white)}
+.empty-plan p{font-size:0.88rem;margin-bottom:1.5rem;line-height:1.6}
+.spin{display:inline-block;width:20px;height:20px;border:2px solid #ffffff15;border-top-color:var(--lime);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.content-grid{display:grid;grid-template-columns:1fr 320px;gap:1.5rem}
+.mobile-menu-btn{display:none}
+.overlay{display:none;position:fixed;inset:0;background:#00000080;z-index:99}
+.overlay.open{display:block}
+@media(max-width:768px){
+  .sidebar{position:fixed;left:-240px;top:0;bottom:0;width:240px;transition:left 0.3s ease;z-index:100}
+  .sidebar.open{left:0}
+  .main{margin-left:0;padding:1rem}
+  .mobile-menu-btn{display:flex;position:fixed;top:1rem;left:1rem;z-index:200;background:var(--lime);color:var(--black);border:none;border-radius:10px;width:40px;height:40px;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer}
+  .topbar{margin-top:3.5rem;flex-wrap:wrap;gap:0.5rem}
+  .days-grid{grid-template-columns:repeat(4,1fr)}
+  .content-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+<button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+
+<div class="sidebar">
+  <a class="logo" href="dashboard.html">Fit<span>Mind</span> AI</a>
+  <nav class="nav">
+    <a class="nav-item" href="dashboard.html"><span class="icon">🏠</span> Ana Sayfa</a>
+    <a class="nav-item" href="dashboard.html"><span class="icon">🤖</span> AI Koç</a>
+    <a class="nav-item active" href="myplan.html"><span class="icon">📋</span> Benim Planım</a>
+    <a class="nav-item" href="dashboard.html"><span class="icon">🏋️</span> Antrenmanlar</a>
+    <a class="nav-item" href="nutrition.html"><span class="icon">🥗</span> Beslenme</a>
+    <a class="nav-item" href="progress.html"><span class="icon">📈</span> İlerleme</a>
+    <a class="nav-item" href="community.html"><span class="icon">👥</span> Topluluk</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="user-info">
+      <div class="avatar" id="avatarInitial">?</div>
+      <div class="user-name" id="userName">Yükleniyor...</div>
+      <button class="signout-btn" onclick="signOut()">⏻</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title">📋 Benim Planım</div>
+      <div class="page-sub" id="planDate">Kişisel antrenman ve beslenme planınız</div>
+    </div>
+    <div style="display:flex;gap:0.75rem">
+      <button class="btn-outline" onclick="goToCoach()">🤖 Planı Güncelle</button>
+      <button class="btn" onclick="resetToday()">✅ Bugünü Sıfırla</button>
+    </div>
+  </div>
+
+  <div id="emptyState" style="display:none">
+    <div class="empty-plan">
+      <div class="big">📋</div>
+      <h3>Henüz planınız yok</h3>
+      <p>AI Koç ile konuşarak kişisel antrenman ve beslenme planınızı oluşturun. Sadece "plan yap" yazmanız yeterli!</p>
+      <button class="btn" onclick="goToCoach()">🤖 AI Koç ile Plan Yap</button>
+    </div>
+  </div>
+
+  <div id="planContent" style="display:none">
+    <!-- HAFTALIK TAKVİM -->
+    <div class="panel-card">
+      <div class="card-title">
+        <span>📅 Haftalık Takvim</span>
+        <span id="weekProgress" style="font-size:0.8rem;color:var(--muted);font-weight:400"></span>
+      </div>
+      <div class="days-grid" id="daysGrid"></div>
+    </div>
+
+    <div class="content-grid">
+      <div>
+        <!-- BUGÜNÜN ANTRENMANı -->
+        <div class="panel-card">
+          <div class="card-title">
+            <span>💪 Bugünün Antrenmanı</span>
+            <span id="todayLabel" style="font-size:0.8rem;color:var(--lime);font-weight:400"></span>
+          </div>
+          <div id="todayWorkout"></div>
+        </div>
+
+        <!-- BESLENME PLANI -->
+        <div class="panel-card">
+          <div class="card-title">🥗 Günlük Beslenme Planı</div>
+          <div id="nutritionPlan"></div>
+        </div>
+      </div>
+
+      <div>
+        <!-- HAFTALIK İLERLEME -->
+        <div class="panel-card">
+          <div class="card-title">📈 Haftalık İlerleme</div>
+          <div class="progress-ring" id="progressRing">
+            <div class="ring-wrap">
+              <svg width="72" height="72" viewBox="0 0 72 72">
+                <circle cx="36" cy="36" r="30" fill="none" stroke="#ffffff08" stroke-width="6"/>
+                <circle cx="36" cy="36" r="30" fill="none" stroke="#c8f542" stroke-width="6"
+                  stroke-linecap="round" stroke-dasharray="188.5" id="progressCircle"
+                  stroke-dashoffset="188.5" style="transition:stroke-dashoffset 1s ease"/>
+              </svg>
+              <div class="ring-text">
+                <div class="ring-pct" id="progressPct">%0</div>
+                <div class="ring-label">tamamlandı</div>
+              </div>
+            </div>
+            <div class="ring-info">
+              <h4 id="progressTitle">Bu hafta</h4>
+              <p id="progressDesc">Antrenmanlarınızı tamamlayın</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- İPUÇLARI -->
+        <div class="panel-card">
+          <div class="card-title">⚡ Günlük İpuçları</div>
+          <div id="tipsList"></div>
+        </div>
+
+        <!-- PLAN BİLGİSİ -->
+        <div class="panel-card">
+          <div class="card-title">ℹ️ Plan Bilgisi</div>
+          <div id="planInfo" style="font-size:0.85rem;color:var(--muted);line-height:1.8"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="loadingState" style="text-align:center;padding:3rem;color:var(--muted)">
+    <div class="spin" style="margin:0 auto 1rem"></div>
+    <div>Planınız yükleniyor...</div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL='https://cypmmayxwbkarvheqoxu.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
+const {createClient}=supabase;
+const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
+
+let currentUser=null;
+let planData=null;
+let completedToday=JSON.parse(localStorage.getItem('completedToday_'+new Date().toDateString())||'[]');
+let completedDays=JSON.parse(localStorage.getItem('completedDays')||'{}');
+
+const days=['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
+const dayEmojis=['💪','🏃','🧘','⚡','🔥','🌟','😴'];
+
+function toggleSidebar(){
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+function closeSidebar(){
+  document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+
+async function init(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){window.location.replace('auth.html');return;}
+  currentUser=session.user;
+  const name=currentUser.user_metadata?.full_name||currentUser.email.split('@')[0];
+  document.getElementById('avatarInitial').textContent=name.charAt(0).toUpperCase();
+  document.getElementById('userName').textContent=name;
+  document.getElementById('planDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  await loadPlan();
+}
+
+async function loadPlan(){
+  const {data}=await sb.from('user_plans').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+  document.getElementById('loadingState').style.display='none';
+  if(!data){
+    document.getElementById('emptyState').style.display='block';
+    return;
+  }
+  planData=data.plan_data;
+  document.getElementById('planContent').style.display='block';
+  renderPlan();
+}
+
+function renderPlan(){
+  renderDaysGrid();
+  renderTodayWorkout();
+  renderNutrition();
+  renderTips();
+  renderPlanInfo();
+  updateProgress();
+}
+
+function renderDaysGrid(){
+  const grid=document.getElementById('daysGrid');
+  grid.innerHTML='';
+  const todayIdx=(new Date().getDay()+6)%7;
+  days.forEach((day,i)=>{
+    const isDone=completedDays[day]===new Date().toDateString();
+    const isToday=i===todayIdx;
+    const div=document.createElement('div');
+    div.className='day-card'+(isToday?' today':'')+(isDone?' done':'');
+    div.onclick=()=>toggleDayDone(day,div);
+    div.innerHTML=`<div class="day-name">${day.slice(0,3)}</div><div class="day-icon">${isDone?'✅':dayEmojis[i]}</div><div class="day-status">${isDone?'Tamamlandı':isToday?'Bugün':'Bekliyor'}</div>`;
+    grid.appendChild(div);
+  });
+  const todayName=days[(new Date().getDay()+6)%7];
+  document.getElementById('todayLabel').textContent=todayName;
+}
+
+function toggleDayDone(day,el){
+  if(completedDays[day]===new Date().toDateString()){
+    delete completedDays[day];
+    el.classList.remove('done');
+    el.querySelector('.day-icon').textContent=dayEmojis[days.indexOf(day)];
+    el.querySelector('.day-status').textContent=day===(days[(new Date().getDay()+6)%7])?'Bugün':'Bekliyor';
+  }else{
+    completedDays[day]=new Date().toDateString();
+    el.classList.add('done');
+    el.querySelector('.day-icon').textContent='✅';
+    el.querySelector('.day-status').textContent='Tamamlandı';
+  }
+  localStorage.setItem('completedDays',JSON.stringify(completedDays));
+  updateProgress();
+}
+
+function renderTodayWorkout(){
+  const container=document.getElementById('todayWorkout');
+  if(!planData.workout){container.innerHTML='<div style="color:var(--muted);font-size:0.88rem">Antrenman bilgisi bulunamadı.</div>';return;}
+  const lines=planData.workout.split('\n').filter(l=>l.trim());
+  container.innerHTML=lines.map((line,i)=>`
+    <div class="workout-item ${completedToday.includes(i)?'done':''}" onclick="toggleWorkoutItem(this,${i})">
+      <div class="workout-check ${completedToday.includes(i)?'done':''}">✓</div>
+      <div class="workout-info">
+        <div class="workout-name">${line.replace(/^[•\-\d\.]+\s*/,'')}</div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleWorkoutItem(el,idx){
+  const check=el.querySelector('.workout-check');
+  if(completedToday.includes(idx)){
+    completedToday=completedToday.filter(i=>i!==idx);
+    el.classList.remove('done');check.classList.remove('done');
+  }else{
+    completedToday.push(idx);
+    el.classList.add('done');check.classList.add('done');
+  }
+  localStorage.setItem('completedToday_'+new Date().toDateString(),JSON.stringify(completedToday));
+  updateProgress();
+}
+
+function renderNutrition(){
+  const container=document.getElementById('nutritionPlan');
+  if(!planData.nutrition){container.innerHTML='<div style="color:var(--muted);font-size:0.88rem">Beslenme bilgisi bulunamadı.</div>';return;}
+  container.innerHTML=`<div class="plan-section blue"><div class="plan-section-title">🥗 Beslenme Planı</div><div class="plan-section-text">${planData.nutrition.replace(/\n/g,'<br>')}</div></div>`;
+}
+
+function renderTips(){
+  const container=document.getElementById('tipsList');
+  if(!planData.tips){return;}
+  const tips=planData.tips.split(/\d+\)/).filter(t=>t.trim());
+  container.innerHTML=tips.map((tip,i)=>`
+    <div style="display:flex;gap:0.6rem;padding:0.6rem 0;border-bottom:1px solid #ffffff06;font-size:0.85rem;color:#ffffffcc;line-height:1.5">
+      <span style="color:var(--lime);font-family:var(--font-head);font-weight:700;flex-shrink:0">${i+1}.</span>
+      <span>${tip.trim()}</span>
+    </div>`).join('');
+}
+
+function renderPlanInfo(){
+  const container=document.getElementById('planInfo');
+  container.innerHTML=`
+    <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #ffffff06"><span>Hedef</span><span style="color:var(--white)">${planData.goal||'—'}</span></div>
+    <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid #ffffff06"><span>Seviye</span><span style="color:var(--white)">${planData.level||'—'}</span></div>
+    <div style="display:flex;justify-content:space-between;padding:0.4rem 0"><span>Oluşturulma</span><span style="color:var(--white)">${planData.createdAt?new Date(planData.createdAt).toLocaleDateString('tr-TR'):'—'}</span></div>`;
+}
+
+function updateProgress(){
+  const totalDays=7;
+  const doneDays=Object.values(completedDays).filter(d=>d===new Date().toDateString()).length;
+  const pct=Math.round((doneDays/totalDays)*100);
+  document.getElementById('progressPct').textContent='%'+pct;
+  document.getElementById('progressCircle').style.strokeDashoffset=188.5*(1-doneDays/totalDays);
+  document.getElementById('weekProgress').textContent=doneDays+'/'+totalDays+' gün tamamlandı';
+  document.getElementById('progressDesc').textContent=doneDays>0?doneDays+' gün tamamlandı, harika gidiyorsun!':'Antrenmanlarını tamamlamaya başla!';
+}
+
+function resetToday(){
+  completedToday=[];
+  localStorage.setItem('completedToday_'+new Date().toDateString(),'[]');
+  renderTodayWorkout();
+}
+
+function goToCoach(){
+  window.location.href='dashboard.html#aicoach';
+}
+
+async function signOut(){
+  await sb.auth.signOut();
+  window.location.replace('auth.html');
+}
+
+init();
+</script>
+</body>
+</html>
