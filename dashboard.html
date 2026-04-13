@@ -432,7 +432,8 @@ async function loadQuickWorkoutPreview() {
 
     // ExerciseDB'den GIF çek
     try{
-      const res = await fetch(`https://exercisedb.p.rapidapi.com/exercises/name/${encodeURIComponent(ex.name.toLowerCase())}?limit=1`,{
+      const searchName = ex.name.toLowerCase().replace(/ş/g,'s').replace(/ç/g,'c').replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ö/g,'o').replace(/ı/g,'i');
+const res = await fetch(`https://exercisedb.p.rapidapi.com/exercises/name/${encodeURIComponent(searchName)}?limit=1&offset=0`,{
         headers:{
           'x-rapidapi-key':'fbbfaada2dmshc5e5f202fe10454p1e4735jsn7c3223f10af2',
           'x-rapidapi-host':'exercisedb.p.rapidapi.com'
