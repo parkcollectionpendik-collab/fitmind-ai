@@ -506,9 +506,10 @@ function showPlanCard(msgsId, plan) {
   const card = document.createElement('div');
   card.className = 'msg-bubble ai';
   card.style.cssText = 'max-width:100%;padding:0;background:transparent;border:none;';
+  const planStr = encodeURIComponent(JSON.stringify(plan));
   card.innerHTML = `
     <div style="background:linear-gradient(135deg,#0f1a06,#0d0d0d);border:1px solid #c8f54230;border-radius:16px;padding:1.4rem;width:100%;">
-      <div style="font-family:var(--font-head);font-size:1rem;font-weight:800;color:var(--lime);margin-bottom:1.2rem;display:flex;align-items:center;gap:0.5rem;">
+      <div style="font-family:var(--font-head);font-size:1rem;font-weight:800;color:var(--lime);margin-bottom:1.2rem;">
         🎯 Kişisel Planınız
       </div>
       ${plan.workout ? `
@@ -522,13 +523,36 @@ function showPlanCard(msgsId, plan) {
         <div style="font-size:0.88rem;line-height:1.7;color:#ffffffdd;">${formatAIReply(plan.nutrition)}</div>
       </div>` : ''}
       ${plan.tips ? `
-      <div style="background:#ffffff08;border-radius:12px;padding:1rem;border-left:3px solid #f5a623;">
+      <div style="background:#ffffff08;border-radius:12px;padding:1rem;margin-bottom:1rem;border-left:3px solid #f5a623;">
         <div style="font-size:0.72rem;color:#f5a623;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:0.5rem;">⚡ İpuçları</div>
         <div style="font-size:0.88rem;line-height:1.7;color:#ffffffdd;">${formatAIReply(plan.tips)}</div>
       </div>` : ''}
+      <div style="display:flex;gap:0.75rem;">
+        <button onclick="savePlan('${planStr}')" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.65rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer;flex:1;">💾 Planı Kaydet</button>
+        <button onclick="window.location.href='myplan.html'" style="background:#ffffff10;color:var(--white);border:1px solid #ffffff20;border-radius:100px;padding:0.65rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer;flex:1;">📋 Benim Planım</button>
+      </div>
     </div>`;
   msgs.appendChild(card);
   msgs.scrollTop = msgs.scrollHeight;
+}
+
+async function savePlan(planStr) {
+  try {
+    const plan = JSON.parse(decodeURIComponent(planStr));
+    const {data:{session}} = await sb.auth.getSession();
+    if (!session) return;
+    plan.createdAt = new Date().toISOString();
+    plan.goal = userProfile?.goal || '';
+    plan.level = userProfile?.fitness_level || '';
+    await sb.from('user_plans').upsert({
+      user_id: session.user.id,
+      plan_data: plan,
+      updated_at: new Date().toISOString()
+    }, {onConflict: 'user_id'});
+    alert('✅ Planınız kaydedildi! "Benim Planım" sayfasından takip edebilirsiniz.');
+  } catch(e) {
+    alert('Hata: ' + e.message);
+  }
 }
   init();
 </script>
