@@ -435,7 +435,7 @@ async function sendToAI(text,msgsId,inputId,btnId,history){
     history.push({role:'assistant',content:reply});
     const typingEl=msgs.querySelector('.msg-bubble.typing');
     if(typingEl)typingEl.remove();
-    msgs.innerHTML+=`<div class="msg-bubble ai">${reply}</div>`;
+    msgs.innerHTML+=`<div class="msg-bubble ai">${formatAIReply(reply)}</div>`;
   }catch(e){
     const typingEl=msgs.querySelector('.msg-bubble.typing');
     if(typingEl)typingEl.remove();
