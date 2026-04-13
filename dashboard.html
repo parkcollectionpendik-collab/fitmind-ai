@@ -427,6 +427,20 @@ async function sendToAI(text,msgsId,inputId,btnId,history){
   msgs.innerHTML+=`<div class="msg-bubble typing"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
   msgs.scrollTop=msgs.scrollHeight;
   history.push({role:'user',content:text});
+  if (detectPlanRequest(text)) {
+    const planSystem = `Sen FitMind AI'sın. Kullanıcı için kısa ve net bir kişisel plan oluştur. SADECE şu JSON formatında yanıt ver, başka metin olmasın:
+{"workout":"haftalık antrenman planı kısa açıklama","nutrition":"günlük beslenme planı kısa açıklama","tips":"3 pratik ipucu"}`;
+    try {
+      const planReply = await callAI([{role:'user',content:text}], planSystem, 400);
+      const clean = planReply.replace(/```json|```/g,'').trim();
+      const plan = JSON.parse(clean);
+      const typingEl = document.getElementById(msgsId).querySelector('.msg-bubble.typing');
+      if(typingEl) typingEl.remove();
+      showPlanCard(msgsId, plan);
+      document.getElementById(btnId).disabled = false;
+      return;
+    } catch(e) {}
+  }
   const system=userProfile
     ?`Sen FitMind AI'sın, kişisel bir fitness ve beslenme koçusun. Her zaman Türkçe yanıt ver. Kullanıcı profili: Hedef: ${userProfile.goal}, Fitness seviyesi: ${userProfile.fitness_level}, Ekipman: ${userProfile.equipment}, Yaş: ${userProfile.age}, Kilo: ${userProfile.weight}kg. Kişisel ve pratik tavsiyeler ver. Yanıtları 2-3 cümle tut.`
     :`Sen FitMind AI'sın, samimi ve motive edici bir fitness koçusun. Her zaman Türkçe yanıt ver. Pratik ve cesaretlendirici tavsiyeler ver. Yanıtları 2-3 cümle tut.`;
