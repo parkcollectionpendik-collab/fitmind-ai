@@ -279,30 +279,117 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
           <div id="nutritionBody"></div>
         </div>
 
-        <!-- TRACKER -->
+        <!-- GÜNLÜK TAKİP - YENİ TASARIM -->
         <div class="panel">
           <div class="panel-head">
-            <div class="panel-title">📊 Günlük Takip</div>
+            <div class="panel-title">📊 Bugünkü Durum</div>
+            <div style="font-size:0.72rem;color:var(--muted)" id="trackerDate"></div>
           </div>
-          <div class="tracker-grid">
-            <div class="tracker-card" id="calCard">
-              <div class="t-icon">🔥</div>
-              <div class="t-val" id="calLogged">0</div>
-              <div class="t-lbl">/ <span id="calTarget">2000</span> kcal</div>
-              <div class="t-bar"><div class="t-fill" id="calFill" style="width:0%;background:var(--lime)"></div></div>
+
+          <!-- KALORİ + SU HALKASI -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem">
+
+            <!-- KALORİ HALKASI -->
+            <div style="background:#ffffff06;border-radius:16px;padding:1.1rem;text-align:center;border:1px solid #ffffff08">
+              <div style="font-size:0.68rem;color:#f5a623;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;font-family:var(--font-head)">🔥 Kalori</div>
+              <div style="position:relative;width:80px;height:80px;margin:0 auto 0.75rem">
+                <svg width="80" height="80" viewBox="0 0 80 80" style="transform:rotate(-90deg)">
+                  <circle cx="40" cy="40" r="32" fill="none" stroke="#ffffff08" stroke-width="6"/>
+                  <circle cx="40" cy="40" r="32" fill="none" stroke="#f5a623" stroke-width="6"
+                    stroke-linecap="round" stroke-dasharray="201" id="calRingCircle"
+                    stroke-dashoffset="201" style="transition:stroke-dashoffset 0.6s ease"/>
+                </svg>
+                <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                  <div style="font-family:var(--font-head);font-weight:800;font-size:0.95rem;color:#f5a623;line-height:1" id="calLogged">0</div>
+                  <div style="font-size:0.52rem;color:var(--muted)">kcal</div>
+                </div>
+              </div>
+              <div style="font-size:0.72rem;color:var(--muted)">Hedef: <span id="calTarget" style="color:var(--white);font-weight:600">2000</span></div>
+              <div style="display:flex;gap:0.4rem;margin-top:0.75rem">
+                <button onclick="logCal(200)" style="flex:1;background:#f5a62320;color:#f5a623;border:1px solid #f5a62330;border-radius:8px;padding:0.35rem;font-family:var(--font-head);font-weight:700;font-size:0.7rem;cursor:pointer">+200</button>
+                <button onclick="logCal(500)" style="flex:1;background:#f5a62315;color:#f5a623;border:1px solid #f5a62325;border-radius:8px;padding:0.35rem;font-family:var(--font-head);font-weight:700;font-size:0.7rem;cursor:pointer">+500</button>
+              </div>
             </div>
-            <div class="tracker-card" id="waterCard">
-              <div class="t-icon">💧</div>
-              <div class="t-val" id="waterLogged">0</div>
-              <div class="t-lbl">/ <span id="waterTarget">8</span> bardak</div>
-              <div class="t-bar"><div class="t-fill" id="waterFill" style="width:0%;background:#4af"></div></div>
+
+            <!-- SU BARDAKLARI -->
+            <div style="background:#ffffff06;border-radius:16px;padding:1.1rem;border:1px solid #ffffff08">
+              <div style="font-size:0.68rem;color:#44aaff;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;font-family:var(--font-head)">💧 Su Takibi</div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.3rem;margin-bottom:0.6rem" id="waterGlasses"></div>
+              <div style="font-size:0.72rem;color:var(--muted);text-align:center;margin-bottom:0.6rem"><span id="waterLogged" style="color:#44aaff;font-weight:700;font-size:1rem">0</span>/<span id="waterTarget">8</span> bardak</div>
+              <button onclick="logWater()" style="width:100%;background:#44aaff20;color:#44aaff;border:1px solid #44aaff30;border-radius:8px;padding:0.4rem;font-family:var(--font-head);font-weight:700;font-size:0.72rem;cursor:pointer">+ 1 Bardak</button>
             </div>
           </div>
-          <div style="display:flex;gap:0.5rem">
-            <button onclick="logCal()" style="flex:1;background:#ffffff08;color:var(--white);border:1px solid #ffffff10;border-radius:10px;padding:0.6rem;font-family:var(--font-head);font-weight:700;font-size:0.78rem;cursor:pointer">+200 kcal</button>
-            <button onclick="logWater()" style="flex:1;background:#ffffff08;color:var(--white);border:1px solid #ffffff10;border-radius:10px;padding:0.6rem;font-family:var(--font-head);font-weight:700;font-size:0.78rem;cursor:pointer">+1 Bardak Su</button>
-            <button onclick="resetTrackers()" style="background:#ffffff05;color:var(--muted);border:1px solid #ffffff08;border-radius:10px;padding:0.6rem 0.8rem;font-family:var(--font-head);font-weight:700;font-size:0.78rem;cursor:pointer">Sıfırla</button>
+
+          <!-- ENERJİ SEVİYESİ -->
+          <div style="background:#ffffff06;border-radius:14px;padding:1rem;margin-bottom:0.75rem;border:1px solid #ffffff08">
+            <div style="font-size:0.68rem;color:var(--lime);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;font-family:var(--font-head)">⚡ Enerji Seviyesi</div>
+            <div style="display:flex;gap:0.5rem">
+              <button onclick="setEnergy('low')" id="energy_low" style="flex:1;background:#ffffff08;border:1.5px solid #ffffff10;border-radius:10px;padding:0.6rem 0.3rem;cursor:pointer;transition:all 0.2s;font-size:0.75rem;font-family:var(--font-head);font-weight:700;color:var(--muted)">😴<br><span style="font-size:0.65rem">Yorgun</span></button>
+              <button onclick="setEnergy('mid')" id="energy_mid" style="flex:1;background:#ffffff08;border:1.5px solid #ffffff10;border-radius:10px;padding:0.6rem 0.3rem;cursor:pointer;transition:all 0.2s;font-size:0.75rem;font-family:var(--font-head);font-weight:700;color:var(--muted)">😐<br><span style="font-size:0.65rem">Normal</span></button>
+              <button onclick="setEnergy('high')" id="energy_high" style="flex:1;background:#ffffff08;border:1.5px solid #ffffff10;border-radius:10px;padding:0.6rem 0.3rem;cursor:pointer;transition:all 0.2s;font-size:0.75rem;font-family:var(--font-head);font-weight:700;color:var(--muted)">⚡<br><span style="font-size:0.65rem">Enerjik</span></button>
+            </div>
           </div>
+
+          <!-- UYKU TAKİBİ -->
+          <div style="background:#ffffff06;border-radius:14px;padding:1rem;margin-bottom:0.75rem;border:1px solid #ffffff08">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
+              <div style="font-size:0.68rem;color:#a78bfa;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;font-family:var(--font-head)">😴 Uyku Süresi</div>
+              <div style="font-family:var(--font-head);font-weight:800;font-size:1rem" id="sleepDisplay"><span style="color:#a78bfa">—</span> saat</div>
+            </div>
+            <div style="display:flex;gap:0.35rem">
+              <button onclick="setSleep(5)" id="sleep_5" style="flex:1;background:#ffffff08;border:1.5px solid #ffffff10;border-radius:8px;padding:0.45rem 0.2rem;cursor:pointer;font-family:var(--font-head);font-weight:700;font-size:0.72rem;color:var(--muted);transition:all 0.2s">5s</button>
+              <button onclick="setSleep(6)" id="sleep_6" style="flex:1;background:#ffffff08;border:1.5px solid #ffffff10;border-radius:8px;padding:0.45rem 0.2rem;cursor:pointer;font-family:var(--font-head);font-weight:700;font-size:0.72rem;color:var(--muted);transition:all 0.2s">6s</button>
+              <button onclick="setSleep(7)" id="sleep_7" style="flex:1;background:#ffffff08;border:1.5px solid #ffffff10;border-radius:8px;padding:0.45rem 0.2rem;cursor:pointer;font-family:var(--font-head);font-weight:700;font-size:0.72rem;color:var(--muted);transition:all 0.2s">7s</button>
+              <button onclick="setSleep(8)" id="sleep_8" style="flex:1;background:#ffffff08;border:1.5px solid #ffffff10;border-radius:8px;padding:0.45rem 0.2rem;cursor:pointer;font-family:var(--font-head);font-weight:700;font-size:0.72rem;color:var(--muted);transition:all 0.2s">8s</button>
+              <button onclick="setSleep(9)" id="sleep_9" style="flex:1;background:#ffffff08;border:1.5px solid #ffffff10;border-radius:8px;padding:0.45rem 0.2rem;cursor:pointer;font-family:var(--font-head);font-weight:700;font-size:0.72rem;color:var(--muted);transition:all 0.2s">9s</button>
+            </div>
+            <div style="margin-top:0.6rem;font-size:0.72rem;text-align:center" id="sleepMsg"></div>
+          </div>
+
+          <!-- KİLO GİRİŞİ -->
+          <div style="background:#ffffff06;border-radius:14px;padding:1rem;margin-bottom:0.75rem;border:1px solid #ffffff08">
+            <div style="font-size:0.68rem;color:#4ade80;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;font-family:var(--font-head)">⚖️ Günlük Kilo</div>
+            <div style="display:flex;gap:0.5rem;align-items:center">
+              <input type="number" id="weightInput" placeholder="örn: 75.5" step="0.1" min="30" max="200"
+                style="flex:1;background:#ffffff08;border:1.5px solid #ffffff15;border-radius:10px;padding:0.6rem 0.8rem;color:var(--white);font-size:0.9rem;outline:none;font-family:var(--font-body)">
+              <span style="color:var(--muted);font-size:0.85rem">kg</span>
+              <button onclick="saveWeight()" style="background:#4ade8020;color:#4ade80;border:1px solid #4ade8030;border-radius:10px;padding:0.6rem 1rem;font-family:var(--font-head);font-weight:700;font-size:0.8rem;cursor:pointer">Kaydet</button>
+            </div>
+            <div style="margin-top:0.5rem;font-size:0.72rem;color:var(--muted)" id="weightHistory"></div>
+          </div>
+
+          <!-- RUH HALİ -->
+          <div style="background:#ffffff06;border-radius:14px;padding:1rem;margin-bottom:0.75rem;border:1px solid #ffffff08">
+            <div style="font-size:0.68rem;color:#f9a8d4;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;font-family:var(--font-head)">🧘 Ruh Hali</div>
+            <div style="display:flex;gap:0.5rem">
+              <button onclick="setMood('stressed')" id="mood_stressed" style="flex:1;background:#ffffff08;border:1.5px solid #ffffff10;border-radius:10px;padding:0.6rem 0.3rem;cursor:pointer;transition:all 0.2s;font-size:0.75rem;font-family:var(--font-head);font-weight:700;color:var(--muted)">😰<br><span style="font-size:0.65rem">Stresli</span></button>
+              <button onclick="setMood('good')" id="mood_good" style="flex:1;background:#ffffff08;border:1.5px solid #ffffff10;border-radius:10px;padding:0.6rem 0.3rem;cursor:pointer;transition:all 0.2s;font-size:0.75rem;font-family:var(--font-head);font-weight:700;color:var(--muted)">😊<br><span style="font-size:0.65rem">İyi</span></button>
+              <button onclick="setMood('great')" id="mood_great" style="flex:1;background:#ffffff08;border:1.5px solid #ffffff10;border-radius:10px;padding:0.6rem 0.3rem;cursor:pointer;transition:all 0.2s;font-size:0.75rem;font-family:var(--font-head);font-weight:700;color:var(--muted)">🤩<br><span style="font-size:0.65rem">Harika</span></button>
+            </div>
+          </div>
+
+          <!-- GÜNÜN ÖZETİ -->
+          <div style="background:linear-gradient(135deg,#0f1a06,#111);border:1px solid #c8f54220;border-radius:14px;padding:1rem">
+            <div style="font-size:0.68rem;color:var(--lime);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;font-family:var(--font-head)">✅ Günün Özeti</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;margin-bottom:0.75rem">
+              <div style="text-align:center;background:#ffffff06;border-radius:10px;padding:0.6rem 0.3rem">
+                <div style="font-family:var(--font-head);font-weight:800;color:var(--lime);font-size:1.1rem" id="summaryEx">0</div>
+                <div style="font-size:0.62rem;color:var(--muted)">egzersiz</div>
+              </div>
+              <div style="text-align:center;background:#ffffff06;border-radius:10px;padding:0.6rem 0.3rem">
+                <div style="font-family:var(--font-head);font-weight:800;color:#f5a623;font-size:1.1rem" id="summaryCal">0</div>
+                <div style="font-size:0.62rem;color:var(--muted)">kcal</div>
+              </div>
+              <div style="text-align:center;background:#ffffff06;border-radius:10px;padding:0.6rem 0.3rem">
+                <div style="font-family:var(--font-head);font-weight:800;color:#44aaff;font-size:1.1rem" id="summaryWater">0</div>
+                <div style="font-size:0.62rem;color:var(--muted)">bardak</div>
+              </div>
+            </div>
+            <div style="font-size:0.82rem;color:#ffffffcc;text-align:center;line-height:1.5" id="summaryMsg">Güne henüz başlamadın — hadi başla! 💪</div>
+          </div>
+
+          <!-- SIFIRLA -->
+          <button onclick="resetTrackers()" style="width:100%;margin-top:0.75rem;background:transparent;color:var(--muted);border:1px solid #ffffff10;border-radius:10px;padding:0.5rem;font-family:var(--font-head);font-weight:700;font-size:0.75rem;cursor:pointer">🔄 Günü Sıfırla</button>
         </div>
 
       </div>
@@ -393,13 +480,21 @@ let stor = {
   done: JSON.parse(localStorage.getItem('fp_done')||'{}'),
   ex:   JSON.parse(localStorage.getItem('fp_ex')||'{}'),
   cal:  parseInt(localStorage.getItem('fp_cal_'+TODAY_STR)||'0'),
-  water:parseInt(localStorage.getItem('fp_water_'+TODAY_STR)||'0')
+  water:parseInt(localStorage.getItem('fp_water_'+TODAY_STR)||'0'),
+  energy: localStorage.getItem('fp_energy_'+TODAY_STR)||'',
+  sleep:  parseInt(localStorage.getItem('fp_sleep_'+TODAY_STR)||'0'),
+  mood:   localStorage.getItem('fp_mood_'+TODAY_STR)||'',
+  weight: parseFloat(localStorage.getItem('fp_weight_'+TODAY_STR)||'0')
 };
 function save(){
   localStorage.setItem('fp_done',JSON.stringify(stor.done));
   localStorage.setItem('fp_ex',JSON.stringify(stor.ex));
   localStorage.setItem('fp_cal_'+TODAY_STR,stor.cal);
   localStorage.setItem('fp_water_'+TODAY_STR,stor.water);
+  localStorage.setItem('fp_energy_'+TODAY_STR,stor.energy);
+  localStorage.setItem('fp_sleep_'+TODAY_STR,stor.sleep);
+  localStorage.setItem('fp_mood_'+TODAY_STR,stor.mood);
+  localStorage.setItem('fp_weight_'+TODAY_STR,stor.weight);
 }
 
 function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('open');document.getElementById('ov').classList.toggle('open')}
@@ -798,16 +893,146 @@ function updateTotalCalories(){
 function renderTrackers(){
   const calT=planData.calories||2000;
   const watT=Math.round((planData.water||3)*2.67);
+  document.getElementById('calTarget').textContent=calT;
+  document.getElementById('waterTarget').textContent=watT;
+  document.getElementById('trackerDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long'});
+
+  // Kalori halkası
   document.getElementById('calLogged').textContent=stor.cal;
+  const calPct=Math.min(stor.cal/calT,1);
+  document.getElementById('calRingCircle').style.strokeDashoffset=201*(1-calPct);
+
+  // Su bardakları
+  const glasses=document.getElementById('waterGlasses');
+  if(glasses){
+    glasses.innerHTML='';
+    for(let i=0;i<watT;i++){
+      const filled=i<stor.water;
+      const g=document.createElement('div');
+      g.onclick=()=>{stor.water=filled?i:i+1;save();renderTrackers();};
+      g.style.cssText=`aspect-ratio:1;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all 0.2s;border:1.5px solid ${filled?'#44aaff':'#ffffff15'};background:${filled?'#44aaff20':'#ffffff06'}`;
+      g.textContent=filled?'💧':'○';
+      g.title=filled?`${i+1}. bardak içildi`:`${i+1}. bardak`;
+      glasses.appendChild(g);
+    }
+  }
   document.getElementById('waterLogged').textContent=stor.water;
-  document.getElementById('calFill').style.width=Math.min(stor.cal/calT*100,100)+'%';
-  document.getElementById('waterFill').style.width=Math.min(stor.water/watT*100,100)+'%';
-  document.getElementById('calCard').className='tracker-card'+(stor.cal>=calT?' active':'');
-  document.getElementById('waterCard').className='tracker-card'+(stor.water>=watT?' active':'');
+
+  // Enerji butonları
+  ['low','mid','high'].forEach(e=>{
+    const btn=document.getElementById('energy_'+e);
+    if(!btn)return;
+    const colors={low:'#ff6b6b',mid:'#f5a623',high:'#c8f542'};
+    const active=stor.energy===e;
+    btn.style.borderColor=active?colors[e]:'#ffffff10';
+    btn.style.background=active?colors[e]+'20':'#ffffff08';
+    btn.style.color=active?colors[e]:'var(--muted)';
+  });
+
+  // Uyku butonları
+  [5,6,7,8,9].forEach(h=>{
+    const btn=document.getElementById('sleep_'+h);
+    if(!btn)return;
+    const active=stor.sleep===h;
+    const good=h>=7;
+    btn.style.borderColor=active?(good?'#a78bfa':'#f5a623'):'#ffffff10';
+    btn.style.background=active?(good?'#a78bfa20':'#f5a62320'):'#ffffff08';
+    btn.style.color=active?(good?'#a78bfa':'#f5a623'):'var(--muted)';
+  });
+  const sleepMsg=document.getElementById('sleepMsg');
+  if(sleepMsg&&stor.sleep){
+    if(stor.sleep>=8) sleepMsg.innerHTML='<span style="color:#a78bfa">✨ Mükemmel uyku! Kasların iyileşiyor.</span>';
+    else if(stor.sleep===7) sleepMsg.innerHTML='<span style="color:#4ade80">✓ İyi uyku süresi.</span>';
+    else if(stor.sleep===6) sleepMsg.innerHTML='<span style="color:#f5a623">⚠️ Biraz az. 7-8 saat ideal.</span>';
+    else sleepMsg.innerHTML='<span style="color:#ff6b6b">⚠️ Yetersiz uyku performansı etkiler!</span>';
+  }
+
+  // Kilo
+  const wi=document.getElementById('weightInput');
+  if(wi&&stor.weight) wi.value=stor.weight;
+  const wh=document.getElementById('weightHistory');
+  if(wh){
+    const weights=JSON.parse(localStorage.getItem('fp_weights')||'[]');
+    if(weights.length>0){
+      const last=weights.slice(-3).reverse();
+      wh.innerHTML='Son: '+last.map(w=>`<span style="color:var(--white)">${w.kg}kg</span> <span style="color:var(--muted);font-size:0.65rem">${w.date}</span>`).join(' · ');
+    }
+  }
+
+  // Ruh hali butonları
+  ['stressed','good','great'].forEach(m=>{
+    const btn=document.getElementById('mood_'+m);
+    if(!btn)return;
+    const colors={stressed:'#ff6b6b',good:'#4ade80',great:'#f9a8d4'};
+    const active=stor.mood===m;
+    btn.style.borderColor=active?colors[m]:'#ffffff10';
+    btn.style.background=active?colors[m]+'20':'#ffffff08';
+    btn.style.color=active?colors[m]:'var(--muted)';
+  });
+
+  // Günün özeti
+  updateSummary();
 }
-function logCal(){stor.cal+=200;save();renderTrackers();}
-function logWater(){stor.water+=1;save();renderTrackers();}
-function resetTrackers(){stor.cal=0;stor.water=0;save();renderTrackers();}
+
+function updateSummary(){
+  const exDone=Object.values(stor.ex).flat().length;
+  document.getElementById('summaryEx').textContent=exDone;
+  document.getElementById('summaryCal').textContent=stor.cal;
+  document.getElementById('summaryWater').textContent=stor.water;
+
+  const msgs=[];
+  if(exDone>0) msgs.push(`${exDone} egzersiz tamamladın 💪`);
+  if(stor.water>=(planData.water||3)*2.67) msgs.push('Su hedefine ulaştın 💧');
+  if(stor.sleep>=7) msgs.push('Uyku düzenin iyi 😴');
+  if(stor.mood==='great') msgs.push('Harika hissediyorsun 🤩');
+  if(stor.energy==='high') msgs.push('Enerji seviyenin yüksek ⚡');
+
+  const summaryMsg=document.getElementById('summaryMsg');
+  if(summaryMsg){
+    if(msgs.length===0) summaryMsg.textContent='Güne henüz başlamadın — hadi başla! 💪';
+    else if(msgs.length>=3) summaryMsg.innerHTML='<span style="color:var(--lime)">🌟 Harika bir gün geçiriyorsun!</span> '+msgs.join(' · ');
+    else summaryMsg.textContent=msgs.join(' · ');
+  }
+}
+
+function logCal(amount){stor.cal+=(amount||200);save();renderTrackers();}
+function logWater(){stor.water=Math.min(stor.water+1,parseInt(document.getElementById('waterTarget').textContent)||8);save();renderTrackers();}
+
+function setEnergy(val){stor.energy=val;save();renderTrackers();}
+
+function setSleep(h){
+  stor.sleep=h;
+  save();
+  document.getElementById('sleepDisplay').innerHTML=`<span style="color:#a78bfa">${h}</span> saat`;
+  renderTrackers();
+}
+
+function saveWeight(){
+  const input=document.getElementById('weightInput');
+  const val=parseFloat(input.value);
+  if(!val||val<30||val>300){alert('Geçerli bir kilo girin!');return;}
+  stor.weight=val;
+  save();
+  const weights=JSON.parse(localStorage.getItem('fp_weights')||'[]');
+  const today=new Date().toLocaleDateString('tr-TR',{day:'numeric',month:'short'});
+  const existing=weights.findIndex(w=>w.date===today);
+  if(existing>-1) weights[existing].kg=val;
+  else weights.push({kg:val,date:today});
+  localStorage.setItem('fp_weights',JSON.stringify(weights.slice(-30)));
+  renderTrackers();
+  // Küçük onay animasyonu
+  const btn=input.nextElementSibling.nextElementSibling;
+  btn.textContent='✓ Kaydedildi';btn.style.color='#4ade80';
+  setTimeout(()=>{btn.textContent='Kaydet';btn.style.color='#4ade80';},1500);
+}
+
+function setMood(val){stor.mood=val;save();renderTrackers();}
+
+function resetTrackers(){
+  if(!confirm('Bugünkü tüm takip verilerini sıfırlamak istiyor musunuz?'))return;
+  stor.cal=0;stor.water=0;stor.energy='';stor.sleep=0;stor.mood='';stor.weight=0;
+  save();renderTrackers();
+}
 
 function renderProgress(){
   const d=doneCount(); const pct=Math.round(d/7*100);
