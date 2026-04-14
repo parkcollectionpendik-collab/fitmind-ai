@@ -16,53 +16,78 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .orb2{width:300px;height:300px;background:#4af;bottom:-50px;right:-50px;animation:float2 10s ease-in-out infinite}
 @keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,20px)}}
 @keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-20px,-15px)}}
+
 .card{position:relative;z-index:1;background:#111;border:1px solid #ffffff15;border-radius:24px;padding:2.5rem;width:100%;max-width:560px;animation:fadeUp 0.6s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .logo{font-family:var(--font-head);font-weight:800;font-size:1.1rem;text-align:center;margin-bottom:2rem}
 .logo span{color:var(--lime)}
+
 .progress-wrap{margin-bottom:2rem}
 .progress-steps{display:flex;justify-content:space-between;margin-bottom:0.5rem}
-.progress-step{font-size:0.75rem;color:var(--muted);font-family:var(--font-head);font-weight:700}
+.progress-step{font-size:0.72rem;color:var(--muted);font-family:var(--font-head);font-weight:700;transition:color 0.3s}
 .progress-step.active{color:var(--lime)}
 .progress-bar{height:4px;background:#ffffff10;border-radius:100px}
-.progress-fill{height:100%;background:var(--lime);border-radius:100px;transition:width 0.4s ease}
-.step{display:none}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--lime),#4af);border-radius:100px;transition:width 0.4s ease}
+
+.step{display:none;animation:fadeUp 0.3s ease both}
 .step.active{display:block}
-.step-tag{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--lime);font-weight:700;margin-bottom:0.5rem}
-.step-title{font-family:var(--font-head);font-size:1.6rem;font-weight:800;line-height:1.1;margin-bottom:0.4rem;letter-spacing:-0.02em}
+.step-tag{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--lime);font-weight:700;margin-bottom:0.5rem;font-family:var(--font-head)}
+.step-title{font-family:var(--font-head);font-size:1.5rem;font-weight:800;line-height:1.15;margin-bottom:0.4rem}
 .step-sub{color:var(--muted);font-size:0.875rem;margin-bottom:1.8rem;line-height:1.6}
-.options{display:grid;gap:0.75rem;margin-bottom:1.5rem}
+
+.options{display:grid;gap:0.6rem;margin-bottom:1.5rem}
 .options.cols2{grid-template-columns:1fr 1fr}
-.option{background:#ffffff06;border:1.5px solid #ffffff12;border-radius:14px;padding:1rem 1.2rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.75rem}
-.option:hover{border-color:#ffffff25;background:#ffffff0a}
-.option.selected{border-color:var(--lime);background:#c8f54210}
+.option{background:#ffffff06;border:1.5px solid #ffffff10;border-radius:14px;padding:1rem 1.1rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.75rem}
+.option:hover{border-color:#ffffff25;background:#ffffff0a;transform:translateX(2px)}
+.option.selected{border-color:var(--lime);background:#c8f54212;box-shadow:0 0 20px #c8f54210}
 .option-icon{font-size:1.4rem;flex-shrink:0}
-.option-label{font-family:var(--font-head);font-size:0.9rem;font-weight:700}
-.option-desc{font-size:0.75rem;color:var(--muted);margin-top:0.1rem}
-.input-row{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem}
-.input-group{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem}
-label{font-size:0.78rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;font-weight:700}
-input[type=number],input[type=text],select{background:#ffffff08;border:1.5px solid #ffffff12;border-radius:12px;padding:0.8rem 1rem;color:var(--white);font-family:var(--font-body);font-size:1rem;outline:none;transition:border-color 0.2s;width:100%}
+.option-label{font-family:var(--font-head);font-size:0.88rem;font-weight:700}
+.option-desc{font-size:0.73rem;color:var(--muted);margin-top:0.1rem}
+
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem}
+.input-group{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:0.75rem}
+label{font-size:0.72rem;color:var(--muted);letter-spacing:0.07em;text-transform:uppercase;font-weight:700;font-family:var(--font-head)}
+input[type=number],input[type=text],select{background:#ffffff08;border:1.5px solid #ffffff12;border-radius:12px;padding:0.8rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.95rem;outline:none;transition:border-color 0.2s;width:100%}
 input:focus,select:focus{border-color:#c8f54250}
 select option{background:#1a1a1a}
+
 .days-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:0.4rem;margin-bottom:1.5rem}
-.day-btn{background:#ffffff06;border:1.5px solid #ffffff12;border-radius:10px;padding:0.6rem 0.3rem;cursor:pointer;transition:all 0.2s;text-align:center;font-family:var(--font-head);font-weight:700;font-size:0.75rem;color:var(--muted)}
+.day-btn{background:#ffffff06;border:1.5px solid #ffffff10;border-radius:10px;padding:0.6rem 0.2rem;cursor:pointer;transition:all 0.2s;text-align:center;font-family:var(--font-head);font-weight:700;font-size:0.72rem;color:var(--muted)}
 .day-btn:hover{border-color:#ffffff25}
 .day-btn.selected{border-color:var(--lime);background:#c8f54215;color:var(--lime)}
+
 .btn-row{display:flex;gap:0.75rem;align-items:center}
-.btn-next{background:var(--lime);color:var(--black);border:none;border-radius:100px;padding:0.85rem 2rem;font-family:var(--font-head);font-weight:700;font-size:0.95rem;cursor:pointer;transition:all 0.25s;flex:1}
+.btn-next{background:var(--lime);color:var(--black);border:none;border-radius:100px;padding:0.85rem 2rem;font-family:var(--font-head);font-weight:700;font-size:0.92rem;cursor:pointer;transition:all 0.25s;flex:1}
 .btn-next:hover{background:var(--lime2);transform:translateY(-1px)}
-.btn-next:disabled{opacity:0.4;cursor:not-allowed;transform:none}
-.btn-back{background:transparent;color:var(--muted);border:1.5px solid #ffffff15;border-radius:100px;padding:0.85rem 1.4rem;font-family:var(--font-head);font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.2s}
+.btn-next:disabled{opacity:0.35;cursor:not-allowed;transform:none}
+.btn-back{background:transparent;color:var(--muted);border:1.5px solid #ffffff15;border-radius:100px;padding:0.85rem 1.4rem;font-family:var(--font-head);font-weight:700;font-size:0.88rem;cursor:pointer;transition:all 0.2s}
 .btn-back:hover{border-color:#ffffff30;color:var(--white)}
-.final-screen{text-align:center;display:none}
-.final-screen .big-icon{font-size:4rem;margin-bottom:1rem}
-.final-screen h2{font-family:var(--font-head);font-size:1.8rem;font-weight:800;margin-bottom:0.5rem}
-.final-screen p{color:var(--muted);margin-bottom:2rem;line-height:1.6}
-.plan-preview{background:#ffffff06;border:1px solid #ffffff12;border-radius:16px;padding:1.2rem;margin-bottom:1.5rem;text-align:left}
-.plan-preview h4{font-family:var(--font-head);font-size:0.85rem;font-weight:700;color:var(--lime);margin-bottom:0.75rem;letter-spacing:0.06em;text-transform:uppercase}
-.plan-item{display:flex;align-items:center;gap:0.6rem;font-size:0.875rem;color:#ffffffcc;margin-bottom:0.5rem}
-.plan-item::before{content:'✓';color:var(--lime);font-weight:700;flex-shrink:0}
+
+/* PLAN OLUŞTURMA EKRANI */
+.creating-screen{display:none;text-align:center;padding:1rem 0}
+.creating-steps{display:flex;flex-direction:column;gap:0.75rem;margin:2rem 0;text-align:left}
+.cs-item{display:flex;align-items:center;gap:0.9rem;padding:0.85rem 1rem;background:#ffffff05;border-radius:12px;border:1px solid #ffffff08;opacity:0.4;transition:all 0.5s}
+.cs-item.done{opacity:1;border-color:#c8f54225;background:#c8f54208}
+.cs-item.active{opacity:1;border-color:#ffffff18;background:#ffffff08}
+.cs-icon{font-size:1.2rem;width:32px;text-align:center;flex-shrink:0}
+.cs-text{font-size:0.88rem;font-weight:500}
+.cs-check{margin-left:auto;color:var(--lime);font-weight:700;font-size:0.9rem;opacity:0;transition:opacity 0.3s}
+.cs-item.done .cs-check{opacity:1}
+.spin{display:inline-block;width:18px;height:18px;border:2px solid #ffffff20;border-top-color:var(--lime);border-radius:50%;animation:spin 0.8s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* SON EKRAN */
+.final-screen{display:none;text-align:center}
+.final-icon{font-size:4rem;margin-bottom:1rem;animation:pop 0.5s ease both}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+.final-title{font-family:var(--font-head);font-size:1.8rem;font-weight:800;margin-bottom:0.5rem}
+.final-sub{color:var(--muted);font-size:0.88rem;margin-bottom:1.5rem;line-height:1.6}
+.final-features{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:1.5rem;text-align:left}
+.ff-item{background:#ffffff06;border:1px solid #ffffff0a;border-radius:12px;padding:0.85rem 1rem;display:flex;align-items:center;gap:0.6rem;font-size:0.82rem}
+.ff-icon{font-size:1rem;flex-shrink:0}
+.ff-label{font-weight:500;color:#ffffffcc}
+.start-btn{width:100%;background:linear-gradient(135deg,var(--lime),var(--lime2));color:#000;border:none;border-radius:100px;padding:1rem;font-family:var(--font-head);font-weight:800;font-size:1rem;cursor:pointer;transition:all 0.25s;box-shadow:0 4px 24px #c8f54230}
+.start-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px #c8f54240}
 </style>
 </head>
 <body>
@@ -87,19 +112,19 @@ select option{background:#1a1a1a}
     <div class="step-title">Ana hedefiniz ne?</div>
     <div class="step-sub">Tüm planınızı bu hedefe göre oluşturacağız.</div>
     <div class="options">
-      <div class="option" onclick="select(this,'goal','lose_weight')">
+      <div class="option" onclick="selectOption(this,'goal','lose_weight')">
         <div class="option-icon">🔥</div>
         <div><div class="option-label">Kilo vermek</div><div class="option-desc">Yağ yak, forma gir</div></div>
       </div>
-      <div class="option" onclick="select(this,'goal','build_muscle')">
+      <div class="option" onclick="selectOption(this,'goal','build_muscle')">
         <div class="option-icon">💪</div>
         <div><div class="option-label">Kas yapmak</div><div class="option-desc">Güçlen, hacim kazan</div></div>
       </div>
-      <div class="option" onclick="select(this,'goal','get_fit')">
+      <div class="option" onclick="selectOption(this,'goal','get_fit')">
         <div class="option-icon">⚡</div>
         <div><div class="option-label">Forma girmek</div><div class="option-desc">Genel kondisyonu artır</div></div>
       </div>
-      <div class="option" onclick="select(this,'goal','improve_health')">
+      <div class="option" onclick="selectOption(this,'goal','improve_health')">
         <div class="option-icon">❤️</div>
         <div><div class="option-label">Sağlığı iyileştirmek</div><div class="option-desc">Daha iyi hisset, enerji kazan</div></div>
       </div>
@@ -151,15 +176,15 @@ select option{background:#1a1a1a}
     <div class="step-title">Fitness seviyeniz nedir?</div>
     <div class="step-sub">Dürüst olun — planınızı buna göre ayarlayacağız.</div>
     <div class="options">
-      <div class="option" onclick="select(this,'level','beginner')">
+      <div class="option" onclick="selectOption(this,'level','beginner')">
         <div class="option-icon">🌱</div>
         <div><div class="option-label">Başlangıç</div><div class="option-desc">Az ya da hiç deneyim yok</div></div>
       </div>
-      <div class="option" onclick="select(this,'level','intermediate')">
+      <div class="option" onclick="selectOption(this,'level','intermediate')">
         <div class="option-icon">🏃</div>
         <div><div class="option-label">Orta Seviye</div><div class="option-desc">Haftada 1-3 kez egzersiz</div></div>
       </div>
-      <div class="option" onclick="select(this,'level','advanced')">
+      <div class="option" onclick="selectOption(this,'level','advanced')">
         <div class="option-icon">🏆</div>
         <div><div class="option-label">İleri Seviye</div><div class="option-desc">Düzenli antrenman, haftada 4+</div></div>
       </div>
@@ -176,19 +201,19 @@ select option{background:#1a1a1a}
     <div class="step-title">Nerede antrenman yapıyorsunuz?</div>
     <div class="step-sub">Sadece yapabileceğiniz egzersizleri vereceğiz.</div>
     <div class="options">
-      <div class="option" onclick="select(this,'equipment','home_no')">
+      <div class="option" onclick="selectOption(this,'equipment','home_no')">
         <div class="option-icon">🏠</div>
         <div><div class="option-label">Evde — ekipmansız</div><div class="option-desc">Sadece vücut ağırlığı</div></div>
       </div>
-      <div class="option" onclick="select(this,'equipment','home_basic')">
+      <div class="option" onclick="selectOption(this,'equipment','home_basic')">
         <div class="option-icon">🏋️</div>
         <div><div class="option-label">Evde — temel ekipman</div><div class="option-desc">Dumbbell, direnç bandı</div></div>
       </div>
-      <div class="option" onclick="select(this,'equipment','gym')">
+      <div class="option" onclick="selectOption(this,'equipment','gym')">
         <div class="option-icon">🏢</div>
         <div><div class="option-label">Spor Salonu</div><div class="option-desc">Tam ekipman erişimi</div></div>
       </div>
-      <div class="option" onclick="select(this,'equipment','outdoor')">
+      <div class="option" onclick="selectOption(this,'equipment','outdoor')">
         <div class="option-icon">🌳</div>
         <div><div class="option-label">Açık Hava</div><div class="option-desc">Park, koşu, kalistenik</div></div>
       </div>
@@ -202,16 +227,17 @@ select option{background:#1a1a1a}
   <!-- ADIM 5: PROGRAM -->
   <div class="step" id="step5">
     <div class="step-tag">Adım 5 / 5</div>
-    <div class="step-title">Ne zaman antrenman yapmak istiyorsunuz?</div>
-    <div class="step-sub">Size uygun günleri seçin.</div>
+    <div class="step-title">Antrenman programınız</div>
+    <div class="step-sub">Hangi günler ve ne kadar süre antrenman yapmak istiyorsunuz?</div>
+    <div style="font-size:0.72rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.6rem;font-family:var(--font-head)">Antrenman Günleri</div>
     <div class="days-grid">
-      <div class="day-btn" onclick="toggleDay(this,'Pzt')">Pzt</div>
-      <div class="day-btn" onclick="toggleDay(this,'Sal')">Sal</div>
-      <div class="day-btn" onclick="toggleDay(this,'Çar')">Çar</div>
-      <div class="day-btn" onclick="toggleDay(this,'Per')">Per</div>
-      <div class="day-btn" onclick="toggleDay(this,'Cum')">Cum</div>
-      <div class="day-btn" onclick="toggleDay(this,'Cmt')">Cmt</div>
-      <div class="day-btn" onclick="toggleDay(this,'Paz')">Paz</div>
+      <div class="day-btn" onclick="toggleDay(this,'Pazartesi')">Pzt</div>
+      <div class="day-btn" onclick="toggleDay(this,'Salı')">Sal</div>
+      <div class="day-btn" onclick="toggleDay(this,'Çarşamba')">Çar</div>
+      <div class="day-btn" onclick="toggleDay(this,'Perşembe')">Per</div>
+      <div class="day-btn" onclick="toggleDay(this,'Cuma')">Cum</div>
+      <div class="day-btn" onclick="toggleDay(this,'Cumartesi')">Cmt</div>
+      <div class="day-btn" onclick="toggleDay(this,'Pazar')">Paz</div>
     </div>
     <div class="input-group">
       <label>Tercih ettiğiniz antrenman süresi</label>
@@ -225,112 +251,207 @@ select option{background:#1a1a1a}
     </div>
     <div class="btn-row">
       <button class="btn-back" onclick="prevStep(4)">← Geri</button>
-      <button class="btn-next" onclick="finish()" id="btn5">Planımı oluştur! 🚀</button>
+      <button class="btn-next" onclick="finish()">Planımı Oluştur 🚀</button>
     </div>
+  </div>
+
+  <!-- PLAN OLUŞTURMA -->
+  <div class="creating-screen" id="creatingScreen">
+    <div style="font-family:var(--font-head);font-size:1.3rem;font-weight:800;margin-bottom:0.4rem">🤖 Planınız Hazırlanıyor</div>
+    <div style="font-size:0.85rem;color:var(--muted)">Bu işlem 10-15 saniye sürebilir...</div>
+    <div class="creating-steps" id="creatingSteps">
+      <div class="cs-item" id="cs1">
+        <div class="cs-icon">👤</div>
+        <div class="cs-text">Profiliniz kaydediliyor</div>
+        <div class="cs-check">✓</div>
+      </div>
+      <div class="cs-item" id="cs2">
+        <div class="cs-icon">🧠</div>
+        <div class="cs-text">AI koçunuz analiz ediyor</div>
+        <div class="cs-check">✓</div>
+      </div>
+      <div class="cs-item" id="cs3">
+        <div class="cs-icon">💪</div>
+        <div class="cs-text">7 günlük antrenman planı oluşturuluyor</div>
+        <div class="cs-check">✓</div>
+      </div>
+      <div class="cs-item" id="cs4">
+        <div class="cs-icon">🥗</div>
+        <div class="cs-text">Beslenme planı kişiselleştiriliyor</div>
+        <div class="cs-check">✓</div>
+      </div>
+      <div class="cs-item" id="cs5">
+        <div class="cs-icon">🎯</div>
+        <div class="cs-text">Plan kaydediliyor</div>
+        <div class="cs-check">✓</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SON EKRAN -->
+  <div class="final-screen" id="finalScreen">
+    <div class="final-icon">🎉</div>
+    <div class="final-title">Planınız Hazır!</div>
+    <div class="final-sub">Yapay zeka koçunuz size özel 7 günlük antrenman ve beslenme planı oluşturdu.</div>
+    <div class="final-features">
+      <div class="ff-item"><div class="ff-icon">📅</div><div class="ff-label">7 günlük haftalık plan</div></div>
+      <div class="ff-item"><div class="ff-icon">🥗</div><div class="ff-label">Kişisel beslenme planı</div></div>
+      <div class="ff-item"><div class="ff-icon">🤖</div><div class="ff-label">7/24 AI koç desteği</div></div>
+      <div class="ff-item"><div class="ff-icon">📊</div><div class="ff-label">İlerleme takibi</div></div>
+    </div>
+    <button class="start-btn" onclick="goToDashboard()">Antrenmana Başla! 🚀</button>
   </div>
 </div>
 
-<!-- SON EKRAN -->
-<div class="card final-screen" id="finalCard">
-  <div class="big-icon">🎉</div>
-  <h2>Planınız hazır!</h2>
-  <p>Yapay zeka koçunuz, verdiğiniz cevaplara göre size özel bir program oluşturdu.</p>
-  <div class="plan-preview" id="planPreview"></div>
-  <button class="btn-next" style="width:100%" onclick="goToDashboard()">Antrenmana başla →</button>
-</div>
-
 <script>
-const SUPABASE_URL = 'https://cypmmayxwbkarvheqoxu.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
-const {createClient} = supabase;
-const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL='https://cypmmayxwbkarvheqoxu.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
+const {createClient}=supabase;
+const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
 
-const data = {goal:'',level:'',equipment:'',days:[],duration:45};
-const progressMap = {1:20,2:40,3:60,4:80,5:100};
+const userData={goal:'',level:'',equipment:'',days:[],duration:45,age:'',height:'',weight:'',gender:''};
+const progressMap={1:20,2:40,3:60,4:80,5:100};
 
-async function checkAuth() {
-  const {data:{session}} = await sb.auth.getSession();
-  if (!session) {window.location.href='auth.html';return;}
+async function checkAuth(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){window.location.href='auth.html';}
 }
 checkAuth();
 
-function select(el, key, val) {
-  const parent = el.closest('.options');
-  parent.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+function selectOption(el,key,val){
+  el.closest('.options').querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
   el.classList.add('selected');
-  data[key] = val;
-  const btnMap = {goal:'btn1',level:'btn3',equipment:'btn4'};
-  if (btnMap[key]) document.getElementById(btnMap[key]).disabled = false;
+  userData[key]=val;
+  const btnMap={goal:'btn1',level:'btn3',equipment:'btn4'};
+  if(btnMap[key]) document.getElementById(btnMap[key]).disabled=false;
 }
 
-function toggleDay(el, day) {
+function toggleDay(el,day){
   el.classList.toggle('selected');
-  if (el.classList.contains('selected')) {data.days.push(day);}
-  else {data.days = data.days.filter(d => d !== day);}
+  if(el.classList.contains('selected')) userData.days.push(day);
+  else userData.days=userData.days.filter(d=>d!==day);
 }
 
-function nextStep(n) {
-  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+function nextStep(n){
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
   document.getElementById('step'+n).classList.add('active');
-  document.getElementById('progressFill').style.width = progressMap[n]+'%';
-  document.querySelectorAll('.progress-step').forEach((s,i) => {
-    s.classList.toggle('active', i < n);
+  document.getElementById('progressFill').style.width=progressMap[n]+'%';
+  document.querySelectorAll('.progress-step').forEach((s,i)=>s.classList.toggle('active',i<n));
+}
+
+function prevStep(n){nextStep(n);}
+
+function finish(){
+  userData.duration=parseInt(document.getElementById('duration').value);
+  userData.age=parseInt(document.getElementById('age').value)||null;
+  userData.height=parseInt(document.getElementById('height').value)||null;
+  userData.weight=parseFloat(document.getElementById('weight').value)||null;
+  userData.gender=document.getElementById('gender').value;
+  startCreating();
+}
+
+async function stepAnim(id,delay){
+  return new Promise(res=>{
+    setTimeout(()=>{
+      const el=document.getElementById(id);
+      el.classList.add('active');
+      setTimeout(()=>{el.classList.remove('active');el.classList.add('done');res();},1200);
+    },delay);
   });
-  if (n===2) {data.age=document.getElementById('age').value;data.height=document.getElementById('height').value;data.weight=document.getElementById('weight').value;}
 }
 
-function prevStep(n) {nextStep(n);}
+async function startCreating(){
+  // Adım formlarını gizle, creating'i göster
+  document.querySelectorAll('.step').forEach(s=>s.style.display='none');
+  document.querySelector('.progress-wrap').style.display='none';
+  document.getElementById('creatingScreen').style.display='block';
 
-function finish() {
-  data.duration = document.getElementById('duration').value;
-  data.age = document.getElementById('age').value;
-  data.height = document.getElementById('height').value;
-  data.weight = document.getElementById('weight').value;
-  data.gender = document.getElementById('gender').value;
-  saveAndShowPlan();
-}
-
-async function saveAndShowPlan() {
-  const {data:{session}} = await sb.auth.getSession();
-  if (session) {
-    try {
-      await sb.from('profiles').upsert({
-        id: session.user.id,
-        goal: data.goal,
-        fitness_level: data.level,
-        equipment: data.equipment,
-        training_days: data.days,
-        workout_duration: parseInt(data.duration),
-        age: parseInt(data.age)||null,
-        height: parseInt(data.height)||null,
-        weight: parseFloat(data.weight)||null,
-        gender: data.gender,
-        onboarding_done: true,
-        updated_at: new Date().toISOString()
-      });
-    } catch(e) {console.log('Profil kayıt:', e);}
+  // Adım 1: Profil kaydet
+  await stepAnim('cs1',300);
+  const {data:{session}}=await sb.auth.getSession();
+  if(session){
+    await sb.from('profiles').upsert({
+      id:session.user.id,
+      goal:userData.goal,
+      fitness_level:userData.level,
+      equipment:userData.equipment,
+      training_days:userData.days,
+      workout_duration:userData.duration,
+      age:userData.age,
+      height:userData.height,
+      weight:userData.weight,
+      gender:userData.gender,
+      onboarding_done:true,
+      updated_at:new Date().toISOString()
+    });
   }
 
-  const goalLabels = {lose_weight:'Kilo Vermek',build_muscle:'Kas Yapmak',get_fit:'Forma Girmek',improve_health:'Sağlığı İyileştirmek'};
-  const levelLabels = {beginner:'Başlangıç',intermediate:'Orta Seviye',advanced:'İleri Seviye'};
-  const equipLabels = {home_no:'Evde (ekipmansız)',home_basic:'Evde (temel ekipman)',gym:'Spor Salonu',outdoor:'Açık Hava'};
-  const daysText = data.days.length > 0 ? data.days.join(', ') : 'Esnek program';
+  // Adım 2: AI analiz
+  await stepAnim('cs2',200);
 
-  document.getElementById('planPreview').innerHTML = `
-    <h4>Kişisel planınız</h4>
-    <div class="plan-item">Hedef: ${goalLabels[data.goal]||'Özel'}</div>
-    <div class="plan-item">Seviye: ${levelLabels[data.level]||'Özel'}</div>
-    <div class="plan-item">Konum: ${equipLabels[data.equipment]||'Özel'}</div>
-    <div class="plan-item">Antrenman günleri: ${daysText}</div>
-    <div class="plan-item">Seans süresi: ${data.duration} dakika</div>
-    <div class="plan-item">Yapay zeka koçunuz 7/24 hazır</div>
-  `;
-  document.getElementById('mainCard').style.display = 'none';
-  document.getElementById('finalCard').style.display = 'block';
+  // Adım 3-4: Plan oluştur (AI çağrısı)
+  document.getElementById('cs3').classList.add('active');
+  document.getElementById('cs4').classList.add('active');
+
+  let plan=null;
+  try{
+    const goalLabels={lose_weight:'kilo vermek',build_muscle:'kas yapmak',get_fit:'forma girmek',improve_health:'sagligi iyilestirmek'};
+    const equipLabels={home_no:'ev ekipmansiz',home_basic:'ev temel ekipman',gym:'spor salonu',outdoor:'acik hava'};
+    const daysStr=userData.days.length>0?userData.days.join(', '):'Pazartesi, Carsamba, Cuma';
+
+    const planSys=`Sen bir JSON uretici sistemsin. SADECE gecerli JSON dondur. Hicbir sey yazma. Ilk karakter { son karakter } olacak.
+Kullanici: Hedef=${goalLabels[userData.goal]||'genel'}, Seviye=${userData.level||'orta'}, Ekipman=${equipLabels[userData.equipment]||'gym'}, Kilo=${userData.weight||70}kg, Antrenman gunleri=${daysStr}, Sure=${userData.duration} dk
+Bu sablonu doldur (sadece belirtilen antrenman gunlerinde type=Antrenman, digerleri Dinlenme):
+{"workout":"haftalik antrenman ozeti","nutrition":{"breakfast":{"title":"Kahvalti","foods":["yiyecek1","yiyecek2","yiyecek3","yiyecek4"],"calories":500,"protein":30,"carbs":45,"fat":15},"lunch":{"title":"Ogle Yemegi","foods":["yiyecek1","yiyecek2","yiyecek3","yiyecek4"],"calories":650,"protein":45,"carbs":60,"fat":15},"dinner":{"title":"Aksam Yemegi","foods":["yiyecek1","yiyecek2","yiyecek3"],"calories":550,"protein":40,"carbs":35,"fat":18},"snack":{"title":"Ara Ogun","foods":["yiyecek1","yiyecek2","yiyecek3"],"calories":300,"protein":15,"carbs":35,"fat":10}},"tips":"1) ipucu 2) ipucu 3) ipucu","calories":2200,"water":3,"days":[{"day":"Pazartesi","type":"Antrenman","focus":"Gogus ve Triseps","duration":45,"exercises":[{"name":"Push-up","sets":"4 set","reps":"12-15 tekrar","rest":"60sn"},{"name":"Dumbbell Press","sets":"3 set","reps":"10-12 tekrar","rest":"90sn"},{"name":"Tricep Dips","sets":"3 set","reps":"12 tekrar","rest":"60sn"}]},{"day":"Sali","type":"Dinlenme","focus":"Aktif Dinlenme","duration":20,"exercises":[]},{"day":"Carsamba","type":"Antrenman","focus":"Sirt ve Biseps","duration":45,"exercises":[{"name":"Pull-ups","sets":"4 set","reps":"8-10 tekrar","rest":"90sn"},{"name":"Bent-over Row","sets":"3 set","reps":"10-12 tekrar","rest":"90sn"},{"name":"Bicep Curl","sets":"3 set","reps":"12-15 tekrar","rest":"60sn"}]},{"day":"Persembe","type":"Dinlenme","focus":"Aktif Dinlenme","duration":20,"exercises":[]},{"day":"Cuma","type":"Antrenman","focus":"Bacak ve Core","duration":45,"exercises":[{"name":"Squat","sets":"4 set","reps":"10-12 tekrar","rest":"120sn"},{"name":"Lunge","sets":"3 set","reps":"12 tekrar","rest":"90sn"},{"name":"Plank","sets":"3 set","reps":"45 sn","rest":"45sn"}]},{"day":"Cumartesi","type":"Dinlenme","focus":"Aktif Dinlenme","duration":20,"exercises":[]},{"day":"Pazar","type":"Dinlenme","focus":"Tam Dinlenme","duration":0,"exercises":[]}]}`;
+
+    const res=await fetch('/api/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:[{role:'user',content:'Plan olustur'}],system:planSys,max_tokens:4000})
+    });
+    const aiData=await res.json();
+    const text=aiData.content?.[0]?.text||'';
+    let clean=text.trim();
+    const start=clean.indexOf('{');const end=clean.lastIndexOf('}');
+    if(start!==-1&&end!==-1) clean=clean.slice(start,end+1);
+    plan=JSON.parse(clean);
+
+    // Gün isimlerini düzelt
+    const dayMap={Sali:'Salı',Carsamba:'Çarşamba',Persembe:'Perşembe'};
+    if(plan.days) plan.days=plan.days.map(d=>({...d,day:dayMap[d.day]||d.day}));
+
+  }catch(e){
+    // Plan oluşturulamazsa boş plan
+    plan={workout:'Kişisel plan',nutrition:{},tips:'',calories:2000,water:3,days:[]};
+  }
+
+  document.getElementById('cs3').classList.add('done');
+  document.getElementById('cs4').classList.add('done');
+
+  // Adım 5: Kaydet
+  await stepAnim('cs5',200);
+  if(session&&plan){
+    plan.createdAt=new Date().toISOString();
+    plan.goal=userData.goal;
+    plan.level=userData.level;
+    await sb.from('user_plans').upsert({
+      user_id:session.user.id,
+      plan_data:plan,
+      updated_at:new Date().toISOString()
+    },{onConflict:'user_id'});
+  }
+
+  // Son ekranı göster
+  setTimeout(()=>{
+    document.getElementById('creatingScreen').style.display='none';
+    document.getElementById('finalScreen').style.display='block';
+  },600);
 }
 
-function goToDashboard() {
-  window.location.href = 'dashboard.html';
+function goToDashboard(){
+  // Yeni kullanıcı bayrağı koy — dashboard'da tour gösterilsin
+  localStorage.setItem('fm_newUser','1');
+  window.location.href='dashboard.html';
 }
 </script>
 </body>
