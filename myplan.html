@@ -777,7 +777,7 @@ function addFoodItem(mealKey){
   meal.foods.push(val);
   savePlanToSupabase();
   renderNutrition();
-}
+function renderTrackers(){
   const calT=planData.calories||2000;
   const watT=Math.round((planData.water||3)*2.67);
   document.getElementById('calLogged').textContent=stor.cal;
