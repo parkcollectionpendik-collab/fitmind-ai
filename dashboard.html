@@ -372,16 +372,21 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
   <!-- AI KOÇU TAB -->
   <div class="tab-section" id="tab-aicoach">
     <div class="ai-coach-full">
-      <div style="font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem">
+      <div style="font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
         <span style="width:8px;height:8px;background:var(--lime);border-radius:50%;animation:pulse 2s infinite;display:inline-block"></span>
         AI Koç — Tam Sohbet
         <span id="msgCounter" style="margin-left:auto;font-size:0.75rem;color:var(--muted);font-weight:400"></span>
+        <button onclick="clearChat()" style="background:#ffffff08;border:1px solid #ffffff10;color:var(--muted);border-radius:100px;padding:0.25rem 0.75rem;font-size:0.72rem;cursor:pointer;font-family:var(--font-head);font-weight:700">🗑 Sohbeti Temizle</button>
       </div>
-      <div class="messages" id="messages">
-        <div class="msg ai">Merhaba! Ben sizin kişisel AI fitness koçunuzum 🤖<br><br>Antrenman, beslenme veya motivasyon hakkında her şeyi sorabilirsiniz!<br><br><strong>"Plan yap"</strong> yazarak kişisel 7 günlük planınızı oluşturabilirsiniz.</div>
+      <div class="messages" id="messages"></div>
+      <div style="display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.6rem" id="quickPrompts">
+        <button onclick="quickSend('Plan yap')" style="background:#c8f54215;border:1px solid #c8f54230;color:var(--lime);border-radius:100px;padding:0.3rem 0.8rem;font-size:0.75rem;cursor:pointer;font-family:var(--font-head);font-weight:700">📋 Plan Yap</button>
+        <button onclick="quickSend('Antrenman programımı güncelle')" style="background:#ffffff08;border:1px solid #ffffff12;color:var(--white);border-radius:100px;padding:0.3rem 0.8rem;font-size:0.75rem;cursor:pointer;font-family:var(--font-head);font-weight:700">💪 Antrenmanı Güncelle</button>
+        <button onclick="quickSend('Beslenme planımı değiştir')" style="background:#ffffff08;border:1px solid #ffffff12;color:var(--white);border-radius:100px;padding:0.3rem 0.8rem;font-size:0.75rem;cursor:pointer;font-family:var(--font-head);font-weight:700">🥗 Beslenmeyi Güncelle</button>
+        <button onclick="quickSend('Bugünkü antrenmanıma yeni egzersiz ekle')" style="background:#ffffff08;border:1px solid #ffffff12;color:var(--white);border-radius:100px;padding:0.3rem 0.8rem;font-size:0.75rem;cursor:pointer;font-family:var(--font-head);font-weight:700">➕ Egzersiz Ekle</button>
       </div>
       <div class="chat-input-wrap">
-        <input class="chat-input" id="chatInput" placeholder="AI koçunuza herhangi bir şey sorun..." onkeydown="if(event.key==='Enter')sendMsg()">
+        <input class="chat-input" id="chatInput" placeholder="Ne yapmak istiyorsun? Plan yap, egzersiz ekle, öğün değiştir..." onkeydown="if(event.key==='Enter')sendMsg()">
         <button class="send-btn" onclick="sendMsg()" id="sendBtn">➤</button>
       </div>
     </div>
@@ -410,10 +415,10 @@ const {createClient}=supabase;
 const sb=createClient(SB_URL,SB_KEY);
 Paddle.Initialize({token:'live_eefc76e39bd2263417b9b9ff52b'});
 
-let userProfile=null, isPro=false, freeCount=0, chatHistory=[];
+let userProfile=null, isPro=false, freeCount=0;
+let chatHistory=JSON.parse(localStorage.getItem('fm_chatHistory')||'[]');
 const FREE_LIMIT=3;
 const TODAY_STR=new Date().toDateString();
-// Bugünün indexi Pazartesi=0
 const jsDay=new Date().getDay();
 const TODAY_IDX=jsDay===0?6:jsDay-1;
 const DAYS=['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
@@ -422,6 +427,65 @@ const TODAY_NAME=DAYS[TODAY_IDX];
 const goalLabels={lose_weight:'Kilo Vermek',build_muscle:'Kas Yapmak',get_fit:'Forma Girmek',improve_health:'Sağlığı İyileştirmek'};
 const levelLabels={beginner:'Başlangıç',intermediate:'Orta Seviye',advanced:'İleri Seviye'};
 const equipLabels={home_no:'Ev',home_basic:'Ev+Ekipman',gym:'Spor Salonu',outdoor:'Açık Hava'};
+
+function saveChatHistory(){
+  // Son 50 mesajı sakla
+  localStorage.setItem('fm_chatHistory',JSON.stringify(chatHistory.slice(-50)));
+}
+
+function clearChat(){
+  if(!confirm('Sohbet geçmişini silmek istiyor musunuz?'))return;
+  chatHistory=[];
+  saveChatHistory();
+  renderChatMessages();
+}
+
+function quickSend(text){
+  document.getElementById('chatInput').value=text;
+  sendMsg();
+}
+
+function renderChatMessages(){
+  const msgs=document.getElementById('messages');
+  if(!msgs)return;
+  if(chatHistory.length===0){
+    msgs.innerHTML=`<div class="msg ai">Merhaba! Ben sizin kişisel AI fitness koçunuzum 🤖<br><br>
+    İstediğiniz her şeyi yazabilirsiniz — plan oluşturma, egzersiz ekleme/çıkarma, öğün değiştirme, motivasyon, soru sorma...<br><br>
+    Örnek: <em>"Haftanın 3 günü evde spor yapacağım, yumurta seviyorum, kilo vermek istiyorum"</em><br>
+    Örnek: <em>"Pazartesi antrenmanına squat ekle"</em><br>
+    Örnek: <em>"Kahvaltıdaki yumurtayı yulafla değiştir"</em></div>`;
+    return;
+  }
+  msgs.innerHTML='';
+  chatHistory.forEach(m=>{
+    if(m.role==='user'){
+      msgs.innerHTML+=`<div class="msg user">${m.content}</div>`;
+    } else if(m.role==='assistant'){
+      if(m.isPlanCard&&m.plan){
+        // Plan kartını yeniden oluştur
+        _pendingPlan=m.plan;
+        const card=document.createElement('div');
+        card.className='msg ai';
+        card.style.cssText='max-width:100%;padding:0;background:transparent;border:none;';
+        let sectionsHtml='';
+        if(m.plan.workout) sectionsHtml+=`<div class="plan-section" style="border-color:var(--lime)"><div style="font-size:0.7rem;color:var(--lime);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">💪 Antrenman Planı</div><div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">${fmt(m.plan.workout)}</div></div>`;
+        if(m.plan.tips) sectionsHtml+=`<div class="plan-section" style="border-color:#f5a623"><div style="font-size:0.7rem;color:#f5a623;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">⚡ İpuçları</div><div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">${fmt(m.plan.tips)}</div></div>`;
+        card.innerHTML=`<div class="plan-card">
+          <div style="font-family:var(--font-head);font-size:1rem;font-weight:800;color:var(--lime);margin-bottom:1rem">🎯 7 Günlük Kişisel Planınız</div>
+          ${sectionsHtml}
+          <div style="display:flex;gap:0.75rem;margin-top:0.25rem">
+            <button onclick="savePlan()" style="flex:1;background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.7rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer">💾 Planı Kaydet</button>
+            <button onclick="window.location.href='myplan.html'" style="flex:1;background:#ffffff10;color:var(--white);border:1px solid #ffffff20;border-radius:100px;padding:0.7rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer">📋 Benim Planım</button>
+          </div>
+        </div>`;
+        msgs.appendChild(card);
+      } else {
+        msgs.innerHTML+=`<div class="msg ai">${m.content}</div>`;
+      }
+    }
+  });
+  msgs.scrollTop=msgs.scrollHeight;
+}
 
 function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open')}
 function closeSidebar(){document.querySelector('.sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open')}
@@ -491,6 +555,8 @@ async function init(){
 
   // Haftalık ilerlemeyi güncelle
   loadWeekProgress();
+  // Chat geçmişini yükle
+  renderChatMessages();
   // Paralel yükle
   loadTodayWorkout(profile,name);
   loadAISummary(profile,name);
@@ -808,15 +874,20 @@ Bu sablonu kullaniciya gore doldur:
       if(plan.days) plan.days=plan.days.map(d=>({...d,day:dayMap[d.day]||d.day}));
       const t=msgs.querySelector('.msg.typing');
       if(t)t.remove();
+      // Plan kartını göster ve geçmişe kaydet
       showPlanCard(plan);
+      chatHistory.push({role:'assistant',isPlanCard:true,plan:plan,content:'[Plan Kartı]'});
+      saveChatHistory();
       document.getElementById('sendBtn').disabled=false;
       if(!isPro){freeCount++;updateCounter();}
       return;
     }catch(e){
-      // JSON parse başarısız — kullanıcıya bildir
       const t=msgs.querySelector('.msg.typing');
       if(t)t.remove();
-      msgs.innerHTML+=`<div class="msg ai">Plan oluşturulurken bir sorun oluştu. Lütfen tekrar <strong>"plan yap"</strong> yazın. 🔄</div>`;
+      const errMsg='Plan oluşturulurken bir sorun oluştu. Lütfen tekrar deneyin. 🔄';
+      msgs.innerHTML+=`<div class="msg ai">${errMsg}</div>`;
+      chatHistory.push({role:'assistant',content:errMsg});
+      saveChatHistory();
       msgs.scrollTop=msgs.scrollHeight;
       document.getElementById('sendBtn').disabled=false;
       if(!isPro){freeCount++;updateCounter();}
@@ -824,19 +895,80 @@ Bu sablonu kullaniciya gore doldur:
     }
   }
 
+  // Plan düzenleme isteği mi? (mevcut planı güncelle)
+  const isEditReq = _pendingPlan && await detectPlanEdit(text);
+  if(isEditReq){
+    await handlePlanEdit(text, msgs);
+    return;
+  }
+
   const sys=userProfile
-    ?`Sen FitMind AI'sın, kişisel fitness koçusun. Her zaman Türkçe yanıt ver. Kullanıcı: Hedef: ${userProfile.goal}, Seviye: ${userProfile.fitness_level}, Ekipman: ${userProfile.equipment}, Yaş: ${userProfile.age}, Kilo: ${userProfile.weight}kg. 2-3 cümle.`
-    :`Sen FitMind AI'sın. Her zaman Türkçe yanıt ver. 2-3 cümle.`;
+    ?`Sen FitMind AI'sın, kişisel fitness koçusun. Her zaman Türkçe yanıt ver. Kullanıcı: Hedef: ${userProfile.goal}, Seviye: ${userProfile.fitness_level}, Ekipman: ${userProfile.equipment}, Yaş: ${userProfile.age||'?'}, Kilo: ${userProfile.weight||'?'}kg. Kısa, net, motive edici yanıt ver (2-4 cümle).`
+    :`Sen FitMind AI'sın, fitness koçusun. Her zaman Türkçe yanıt ver. 2-3 cümle.`;
   try{
-    const reply=await callAI(chatHistory.slice(-10),sys,350);
+    const reply=await callAI(chatHistory.slice(-10),sys,400);
     chatHistory.push({role:'assistant',content:reply});
+    saveChatHistory();
     const t=msgs.querySelector('.msg.typing');
     if(t)t.remove();
     msgs.innerHTML+=`<div class="msg ai">${fmt(reply)}</div>`;
   }catch(e){
     const t=msgs.querySelector('.msg.typing');
     if(t)t.remove();
-    msgs.innerHTML+=`<div class="msg ai">Tutarlı ol ve sürece güven! 💪</div>`;
+    const fb='Tutarlı ol ve sürece güven! 💪';
+    msgs.innerHTML+=`<div class="msg ai">${fb}</div>`;
+    chatHistory.push({role:'assistant',content:fb});
+    saveChatHistory();
+  }
+  msgs.scrollTop=msgs.scrollHeight;
+  document.getElementById('sendBtn').disabled=false;
+  if(!isPro){freeCount++;updateCounter();}
+}
+
+// Plan düzenleme tespiti
+async function detectPlanEdit(text){
+  const t=text.toLowerCase();
+  const editKw=['ekle','çıkar','kaldır','değiştir','güncelle','yerine','swap','remove','add','değiştirmek','eklemek','çıkarmak'];
+  return editKw.some(k=>t.includes(k));
+}
+
+// Plan düzenleme işlemi
+async function handlePlanEdit(text, msgs){
+  const currentPlanStr=JSON.stringify(_pendingPlan||{});
+  const editSys=`Sen FitMind AI'sın. Kullanıcının mevcut planını güncelliyorsun.
+Mevcut plan: ${currentPlanStr.slice(0,2000)}
+Kullanıcının isteği: ${text.replace(/`/g,"'")}
+SADECE güncellenmiş JSON döndür — aynı format, başka hiçbir şey yazma. İlk karakter { son karakter } olacak.`;
+  try{
+    const reply=await callAI([{role:'user',content:text}],editSys,3000);
+    let clean=reply.trim();
+    const start=clean.indexOf('{');const end=clean.lastIndexOf('}');
+    if(start!==-1&&end!==-1) clean=clean.slice(start,end+1);
+    const updatedPlan=JSON.parse(clean);
+    const dayMap={'Sali':'Salı','Carsamba':'Çarşamba','Persembe':'Perşembe'};
+    if(updatedPlan.days) updatedPlan.days=updatedPlan.days.map(d=>({...d,day:dayMap[d.day]||d.day}));
+    const t=msgs.querySelector('.msg.typing');
+    if(t)t.remove();
+    const confirmMsg='✅ Planınız güncellendi! Kaydetmek ister misiniz?';
+    msgs.innerHTML+=`<div class="msg ai">${confirmMsg}</div>`;
+    _pendingPlan=updatedPlan;
+    // Kaydet butonu ekle
+    const btnWrap=document.createElement('div');
+    btnWrap.className='msg ai';
+    btnWrap.style.cssText='background:transparent;border:none;padding:0;display:flex;gap:0.5rem;';
+    btnWrap.innerHTML=`
+      <button onclick="savePlan()" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.5rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer">💾 Güncellemeyi Kaydet</button>
+      <button onclick="window.location.href='myplan.html'" style="background:#ffffff10;color:var(--white);border:1px solid #ffffff20;border-radius:100px;padding:0.5rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer">📋 Benim Planım</button>`;
+    msgs.appendChild(btnWrap);
+    chatHistory.push({role:'assistant',content:confirmMsg});
+    saveChatHistory();
+  }catch(e){
+    const t=msgs.querySelector('.msg.typing');
+    if(t)t.remove();
+    const fb='Güncelleme yapılamadı, lütfen daha açık bir şekilde belirtin. Örnek: "Pazartesi antrenmanına squat ekle"';
+    msgs.innerHTML+=`<div class="msg ai">${fb}</div>`;
+    chatHistory.push({role:'assistant',content:fb});
+    saveChatHistory();
   }
   msgs.scrollTop=msgs.scrollHeight;
   document.getElementById('sendBtn').disabled=false;
