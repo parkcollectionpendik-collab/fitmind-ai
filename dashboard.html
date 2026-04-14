@@ -955,7 +955,13 @@ async function savePlan(){
     plan.goal=userProfile?.goal||'';
     plan.level=userProfile?.fitness_level||'';
     await sb.from('user_plans').upsert({user_id:session.user.id,plan_data:plan,updated_at:new Date().toISOString()},{onConflict:'user_id'});
+    // Yeni plan kaydedilince eski ilerleme verilerini sıfırla
+    localStorage.removeItem('fp_done');
+    localStorage.removeItem('fp_ex');
+    localStorage.removeItem('fp_week');
+    window._workoutSelectedDay=null;
     alert('✅ Planınız kaydedildi! "Benim Planım" sayfasından takip edebilirsiniz.');
+    window.location.href='myplan.html';
   }catch(e){alert('Hata: '+e.message);}
 }
 
