@@ -701,8 +701,33 @@ function fmt(text){
   return text.replace(/^#{1,3}\s*/gm,'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
 }
 
-function detectPlan(text){
-  return ['plan yap','program yap','plan oluştur','haftalık plan','programı yap','programı çıkar','program çıkar','antrenman programı','beslenme programı','diyet programı','benim için plan'].some(k=>text.toLowerCase().includes(k));
+// Hızlı keyword kontrolü — açık plan isteklerini anında yakala
+function quickDetectPlan(text){
+  const t=text.toLowerCase();
+  return ['plan yap','program yap','plan oluştur','haftalık plan','programı yap','programı çıkar',
+    'program çıkar','antrenman programı','beslenme programı','diyet programı','benim için plan',
+    'program istiyorum','plan istiyorum','antrenman istiyorum','beslenme istiyorum',
+    'spor programı','fitness programı','egzersiz programı','diyet yap','rejim',
+    'kilo vermek istiyorum','kas yapmak istiyorum','forma girmek istiyorum',
+    'haftanın','haftada','günde','evde spor','spora başlamak','sağlıklı beslenme',
+    'öğün planı','yemek planı','kalori','protein almak'].some(k=>t.includes(k));
+}
+
+// AI tabanlı akıllı plan tespiti — keyword yakalamadıysa AI'a sor
+async function detectPlan(text){
+  // Önce hızlı kontrolü dene
+  if(quickDetectPlan(text)) return true;
+  // Keyword bulamadıysa AI'a sor (max 50 token, çok hızlı)
+  try{
+    const res=await callAI(
+      [{role:'user',content:text}],
+      `Kullanıcının mesajı bir fitness/beslenme/antrenman PLANI veya PROGRAM isteği mi? SADECE "evet" veya "hayir" yaz, başka hiçbir şey yazma.`,
+      10
+    );
+    return res.trim().toLowerCase().startsWith('evet');
+  }catch(e){
+    return false;
+  }
 }
 
 function showPlanCard(plan){
@@ -757,11 +782,16 @@ async function sendMsg(){
   msgs.scrollTop=msgs.scrollHeight;
   chatHistory.push({role:'user',content:text});
 
-  if(detectPlan(text)){
-    const planSys=`Sen bir JSON üretici sistemsin. SADECE geçerli JSON döndür. Hiçbir şey yazma — selamlama yok, açıklama yok, markdown yok, kod bloğu yok. İlk karakter { olacak son karakter } olacak.
-Kullanıcı: Hedef=${userProfile?.goal||'genel'}, Seviye=${userProfile?.fitness_level||'orta'}, Ekipman=${userProfile?.equipment||'gym'}, Kilo=${userProfile?.weight||70}kg
-Bu şablonu kullanıcıya göre doldur:
-{"workout":"haftalık antrenman genel ozeti","nutrition":{"breakfast":{"title":"Kahvalti","foods":["yiyecek1","yiyecek2","yiyecek3","yiyecek4"],"calories":500,"protein":30,"carbs":45,"fat":15},"lunch":{"title":"Ogle Yemegi","foods":["yiyecek1","yiyecek2","yiyecek3","yiyecek4"],"calories":650,"protein":45,"carbs":60,"fat":15},"dinner":{"title":"Aksam Yemegi","foods":["yiyecek1","yiyecek2","yiyecek3"],"calories":550,"protein":40,"carbs":35,"fat":18},"snack":{"title":"Ara Ogun","foods":["yiyecek1","yiyecek2","yiyecek3"],"calories":300,"protein":15,"carbs":35,"fat":10}},"tips":"1) ipucu bir 2) ipucu iki 3) ipucu uc","calories":2200,"water":3,"days":[{"day":"Pazartesi","type":"Antrenman","focus":"Gogus ve Triseps","duration":45,"exercises":[{"name":"Push-up","sets":"4 set","reps":"12-15 tekrar","rest":"60sn"},{"name":"Dumbbell Press","sets":"3 set","reps":"10-12 tekrar","rest":"90sn"},{"name":"Tricep Dips","sets":"3 set","reps":"12 tekrar","rest":"60sn"},{"name":"Cable Flye","sets":"3 set","reps":"15 tekrar","rest":"60sn"}]},{"day":"Sali","type":"Dinlenme","focus":"Aktif Dinlenme","duration":20,"exercises":[]},{"day":"Carsamba","type":"Antrenman","focus":"Sirt ve Biseps","duration":45,"exercises":[{"name":"Pull-ups","sets":"4 set","reps":"8-10 tekrar","rest":"90sn"},{"name":"Bent-over Row","sets":"4 set","reps":"10-12 tekrar","rest":"90sn"},{"name":"Bicep Curl","sets":"3 set","reps":"12-15 tekrar","rest":"60sn"},{"name":"Hammer Curl","sets":"3 set","reps":"12 tekrar","rest":"60sn"}]},{"day":"Persembe","type":"Antrenman","focus":"Bacak ve Kalca","duration":55,"exercises":[{"name":"Squat","sets":"4 set","reps":"10-12 tekrar","rest":"120sn"},{"name":"Romanian Deadlift","sets":"3 set","reps":"10-12 tekrar","rest":"90sn"},{"name":"Leg Press","sets":"3 set","reps":"12-15 tekrar","rest":"90sn"},{"name":"Calf Raise","sets":"4 set","reps":"15-20 tekrar","rest":"45sn"}]},{"day":"Cuma","type":"Dinlenme","focus":"Aktif Dinlenme","duration":20,"exercises":[]},{"day":"Cumartesi","type":"Antrenman","focus":"Omuz ve Core","duration":50,"exercises":[{"name":"Shoulder Press","sets":"4 set","reps":"10-12 tekrar","rest":"90sn"},{"name":"Lateral Raise","sets":"3 set","reps":"15 tekrar","rest":"60sn"},{"name":"Face Pull","sets":"3 set","reps":"15 tekrar","rest":"60sn"},{"name":"Plank","sets":"3 set","reps":"45-60 sn","rest":"45sn"}]},{"day":"Pazar","type":"Dinlenme","focus":"Tam Dinlenme","duration":0,"exercises":[]}]}`;
+  // Plan isteği mi kontrol et (AI destekli)
+  const isPlanReq = await detectPlan(text);
+
+  if(isPlanReq){
+    const planSys=`Sen bir JSON üretici sistemsin. SADECE geçerli JSON döndür. Hiçbir şey yazma — selamlama yok, aciklama yok, markdown yok, kod blogü yok. Ilk karakter { olacak son karakter } olacak.
+Kullanici profili: Hedef=${userProfile?.goal||'genel'}, Seviye=${userProfile?.fitness_level||'orta'}, Ekipman=${userProfile?.equipment||'gym'}, Kilo=${userProfile?.weight||70}kg
+Kullanicinin ozel istegi: "${text}"
+ONEMLI: Kullanicinin belirttigi ozel tercihleri (tercih ettigi yiyecekler, kac gun spor yapacagi, hangi gunler, hangi ekipman, ne kadar sure vs) MUTLAKA plana yansit. Ornegin "haftanin 3 gunu" dediyse sadece 3 gun antrenman yap, "yumurta ve sebze" dediyse beslenme planinda bunlari kullan.
+Bu sablonu kullaniciya gore doldur:
+{"workout":"haftalik antrenman genel ozeti","nutrition":{"breakfast":{"title":"Kahvalti","foods":["yiyecek1","yiyecek2","yiyecek3","yiyecek4"],"calories":500,"protein":30,"carbs":45,"fat":15},"lunch":{"title":"Ogle Yemegi","foods":["yiyecek1","yiyecek2","yiyecek3","yiyecek4"],"calories":650,"protein":45,"carbs":60,"fat":15},"dinner":{"title":"Aksam Yemegi","foods":["yiyecek1","yiyecek2","yiyecek3"],"calories":550,"protein":40,"carbs":35,"fat":18},"snack":{"title":"Ara Ogun","foods":["yiyecek1","yiyecek2","yiyecek3"],"calories":300,"protein":15,"carbs":35,"fat":10}},"tips":"1) ipucu bir 2) ipucu iki 3) ipucu uc","calories":2200,"water":3,"days":[{"day":"Pazartesi","type":"Antrenman","focus":"Gogus ve Triseps","duration":45,"exercises":[{"name":"Push-up","sets":"4 set","reps":"12-15 tekrar","rest":"60sn"},{"name":"Dumbbell Press","sets":"3 set","reps":"10-12 tekrar","rest":"90sn"},{"name":"Tricep Dips","sets":"3 set","reps":"12 tekrar","rest":"60sn"},{"name":"Cable Flye","sets":"3 set","reps":"15 tekrar","rest":"60sn"}]},{"day":"Sali","type":"Dinlenme","focus":"Aktif Dinlenme","duration":20,"exercises":[]},{"day":"Carsamba","type":"Antrenman","focus":"Sirt ve Biseps","duration":45,"exercises":[{"name":"Pull-ups","sets":"4 set","reps":"8-10 tekrar","rest":"90sn"},{"name":"Bent-over Row","sets":"4 set","reps":"10-12 tekrar","rest":"90sn"},{"name":"Bicep Curl","sets":"3 set","reps":"12-15 tekrar","rest":"60sn"},{"name":"Hammer Curl","sets":"3 set","reps":"12 tekrar","rest":"60sn"}]},{"day":"Persembe","type":"Antrenman","focus":"Bacak ve Kalca","duration":55,"exercises":[{"name":"Squat","sets":"4 set","reps":"10-12 tekrar","rest":"120sn"},{"name":"Romanian Deadlift","sets":"3 set","reps":"10-12 tekrar","rest":"90sn"},{"name":"Leg Press","sets":"3 set","reps":"12-15 tekrar","rest":"90sn"},{"name":"Calf Raise","sets":"4 set","reps":"15-20 tekrar","rest":"45sn"}]},{"day":"Cuma","type":"Dinlenme","focus":"Aktif Dinlenme","duration":20,"exercises":[]},{"day":"Cumartesi","type":"Antrenman","focus":"Omuz ve Core","duration":50,"exercises":[{"name":"Shoulder Press","sets":"4 set","reps":"10-12 tekrar","rest":"90sn"},{"name":"Lateral Raise","sets":"3 set","reps":"15 tekrar","rest":"60sn"},{"name":"Face Pull","sets":"3 set","reps":"15 tekrar","rest":"60sn"},{"name":"Plank","sets":"3 set","reps":"45-60 sn","rest":"45sn"}]},{"day":"Pazar","type":"Dinlenme","focus":"Tam Dinlenme","duration":0,"exercises":[]}]}`;
     try{
       const reply=await callAI([{role:'user',content:text}],planSys,2000);
       // JSON'u yanıttan çıkar — baştan { bul, sondan } bul
