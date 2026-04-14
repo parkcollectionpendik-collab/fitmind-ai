@@ -745,15 +745,15 @@ async function loadQuickWorkoutPreview(){
     const days=plan.days;
     const done=JSON.parse(localStorage.getItem('fp_done')||'{}');
 
-    // Hangi günün seçili olduğunu tut
-    let selectedDay=TODAY_NAME;
+    // selectedDay global değişkenden al, ilk açılışta bugüne set et
+    if(!window._workoutSelectedDay) window._workoutSelectedDay=TODAY_NAME;
 
     // Haftalık takvim şeridi
     function renderStrip(){
       strip.innerHTML='';
       days.forEach(dp=>{
         const isToday=dp.day===TODAY_NAME;
-        const isSel=dp.day===selectedDay;
+        const isSel=dp.day===window._workoutSelectedDay;
         const isDone=!!done[dp.day];
         const isRest=dp.type==='Dinlenme'||dp.type==='Rest';
         const dayIdx=DAYS.indexOf(dp.day);
@@ -773,7 +773,7 @@ async function loadQuickWorkoutPreview(){
           <div style="font-size:1.3rem;margin-bottom:0.25rem">${icon}</div>
           <div style="font-size:0.55rem;color:${isDone?'#4ade80':isRest?'var(--muted)':'var(--white)'};font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 0.2rem">${isDone?'Tamam':isRest?'Dinlenme':(dp.focus||'Antrenman').slice(0,10)}</div>
           ${isSel?'<div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--lime);border-radius:0 0 12px 12px"></div>':''}`;
-        el.onclick=()=>{selectedDay=dp.day;renderStrip();renderDayDetail(dp,plan);};
+        el.onclick=()=>{window._workoutSelectedDay=dp.day;renderStrip();renderDayDetail(dp,plan);};
         strip.appendChild(el);
       });
     }
@@ -854,10 +854,10 @@ async function loadQuickWorkoutPreview(){
       detail.innerHTML=html;
     }
 
-    // İlk render
+    // İlk render — seçili günü koru, yoksa bugünü göster
     renderStrip();
-    const todayPlan=days.find(d=>d.day===TODAY_NAME)||days[0];
-    if(todayPlan) renderDayDetail(todayPlan, plan);
+    const selPlan=days.find(d=>d.day===window._workoutSelectedDay)||days.find(d=>d.day===TODAY_NAME)||days[0];
+    if(selPlan) renderDayDetail(selPlan, plan);
 
   }catch(e){
     if(detail) detail.innerHTML=`<div style="color:var(--muted);text-align:center;padding:2rem">Plan yüklenemedi. Lütfen sayfayı yenileyin.</div>`;
