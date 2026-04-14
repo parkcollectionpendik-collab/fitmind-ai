@@ -394,16 +394,30 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 
   <!-- ANTRENMANLAR TAB -->
   <div class="tab-section" id="tab-workouts">
-    <div class="panel" style="text-align:center;padding:2.5rem;margin-bottom:1.5rem">
-      <div style="font-size:3rem;margin-bottom:1rem">📋</div>
-      <div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;margin-bottom:0.5rem">Haftalık Antrenman Planınız</div>
-      <p style="color:var(--muted);font-size:0.88rem;margin-bottom:1.5rem;line-height:1.6">Antrenman planınız <strong>Benim Planım</strong> sayfasında takip edilir.</p>
-      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
-        <a href="myplan.html" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.75rem 1.8rem;font-family:var(--font-head);font-weight:700;font-size:0.9rem;text-decoration:none">📋 Benim Planım'a Git</a>
-        <button onclick="switchTab('aicoach',document.querySelectorAll('.nav-item')[1])" style="background:#ffffff10;color:var(--white);border:1px solid #ffffff20;border-radius:100px;padding:0.75rem 1.8rem;font-family:var(--font-head);font-weight:700;font-size:0.9rem;cursor:pointer">🤖 AI Koç ile Plan Yap</button>
+
+    <!-- BAŞLIK -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem">
+      <div>
+        <div style="font-family:var(--font-head);font-size:1.4rem;font-weight:800">🏋️ Antrenman Planı</div>
+        <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem" id="workoutTabSub">Haftalık programınız</div>
       </div>
-      <div id="quickWorkoutPreview" style="margin-top:2rem;text-align:left"></div>
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+        <a href="myplan.html" style="background:#ffffff10;color:var(--white);border:1px solid #ffffff15;border-radius:100px;padding:0.55rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;text-decoration:none">📋 Benim Planım</a>
+        <button onclick="switchTab('aicoach',document.querySelectorAll('.nav-item')[1])" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.55rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer">🤖 Planı Güncelle</button>
+      </div>
     </div>
+
+    <!-- HAFTALIK TAKVİM ÖZET -->
+    <div id="weeklyCalendarStrip" style="display:grid;grid-template-columns:repeat(7,1fr);gap:0.5rem;margin-bottom:1.5rem"></div>
+
+    <!-- BUGÜNÜN ANTRENMANINI DETAYLI -->
+    <div id="workoutDayDetail" style="margin-bottom:1.5rem">
+      <div style="text-align:center;padding:2rem;color:var(--muted)">
+        <div class="spin" style="margin:0 auto 0.75rem;display:block;width:24px;height:24px"></div>
+        <div>Antrenman planı yükleniyor...</div>
+      </div>
+    </div>
+
   </div>
 
 </div>
@@ -705,62 +719,174 @@ function loadDailyTip(profile){
 }
 
 async function loadQuickWorkoutPreview(){
-  const {data:{session}}=await sb.auth.getSession();
-  if(!session)return;
-  const {data}=await sb.from('user_plans').select('*').eq('user_id',session.user.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
-  if(!data)return;
-  const plan=data.plan_data;
-  const todayPlan=plan.days?.find(d=>d.day===TODAY_NAME);
-  const preview=document.getElementById('quickWorkoutPreview');
-  if(!todayPlan||!preview)return;
-  const isRest=todayPlan.type==='Dinlenme'||todayPlan.type==='Rest';
-  const exs=todayPlan.exercises||[];
-  if(isRest){
-    preview.innerHTML=`<div style="background:#ffffff06;border-radius:16px;padding:2rem;text-align:center;border:1px solid #ffffff08"><div style="font-size:2.5rem;margin-bottom:0.75rem">🧘</div><div style="font-family:var(--font-head);font-weight:700;margin-bottom:0.3rem">Dinlenme Günü</div><div style="color:var(--muted);font-size:0.85rem">Vücudunun iyileşmesine izin ver.</div></div>`;
-    return;
-  }
-  preview.innerHTML=`<div style="font-family:var(--font-head);font-size:0.8rem;color:var(--lime);font-weight:700;margin-bottom:1rem;letter-spacing:0.05em">📅 BUGÜN · ${TODAY_NAME.toUpperCase()}${todayPlan.focus?' · '+todayPlan.focus.toUpperCase():''}</div><div id="exCards" style="display:flex;flex-direction:column;gap:0.75rem"></div>`;
-  const cards=document.getElementById('exCards');
-  for(let i=0;i<exs.length;i++){
-    const ex=exs[i];
-    const card=document.createElement('div');
-    card.style.cssText='background:#ffffff06;border-radius:16px;padding:1rem;border:1px solid #ffffff0a;display:flex;align-items:center;gap:1rem;transition:all 0.2s;cursor:pointer';
-    card.onmouseenter=()=>card.style.borderColor='#c8f54230';
-    card.onmouseleave=()=>card.style.borderColor='#ffffff0a';
-    card.onclick=()=>window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(ex.name+' nasıl yapılır'),'_blank');
-    card.innerHTML=`
-      <div style="width:70px;height:70px;border-radius:12px;background:#ffffff08;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden" id="gif_${i}">
-        <div class="spin" style="width:20px;height:20px"></div>
-      </div>
-      <div style="flex:1">
-        <div style="font-size:0.95rem;font-weight:600;margin-bottom:0.5rem">${ex.name}</div>
-        <div style="display:flex;gap:0.4rem;flex-wrap:wrap">
-          <span style="background:#c8f54218;border:1px solid #c8f54225;border-radius:8px;padding:0.2rem 0.6rem;font-family:var(--font-head);font-weight:700;font-size:0.72rem;color:var(--lime)">${ex.sets} SET</span>
-          <span style="background:#ffffff08;border-radius:8px;padding:0.2rem 0.6rem;font-family:var(--font-head);font-weight:700;font-size:0.72rem;color:var(--white)">${ex.reps} TEKRAR</span>
-          ${ex.rest?`<span style="background:#4af10;border-radius:8px;padding:0.2rem 0.6rem;font-family:var(--font-head);font-weight:700;font-size:0.72rem;color:#4af">⏱ ${ex.rest}</span>`:''}
-        </div>
-      </div>
-      <div style="color:var(--muted);font-size:0.8rem;flex-shrink:0">▶ Video</div>`;
-    cards.appendChild(card);
-    // wger.de'den görsel yükle
-    try{
-      const sn=ex.name.toLowerCase().replace(/[şçğüöı]/g,c=>({ş:'s',ç:'c',ğ:'g',ü:'u',ö:'o',ı:'i'}[c]||c));
-      const r=await fetch(`https://wger.de/api/v2/exercise/search/?term=${encodeURIComponent(sn)}&language=english&format=json`);
-      const wd=await r.json();
-      const gifEl=document.getElementById('gif_'+i);
-      if(wd?.suggestions?.[0]?.data?.id&&gifEl){
-        const eId=wd.suggestions[0].data.id;
-        const ir=await fetch(`https://wger.de/api/v2/exerciseimage/?exercise=${eId}&format=json`);
-        const id=await ir.json();
-        if(id?.results?.[0]?.image&&gifEl){
-          gifEl.innerHTML=`<img src="${id.results[0].image}" style="width:70px;height:70px;object-fit:cover;border-radius:12px" alt="${ex.name}" onerror="this.parentElement.innerHTML='<span style=font-size:1.8rem>💪</span>'">`;
-        }else if(gifEl){gifEl.innerHTML=`<span style="font-size:1.8rem">💪</span>`;}
-      }else if(document.getElementById('gif_'+i)){document.getElementById('gif_'+i).innerHTML=`<span style="font-size:1.8rem">💪</span>`;}
-    }catch(e){
-      const g=document.getElementById('gif_'+i);
-      if(g)g.innerHTML=`<span style="font-size:1.8rem">💪</span>`;
+  const strip=document.getElementById('weeklyCalendarStrip');
+  const detail=document.getElementById('workoutDayDetail');
+  const sub=document.getElementById('workoutTabSub');
+  if(!strip||!detail)return;
+
+  try{
+    const {data:{session}}=await sb.auth.getSession();
+    if(!session)return;
+    const {data}=await sb.from('user_plans').select('*').eq('user_id',session.user.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+
+    if(!data?.plan_data?.days){
+      strip.innerHTML='';
+      detail.innerHTML=`
+        <div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:3rem;text-align:center">
+          <div style="font-size:3rem;margin-bottom:1rem">📋</div>
+          <div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;margin-bottom:0.5rem">Henüz antrenman planınız yok</div>
+          <p style="color:var(--muted);font-size:0.88rem;margin-bottom:1.5rem;line-height:1.6">AI Koç ile konuşarak kişisel 7 günlük planınızı oluşturun.</p>
+          <button onclick="switchTab('aicoach',document.querySelectorAll('.nav-item')[1])" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.75rem 1.8rem;font-family:var(--font-head);font-weight:700;font-size:0.9rem;cursor:pointer">🤖 AI Koç ile Plan Yap</button>
+        </div>`;
+      return;
     }
+
+    const plan=data.plan_data;
+    const days=plan.days;
+    const done=JSON.parse(localStorage.getItem('fp_done')||'{}');
+
+    // Hangi günün seçili olduğunu tut
+    let selectedDay=TODAY_NAME;
+
+    // Haftalık takvim şeridi
+    function renderStrip(){
+      strip.innerHTML='';
+      days.forEach(dp=>{
+        const isToday=dp.day===TODAY_NAME;
+        const isSel=dp.day===selectedDay;
+        const isDone=!!done[dp.day];
+        const isRest=dp.type==='Dinlenme'||dp.type==='Rest';
+        const dayIdx=DAYS.indexOf(dp.day);
+        const shortName=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'][dayIdx]||dp.day.slice(0,3);
+
+        let bg='#0d0d0d', border='#ffffff0a', nameCol='var(--muted)';
+        if(isSel){bg='#1a1a1a';border='#ffffff40';}
+        else if(isDone){bg='#051205';border='#4ade8040';}
+        else if(isToday){bg='#0f1a06';border='var(--lime)';}
+
+        const icon=isDone?'✅':isRest?'🧘':['💪','🏃','🧘','⚡','🔥','🌟','😴'][dayIdx]||'💪';
+
+        const el=document.createElement('div');
+        el.style.cssText=`background:${bg};border:2px solid ${border};border-radius:14px;padding:0.75rem 0.3rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative`;
+        el.innerHTML=`
+          <div style="font-family:var(--font-head);font-size:0.6rem;font-weight:700;color:${isToday?'var(--lime)':'var(--muted)'};margin-bottom:0.3rem;letter-spacing:0.05em">${shortName}</div>
+          <div style="font-size:1.3rem;margin-bottom:0.25rem">${icon}</div>
+          <div style="font-size:0.55rem;color:${isDone?'#4ade80':isRest?'var(--muted)':'var(--white)'};font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 0.2rem">${isDone?'Tamam':isRest?'Dinlenme':(dp.focus||'Antrenman').slice(0,10)}</div>
+          ${isSel?'<div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--lime);border-radius:0 0 12px 12px"></div>':''}`;
+        el.onclick=()=>{selectedDay=dp.day;renderStrip();renderDayDetail(dp,plan);};
+        strip.appendChild(el);
+      });
+    }
+
+    // Seçili günün detaylı antrenmanı
+    function renderDayDetail(dp, plan){
+      const isToday=dp.day===TODAY_NAME;
+      const isRest=dp.type==='Dinlenme'||dp.type==='Rest';
+      const isDone=!!done[dp.day];
+      const exs=dp.exercises||[];
+      const doneExes=JSON.parse(localStorage.getItem('fp_ex')||'{}')[dp.day+'_ex']||[];
+
+      if(sub) sub.textContent=dp.day+(isToday?' · Bugün':'')+(dp.duration?' · '+dp.duration+' dk':'');
+
+      if(isRest){
+        detail.innerHTML=`
+          <div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:3rem;text-align:center">
+            <div style="font-size:3.5rem;margin-bottom:1rem">🧘</div>
+            <div style="font-family:var(--font-head);font-size:1.2rem;font-weight:700;margin-bottom:0.5rem">${dp.day} — Dinlenme Günü</div>
+            <p style="color:var(--muted);font-size:0.88rem;line-height:1.7">Vücudunun iyileşmesine izin ver.<br>Hafif yürüyüş veya esneme hareketleri yapabilirsin.</p>
+          </div>`;
+        return;
+      }
+
+      if(exs.length===0){
+        detail.innerHTML=`<div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:2rem;text-align:center;color:var(--muted)">Bu gün için egzersiz bulunamadı.</div>`;
+        return;
+      }
+
+      const pct=Math.round(doneExes.length/exs.length*100);
+      let html=`
+        <div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:0.75rem">
+            <div>
+              <div style="font-family:var(--font-head);font-size:1rem;font-weight:700">${dp.day}${isToday?' <span style="background:#c8f54220;color:var(--lime);font-size:0.7rem;padding:0.2rem 0.6rem;border-radius:100px;border:1px solid #c8f54230">Bugün</span>':''}</div>
+              ${dp.focus?`<div style="display:inline-flex;align-items:center;background:#c8f54215;border:1px solid #c8f54225;border-radius:100px;padding:0.25rem 0.75rem;font-size:0.72rem;font-family:var(--font-head);font-weight:700;color:var(--lime);letter-spacing:0.05em;margin-top:0.4rem">${dp.focus.toUpperCase()}</div>`:''}
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.3rem">${doneExes.length}/${exs.length} tamamlandı</div>
+              <div style="width:120px;height:5px;background:#ffffff10;border-radius:100px;overflow:hidden">
+                <div style="height:100%;width:${pct}%;background:var(--lime);border-radius:100px;transition:width 0.5s"></div>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0.6rem">`;
+
+      exs.forEach((ex,i)=>{
+        const isDoneEx=doneExes.includes(i);
+        html+=`
+          <div style="display:flex;align-items:center;gap:1rem;padding:1rem 1.1rem;background:${isDoneEx?'#4ade8008':'#ffffff05'};border-radius:14px;border:1.5px solid ${isDoneEx?'#4ade8025':'#ffffff08'};cursor:pointer;transition:all 0.2s"
+            onclick="toggleWorkoutTabEx(this,${i},'${dp.day}',${exs.length})"
+            onmouseenter="this.style.borderColor='${isDoneEx?'#4ade8040':'#ffffff18'}'"
+            onmouseleave="this.style.borderColor='${isDoneEx?'#4ade8025':'#ffffff08'}'">
+            <div style="width:32px;height:32px;border-radius:10px;background:${isDoneEx?'var(--lime)':'#ffffff10'};display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.8rem;color:${isDoneEx?'#000':'var(--muted)'};flex-shrink:0;transition:all 0.2s">
+              ${isDoneEx?'✓':(i+1)}
+            </div>
+            <div style="flex:1">
+              <div style="font-size:0.92rem;font-weight:600;margin-bottom:0.35rem;${isDoneEx?'text-decoration:line-through;opacity:0.5':''}">${ex.name}</div>
+              <div style="display:flex;gap:0.4rem;flex-wrap:wrap">
+                <span style="background:#c8f54218;border:1px solid #c8f54225;border-radius:8px;padding:0.18rem 0.55rem;font-family:var(--font-head);font-weight:700;font-size:0.7rem;color:var(--lime)">🔄 ${ex.sets}</span>
+                <span style="background:#ffffff08;border-radius:8px;padding:0.18rem 0.55rem;font-family:var(--font-head);font-weight:700;font-size:0.7rem;color:var(--white)">💪 ${ex.reps}</span>
+                ${ex.rest?`<span style="background:#4af10;border-radius:8px;padding:0.18rem 0.55rem;font-family:var(--font-head);font-weight:700;font-size:0.7rem;color:#4af">⏱ ${ex.rest}</span>`:''}
+              </div>
+            </div>
+            <div onclick="event.stopPropagation();window.open('https://www.youtube.com/results?search_query='+encodeURIComponent('${ex.name.replace(/'/g,'')} nasıl yapılır'),'_blank')"
+              style="background:#ffffff08;border:1px solid #ffffff10;border-radius:10px;padding:0.4rem 0.7rem;font-size:0.72rem;color:var(--muted);cursor:pointer;flex-shrink:0;font-family:var(--font-head);font-weight:700;white-space:nowrap">
+              ▶ Video
+            </div>
+          </div>`;
+      });
+
+      html+=`</div>
+          <button onclick="toggleWorkoutTabDone('${dp.day}')" style="width:100%;margin-top:1rem;padding:0.85rem;border:none;border-radius:14px;font-family:var(--font-head);font-weight:700;font-size:0.92rem;cursor:pointer;transition:all 0.2s;${isDone?'background:#4ade8015;color:#4ade80;border:1.5px solid #4ade8030':'background:linear-gradient(135deg,var(--lime),var(--lime2));color:#000'}">
+            ${isDone?'✅ Tamamlandı — Geri Al':'🏁 Antrenmanı Tamamla'}
+          </button>
+        </div>`;
+
+      detail.innerHTML=html;
+    }
+
+    // İlk render
+    renderStrip();
+    const todayPlan=days.find(d=>d.day===TODAY_NAME)||days[0];
+    if(todayPlan) renderDayDetail(todayPlan, plan);
+
+  }catch(e){
+    if(detail) detail.innerHTML=`<div style="color:var(--muted);text-align:center;padding:2rem">Plan yüklenemedi. Lütfen sayfayı yenileyin.</div>`;
   }
+}
+
+function toggleWorkoutTabEx(el, idx, day, total){
+  const stored=JSON.parse(localStorage.getItem('fp_ex')||'{}');
+  const key=day+'_ex';
+  if(!stored[key]) stored[key]=[];
+  const arr=stored[key];
+  const pos=arr.indexOf(idx);
+  if(pos>-1) arr.splice(pos,1); else arr.push(idx);
+  localStorage.setItem('fp_ex',JSON.stringify(stored));
+  // Otomatik gün tamamlama
+  if(arr.length>=total){
+    const done=JSON.parse(localStorage.getItem('fp_done')||'{}');
+    done[day]=true;
+    localStorage.setItem('fp_done',JSON.stringify(done));
+  }
+  loadQuickWorkoutPreview(); // Yeniden render
+}
+
+function toggleWorkoutTabDone(day){
+  const done=JSON.parse(localStorage.getItem('fp_done')||'{}');
+  if(done[day]) delete done[day]; else done[day]=true;
+  localStorage.setItem('fp_done',JSON.stringify(done));
+  loadQuickWorkoutPreview();
+  loadWeekProgress();
 }
 
 function fmt(text){
