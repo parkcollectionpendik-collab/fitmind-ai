@@ -162,11 +162,40 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
   .topbar{margin-top:3.5rem}
   .page-title{font-size:1.4rem}
   .ai-coach-full{height:calc(100vh - 160px)}
-}
+/* TOUR */
+.tour-overlay{position:fixed;inset:0;background:#00000085;z-index:500;backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center}
+.tour-card{background:#161616;border:1px solid #ffffff18;border-radius:24px;padding:2rem;max-width:420px;width:90%;position:relative;animation:fadeUp 0.4s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.tour-step-badge{display:inline-flex;align-items:center;gap:0.4rem;background:#c8f54215;border:1px solid #c8f54225;color:var(--lime);font-family:var(--font-head);font-weight:700;font-size:0.7rem;padding:0.25rem 0.75rem;border-radius:100px;margin-bottom:0.75rem;letter-spacing:0.06em}
+.tour-icon{font-size:2.5rem;margin-bottom:0.75rem}
+.tour-title{font-family:var(--font-head);font-size:1.2rem;font-weight:800;margin-bottom:0.5rem}
+.tour-desc{font-size:0.88rem;color:#ffffffcc;line-height:1.7;margin-bottom:1.5rem}
+.tour-dots{display:flex;gap:0.4rem;justify-content:center;margin-bottom:1.2rem}
+.tour-dot{width:8px;height:8px;border-radius:50%;background:#ffffff15;transition:all 0.3s}
+.tour-dot.active{background:var(--lime);width:20px;border-radius:100px}
+.tour-btns{display:flex;gap:0.6rem}
+.tour-btn-skip{background:transparent;color:var(--muted);border:1px solid #ffffff15;border-radius:100px;padding:0.6rem 1.1rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer;transition:all 0.2s}
+.tour-btn-skip:hover{color:var(--white);border-color:#ffffff30}
+.tour-btn-next{flex:1;background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.6rem 1.1rem;font-family:var(--font-head);font-weight:700;font-size:0.88rem;cursor:pointer;transition:all 0.2s}
+.tour-btn-next:hover{background:var(--lime2)}
 </style>
 </head>
 <body>
-<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- TOUR OVERLAY -->
+<div class="tour-overlay" id="tourOverlay" style="display:none">
+  <div class="tour-card" id="tourCard">
+    <div class="tour-step-badge" id="tourBadge">1 / 5</div>
+    <div class="tour-icon" id="tourIcon">👋</div>
+    <div class="tour-title" id="tourTitle">Hoş geldin!</div>
+    <div class="tour-desc" id="tourDesc">Açıklama</div>
+    <div class="tour-dots" id="tourDots"></div>
+    <div class="tour-btns">
+      <button class="tour-btn-skip" onclick="closeTour()">Geç</button>
+      <button class="tour-btn-next" id="tourNextBtn" onclick="nextTourStep()">Devam →</button>
+    </div>
+  </div>
+</div>
 <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
 
 <div class="sidebar">
@@ -579,6 +608,11 @@ async function init(){
   loadWeekProgress();
   // Chat geçmişini yükle
   renderChatMessages();
+  // Yeni kullanıcı turu
+  if(localStorage.getItem('fm_newUser')==='1'&&!localStorage.getItem('fm_tourDone')){
+    localStorage.removeItem('fm_newUser');
+    setTimeout(startTour, 800);
+  }
   // Paralel yükle
   loadTodayWorkout(profile,name);
   loadAISummary(profile,name);
@@ -1139,6 +1173,58 @@ SADECE güncellenmiş JSON döndür — aynı format, başka hiçbir şey yazma.
 }
 
 async function signOut(){await sb.auth.signOut();window.location.replace('auth.html');}
+
+// ---- TOUR ----
+const TOUR_STEPS=[
+  {icon:'👋',title:'FitMind AI\'ya Hoş Geldin!',desc:'Sana özel yapay zeka destekli fitness koçun burada. Planını oluştur, antrenmanlarını takip et, beslenmeni düzenle — hepsi tek yerden.'},
+  {icon:'🤖',title:'AI Koçun Her Zaman Hazır',desc:'Sol menüden <strong>AI Koç</strong> sekmesine gir. Dilediğin her şeyi yaz — antrenman soruları, beslenme önerileri veya "plan yap" yazarak 7 günlük kişisel planını oluştur.'},
+  {icon:'📋',title:'Planını Takip Et',desc:'AI ile plan oluşturduktan sonra <strong>Benim Planım</strong> sayfasında haftalık takvimini gör, egzersizleri işaretle ve beslenme planını düzenle.'},
+  {icon:'🏋️',title:'Antrenmanlarını Yönet',desc:'<strong>Antrenmanlar</strong> sekmesinde haftanın her günü için planını gör, egzersizleri tamamla ve YouTube video linklerine eriş.'},
+  {icon:'🚀',title:'Başlamaya Hazır mısın?',desc:'İlk adım olarak <strong>AI Koç</strong> sekmesine git ve "plan yap" yaz. 10 saniyede sana özel 7 günlük plan hazır olacak!'},
+];
+
+let tourStep=0;
+
+function startTour(){
+  tourStep=0;
+  renderTourStep();
+  document.getElementById('tourOverlay').style.display='flex';
+}
+
+function renderTourStep(){
+  const s=TOUR_STEPS[tourStep];
+  document.getElementById('tourBadge').textContent=(tourStep+1)+' / '+TOUR_STEPS.length;
+  document.getElementById('tourIcon').textContent=s.icon;
+  document.getElementById('tourTitle').textContent=s.title;
+  document.getElementById('tourDesc').innerHTML=s.desc;
+  // Dots
+  const dots=document.getElementById('tourDots');
+  dots.innerHTML='';
+  TOUR_STEPS.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='tour-dot'+(i===tourStep?' active':'');
+    dots.appendChild(d);
+  });
+  // Son adımda buton değişir
+  const btn=document.getElementById('tourNextBtn');
+  btn.textContent=tourStep===TOUR_STEPS.length-1?"Hadi Başlayalım! 🚀":"Devam →";
+}
+
+function nextTourStep(){
+  if(tourStep<TOUR_STEPS.length-1){
+    tourStep++;
+    renderTourStep();
+  } else {
+    closeTour();
+    // Son adımda AI Koç'a yönlendir
+    switchTab('aicoach',document.querySelectorAll('.nav-item')[1]);
+  }
+}
+
+function closeTour(){
+  document.getElementById('tourOverlay').style.display='none';
+  localStorage.setItem('fm_tourDone','1');
+}
 
 init();
 </script>
