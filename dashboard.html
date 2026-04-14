@@ -483,6 +483,14 @@ function renderChatMessages(){
         card.style.cssText='max-width:100%;padding:0;background:transparent;border:none;';
         let sectionsHtml='';
         if(m.plan.workout) sectionsHtml+=`<div class="plan-section" style="border-color:var(--lime)"><div style="font-size:0.7rem;color:var(--lime);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">💪 Antrenman Planı</div><div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">${fmt(m.plan.workout)}</div></div>`;
+        if(m.plan.nutrition){
+          let nutHtml='';
+          if(typeof m.plan.nutrition==='object'){
+            const meals=[{key:'breakfast',icon:'🌅',label:'Kahvaltı',color:'#f5a623'},{key:'lunch',icon:'☀️',label:'Öğle',color:'#44aaff'},{key:'dinner',icon:'🌙',label:'Akşam',color:'#c8f542'},{key:'snack',icon:'🍎',label:'Ara Öğün',color:'#a78bfa'}];
+            meals.forEach(meal=>{const md=m.plan.nutrition[meal.key];if(!md)return;const foods=Array.isArray(md.foods)?md.foods.join(', '):(md.foods||'');nutHtml+=`<div style="margin-bottom:0.5rem"><span style="color:${meal.color};font-weight:700">${meal.icon} ${md.title||meal.label}:</span> <span style="color:#ffffffcc">${foods}</span> <span style="color:var(--muted);font-size:0.8rem">(${md.calories||0} kcal)</span></div>`;});
+          } else { nutHtml=`<div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">${fmt(String(m.plan.nutrition))}</div>`; }
+          sectionsHtml+=`<div class="plan-section" style="border-color:#44aaff"><div style="font-size:0.7rem;color:#44aaff;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">🥗 Beslenme Planı</div>${nutHtml}</div>`;
+        }
         if(m.plan.tips) sectionsHtml+=`<div class="plan-section" style="border-color:#f5a623"><div style="font-size:0.7rem;color:#f5a623;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">⚡ İpuçları</div><div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">${fmt(m.plan.tips)}</div></div>`;
         card.innerHTML=`<div class="plan-card">
           <div style="font-family:var(--font-head);font-size:1rem;font-weight:800;color:var(--lime);margin-bottom:1rem">🎯 7 Günlük Kişisel Planınız</div>
@@ -932,6 +940,29 @@ function showPlanCard(plan){
   card.style.cssText='max-width:100%;padding:0;background:transparent;border:none;';
   let sectionsHtml='';
   if(plan.workout) sectionsHtml+=`<div class="plan-section" style="border-color:var(--lime)"><div style="font-size:0.7rem;color:var(--lime);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">💪 Antrenman Planı</div><div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">${fmt(plan.workout)}</div></div>`;
+
+  // Beslenme planı — object veya string olabilir
+  if(plan.nutrition){
+    let nutHtml='';
+    if(typeof plan.nutrition==='object'){
+      const meals=[
+        {key:'breakfast',icon:'🌅',label:'Kahvaltı',color:'#f5a623'},
+        {key:'lunch',icon:'☀️',label:'Öğle',color:'#44aaff'},
+        {key:'dinner',icon:'🌙',label:'Akşam',color:'#c8f542'},
+        {key:'snack',icon:'🍎',label:'Ara Öğün',color:'#a78bfa'}
+      ];
+      meals.forEach(m=>{
+        const meal=plan.nutrition[m.key];
+        if(!meal)return;
+        const foods=Array.isArray(meal.foods)?meal.foods.join(', '):(meal.foods||'');
+        nutHtml+=`<div style="margin-bottom:0.5rem"><span style="color:${m.color};font-weight:700">${m.icon} ${meal.title||m.label}:</span> <span style="color:#ffffffcc">${foods}</span> <span style="color:var(--muted);font-size:0.8rem">(${meal.calories||0} kcal)</span></div>`;
+      });
+    } else {
+      nutHtml=`<div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">${fmt(String(plan.nutrition))}</div>`;
+    }
+    sectionsHtml+=`<div class="plan-section" style="border-color:#44aaff"><div style="font-size:0.7rem;color:#44aaff;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">🥗 Beslenme Planı</div>${nutHtml}</div>`;
+  }
+
   if(plan.tips) sectionsHtml+=`<div class="plan-section" style="border-color:#f5a623"><div style="font-size:0.7rem;color:#f5a623;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">⚡ İpuçları</div><div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">${fmt(plan.tips)}</div></div>`;
   card.innerHTML=`<div class="plan-card">
     <div style="font-family:var(--font-head);font-size:1rem;font-weight:800;color:var(--lime);margin-bottom:1rem">🎯 7 Günlük Kişisel Planınız</div>
