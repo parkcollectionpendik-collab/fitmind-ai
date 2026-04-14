@@ -757,11 +757,60 @@ function renderNutrition(){
   document.getElementById('nutritionBody').innerHTML=html;
 }
 
+// Yiyecek adından tahmini kalori hesapla
+function estimateCalories(foodName){
+  const f=foodName.toLowerCase();
+  // Gram/miktar bilgisi varsa çıkar
+  const grMatch=f.match(/(\d+)\s*g/);
+  const gr=grMatch?parseInt(grMatch[1]):100;
+  // Kalori yoğunlukları (100g başına kcal)
+  const table=[
+    {keys:['yumurta','egg'],kcal:155,unit:70},
+    {keys:['tavuk','chicken','hindi'],kcal:165,gr:true},
+    {keys:['balık','salmon','somon','tuna','ton'],kcal:150,gr:true},
+    {keys:['et','beef','kıyma'],kcal:250,gr:true},
+    {keys:['pirinç','rice','makarna','pasta','ekmek','bread','tahıl'],kcal:130,gr:true},
+    {keys:['patates','potato'],kcal:80,gr:true},
+    {keys:['sebze','salata','brokoli','havuç','ıspanak','domates','salatalık','marul'],kcal:30,gr:true},
+    {keys:['meyve','elma','muz','portakal','çilek','kivi'],kcal:60,unit:80},
+    {keys:['yoğurt','yogurt'],kcal:100,gr:true},
+    {keys:['süt','milk'],kcal:60,gr:true},
+    {keys:['peynir','cheese'],kcal:300,gr:true},
+    {keys:['badem','ceviz','fındık','fıstık','nuts'],kcal:580,gr:true},
+    {keys:['zeytinyağı','yağ','oil'],kcal:884,gr:true},
+    {keys:['avokado','avocado'],kcal:160,unit:150},
+    {keys:['protein tozu','whey'],kcal:120,unit:30},
+    {keys:['kahve','coffee','çay','tea'],kcal:5,unit:240},
+    {keys:['bal','honey'],kcal:300,gr:true},
+    {keys:['yulaf','oat'],kcal:380,gr:true},
+  ];
+  for(const item of table){
+    if(item.keys.some(k=>f.includes(k))){
+      if(grMatch&&item.gr) return Math.round(gr*(item.kcal/100));
+      return item.unit||Math.round(100*(item.kcal/100));
+    }
+  }
+  // Bilinmeyen → ortalama 80 kcal
+  return 80;
+}
+
+function recalcMealCalories(meal){
+  if(!meal||!Array.isArray(meal.foods))return;
+  meal.calories=meal.foods.reduce((sum,f)=>sum+estimateCalories(f),0);
+  // Makrolar da güncelle (basit oran)
+  meal.protein=Math.round(meal.calories*0.25/4);
+  meal.carbs=Math.round(meal.calories*0.45/4);
+  meal.fat=Math.round(meal.calories*0.3/9);
+}
+
 function removeFoodItem(mealKey, foodIdx){
   if(!planData.nutrition||typeof planData.nutrition!=='object')return;
   const meal=planData.nutrition[mealKey];
   if(!meal||!Array.isArray(meal.foods))return;
   meal.foods.splice(foodIdx,1);
+  recalcMealCalories(meal);
+  // Toplam günlük kaloriyi güncelle
+  updateTotalCalories();
   savePlanToSupabase();
   renderNutrition();
 }
@@ -775,8 +824,20 @@ function addFoodItem(mealKey){
   if(!meal)return;
   if(!Array.isArray(meal.foods)) meal.foods=[];
   meal.foods.push(val);
+  recalcMealCalories(meal);
+  updateTotalCalories();
   savePlanToSupabase();
   renderNutrition();
+}
+
+function updateTotalCalories(){
+  if(!planData.nutrition||typeof planData.nutrition!=='object')return;
+  const meals=['breakfast','lunch','dinner','snack'];
+  const total=meals.reduce((sum,k)=>{
+    const m=planData.nutrition[k];
+    return sum+(m?.calories||0);
+  },0);
+  if(total>0) planData.calories=total;
 }
 
 function renderTrackers(){
