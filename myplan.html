@@ -452,7 +452,7 @@ function renderWeek(){
     else if(isDone) cls+=' done';
     else if(isToday) cls+=' today';
     el.className=cls;
-    el.onclick=()=>{selDay=day;renderWeek();renderWorkout(day)};
+    el.onclick=()=>{selDay=day;renderWeek();renderWorkout(day);renderNutrition()};
     const ico = isDone?'✅':(isRest?'🧘':DAY_EMOJI[i]);
     const typ = isRest?'Dinlenme':(dp?.focus||'Antrenman');
     const shortTyp = typ.length>12?typ.slice(0,12)+'...':typ;
@@ -602,24 +602,32 @@ function toggleDone(day){
 }
 
 function renderNutrition(){
+  // Seçili günün beslenme verisini al
+  // Yeni format: days[].nutrition, eski format: planData.nutrition
+  const dp=planData.days?.find(d=>d.day===selDay);
+  const nut=dp?.nutrition||planData.nutrition||null;
   const cal=planData.calories||2000;
+
   document.getElementById('calBadge').textContent=cal+' kcal/gün';
   document.getElementById('calTarget').textContent=cal;
   document.getElementById('waterTarget').textContent=Math.round((planData.water||3)*2.67);
 
-  const nut=planData.nutrition;
+  const mealDefs=[
+    {key:'breakfast',icon:'🌅',label:'Kahvaltı',color:'#f5a623',bg:'#f5a62312'},
+    {key:'lunch',icon:'☀️',label:'Öğle Yemeği',color:'#44aaff',bg:'#44aaff12'},
+    {key:'dinner',icon:'🌙',label:'Akşam Yemeği',color:'#c8f542',bg:'#c8f54212'},
+    {key:'snack',icon:'🍎',label:'Ara Öğün',color:'#a78bfa',bg:'#a78bfa12'}
+  ];
+
   let html='';
 
-  // YENİ FORMAT: nutrition bir object ise (breakfast/lunch/dinner/snack)
-  if(nut && typeof nut==='object' && (nut.breakfast||nut.lunch||nut.dinner||nut.snack)){
-    const mealDefs=[
-      {key:'breakfast', icon:'🌅', label:'Kahvaltı', color:'#f5a623', bg:'#f5a62312'},
-      {key:'lunch',     icon:'☀️', label:'Öğle Yemeği', color:'#44aaff', bg:'#44aaff12'},
-      {key:'dinner',    icon:'🌙', label:'Akşam Yemeği', color:'#c8f542', bg:'#c8f54212'},
-      {key:'snack',     icon:'🍎', label:'Ara Öğün', color:'#a78bfa', bg:'#a78bfa12'}
-    ];
+  // Gün başlığı
+  html+=`<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem">
+    <div style="font-size:0.72rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;font-family:var(--font-head)">${selDay} Beslenme Planı</div>
+    ${selDay===TODAY_NAME?'<span style="background:#c8f54215;color:var(--lime);font-size:0.65rem;font-family:var(--font-head);font-weight:700;padding:0.15rem 0.5rem;border-radius:100px;border:1px solid #c8f54225">Bugün</span>':''}
+  </div>`;
 
-    // Toplam makro hesapla
+  if(nut && typeof nut==='object' && (nut.breakfast||nut.lunch||nut.dinner||nut.snack)){
     let totalProt=0,totalCarb=0,totalFat=0,totalCal=0;
     mealDefs.forEach(m=>{
       const meal=nut[m.key];
@@ -630,12 +638,12 @@ function renderNutrition(){
       totalCal+=(meal.calories||0);
     });
 
-    // Öğün kartları
     html+=`<div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.25rem">`;
     mealDefs.forEach(m=>{
       const meal=nut[m.key];
       if(!meal)return;
       const foods=Array.isArray(meal.foods)?meal.foods:[];
+      // removeFoodItem ve addFoodItem için günü de geçir
       html+=`
         <div style="background:${m.bg};border:1px solid ${m.color}25;border-radius:16px;padding:1.1rem 1.3rem;border-left:3px solid ${m.color}">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
@@ -649,12 +657,12 @@ function renderNutrition(){
             ${foods.map((f,fi)=>`
               <span style="display:inline-flex;align-items:center;gap:0.3rem;background:#ffffff08;border:1px solid #ffffff10;border-radius:8px;padding:0.2rem 0.5rem 0.2rem 0.6rem;font-size:0.78rem;color:#ffffffcc">
                 ${f}
-                <button onclick="removeFoodItem('${m.key}',${fi})" style="background:none;border:none;color:#ff6b6b;cursor:pointer;font-size:0.7rem;padding:0;line-height:1;margin-left:0.1rem">✕</button>
+                <button onclick="removeFoodItem('${m.key}',${fi},'${selDay}')" style="background:none;border:none;color:#ff6b6b;cursor:pointer;font-size:0.7rem;padding:0;line-height:1;margin-left:0.1rem">✕</button>
               </span>`).join('')}
           </div>
           <div style="display:flex;gap:0.4rem;margin-bottom:0.5rem">
             <input id="newFood_${m.key}" placeholder="Yeni besin ekle..." style="flex:1;background:#ffffff08;border:1px solid #ffffff15;border-radius:8px;padding:0.35rem 0.6rem;color:var(--white);font-size:0.78rem;outline:none;font-family:var(--font-body)">
-            <button onclick="addFoodItem('${m.key}')" style="background:${m.color};color:#000;border:none;border-radius:8px;padding:0.35rem 0.7rem;font-family:var(--font-head);font-weight:700;font-size:0.75rem;cursor:pointer">+ Ekle</button>
+            <button onclick="addFoodItem('${m.key}','${selDay}')" style="background:${m.color};color:#000;border:none;border-radius:8px;padding:0.35rem 0.7rem;font-family:var(--font-head);font-weight:700;font-size:0.75rem;cursor:pointer">+ Ekle</button>
           </div>
           <div style="display:flex;gap:0.6rem">
             <div style="background:#44aaff15;border-radius:8px;padding:0.25rem 0.6rem;font-size:0.7rem;font-family:var(--font-head);font-weight:700;color:#44aaff">P: ${meal.protein||0}g</div>
@@ -665,92 +673,37 @@ function renderNutrition(){
     });
     html+=`</div>`;
 
-    // Günlük makro özet
-    html+=`
-      <div style="background:#ffffff06;border-radius:14px;padding:1rem;margin-bottom:0.5rem">
-        <div style="font-size:0.72rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem">📊 Günlük Makro Özet</div>
-        <div style="display:flex;gap:0.6rem;margin-bottom:0.75rem">
-          <div style="flex:1;background:#44aaff12;border:1px solid #44aaff25;border-radius:12px;padding:0.85rem;text-align:center">
-            <div style="font-size:0.6rem;color:#44aaff;text-transform:uppercase;font-weight:700;margin-bottom:0.3rem">Protein</div>
-            <div style="font-family:var(--font-head);font-weight:800;color:#44aaff;font-size:1.3rem">${totalProt}g</div>
-          </div>
-          <div style="flex:1;background:#f5a62312;border:1px solid #f5a62325;border-radius:12px;padding:0.85rem;text-align:center">
-            <div style="font-size:0.6rem;color:#f5a623;text-transform:uppercase;font-weight:700;margin-bottom:0.3rem">Karbonhidrat</div>
-            <div style="font-family:var(--font-head);font-weight:800;color:#f5a623;font-size:1.3rem">${totalCarb}g</div>
-          </div>
-          <div style="flex:1;background:#c8f54212;border:1px solid #c8f54225;border-radius:12px;padding:0.85rem;text-align:center">
-            <div style="font-size:0.6rem;color:var(--lime);text-transform:uppercase;font-weight:700;margin-bottom:0.3rem">Yağ</div>
-            <div style="font-family:var(--font-head);font-weight:800;color:var(--lime);font-size:1.3rem">${totalFat}g</div>
-          </div>
+    // Makro özet
+    html+=`<div style="background:#ffffff06;border-radius:14px;padding:1rem;margin-bottom:0.5rem">
+      <div style="font-size:0.72rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem;font-family:var(--font-head)">📊 Günlük Makro Özet</div>
+      <div style="display:flex;gap:0.6rem;margin-bottom:0.75rem">
+        <div style="flex:1;background:#44aaff12;border:1px solid #44aaff25;border-radius:12px;padding:0.85rem;text-align:center">
+          <div style="font-size:0.6rem;color:#44aaff;text-transform:uppercase;font-weight:700;margin-bottom:0.3rem">Protein</div>
+          <div style="font-family:var(--font-head);font-weight:800;color:#44aaff;font-size:1.3rem">${totalProt}g</div>
         </div>
-        <!-- Makro barlar -->
-        <div style="display:flex;flex-direction:column;gap:0.5rem">
-          ${totalCal>0?`
-          <div>
-            <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);margin-bottom:0.25rem"><span>Protein</span><span style="color:#44aaff">%${Math.round(totalProt*4/totalCal*100)}</span></div>
-            <div style="height:5px;background:#ffffff10;border-radius:100px;overflow:hidden"><div style="height:100%;width:${Math.round(totalProt*4/totalCal*100)}%;background:#44aaff;border-radius:100px"></div></div>
-          </div>
-          <div>
-            <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);margin-bottom:0.25rem"><span>Karbonhidrat</span><span style="color:#f5a623">%${Math.round(totalCarb*4/totalCal*100)}</span></div>
-            <div style="height:5px;background:#ffffff10;border-radius:100px;overflow:hidden"><div style="height:100%;width:${Math.round(totalCarb*4/totalCal*100)}%;background:#f5a623;border-radius:100px"></div></div>
-          </div>
-          <div>
-            <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);margin-bottom:0.25rem"><span>Yağ</span><span style="color:var(--lime)">%${Math.round(totalFat*9/totalCal*100)}</span></div>
-            <div style="height:5px;background:#ffffff10;border-radius:100px;overflow:hidden"><div style="height:100%;width:${Math.round(totalFat*9/totalCal*100)}%;background:var(--lime);border-radius:100px"></div></div>
-          </div>`:''}
+        <div style="flex:1;background:#f5a62312;border:1px solid #f5a62325;border-radius:12px;padding:0.85rem;text-align:center">
+          <div style="font-size:0.6rem;color:#f5a623;text-transform:uppercase;font-weight:700;margin-bottom:0.3rem">Karbonhidrat</div>
+          <div style="font-family:var(--font-head);font-weight:800;color:#f5a623;font-size:1.3rem">${totalCarb}g</div>
         </div>
-      </div>`;
+        <div style="flex:1;background:#c8f54212;border:1px solid #c8f54225;border-radius:12px;padding:0.85rem;text-align:center">
+          <div style="font-size:0.6rem;color:var(--lime);text-transform:uppercase;font-weight:700;margin-bottom:0.3rem">Yağ</div>
+          <div style="font-family:var(--font-head);font-weight:800;color:var(--lime);font-size:1.3rem">${totalFat}g</div>
+        </div>
+      </div>
+      ${totalCal>0?`<div style="display:flex;flex-direction:column;gap:0.5rem">
+        <div><div style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);margin-bottom:0.25rem"><span>Protein</span><span style="color:#44aaff">%${Math.round(totalProt*4/totalCal*100)}</span></div><div style="height:5px;background:#ffffff10;border-radius:100px;overflow:hidden"><div style="height:100%;width:${Math.round(totalProt*4/totalCal*100)}%;background:#44aaff;border-radius:100px"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);margin-bottom:0.25rem"><span>Karbonhidrat</span><span style="color:#f5a623">%${Math.round(totalCarb*4/totalCal*100)}</span></div><div style="height:5px;background:#ffffff10;border-radius:100px;overflow:hidden"><div style="height:100%;width:${Math.round(totalCarb*4/totalCal*100)}%;background:#f5a623;border-radius:100px"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);margin-bottom:0.25rem"><span>Yağ</span><span style="color:var(--lime)">%${Math.round(totalFat*9/totalCal*100)}</span></div><div style="height:5px;background:#ffffff10;border-radius:100px;overflow:hidden"><div style="height:100%;width:${Math.round(totalFat*9/totalCal*100)}%;background:var(--lime);border-radius:100px"></div></div></div>
+      </div>`:''}
+    </div>`;
 
   } else {
-    // ESKİ FORMAT: string ise basit göster ama yine güzel
-    const nutStr = typeof nut==='string'?nut:'';
-    const mealDefs=[
-      {icon:'🌅',label:'Kahvaltı',color:'#f5a623',kw:['sabah','kahvaltı','breakfast']},
-      {icon:'☀️',label:'Öğle',color:'#44aaff',kw:['öğle','lunch']},
-      {icon:'🌙',label:'Akşam',color:'#c8f542',kw:['akşam','dinner']},
-      {icon:'🍎',label:'Ara Öğün',color:'#a78bfa',kw:['ara öğün','snack']}
-    ];
-    const lines=nutStr.split(/[,\.\n]/).map(l=>l.trim()).filter(l=>l.length>3);
-    const used=new Set();
-    let hasAny=false;
-    mealDefs.forEach(m=>{
-      const matched=lines.filter((l,i)=>!used.has(i)&&m.kw.some(k=>l.toLowerCase().includes(k)));
-      if(matched.length){
-        hasAny=true;
-        matched.forEach(l=>used.add(lines.indexOf(l)));
-        const content=matched.map(l=>l.replace(/^[^:]+:\s*/,'')).join(', ');
-        html+=`<div style="background:#ffffff06;border:1px solid ${m.color}20;border-radius:14px;padding:1rem 1.2rem;border-left:3px solid ${m.color};margin-bottom:0.6rem">
-          <div style="font-size:0.68rem;color:${m.color};letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:0.4rem">${m.icon} ${m.label}</div>
-          <div style="font-size:0.88rem;line-height:1.6;color:#ffffffdd">${content}</div>
-        </div>`;
-      }
-    });
-    if(!hasAny){
-      html+=`<div style="background:#ffffff06;border-radius:14px;padding:1.2rem;border-left:3px solid #44aaff;margin-bottom:0.75rem">
-        <div style="font-size:0.68rem;color:#44aaff;text-transform:uppercase;font-weight:700;margin-bottom:0.4rem">🥗 Genel Beslenme Planı</div>
-        <div style="font-size:0.88rem;line-height:1.7;color:#ffffffdd">${nutStr||'Yeni plan oluşturduğunuzda detaylı beslenme planı burada görünecek.'}</div>
-      </div>`;
-    }
-    // Tahmini makrolar
-    html+=`<div style="display:flex;gap:0.6rem;margin-top:1rem">
-      <div style="flex:1;background:#44aaff12;border:1px solid #44aaff25;border-radius:12px;padding:0.85rem;text-align:center">
-        <div style="font-size:0.6rem;color:#44aaff;text-transform:uppercase;font-weight:700;margin-bottom:0.3rem">Protein</div>
-        <div style="font-family:var(--font-head);font-weight:800;color:#44aaff;font-size:1.3rem">${Math.round(cal*0.3/4)}g</div>
-        <div style="font-size:0.6rem;color:var(--muted);margin-top:0.2rem">tahmini</div>
+    html+=`<div style="background:#ffffff06;border-radius:14px;padding:1.5rem;text-align:center;color:var(--muted)">
+      <div style="font-size:2rem;margin-bottom:0.5rem">🥗</div>
+      <div style="font-size:0.88rem;margin-bottom:1rem">Bu günün beslenme planı bulunamadı.</div>
+      <div style="font-size:0.8rem;background:#c8f54208;border:1px solid #c8f54218;border-radius:10px;padding:0.75rem;color:var(--muted)">
+        💡 AI Koç'ta <strong style="color:var(--lime)">"plan yap"</strong> yazarak 7 günlük detaylı beslenme planı oluşturun
       </div>
-      <div style="flex:1;background:#f5a62312;border:1px solid #f5a62325;border-radius:12px;padding:0.85rem;text-align:center">
-        <div style="font-size:0.6rem;color:#f5a623;text-transform:uppercase;font-weight:700;margin-bottom:0.3rem">Karbonhidrat</div>
-        <div style="font-family:var(--font-head);font-weight:800;color:#f5a623;font-size:1.3rem">${Math.round(cal*0.4/4)}g</div>
-        <div style="font-size:0.6rem;color:var(--muted);margin-top:0.2rem">tahmini</div>
-      </div>
-      <div style="flex:1;background:#c8f54212;border:1px solid #c8f54225;border-radius:12px;padding:0.85rem;text-align:center">
-        <div style="font-size:0.6rem;color:var(--lime);text-transform:uppercase;font-weight:700;margin-bottom:0.3rem">Yağ</div>
-        <div style="font-family:var(--font-head);font-weight:800;color:var(--lime);font-size:1.3rem">${Math.round(cal*0.3/9)}g</div>
-        <div style="font-size:0.6rem;color:var(--muted);margin-top:0.2rem">tahmini</div>
-      </div>
-    </div>
-    <div style="margin-top:1rem;padding:0.85rem 1rem;background:#c8f54208;border:1px solid #c8f54218;border-radius:12px;font-size:0.8rem;color:var(--muted);text-align:center">
-      💡 Daha detaylı beslenme planı için AI Koç'ta <strong style="color:var(--lime)">"plan yap"</strong> yazın
     </div>`;
   }
 
@@ -803,24 +756,26 @@ function recalcMealCalories(meal){
   meal.fat=Math.round(meal.calories*0.3/9);
 }
 
-function removeFoodItem(mealKey, foodIdx){
-  if(!planData.nutrition||typeof planData.nutrition!=='object')return;
-  const meal=planData.nutrition[mealKey];
+function removeFoodItem(mealKey, foodIdx, dayName){
+  // Önce günün kendi nutrition'ına bak, yoksa genel nutrition'a bak
+  const dp=planData.days?.find(d=>d.day===(dayName||selDay));
+  const meal=(dp?.nutrition||planData.nutrition||{})[mealKey];
   if(!meal||!Array.isArray(meal.foods))return;
   meal.foods.splice(foodIdx,1);
   recalcMealCalories(meal);
-  // Toplam günlük kaloriyi güncelle
   updateTotalCalories();
   savePlanToSupabase();
   renderNutrition();
 }
 
-function addFoodItem(mealKey){
+function addFoodItem(mealKey, dayName){
   const input=document.getElementById('newFood_'+mealKey);
   const val=input?.value?.trim();
   if(!val){alert('Besin adı girin!');return;}
-  if(!planData.nutrition||typeof planData.nutrition!=='object')return;
-  const meal=planData.nutrition[mealKey];
+  const dp=planData.days?.find(d=>d.day===(dayName||selDay));
+  const nut=dp?.nutrition||planData.nutrition;
+  if(!nut)return;
+  const meal=nut[mealKey];
   if(!meal)return;
   if(!Array.isArray(meal.foods)) meal.foods=[];
   meal.foods.push(val);
