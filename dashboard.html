@@ -1229,31 +1229,6 @@ function closeTour(){
 }
 
 init();
-// YENİ: Su ve Kalori Takip Fonksiyonları
-let waterCount = 0;
-let calCount = 0;
-const waterGoal = 8;
-const calGoal = 2200;
-
-function updateWater(val) {
-    waterCount = Math.max(0, waterCount + val);
-    const waterValEl = document.getElementById('waterVal');
-    const waterTextEl = document.getElementById('waterText');
-    const waterFillEl = document.getElementById('waterFill');
-    if(waterValEl) waterValEl.textContent = waterCount;
-    if(waterTextEl) waterTextEl.textContent = waterCount + '/' + waterGoal + ' Bardak';
-    if(waterFillEl) waterFillEl.style.width = Math.min(100, (waterCount/waterGoal)*100) + '%';
-}
-
-function updateCal(val) {
-    calCount = Math.max(0, calCount + val);
-    const calValEl = document.getElementById('calorieCount');
-    const calTextEl = document.getElementById('calText');
-    const calFillEl = document.getElementById('calFill');
-    if(calValEl) calValEl.textContent = calCount;
-    if(calTextEl) calTextEl.textContent = calCount + '/' + calGoal + ' kcal';
-    if(calFillEl) calFillEl.style.width = Math.min(100, (calCount/calGoal)*100) + '%';
-}
 </script>
 </body>
 </html>
