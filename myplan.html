@@ -508,27 +508,78 @@ function renderWorkout(dayName){
     exs.forEach((ex,i)=>{
       const done = doneExes.includes(i);
       html+=`
-        <div class="ex-card ${done?'done':''}" onclick="toggleEx('${dayName}',${i},${exs.length})">
-          <div class="ex-num">${done?'✓':(i+1)}</div>
-          <div class="ex-body">
-            <div class="ex-name">${ex.name}</div>
-            <div class="ex-tags">
-              <span class="ex-tag sets">🔄 ${ex.sets} SET</span>
-              <span class="ex-tag reps">💪 ${ex.reps}</span>
-              ${ex.rest?`<span class="ex-tag rest">⏱ ${ex.rest}</span>`:''}
+        <div class="ex-card ${done?'done':''}" style="gap:0.6rem">
+          <div onclick="toggleEx('${dayName}',${i},${exs.length})" style="display:flex;align-items:center;gap:0.9rem;flex:1;cursor:pointer;min-width:0">
+            <div class="ex-num">${done?'✓':(i+1)}</div>
+            <div class="ex-body">
+              <div class="ex-name">${ex.name}</div>
+              <div class="ex-tags">
+                <span class="ex-tag sets">🔄 ${ex.sets}</span>
+                <span class="ex-tag reps">💪 ${ex.reps}</span>
+                ${ex.rest?`<span class="ex-tag rest">⏱ ${ex.rest}</span>`:''}
+              </div>
             </div>
+            <div class="ex-check">${done?'✓':''}</div>
           </div>
-          <div class="ex-check">${done?'✓':''}</div>
+          <button onclick="removeExercise('${dayName}',${i})" title="Egzersizi kaldır"
+            style="background:#ff6b6b15;border:1px solid #ff6b6b25;color:#ff6b6b;border-radius:8px;width:28px;height:28px;cursor:pointer;font-size:0.82rem;flex-shrink:0;display:flex;align-items:center;justify-content:center">✕</button>
         </div>`;
     });
   } else if(dp?.exercises_text){
     html+=`<div style="background:#ffffff07;border-radius:14px;padding:1rem;line-height:1.7;font-size:0.88rem;color:#ffffffdd;border-left:3px solid var(--lime);margin-bottom:1rem">${dp.exercises_text}</div>`;
   }
 
+  // Egzersiz ekleme formu
+  html+=`
+    <div style="background:#ffffff05;border:1.5px dashed #ffffff15;border-radius:14px;padding:0.9rem 1rem;margin:0.75rem 0">
+      <div style="font-size:0.7rem;color:var(--lime);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.6rem;font-family:var(--font-head)">➕ Egzersiz Ekle</div>
+      <div style="display:flex;gap:0.4rem;flex-wrap:wrap">
+        <input id="newExName_${dayName}" placeholder="Egzersiz adı" style="flex:2;min-width:110px;background:#ffffff08;border:1px solid #ffffff15;border-radius:10px;padding:0.45rem 0.7rem;color:var(--white);font-size:0.8rem;outline:none;font-family:var(--font-body)">
+        <input id="newExSets_${dayName}" placeholder="3 set" style="flex:1;min-width:70px;background:#ffffff08;border:1px solid #ffffff15;border-radius:10px;padding:0.45rem 0.7rem;color:var(--white);font-size:0.8rem;outline:none;font-family:var(--font-body)">
+        <input id="newExReps_${dayName}" placeholder="12 tekrar" style="flex:1;min-width:80px;background:#ffffff08;border:1px solid #ffffff15;border-radius:10px;padding:0.45rem 0.7rem;color:var(--white);font-size:0.8rem;outline:none;font-family:var(--font-body)">
+        <button onclick="addExercise('${dayName}')" style="background:var(--lime);color:#000;border:none;border-radius:10px;padding:0.45rem 0.9rem;font-family:var(--font-head);font-weight:700;font-size:0.8rem;cursor:pointer">Ekle</button>
+      </div>
+    </div>`;
+
   html+=`<button class="finish-btn ${isDone?'done':'pending'}" onclick="toggleDone('${dayName}')">
     ${isDone?'✅ Tamamlandı — Geri Al':'🏁 Antrenmanı Tamamla'}
   </button>`;
   body.innerHTML=html;
+}
+
+function removeExercise(dayName, idx){
+  const dp = planData.days?.find(d=>d.day===dayName);
+  if(!dp||!dp.exercises)return;
+  dp.exercises.splice(idx,1);
+  // Supabase'e kaydet
+  savePlanToSupabase();
+  // Tamamlanan egzersiz indexlerini güncelle
+  const key=dayName+'_ex';
+  if(stor.ex[key]) stor.ex[key]=stor.ex[key].filter(i=>i!==idx).map(i=>i>idx?i-1:i);
+  save();
+  renderWorkout(dayName);
+}
+
+function addExercise(dayName){
+  const name=document.getElementById('newExName_'+dayName)?.value?.trim();
+  const sets=document.getElementById('newExSets_'+dayName)?.value?.trim()||'3 set';
+  const reps=document.getElementById('newExReps_'+dayName)?.value?.trim()||'12 tekrar';
+  if(!name){alert('Egzersiz adı girin!');return;}
+  const dp = planData.days?.find(d=>d.day===dayName);
+  if(!dp){return;}
+  if(!dp.exercises) dp.exercises=[];
+  dp.exercises.push({name,sets,reps,rest:'60sn'});
+  savePlanToSupabase();
+  renderWorkout(dayName);
+}
+
+async function savePlanToSupabase(){
+  try{
+    const {data:{session}}=await sb2.auth.getSession();
+    if(!session)return;
+    planData.updatedAt=new Date().toISOString();
+    await sb2.from('user_plans').upsert({user_id:session.user.id,plan_data:planData,updated_at:new Date().toISOString()},{onConflict:'user_id'});
+  }catch(e){console.error('Plan kayıt hatası:',e);}
 }
 
 function toggleEx(day,idx,total){
@@ -595,7 +646,15 @@ function renderNutrition(){
             <span style="font-family:var(--font-head);font-weight:800;font-size:0.85rem;color:var(--white)">${meal.calories||0} kcal</span>
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.75rem">
-            ${foods.map(f=>`<span style="background:#ffffff08;border:1px solid #ffffff10;border-radius:8px;padding:0.25rem 0.6rem;font-size:0.78rem;color:#ffffffcc">${f}</span>`).join('')}
+            ${foods.map((f,fi)=>`
+              <span style="display:inline-flex;align-items:center;gap:0.3rem;background:#ffffff08;border:1px solid #ffffff10;border-radius:8px;padding:0.2rem 0.5rem 0.2rem 0.6rem;font-size:0.78rem;color:#ffffffcc">
+                ${f}
+                <button onclick="removeFoodItem('${m.key}',${fi})" style="background:none;border:none;color:#ff6b6b;cursor:pointer;font-size:0.7rem;padding:0;line-height:1;margin-left:0.1rem">✕</button>
+              </span>`).join('')}
+          </div>
+          <div style="display:flex;gap:0.4rem;margin-bottom:0.5rem">
+            <input id="newFood_${m.key}" placeholder="Yeni besin ekle..." style="flex:1;background:#ffffff08;border:1px solid #ffffff15;border-radius:8px;padding:0.35rem 0.6rem;color:var(--white);font-size:0.78rem;outline:none;font-family:var(--font-body)">
+            <button onclick="addFoodItem('${m.key}')" style="background:${m.color};color:#000;border:none;border-radius:8px;padding:0.35rem 0.7rem;font-family:var(--font-head);font-weight:700;font-size:0.75rem;cursor:pointer">+ Ekle</button>
           </div>
           <div style="display:flex;gap:0.6rem">
             <div style="background:#44aaff15;border-radius:8px;padding:0.25rem 0.6rem;font-size:0.7rem;font-family:var(--font-head);font-weight:700;color:#44aaff">P: ${meal.protein||0}g</div>
@@ -698,7 +757,27 @@ function renderNutrition(){
   document.getElementById('nutritionBody').innerHTML=html;
 }
 
-function renderTrackers(){
+function removeFoodItem(mealKey, foodIdx){
+  if(!planData.nutrition||typeof planData.nutrition!=='object')return;
+  const meal=planData.nutrition[mealKey];
+  if(!meal||!Array.isArray(meal.foods))return;
+  meal.foods.splice(foodIdx,1);
+  savePlanToSupabase();
+  renderNutrition();
+}
+
+function addFoodItem(mealKey){
+  const input=document.getElementById('newFood_'+mealKey);
+  const val=input?.value?.trim();
+  if(!val){alert('Besin adı girin!');return;}
+  if(!planData.nutrition||typeof planData.nutrition!=='object')return;
+  const meal=planData.nutrition[mealKey];
+  if(!meal)return;
+  if(!Array.isArray(meal.foods)) meal.foods=[];
+  meal.foods.push(val);
+  savePlanToSupabase();
+  renderNutrition();
+}
   const calT=planData.calories||2000;
   const watT=Math.round((planData.water||3)*2.67);
   document.getElementById('calLogged').textContent=stor.cal;
