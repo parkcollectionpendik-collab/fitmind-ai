@@ -1484,7 +1484,101 @@ function closeTour(){
   document.getElementById('tourOverlay').style.display='none';
   localStorage.setItem('fm_tourDone','1');
 }
+function showNoPlanScreen(){
+  const home=document.getElementById('tab-home');
+  home.innerHTML=`
+  <div style="max-width:680px;margin:0 auto;padding:1rem 0">
 
+    <!-- KARŞILAMA -->
+    <div style="background:linear-gradient(135deg,#0d1a05,#0a0a0a);border:1px solid #c8f54222;border-radius:24px;padding:2rem;margin-bottom:1.25rem;text-align:center;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:var(--lime);opacity:0.05;border-radius:50%"></div>
+      <div style="font-size:2.5rem;margin-bottom:0.75rem">👋</div>
+      <div style="font-family:var(--font-head);font-size:1.5rem;font-weight:800;margin-bottom:0.5rem" id="welcomeNoPlan">Hoş geldin!</div>
+      <div style="color:var(--muted);font-size:0.9rem;line-height:1.6;max-width:420px;margin:0 auto">
+        FitMind AI'ya hoş geldin. Sana özel 7 günlük antrenman ve beslenme planı oluşturmak için sadece <strong style="color:var(--white)">3 adım</strong> gerekiyor.
+      </div>
+    </div>
+
+    <!-- 3 ADIM -->
+    <div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.25rem">
+
+      <!-- ADIM 1 -->
+      <div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:16px;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1.25rem" id="step1Card">
+        <div style="width:44px;height:44px;border-radius:12px;background:var(--lime);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:1.1rem;color:#000;flex-shrink:0">1</div>
+        <div style="flex:1">
+          <div style="font-family:var(--font-head);font-size:0.95rem;font-weight:700;margin-bottom:0.2rem">Profilini Tamamla</div>
+          <div style="font-size:0.82rem;color:var(--muted);line-height:1.5">Hedefin, vücut bilgilerin ve ekipman tercihlerini gir. AI koçun bunu kullanarak sana özel plan yapacak.</div>
+        </div>
+        <div id="step1Status" style="flex-shrink:0"></div>
+      </div>
+
+      <!-- ADIM 2 -->
+      <div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:16px;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1.25rem">
+        <div style="width:44px;height:44px;border-radius:12px;background:#ffffff10;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:1.1rem;color:var(--muted);flex-shrink:0">2</div>
+        <div style="flex:1">
+          <div style="font-family:var(--font-head);font-size:0.95rem;font-weight:700;margin-bottom:0.2rem">AI Koç ile Plan Oluştur</div>
+          <div style="font-size:0.82rem;color:var(--muted);line-height:1.5">AI Koç sekmesine geç, <strong style="color:var(--lime)">"plan yap"</strong> yaz. 10 saniyede 7 günlük kişisel planın hazır olacak.</div>
+        </div>
+      </div>
+
+      <!-- ADIM 3 -->
+      <div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:16px;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1.25rem">
+        <div style="width:44px;height:44px;border-radius:12px;background:#ffffff10;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:1.1rem;color:var(--muted);flex-shrink:0">3</div>
+        <div style="flex:1">
+          <div style="font-family:var(--font-head);font-size:0.95rem;font-weight:700;margin-bottom:0.2rem">Takip Et ve Geliştir</div>
+          <div style="font-size:0.82rem;color:var(--muted);line-height:1.5">Planını kaydet, her gün egzersizlerini işaretle, beslenmeni takip et. AI koçun her zaman yanında.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BÜYÜK CTA BUTON -->
+    <button onclick="switchTab('aicoach',document.querySelectorAll('.nav-item')[1])" 
+      style="width:100%;background:linear-gradient(135deg,var(--lime),var(--lime2));color:#000;border:none;border-radius:16px;padding:1.1rem;font-family:var(--font-head);font-weight:800;font-size:1.05rem;cursor:pointer;transition:all 0.2s;margin-bottom:0.75rem;box-shadow:0 4px 24px #c8f54230">
+      🤖 Şimdi Plan Oluştur →
+    </button>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem">
+      <a href="profile.html" style="background:#ffffff08;color:var(--white);border:1px solid #ffffff12;border-radius:12px;padding:0.85rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;text-decoration:none;text-align:center;display:block">
+        👤 Profilimi Düzenle
+      </a>
+      <a href="myplan.html" style="background:#ffffff08;color:var(--white);border:1px solid #ffffff12;border-radius:12px;padding:0.85rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;text-decoration:none;text-align:center;display:block">
+        📋 Benim Planım
+      </a>
+    </div>
+
+    <!-- BİLGİ KARTLARI -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-top:1.25rem">
+      <div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:14px;padding:1rem;text-align:center">
+        <div style="font-size:1.5rem;margin-bottom:0.4rem">🤖</div>
+        <div style="font-family:var(--font-head);font-size:0.78rem;font-weight:700;margin-bottom:0.2rem">7/24 AI Koç</div>
+        <div style="font-size:0.7rem;color:var(--muted)">Her zaman yanında</div>
+      </div>
+      <div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:14px;padding:1rem;text-align:center">
+        <div style="font-size:1.5rem;margin-bottom:0.4rem">📅</div>
+        <div style="font-family:var(--font-head);font-size:0.78rem;font-weight:700;margin-bottom:0.2rem">7 Günlük Plan</div>
+        <div style="font-size:0.7rem;color:var(--muted)">Tamamen kişisel</div>
+      </div>
+      <div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:14px;padding:1rem;text-align:center">
+        <div style="font-size:1.5rem;margin-bottom:0.4rem">🥗</div>
+        <div style="font-family:var(--font-head);font-size:0.78rem;font-weight:700;margin-bottom:0.2rem">Beslenme Planı</div>
+        <div style="font-size:0.7rem;color:var(--muted)">Günlük öğünler</div>
+      </div>
+    </div>
+  </div>`;
+
+  // İsmi güncelle
+  const n=document.getElementById('userName')?.textContent||'';
+  const el=document.getElementById('welcomeNoPlan');
+  if(el&&n) el.textContent='Hoş geldin, '+n.split(' ')[0]+'! 👋';
+
+  // Profil tamamlandı mı kontrol et
+  if(userProfile?.goal){
+    const s=document.getElementById('step1Status');
+    if(s) s.innerHTML='<span style="background:#4ade8015;color:#4ade80;border:1px solid #4ade8030;border-radius:100px;padding:0.2rem 0.6rem;font-size:0.72rem;font-family:var(--font-head);font-weight:700">✓ Tamamlandı</span>';
+    const step1=document.getElementById('step1Card');
+    if(step1) step1.style.borderColor='#4ade8020';
+  }
+}
 init();
 </script>
 </body>
