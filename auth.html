@@ -152,21 +152,7 @@ async function signUp() {
     btn.disabled = false;
     btn.textContent = 'Hesap Oluştur →';
   } else {
-    document.getElementById('authForm').style.display='none';
-document.getElementById('authForm').insertAdjacentHTML('afterend',`
-  <div style="text-align:center;padding:1rem">
-    <div style="font-size:3rem;margin-bottom:1rem">📬</div>
-    <div style="font-family:var(--font-head);font-size:1.2rem;font-weight:800;margin-bottom:0.75rem">E-postanı Doğrula</div>
-    <p style="color:var(--muted);font-size:0.88rem;line-height:1.7;margin-bottom:1.5rem">
-      <strong style="color:var(--white)">${email}</strong> adresine doğrulama linki gönderdik.<br>
-      Gelen kutunu kontrol et ve linke tıkla.
-    </p>
-    <div style="background:#ffffff08;border-radius:14px;padding:1rem;font-size:0.82rem;color:var(--muted);line-height:1.6">
-      💡 Mail gelmedi mi? Spam klasörünü kontrol et veya<br>
-      <a href="javascript:void(0)" onclick="location.reload()" style="color:var(--lime)">tekrar dene</a>
-    </div>
-  </div>
-`);
+    window.location.replace('onboarding.html');
   }
 }
 
