@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FitMind AI \u2013 Dashboard</title>
+<title>FitMind AI &ndash; Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
@@ -18,7 +18,7 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .nav-item{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 1rem;border-radius:12px;cursor:pointer;transition:all 0.2s;font-size:0.9rem;color:var(--muted);border:none;background:transparent;width:100%;text-align:left;font-family:var(--font-body);text-decoration:none}
 .nav-item:hover{background:#ffffff08;color:var(--white)}
 .nav-item.active{background:#c8f54215;color:var(--lime)}
-.nav-item .icon{width:18px;text-align:center;font-size:1rem}
+.nav-item .icon{width:20px;text-align:center;font-size:1rem}
 .sidebar-bottom{padding-top:1rem;border-top:1px solid #ffffff0f}
 .user-info{display:flex;align-items:center;gap:0.75rem;padding:0.5rem}
 .avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--lime),#4af);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.85rem;color:var(--black);flex-shrink:0}
@@ -29,12 +29,13 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .pro-badge{display:inline-flex;align-items:center;background:linear-gradient(135deg,#c8f542,#a8d92e);color:var(--black);padding:0.2rem 0.7rem;border-radius:100px;font-size:0.7rem;font-family:var(--font-head);font-weight:800}
 .free-badge{display:inline-flex;align-items:center;background:#ffffff15;color:var(--muted);padding:0.2rem 0.7rem;border-radius:100px;font-size:0.7rem;font-family:var(--font-head);font-weight:800}
 .badge-live{display:inline-flex;align-items:center;gap:0.4rem;background:#c8f54215;border:1px solid #c8f54230;color:var(--lime);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.75rem;font-family:var(--font-head);font-weight:700}
-.badge-dot{width:6px;height:6px;background:var(--lime);border-radius:50%;animation:pulse 2s infinite}
+.badge-dot{width:6px;height:6px;background:var(--lime);border-radius:50%;animation:pulse 2s infinite;display:inline-block}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 .tab-section{display:none}
 .tab-section.active{display:block}
-.spin{display:inline-block;width:16px;height:16px;border:2px solid #ffffff15;border-top-color:var(--lime);border-radius:50%;animation:spin 0.8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+.spin{display:inline-block;width:22px;height:22px;border:2px solid #ffffff15;border-top-color:var(--lime);border-radius:50%;animation:spin-anim 0.8s linear infinite}
+@keyframes spin-anim{to{transform:rotate(360deg)}}
+/* AI KOC */
 .ai-coach-full{display:flex;flex-direction:column;height:calc(100vh - 160px);background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem}
 .messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1rem;padding-right:0.25rem}
 .messages::-webkit-scrollbar{width:3px}
@@ -58,160 +59,143 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .send-btn:disabled{opacity:0.4;cursor:not-allowed}
 .plan-card{background:linear-gradient(135deg,#0f1a06,#0d0d0d);border:1px solid #c8f54230;border-radius:16px;padding:1.4rem;width:100%;max-width:100%}
 .plan-section{background:#ffffff08;border-radius:12px;padding:1rem;margin-bottom:0.75rem;border-left:3px solid}
-
-/* === ANA SAYFA === */
+/* ANA SAYFA */
 .home-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
-.home-greeting{font-family:var(--font-head);font-size:1.5rem;font-weight:800;line-height:1.2}
-.home-greeting span{color:var(--lime)}
+.home-greeting{font-family:var(--font-head);font-size:1.5rem;font-weight:800}
+.home-greeting b{color:var(--lime)}
 .home-date{font-size:0.82rem;color:var(--muted);margin-top:0.25rem}
-
-/* BUGÜN HERO */
+/* HERO */
 .today-hero{background:linear-gradient(135deg,#0d1f04,#0a0a0a);border:1px solid #c8f54230;border-radius:24px;padding:2rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
 .today-hero::before{content:'';position:absolute;top:-100px;right:-100px;width:350px;height:350px;background:var(--lime);opacity:0.04;border-radius:50%;pointer-events:none}
-.today-hero-label{font-size:0.7rem;color:var(--lime);font-family:var(--font-head);font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem}
-.today-hero-label .dot{width:6px;height:6px;background:var(--lime);border-radius:50%;animation:pulse 2s infinite;flex-shrink:0}
-.today-focus{font-family:var(--font-head);font-size:2rem;font-weight:800;line-height:1.1;margin-bottom:0.6rem}
-.today-focus span{color:var(--lime)}
-.today-meta{display:flex;gap:1.25rem;margin-bottom:1.75rem;flex-wrap:wrap}
-.today-meta-chip{background:#ffffff08;border:1px solid #ffffff10;border-radius:100px;padding:0.35rem 0.85rem;font-size:0.8rem;color:var(--white);display:flex;align-items:center;gap:0.35rem}
-.today-meta-chip .lbl{color:var(--muted);font-size:0.72rem}
-.today-cta{display:flex;gap:0.75rem;flex-wrap:wrap}
-.btn-primary{background:linear-gradient(135deg,var(--lime),var(--lime2));color:#000;border:none;border-radius:14px;padding:0.9rem 2rem;font-family:var(--font-head);font-weight:800;font-size:1rem;cursor:pointer;transition:all 0.25s;display:inline-flex;align-items:center;gap:0.5rem;box-shadow:0 4px 20px #c8f54228;text-decoration:none}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px #c8f54235}
-.btn-ghost{background:#ffffff08;color:var(--white);border:1px solid #ffffff15;border-radius:14px;padding:0.9rem 1.4rem;font-family:var(--font-head);font-weight:700;font-size:0.88rem;cursor:pointer;transition:all 0.2s;text-decoration:none;display:inline-flex;align-items:center;gap:0.4rem}
-.btn-ghost:hover{background:#ffffff12;border-color:#ffffff25}
-
-/* GOREV LISTESI */
-.section-label{font-family:var(--font-head);font-size:0.68rem;font-weight:700;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem}
-.task-row{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.5rem}
-.task-card{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--gray);border:1.5px solid #ffffff0a;border-radius:16px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
-.task-card:hover{border-color:#ffffff18;background:#161616}
-.task-card.done{border-color:#4ade8025;background:#071507}
-.task-card.done::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#4ade80;border-radius:3px 0 0 3px}
-.task-check{width:26px;height:26px;border-radius:8px;border:2px solid #ffffff20;display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0;transition:all 0.25s}
-.task-card.done .task-check{background:#4ade80;border-color:#4ade80;color:#000}
+.hero-day-label{font-size:0.7rem;color:var(--lime);font-family:var(--font-head);font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem}
+.hero-focus{font-family:var(--font-head);font-size:1.9rem;font-weight:800;line-height:1.1;margin-bottom:0.6rem}
+.hero-focus b{color:var(--lime)}
+.hero-chips{display:flex;gap:0.75rem;margin-bottom:1.75rem;flex-wrap:wrap}
+.chip{background:#ffffff08;border:1px solid #ffffff10;border-radius:100px;padding:0.35rem 0.9rem;font-size:0.8rem;color:var(--white);display:flex;align-items:center;gap:0.35rem}
+.chip .dim{color:var(--muted);font-size:0.72rem}
+.hero-btns{display:flex;gap:0.75rem;flex-wrap:wrap}
+.btn-go{background:linear-gradient(135deg,var(--lime),var(--lime2));color:#000;border:none;border-radius:14px;padding:0.9rem 2rem;font-family:var(--font-head);font-weight:800;font-size:1rem;cursor:pointer;transition:all 0.25s;display:inline-flex;align-items:center;gap:0.5rem;box-shadow:0 4px 20px #c8f54228;text-decoration:none}
+.btn-go:hover{transform:translateY(-2px);box-shadow:0 8px 32px #c8f54235}
+.btn-out{background:#ffffff08;color:var(--white);border:1px solid #ffffff15;border-radius:14px;padding:0.9rem 1.4rem;font-family:var(--font-head);font-weight:700;font-size:0.88rem;cursor:pointer;transition:all 0.2s;text-decoration:none;display:inline-flex;align-items:center;gap:0.4rem}
+.btn-out:hover{background:#ffffff12;border-color:#ffffff25}
+/* GOREVLER */
+.sec-label{font-family:var(--font-head);font-size:0.68rem;font-weight:700;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem}
+.task-list{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.5rem}
+.task{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--gray);border:1.5px solid #ffffff0a;border-radius:16px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
+.task:hover{border-color:#ffffff18;background:#161616}
+.task.done{border-color:#4ade8025;background:#071507}
+.task.done::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#4ade80;border-radius:3px 0 0 3px}
+.task-box{width:26px;height:26px;border-radius:8px;border:2px solid #ffffff20;display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0;transition:all 0.25s}
+.task.done .task-box{background:#4ade80;border-color:#4ade80;color:#000}
 .task-info{flex:1;min-width:0}
 .task-title{font-size:0.9rem;font-weight:500;margin-bottom:0.15rem}
-.task-card.done .task-title{text-decoration:line-through;opacity:0.4}
-.task-desc{font-size:0.73rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.task.done .task-title{text-decoration:line-through;opacity:0.4}
+.task-desc{font-size:0.73rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .task-tag{font-size:0.68rem;font-family:var(--font-head);font-weight:700;padding:0.22rem 0.65rem;border-radius:100px;flex-shrink:0;white-space:nowrap}
-.tag-green{background:#c8f54215;color:var(--lime)}
-.tag-blue{background:#44aaff15;color:#44aaff}
-
-/* 2-KOLON */
+.tag-g{background:#c8f54215;color:var(--lime)}
+.tag-b{background:#44aaff15;color:#44aaff}
+/* 2 KOLON */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem}
 .card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem}
 .card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
 .card-title{font-family:var(--font-head);font-size:0.9rem;font-weight:700}
 .card-link{font-size:0.75rem;color:var(--lime);text-decoration:none;font-family:var(--font-head);font-weight:700;opacity:0.7}
 .card-link:hover{opacity:1}
-
-/* HIZLI TAKIP */
+/* TAKIP */
 .track-pair{display:flex;gap:0.75rem;margin-bottom:0.75rem}
-.track-box{flex:1;background:#ffffff05;border:1.5px solid #ffffff08;border-radius:14px;padding:1rem;text-align:center;cursor:pointer;transition:all 0.2s}
-.track-box:hover{background:#ffffff09;border-color:#ffffff18}
-.track-em{font-size:1.3rem;margin-bottom:0.25rem}
-.track-num{font-family:var(--font-head);font-size:1.4rem;font-weight:800;line-height:1}
-.track-lbl{font-size:0.65rem;color:var(--muted);margin-top:0.15rem}
-.track-bar{height:3px;background:#ffffff0f;border-radius:100px;margin-top:0.55rem;overflow:hidden}
-.track-fill{height:100%;border-radius:100px;transition:width 0.4s}
-.add-btns{display:flex;gap:0.4rem}
-.add-btn{flex:1;padding:0.5rem;border-radius:10px;font-family:var(--font-head);font-weight:700;font-size:0.7rem;cursor:pointer;transition:all 0.2s}
-
-/* HAFTALIK BAR */
-.week-chart{display:flex;gap:0.3rem;align-items:flex-end;height:48px;margin-bottom:0.45rem}
+.tbox{flex:1;background:#ffffff05;border:1.5px solid #ffffff08;border-radius:14px;padding:1rem;text-align:center;cursor:pointer;transition:all 0.2s}
+.tbox:hover{background:#ffffff09;border-color:#ffffff18}
+.tbox-num{font-family:var(--font-head);font-size:1.4rem;font-weight:800;line-height:1;margin:0.2rem 0}
+.tbox-lbl{font-size:0.65rem;color:var(--muted)}
+.tbar{height:3px;background:#ffffff0f;border-radius:100px;margin-top:0.55rem;overflow:hidden}
+.tfill{height:100%;border-radius:100px;transition:width 0.4s}
+.add-row{display:flex;gap:0.4rem}
+.add-btn{flex:1;padding:0.5rem;border-radius:10px;font-family:var(--font-head);font-weight:700;font-size:0.72rem;cursor:pointer;transition:background 0.2s}
+/* HAFTA BAR */
+.wk-bars{display:flex;gap:0.3rem;align-items:flex-end;height:48px;margin-bottom:0.45rem}
 .wk-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.2rem}
 .wk-bar{width:100%;border-radius:3px 3px 0 0;min-height:3px;transition:height 0.5s}
 .wk-lbl{font-size:0.56rem;font-family:var(--font-head);font-weight:700}
-
-/* BESLENME OZET */
-.meal-row{display:flex;flex-direction:column;gap:0.45rem}
-.meal-item{display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0.85rem;background:#ffffff04;border-radius:12px}
+/* BESLENME */
+.meal-list{display:flex;flex-direction:column;gap:0.45rem}
+.meal-row{display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0.85rem;background:#ffffff04;border-radius:12px}
 .meal-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .meal-info{flex:1;min-width:0}
 .meal-name{font-size:0.82rem;font-weight:500}
-.meal-foods{font-size:0.7rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:0.08rem}
+.meal-foods{font-size:0.7rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:0.06rem}
 .meal-kcal{font-family:var(--font-head);font-size:0.75rem;font-weight:700;color:var(--muted);flex-shrink:0}
-.meal-total{display:flex;justify-content:space-between;padding:0.5rem 0.75rem;background:#c8f54210;border:1px solid #c8f54218;border-radius:10px;margin-top:0.4rem}
-
 /* UPGRADE */
 .upgrade-strip{background:linear-gradient(135deg,#0e1d04,#0a0a0a);border:1px solid #c8f54222;border-radius:20px;padding:1.5rem;display:flex;align-items:center;gap:1.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
-.upgrade-strip-text{flex:1;min-width:200px}
-.upgrade-strip-text h3{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:0.3rem}
-.upgrade-strip-text p{font-size:0.8rem;color:var(--muted);line-height:1.5}
-.upgrade-strip-btn{background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.7rem 1.5rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer;white-space:nowrap;flex-shrink:0}
-.upgrade-strip-btn:hover{background:var(--lime2)}
-
+.upgrade-txt{flex:1;min-width:180px}
+.upgrade-txt h3{font-family:var(--font-head);font-size:0.95rem;font-weight:700;margin-bottom:0.3rem}
+.upgrade-txt p{font-size:0.8rem;color:var(--muted);line-height:1.5}
+.upgrade-btn{background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.7rem 1.5rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background 0.2s}
+.upgrade-btn:hover{background:var(--lime2)}
 /* PLAN YOK */
 .no-plan{max-width:600px;margin:0 auto;padding:1rem 0}
-.no-plan-top{background:linear-gradient(135deg,#0d1f04,#0a0a0a);border:1px solid #c8f54222;border-radius:24px;padding:2.5rem 2rem;margin-bottom:1.25rem;text-align:center;position:relative;overflow:hidden}
-.no-plan-top::before{content:'';position:absolute;top:-80px;right:-80px;width:240px;height:240px;background:var(--lime);opacity:0.05;border-radius:50%}
-.no-plan-icon{font-size:3rem;margin-bottom:0.75rem}
-.no-plan-title{font-family:var(--font-head);font-size:1.6rem;font-weight:800;margin-bottom:0.6rem}
-.no-plan-sub{color:var(--muted);font-size:0.88rem;line-height:1.7;max-width:400px;margin:0 auto}
-.step-item{background:var(--gray);border:1.5px solid #ffffff0a;border-radius:16px;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1.25rem;margin-bottom:0.6rem;transition:border-color 0.2s}
-.step-item:hover{border-color:#ffffff18}
-.step-item.step-done{border-color:#4ade8028;background:#060f06}
-.step-num{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:1.1rem;flex-shrink:0}
-.num-lime{background:var(--lime);color:#000}
-.num-dim{background:#ffffff0f;color:var(--muted)}
-.num-done{background:#4ade8018;color:#4ade80;font-size:1.3rem}
-.step-title{font-family:var(--font-head);font-size:0.95rem;font-weight:700;margin-bottom:0.2rem}
-.step-sub{font-size:0.8rem;color:var(--muted);line-height:1.55}
-.cta-main{width:100%;background:linear-gradient(135deg,var(--lime),var(--lime2));color:#000;border:none;border-radius:16px;padding:1.15rem;font-family:var(--font-head);font-weight:800;font-size:1rem;cursor:pointer;margin:1rem 0 0.75rem;box-shadow:0 4px 24px #c8f54220;display:flex;align-items:center;justify-content:center;gap:0.6rem;transition:all 0.25s}
-.cta-main:hover{transform:translateY(-2px);box-shadow:0 8px 32px #c8f54230}
-.sub-btns{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1.25rem}
-.sub-btn{background:#ffffff08;color:var(--white);border:1px solid #ffffff10;border-radius:12px;padding:0.85rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;text-decoration:none;text-align:center;display:block;transition:all 0.2s}
-.sub-btn:hover{background:#ffffff12;border-color:#ffffff20}
-.feat-pills{display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap}
+.nph{background:linear-gradient(135deg,#0d1f04,#0a0a0a);border:1px solid #c8f54222;border-radius:24px;padding:2.5rem 2rem;margin-bottom:1.25rem;text-align:center;position:relative;overflow:hidden}
+.nph::before{content:'';position:absolute;top:-80px;right:-80px;width:240px;height:240px;background:var(--lime);opacity:0.05;border-radius:50%}
+.nph-title{font-family:var(--font-head);font-size:1.6rem;font-weight:800;margin-bottom:0.6rem}
+.nph-sub{color:var(--muted);font-size:0.88rem;line-height:1.7;max-width:400px;margin:0 auto}
+.step{background:var(--gray);border:1.5px solid #ffffff0a;border-radius:16px;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1.25rem;margin-bottom:0.6rem;transition:border-color 0.2s}
+.step:hover{border-color:#ffffff18}
+.step.sdone{border-color:#4ade8028;background:#060f06}
+.snum{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:1.1rem;flex-shrink:0}
+.snum.slime{background:var(--lime);color:#000}
+.snum.sdim{background:#ffffff0f;color:var(--muted)}
+.snum.sok{background:#4ade8018;color:#4ade80;font-size:1.3rem}
+.stitle{font-family:var(--font-head);font-size:0.95rem;font-weight:700;margin-bottom:0.2rem}
+.ssub{font-size:0.8rem;color:var(--muted);line-height:1.55}
+.cta-big{width:100%;background:linear-gradient(135deg,var(--lime),var(--lime2));color:#000;border:none;border-radius:16px;padding:1.15rem;font-family:var(--font-head);font-weight:800;font-size:1rem;cursor:pointer;margin:1rem 0 0.75rem;box-shadow:0 4px 24px #c8f54220;display:flex;align-items:center;justify-content:center;gap:0.6rem;transition:all 0.25s}
+.cta-big:hover{transform:translateY(-2px);box-shadow:0 8px 32px #c8f54230}
+.sub-row{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1.25rem}
+.sub-a{background:#ffffff08;color:var(--white);border:1px solid #ffffff10;border-radius:12px;padding:0.85rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;text-decoration:none;text-align:center;display:block;transition:all 0.2s}
+.sub-a:hover{background:#ffffff12;border-color:#ffffff20}
+.pills{display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap}
 .pill{background:var(--gray);border:1px solid #ffffff0e;border-radius:100px;padding:0.45rem 1rem;font-size:0.75rem;color:var(--muted);display:flex;align-items:center;gap:0.35rem}
-.pill strong{color:var(--white)}
-
+.pill b{color:var(--white)}
 /* TOPBAR */
 .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem;flex-wrap:wrap;gap:1rem}
-.page-title{font-family:var(--font-head);font-size:1.8rem;font-weight:800;line-height:1.1}
-.page-title span{color:var(--lime)}
+.page-title{font-family:var(--font-head);font-size:1.8rem;font-weight:800}
+.page-title b{color:var(--lime)}
 .page-sub{color:var(--muted);font-size:0.88rem;margin-top:0.35rem}
-
 /* TOUR */
-.tour-overlay{position:fixed;inset:0;background:#000000aa;z-index:500;backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center}
+.tour-ov{position:fixed;inset:0;background:#000000aa;z-index:500;backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center}
 .tour-box{background:#161616;border:1px solid #ffffff18;border-radius:24px;padding:2rem;max-width:420px;width:90%;animation:fadeUp 0.35s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.tour-badge{display:inline-flex;background:#c8f54215;border:1px solid #c8f54222;color:var(--lime);font-family:var(--font-head);font-weight:700;font-size:0.68rem;padding:0.25rem 0.75rem;border-radius:100px;margin-bottom:0.75rem;letter-spacing:0.06em}
+.tour-badge{display:inline-flex;background:#c8f54215;border:1px solid #c8f54222;color:var(--lime);font-family:var(--font-head);font-weight:700;font-size:0.68rem;padding:0.25rem 0.75rem;border-radius:100px;margin-bottom:0.75rem}
 .tour-icon{font-size:2.5rem;margin-bottom:0.75rem}
 .tour-title{font-family:var(--font-head);font-size:1.2rem;font-weight:800;margin-bottom:0.5rem}
 .tour-desc{font-size:0.87rem;color:#ffffffcc;line-height:1.7;margin-bottom:1.5rem}
 .tour-dots{display:flex;gap:0.4rem;justify-content:center;margin-bottom:1.2rem}
-.t-dot{width:8px;height:8px;border-radius:50%;background:#ffffff15;transition:all 0.3s}
-.t-dot.on{background:var(--lime);width:20px;border-radius:100px}
+.tdot{width:8px;height:8px;border-radius:50%;background:#ffffff15;transition:all 0.3s}
+.tdot.on{background:var(--lime);width:20px;border-radius:100px}
 .tour-btns{display:flex;gap:0.6rem}
 .t-skip{background:transparent;color:var(--muted);border:1px solid #ffffff15;border-radius:100px;padding:0.6rem 1.1rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer}
 .t-next{flex:1;background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.6rem;font-family:var(--font-head);font-weight:700;font-size:0.88rem;cursor:pointer}
 .t-next:hover{background:var(--lime2)}
-
-/* MOBILE */
+/* MOBiL */
 .mob-btn{display:none}
 .overlay{display:none;position:fixed;inset:0;background:#00000080;z-index:99}
 .overlay.open{display:block}
 @media(max-width:768px){
-  .sidebar{position:fixed;left:-240px;top:0;bottom:0;width:240px;transition:left 0.3s ease;z-index:100}
+  .sidebar{position:fixed;left:-240px;top:0;bottom:0;width:240px;transition:left 0.3s;z-index:100}
   .sidebar.open{left:0}
   .main{margin-left:0;padding:1rem}
   .mob-btn{display:flex;position:fixed;top:1rem;left:1rem;z-index:200;background:var(--lime);color:var(--black);border:none;border-radius:10px;width:40px;height:40px;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer}
   .home-topbar,.topbar{margin-top:3.5rem}
   .two-col{grid-template-columns:1fr}
-  .today-focus{font-size:1.4rem}
+  .hero-focus{font-size:1.4rem}
   .ai-coach-full{height:calc(100vh - 140px)}
-  .sub-btns{grid-template-columns:1fr}
-  .today-cta,.upgrade-strip{flex-direction:column}
-  .btn-primary,.btn-ghost{width:100%;justify-content:center}
+  .sub-row{grid-template-columns:1fr}
+  .hero-btns,.upgrade-strip{flex-direction:column}
+  .btn-go,.btn-out{width:100%;justify-content:center}
 }
 </style>
 </head>
 <body>
 
-<!-- TOUR -->
-<div class="tour-overlay" id="tourOverlay" style="display:none">
+<div class="tour-ov" id="tourOverlay" style="display:none">
   <div class="tour-box">
     <div class="tour-badge" id="tourBadge">1 / 5</div>
     <div class="tour-icon" id="tourIcon"></div>
@@ -219,108 +203,105 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
     <div class="tour-desc" id="tourDesc"></div>
     <div class="tour-dots" id="tourDots"></div>
     <div class="tour-btns">
-      <button class="t-skip" onclick="closeTour()">Ge\u00e7</button>
-      <button class="t-next" id="tourNextBtn" onclick="nextTourStep()">Devam \u2192</button>
+      <button class="t-skip" onclick="closeTour()">Ge&ccedil;</button>
+      <button class="t-next" id="tourNextBtn" onclick="nextTourStep()">Devam &rarr;</button>
     </div>
   </div>
 </div>
 
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
-<button class="mob-btn" onclick="toggleSidebar()">\u2630</button>
+<button class="mob-btn" onclick="toggleSidebar()">&#9776;</button>
 
 <div class="sidebar">
   <a class="logo" href="dashboard.html">Fit<span>Mind</span> AI</a>
   <nav class="nav">
-    <button class="nav-item active" onclick="switchTab('home',this)"><span class="icon">\ud83c\udfe0</span> Ana Sayfa</button>
-    <button class="nav-item" onclick="switchTab('aicoach',this)"><span class="icon">\ud83e\udd16</span> AI Ko\u00e7</button>
-    <button class="nav-item" onclick="switchTab('workouts',this)"><span class="icon">\ud83c\udfcb\ufe0f</span> Antrenmanlar</button>
-    <a class="nav-item" href="myplan.html"><span class="icon">\ud83d\udccb</span> Benim Plan\u0131m</a>
-    <a class="nav-item" href="nutrition.html"><span class="icon">\ud83e\udd57</span> Beslenme</a>
-    <a class="nav-item" href="progress.html"><span class="icon">\ud83d\udcc8</span> \u0130lerleme</a>
-    <a class="nav-item" href="community.html"><span class="icon">\ud83d\udc65</span> Topluluk</a>
+    <button class="nav-item active" onclick="switchTab('home',this)"><span class="icon">&#127968;</span> Ana Sayfa</button>
+    <button class="nav-item" onclick="switchTab('aicoach',this)"><span class="icon">&#129302;</span> AI Ko&ccedil;</button>
+    <button class="nav-item" onclick="switchTab('workouts',this)"><span class="icon">&#127947;</span> Antrenmanlar</button>
+    <a class="nav-item" href="myplan.html"><span class="icon">&#128203;</span> Benim Plan&imath;m</a>
+    <a class="nav-item" href="nutrition.html"><span class="icon">&#129367;</span> Beslenme</a>
+    <a class="nav-item" href="progress.html"><span class="icon">&#128200;</span> &Iuml;lerleme</a>
+    <a class="nav-item" href="community.html"><span class="icon">&#128101;</span> Topluluk</a>
   </nav>
   <div class="sidebar-bottom">
     <div class="user-info">
       <div class="avatar" id="avatarInitial">?</div>
-      <a class="user-name" id="userName" href="profile.html" style="text-decoration:none;color:inherit;cursor:pointer">Y\u00fckleniyor...</a>
-      <button class="signout-btn" onclick="signOut()">\u23fb</button>
+      <a class="user-name" id="userName" href="profile.html" style="text-decoration:none;color:inherit;cursor:pointer">Y&uuml;kleniyor...</a>
+      <button class="signout-btn" onclick="signOut()">&#9211;</button>
     </div>
   </div>
 </div>
 
 <div class="main">
 
-<!-- ===== ANA SAYFA ===== -->
 <div class="tab-section active" id="tab-home">
   <div class="home-topbar">
     <div>
-      <div class="home-greeting">Merhaba, <span id="heroName">...</span> \ud83d\udc4b</div>
+      <div class="home-greeting">Merhaba, <b id="heroName">...</b> &#128075;</div>
       <div class="home-date" id="heroDate"></div>
     </div>
     <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap">
-      <span id="planBadge" class="free-badge">\u00dcCRETSIZ</span>
-      <div class="badge-live"><span class="badge-dot"></span> AI Ko\u00e7 Aktif</div>
+      <span id="planBadge" class="free-badge">&#220;CRETSIZ</span>
+      <div class="badge-live"><span class="badge-dot"></span> AI Ko&ccedil; Aktif</div>
     </div>
   </div>
   <div id="homeContent">
     <div style="text-align:center;padding:4rem;color:var(--muted)">
-      <div class="spin" style="margin:0 auto 1rem;display:block;width:28px;height:28px"></div>
-      <div style="font-size:0.9rem">Y\u00fckleniyor...</div>
+      <div class="spin" style="margin:0 auto 1rem;display:block"></div>
+      <div style="font-size:0.9rem">Y&uuml;kleniyor...</div>
     </div>
   </div>
 </div>
 
-<!-- ===== AI KO\u00c7 ===== -->
 <div class="tab-section" id="tab-aicoach">
   <div class="topbar">
     <div>
-      <div class="page-title">\ud83e\udd16 AI <span>Ko\u00e7</span></div>
-      <div class="page-sub">Ki\u015fisel fitness ko\u00e7un 7/24 aktif</div>
+      <div class="page-title">&#129302; AI <b>Ko&ccedil;</b></div>
+      <div class="page-sub">Ki&scedil;isel fitness ko&ccedil;un 7/24 aktif</div>
     </div>
     <span id="msgCounter" style="font-size:0.8rem;color:var(--muted)"></span>
   </div>
   <div class="ai-coach-full">
     <div style="font-family:var(--font-head);font-size:0.92rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
-      <span style="width:7px;height:7px;background:var(--lime);border-radius:50%;animation:pulse 2s infinite;display:inline-block;flex-shrink:0"></span>
-      AI Ko\u00e7 \u2014 Sohbet
-      <button onclick="clearChat()" style="margin-left:auto;background:#ffffff08;border:1px solid #ffffff10;color:var(--muted);border-radius:100px;padding:0.25rem 0.75rem;font-size:0.7rem;cursor:pointer;font-family:var(--font-head);font-weight:700">\ud83d\uddd1 Temizle</button>
+      <span class="badge-dot"></span>
+      AI Ko&ccedil; &mdash; Sohbet
+      <button onclick="clearChat()" style="margin-left:auto;background:#ffffff08;border:1px solid #ffffff10;color:var(--muted);border-radius:100px;padding:0.25rem 0.75rem;font-size:0.7rem;cursor:pointer;font-family:var(--font-head);font-weight:700">&#128465; Temizle</button>
     </div>
     <div class="messages" id="messages"></div>
     <div style="display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.6rem">
-      <button onclick="quickSend('Plan yap')" style="background:#c8f54215;border:1px solid #c8f54230;color:var(--lime);border-radius:100px;padding:0.3rem 0.85rem;font-size:0.75rem;cursor:pointer;font-family:var(--font-head);font-weight:700">\ud83d\udccb Plan Yap</button>
-      <button onclick="quickSend('Antrenman programimi guncelle')" style="background:#ffffff08;border:1px solid #ffffff12;color:var(--white);border-radius:100px;padding:0.3rem 0.85rem;font-size:0.75rem;cursor:pointer;font-family:var(--font-head);font-weight:700">\ud83d\udcaa G\u00fcncelle</button>
-      <button onclick="quickSend('Beslenme planimi degistir')" style="background:#ffffff08;border:1px solid #ffffff12;color:var(--white);border-radius:100px;padding:0.3rem 0.85rem;font-size:0.75rem;cursor:pointer;font-family:var(--font-head);font-weight:700">\ud83e\udd57 Beslenme</button>
-      <button onclick="quickSend('Bugunku antrenmanima egzersiz ekle')" style="background:#ffffff08;border:1px solid #ffffff12;color:var(--white);border-radius:100px;padding:0.3rem 0.85rem;font-size:0.75rem;cursor:pointer;font-family:var(--font-head);font-weight:700">\u2795 Egzersiz Ekle</button>
+      <button onclick="quickSend('Plan yap')" style="background:#c8f54215;border:1px solid #c8f54230;color:var(--lime);border-radius:100px;padding:0.3rem 0.85rem;font-size:0.75rem;cursor:pointer;font-family:var(--font-head);font-weight:700">&#128203; Plan Yap</button>
+      <button onclick="quickSend('Antrenman programimi guncelle')" style="background:#ffffff08;border:1px solid #ffffff12;color:var(--white);border-radius:100px;padding:0.3rem 0.85rem;font-size:0.75rem;cursor:pointer;font-family:var(--font-head);font-weight:700">&#128170; G&uuml;ncelle</button>
+      <button onclick="quickSend('Beslenme planimi degistir')" style="background:#ffffff08;border:1px solid #ffffff12;color:var(--white);border-radius:100px;padding:0.3rem 0.85rem;font-size:0.75rem;cursor:pointer;font-family:var(--font-head);font-weight:700">&#129367; Beslenme</button>
+      <button onclick="quickSend('Bugunku antrenmanima egzersiz ekle')" style="background:#ffffff08;border:1px solid #ffffff12;color:var(--white);border-radius:100px;padding:0.3rem 0.85rem;font-size:0.75rem;cursor:pointer;font-family:var(--font-head);font-weight:700">&#10133; Egzersiz Ekle</button>
     </div>
     <div class="chat-input-wrap">
-      <input class="chat-input" id="chatInput" placeholder="Sor, plan yap, egzersiz ekle, \u00f6\u011f\u00fcn de\u011fi\u015ftir..." onkeydown="if(event.key==='Enter')sendMsg()">
-      <button class="send-btn" onclick="sendMsg()" id="sendBtn">\u25ba</button>
+      <input class="chat-input" id="chatInput" placeholder="Sor, plan yap, egzersiz ekle, &ouml;&gbreve;&uuml;n de&gbreve;i&scedil;tir..." onkeydown="if(event.key==='Enter')sendMsg()">
+      <button class="send-btn" onclick="sendMsg()" id="sendBtn">&#9658;</button>
     </div>
   </div>
 </div>
 
-<!-- ===== ANTRENMANLAR ===== -->
 <div class="tab-section" id="tab-workouts">
   <div class="topbar">
     <div>
-      <div class="page-title">\ud83c\udfcb\ufe0f <span>Antrenman</span> Plan\u0131</div>
-      <div class="page-sub" id="workoutTabSub">Haftal\u0131k programın</div>
+      <div class="page-title">&#127947; <b>Antrenman</b> Plan&imath;</div>
+      <div class="page-sub" id="workoutTabSub">Haftal&imath;k program&imath;n</div>
     </div>
     <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
-      <a href="myplan.html" style="background:#ffffff10;color:var(--white);border:1px solid #ffffff15;border-radius:100px;padding:0.55rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;text-decoration:none">\ud83d\udccb Benim Plan\u0131m</a>
-      <button onclick="switchTab('aicoach',document.querySelectorAll('.nav-item')[1])" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.55rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer">\ud83e\udd16 Plan\u0131 G\u00fcncelle</button>
+      <a href="myplan.html" style="background:#ffffff10;color:var(--white);border:1px solid #ffffff15;border-radius:100px;padding:0.55rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;text-decoration:none">&#128203; Benim Plan&imath;m</a>
+      <button onclick="switchTab('aicoach',document.querySelectorAll('.nav-item')[1])" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.55rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer">&#129302; Plan&imath; G&uuml;ncelle</button>
     </div>
   </div>
   <div id="weeklyCalendarStrip" style="display:grid;grid-template-columns:repeat(7,1fr);gap:0.5rem;margin-bottom:1.5rem"></div>
   <div id="workoutDayDetail">
     <div style="text-align:center;padding:2rem;color:var(--muted)">
-      <div class="spin" style="margin:0 auto 0.75rem;display:block;width:24px;height:24px"></div>
-      <div>Y\u00fckleniyor...</div>
+      <div class="spin" style="margin:0 auto 0.75rem;display:block"></div>
+      <div>Y&uuml;kleniyor...</div>
     </div>
   </div>
 </div>
 
-</div><!-- .main -->
+</div>
 
 <script>
 const SB_URL='https://cypmmayxwbkarvheqoxu.supabase.co';
@@ -335,11 +316,11 @@ let _pendingPlan=null;
 const FREE_LIMIT=3;
 const jsDay=new Date().getDay();
 const TODAY_IDX=jsDay===0?6:jsDay-1;
-const DAYS=['Pazartesi','Sal\\u0131','\\u00c7ar\\u015famba','Per\\u015fembe','Cuma','Cumartesi','Pazar'];
+const DAYS=['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
 const TODAY_NAME=DAYS[TODAY_IDX];
-const TODAY_STR2=new Date().toDateString();
-let quickCal=parseInt(localStorage.getItem('fp_cal_'+TODAY_STR2)||'0');
-let quickWater=parseInt(localStorage.getItem('fp_water_'+TODAY_STR2)||'0');
+const TODAY_STR=new Date().toDateString();
+let quickCal=parseInt(localStorage.getItem('fp_cal_'+TODAY_STR)||'0');
+let quickWater=parseInt(localStorage.getItem('fp_water_'+TODAY_STR)||'0');
 let calTarget=2000,waterTarget=8;
 
 function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open')}
@@ -364,9 +345,8 @@ async function init(){
   document.getElementById('heroDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   const {data:profile}=await sb.from('profiles').select('*').eq('id',u.id).maybeSingle();
   userProfile=profile;isPro=profile?.is_pro===true;
-  if(isPro){const b=document.getElementById('planBadge');b.textContent='\\u26a1 PRO';b.className='pro-badge';}
-  const calMap={lose_weight:1600,build_muscle:2500,get_fit:2000,improve_health:1800};
-  if(profile?.goal)calTarget=calMap[profile.goal]||2000;
+  if(isPro){const b=document.getElementById('planBadge');b.textContent='PRO';b.className='pro-badge';}
+  if(profile?.goal){const m={lose_weight:1600,build_muscle:2500,get_fit:2000,improve_health:1800};calTarget=m[profile.goal]||2000;}
   renderChatMessages();
   if(localStorage.getItem('fm_newUser')==='1'&&!localStorage.getItem('fm_tourDone')){localStorage.removeItem('fm_newUser');setTimeout(startTour,800);}
   await loadHome();
@@ -384,94 +364,96 @@ async function loadHome(){
     const tp=plan.days.find(d=>d.day===TODAY_NAME);
     const isRest=!tp||tp.type==='Dinlenme'||tp.type==='Rest';
     const exs=tp?.exercises||[];
-    const doneExes=JSON.parse(localStorage.getItem('fp_ex')||'{}')[TODAY_NAME+'_ex']||[];
+    const doneEx=JSON.parse(localStorage.getItem('fp_ex')||'{}')[TODAY_NAME+'_ex']||[];
     const weekDone=JSON.parse(localStorage.getItem('fp_done')||'{}');
     const todayDone=!!weekDone[TODAY_NAME];
     const calPct=Math.min(quickCal/calTarget*100,100);
     const watPct=Math.min(quickWater/waterTarget*100,100);
-    const exPct=exs.length?Math.round(doneExes.length/exs.length*100):0;
+    const exPct=exs.length?Math.round(doneEx.length/exs.length*100):0;
     const weekCount=Object.keys(weekDone).length;
     const weekPct=Math.round(weekCount/7*100);
     const tn=tp?.nutrition||plan?.nutrition||null;
     const totalKcal=tn?['breakfast','lunch','dinner','snack'].reduce((s,k)=>s+(tn[k]?.calories||0),0):0;
-
     let h='';
 
-    // --- HERO ---
+    // HERO
     h+='<div class="today-hero">';
-    h+='<div class="today-hero-label"><span class="dot"></span>Bug\\u00fcn \\u00b7 '+TODAY_NAME+'</div>';
+    h+='<div class="hero-day-label"><span class="badge-dot"></span>Bugün &middot; '+TODAY_NAME+'</div>';
     if(isRest){
-      h+='<div style="text-align:center;padding:1.5rem 0"><div style="font-size:3rem;margin-bottom:0.5rem">\\ud83e\\uddd8</div>';
-      h+='<div style="font-family:var(--font-head);font-size:1.35rem;font-weight:700;margin-bottom:0.4rem">Dinlenme G\\u00fcn\\u00fc</div>';
-      h+='<div style="font-size:0.88rem;color:var(--muted);margin-bottom:1.5rem">V\\u00fccudunun iyile\\u015fmesine izin ver. Hafif y\\u00fcr\\u00fcy\\u00fc\\u015f veya esneme yapabilirsin.</div>';
-      h+='<div class="today-cta" style="justify-content:center"><button class="btn-ghost" onclick="switchTab(\'aicoach\',document.querySelectorAll(\'.nav-item\')[1])">\\ud83e\\udd16 AI Ko\\u00e7 ile Konu\\u015f</button><a href="myplan.html" class="btn-ghost">\\ud83d\\udccb T\\u00fcm Plan\\u0131m</a></div></div>';
+      h+='<div style="text-align:center;padding:1.5rem 0">';
+      h+='<div style="font-size:3rem;margin-bottom:0.5rem">&#129496;</div>';
+      h+='<div style="font-family:var(--font-head);font-size:1.35rem;font-weight:700;margin-bottom:0.4rem">Dinlenme Günü</div>';
+      h+='<div style="font-size:0.88rem;color:var(--muted);margin-bottom:1.5rem">Vücudunun iyileşmesine izin ver. Hafif yürüyüş veya esneme yapabilirsin.</div>';
+      h+='<div class="hero-btns" style="justify-content:center">';
+      h+='<button class="btn-out" onclick="switchTab(\'aicoach\',document.querySelectorAll(\'.nav-item\')[1])">&#129302; AI Ko&ccedil; ile Konu&scedil;</button>';
+      h+='<a href="myplan.html" class="btn-out">&#128203; Tüm Planım</a>';
+      h+='</div></div>';
     } else {
-      h+='<div class="today-focus">\\ud83d\\udcaa <span>'+(tp?.focus||'Antrenman')+'</span></div>';
-      h+='<div class="today-meta">';
-      h+='<div class="today-meta-chip"><span>\\u23f1</span><strong>'+(tp?.duration||45)+' dk</strong></div>';
-      h+='<div class="today-meta-chip"><span>\\ud83c\\udfcb\\ufe0f</span><strong>'+exs.length+' egzersiz</strong></div>';
-      h+='<div class="today-meta-chip"><span class="lbl">Tamamlanan</span><strong style="color:'+(exPct===100?'#4ade80':'var(--lime)')+'">%'+exPct+'</strong></div>';
+      h+='<div class="hero-focus">&#128170; <b>'+(tp?.focus||'Antrenman')+'</b></div>';
+      h+='<div class="hero-chips">';
+      h+='<div class="chip"><span class="dim">&#8987;</span><strong>'+(tp?.duration||45)+' dk</strong></div>';
+      h+='<div class="chip"><span class="dim">&#127947;</span><strong>'+exs.length+' egzersiz</strong></div>';
+      h+='<div class="chip"><span class="dim">Tamamlanan</span><strong style="color:'+(exPct===100?'#4ade80':'var(--lime)')+'">%'+exPct+'</strong></div>';
       h+='</div>';
-      h+='<div class="today-cta">';
-      h+='<button class="btn-primary" onclick="switchTab(\'workouts\',document.querySelectorAll(\'.nav-item\')[2])">\\ud83c\\udfc1 Antrenman\\u0131 Ba\\u015flat</button>';
-      h+='<a href="myplan.html" class="btn-ghost">\\ud83d\\udccb T\\u00fcm Plan\\u0131m</a>';
-      h+='<button class="btn-ghost" onclick="switchTab(\'aicoach\',document.querySelectorAll(\'.nav-item\')[1])">\\ud83e\\udd16 AI Ko\\u00e7</button>';
+      h+='<div class="hero-btns">';
+      h+='<button class="btn-go" onclick="switchTab(\'workouts\',document.querySelectorAll(\'.nav-item\')[2])">&#127937; Antrenmanı Başlat</button>';
+      h+='<a href="myplan.html" class="btn-out">&#128203; Tüm Planım</a>';
+      h+='<button class="btn-out" onclick="switchTab(\'aicoach\',document.querySelectorAll(\'.nav-item\')[1])">&#129302; AI Ko&ccedil;</button>';
       h+='</div>';
     }
     h+='</div>';
 
-    // --- GOREVLER ---
+    // GOREVLER
     const calDone=quickCal>=calTarget,wtrDone=quickWater>=waterTarget;
-    h+='<div class="section-label">Bug\\u00fcn\\u00fcn G\\u00f6revleri</div>';
-    h+='<div class="task-row">';
+    h+='<div class="sec-label">Bugünün Görevleri</div>';
+    h+='<div class="task-list">';
 
-    // antrenman
-    h+='<div class="task-card '+(todayDone?'done':'')+'" onclick="toggleTodayDone()">';
-    h+='<div class="task-check">'+(todayDone?'\\u2713':'')+'</div>';
-    h+='<div class="task-info"><div class="task-title">'+(isRest?'Dinlenme g\\u00fcn\\u00fc \\u2014 aktif iyile\\u015fme':'Antrenman\\u0131 tamamla')+'</div>';
-    h+='<div class="task-desc">'+(isRest?'Hafif y\\u00fcr\\u00fcy\\u00fc\\u015f veya esneme':(tp?.focus||'Antrenman')+' \\u00b7 '+exs.length+' egzersiz \\u00b7 '+(tp?.duration||45)+' dk')+'</div></div>';
-    h+='<span class="task-tag '+(todayDone?'tag-blue':'tag-green')+'">'+(todayDone?'\\u2705 Tamam':'\\ud83d\\udcaa Antrenman')+'</span></div>';
+    h+='<div class="task '+(todayDone?'done':'')+'" onclick="toggleTodayDone()">';
+    h+='<div class="task-box">'+(todayDone?'&#10003;':'')+'</div>';
+    h+='<div class="task-info"><div class="task-title">'+(isRest?'Dinlenme günü &mdash; aktif iyileşme':'Antrenmanı tamamla')+'</div>';
+    h+='<div class="task-desc">'+(isRest?'Hafif yürüyüş veya esneme':(tp?.focus||'Antrenman')+' &middot; '+exs.length+' egzersiz &middot; '+(tp?.duration||45)+' dk')+'</div></div>';
+    h+='<span class="task-tag '+(todayDone?'tag-b':'tag-g')+'">'+(todayDone?'&#9989; Tamam':'&#128170; Antrenman')+'</span></div>';
 
     if(tn){
-      h+='<div class="task-card '+(calDone?'done':'')+'" onclick="switchTab(\'aicoach\',document.querySelectorAll(\'.nav-item\')[1])">';
-      h+='<div class="task-check">'+(calDone?'\\u2713':'')+'</div>';
-      h+='<div class="task-info"><div class="task-title">G\\u00fcnl\\u00fck beslenmeni takip et</div>';
-      h+='<div class="task-desc">Hedef '+(totalKcal||calTarget)+' kcal \\u00b7 Kahvalt\\u0131, \\u00f6\\u011fle, ak\\u015fam, ara \\u00f6\\u011f\\u00fcn</div></div>';
-      h+='<span class="task-tag '+(calDone?'tag-blue':'tag-green')+'">'+(calDone?'\\u2705 Tamam':'\\ud83e\\udd57 Beslenme')+'</span></div>';
+      h+='<div class="task '+(calDone?'done':'')+'" onclick="switchTab(\'aicoach\',document.querySelectorAll(\'.nav-item\')[1])">';
+      h+='<div class="task-box">'+(calDone?'&#10003;':'')+'</div>';
+      h+='<div class="task-info"><div class="task-title">Günlük beslenmeni takip et</div>';
+      h+='<div class="task-desc">Hedef '+(totalKcal||calTarget)+' kcal &middot; Kahvaltı, öğle, akşam, ara öğün</div></div>';
+      h+='<span class="task-tag '+(calDone?'tag-b':'tag-g')+'">'+(calDone?'&#9989; Tamam':'&#129367; Beslenme')+'</span></div>';
     }
 
-    h+='<div class="task-card '+(wtrDone?'done':'')+'" onclick="addWater()">';
-    h+='<div class="task-check">'+(wtrDone?'\\u2713':'')+'</div>';
-    h+='<div class="task-info"><div class="task-title">Su i\\u00e7meyi unutma</div>';
-    h+='<div class="task-desc">'+quickWater+'/'+waterTarget+' bardak tamamland\\u0131</div></div>';
-    h+='<span class="task-tag '+(wtrDone?'tag-blue':'tag-green')+'">'+(wtrDone?'\\u2705 Tamam':'\\ud83d\\udca7 '+quickWater+'/'+waterTarget)+'</span></div>';
+    h+='<div class="task '+(wtrDone?'done':'')+'" onclick="addWater()">';
+    h+='<div class="task-box">'+(wtrDone?'&#10003;':'')+'</div>';
+    h+='<div class="task-info"><div class="task-title">Su i&ccedil;meyi unutma</div>';
+    h+='<div class="task-desc">'+quickWater+'/'+waterTarget+' bardak tamamlandı</div></div>';
+    h+='<span class="task-tag '+(wtrDone?'tag-b':'tag-g')+'">'+(wtrDone?'&#9989; Tamam':'&#128167; '+quickWater+'/'+waterTarget)+'</span></div>';
 
     h+='</div>';
 
-    // --- 2 KOLON ---
-    const short=['Pzt','Sal','\\u00c7ar','Per','Cum','Cmt','Paz'];
+    // 2 KOLON
+    const SHORT=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
     h+='<div class="two-col">';
 
-    // Hizli takip
-    h+='<div class="card"><div class="card-head"><div class="card-title">\\u26a1 H\\u0131zl\\u0131 Takip</div><a href="nutrition.html" class="card-link">Detay \\u2192</a></div>';
+    // Takip
+    h+='<div class="card"><div class="card-head"><div class="card-title">&#9889; Hızlı Takip</div><a href="nutrition.html" class="card-link">Detay &rarr;</a></div>';
     h+='<div class="track-pair">';
-    h+='<div class="track-box" onclick="addCal()"><div class="track-em">\\ud83d\\udd25</div><div class="track-num" id="calNum" style="color:#f5a623">'+quickCal+'</div><div class="track-lbl">/ '+calTarget+' kcal</div><div class="track-bar"><div class="track-fill" id="calFill" style="width:'+calPct+'%;background:#f5a623"></div></div></div>';
-    h+='<div class="track-box" onclick="addWater()"><div class="track-em">\\ud83d\\udca7</div><div class="track-num" id="watNum" style="color:#44aaff">'+quickWater+'</div><div class="track-lbl">/ '+waterTarget+' bardak</div><div class="track-bar"><div class="track-fill" id="watFill" style="width:'+watPct+'%;background:#44aaff"></div></div></div>';
+    h+='<div class="tbox" onclick="addCal()"><div style="font-size:1.3rem">&#128293;</div><div class="tbox-num" id="calNum" style="color:#f5a623">'+quickCal+'</div><div class="tbox-lbl">/ '+calTarget+' kcal</div><div class="tbar"><div class="tfill" id="calFill" style="width:'+calPct+'%;background:#f5a623"></div></div></div>';
+    h+='<div class="tbox" onclick="addWater()"><div style="font-size:1.3rem">&#128167;</div><div class="tbox-num" id="watNum" style="color:#44aaff">'+quickWater+'</div><div class="tbox-lbl">/ '+waterTarget+' bardak</div><div class="tbar"><div class="tfill" id="watFill" style="width:'+watPct+'%;background:#44aaff"></div></div></div>';
     h+='</div>';
-    h+='<div class="add-btns"><button class="add-btn" style="color:#f5a623;border:1px solid #f5a62325;background:#f5a62310" onclick="addCal()">+200 kcal</button><button class="add-btn" style="color:#44aaff;border:1px solid #44aaff25;background:#44aaff10" onclick="addWater()">+1 Bardak</button></div>';
+    h+='<div class="add-row"><button class="add-btn" style="color:#f5a623;border:1px solid #f5a62325;background:#f5a62310" onclick="addCal()">+200 kcal</button><button class="add-btn" style="color:#44aaff;border:1px solid #44aaff25;background:#44aaff10" onclick="addWater()">+1 Bardak</button></div>';
     h+='</div>';
 
-    // Bu hafta
+    // Hafta
     let bars='';
     DAYS.forEach((day,i)=>{
       const done=!!weekDone[day],today=i===TODAY_IDX;
       const bh=done?100:today?38:10,bc=done?'var(--lime)':today?'#ffffff28':'#ffffff10';
-      bars+='<div class="wk-col"><div class="wk-bar" style="height:'+bh+'%;background:'+bc+'"></div><div class="wk-lbl" style="color:'+(today?'var(--lime)':done?'#4ade80':'var(--muted)')+'">'+short[i]+'</div></div>';
+      bars+='<div class="wk-col"><div class="wk-bar" style="height:'+bh+'%;background:'+bc+'"></div><div class="wk-lbl" style="color:'+(today?'var(--lime)':done?'#4ade80':'var(--muted)')+'">'+SHORT[i]+'</div></div>';
     });
-    const motivs=['Serini ba\\u015flat! \\ud83d\\udcaa','\\u0130yi gidiyorsun! \\ud83d\\udd25','Al\\u0131\\u015fkanl\\u0131k oluyor! \\u2728','4 g\\u00fcn \\u00fcst \\u00fcste! \\ud83c\\udfc6','Neredeyse tam hafta! \\ud83c\\udf1f','6 g\\u00fcn! \\ud83c\\udfaf','M\\u00fckemmel hafta! \\ud83c\\udfc5'];
-    h+='<div class="card"><div class="card-head"><div class="card-title">\\ud83d\\udcca Bu Hafta</div><div style="font-family:var(--font-head);font-weight:700;font-size:0.78rem;color:var(--lime)">'+weekCount+'/7</div></div>';
-    h+='<div class="week-chart">'+bars+'</div>';
-    h+='<div style="display:flex;justify-content:space-between;font-size:0.76rem;margin-top:0.35rem"><span style="color:var(--muted)">'+weekCount+' g\\u00fcn tamamland\\u0131</span><span style="color:var(--lime);font-family:var(--font-head);font-weight:700">%'+weekPct+'</span></div>';
+    const motivs=['Serini başlat! &#128170;','İyi gidiyorsun! &#128293;','Alışkanlık oluyor! &#10024;','4 gün üst üste! &#127942;','Neredeyse tam hafta! &#11088;','6 gün! &#127919;','Mükemmel hafta! &#127941;'];
+    h+='<div class="card"><div class="card-head"><div class="card-title">&#128202; Bu Hafta</div><div style="font-family:var(--font-head);font-weight:700;font-size:0.78rem;color:var(--lime)">'+weekCount+'/7 gün</div></div>';
+    h+='<div class="wk-bars">'+bars+'</div>';
+    h+='<div style="display:flex;justify-content:space-between;font-size:0.76rem;margin-top:0.35rem"><span style="color:var(--muted)">'+weekCount+' gün tamamlandı</span><span style="color:var(--lime);font-family:var(--font-head);font-weight:700">%'+weekPct+'</span></div>';
     h+='<div style="height:4px;background:#ffffff0f;border-radius:100px;overflow:hidden;margin-top:0.4rem"><div style="height:100%;width:'+weekPct+'%;background:var(--lime);border-radius:100px;transition:width 0.5s"></div></div>';
     h+='<div style="margin-top:0.85rem;font-size:0.78rem;color:var(--muted)">'+motivs[Math.min(weekCount,6)]+'</div></div>';
 
@@ -479,27 +461,26 @@ async function loadHome(){
 
     // Beslenme ozet
     if(tn&&typeof tn==='object'){
-      const mDefs=[{k:'breakfast',ic:'\\ud83c\\udf05',lb:'Kahvalt\\u0131',co:'#f5a623'},{k:'lunch',ic:'\\u2600\\ufe0f',lb:'\\u00d6\\u011fle',co:'#44aaff'},{k:'dinner',ic:'\\ud83c\\udf19',lb:'Ak\\u015fam',co:'#c8f542'},{k:'snack',ic:'\\ud83c\\udf4e',lb:'Ara \\u00d6\\u011f\\u00fcn',co:'#a78bfa'}];
+      const mDefs=[{k:'breakfast',lb:'Kahvaltı',co:'#f5a623',ic:'&#127749;'},{k:'lunch',lb:'Öğle',co:'#44aaff',ic:'&#9728;'},{k:'dinner',lb:'Akşam',co:'#c8f542',ic:'&#127769;'},{k:'snack',lb:'Ara Öğün',co:'#a78bfa',ic:'&#127822;'}];
       let mi='';
       mDefs.forEach(m=>{
         const meal=tn[m.k];if(!meal)return;
         const foods=Array.isArray(meal.foods)?meal.foods.slice(0,2).join(', '):(meal.foods||'');
-        mi+='<div class="meal-item"><div class="meal-dot" style="background:'+m.co+'"></div><div class="meal-info"><div class="meal-name">'+m.ic+' '+(meal.title||m.lb)+'</div><div class="meal-foods">'+foods+'</div></div><div class="meal-kcal">'+(meal.calories||0)+' kcal</div></div>';
+        mi+='<div class="meal-row"><div class="meal-dot" style="background:'+m.co+'"></div><div class="meal-info"><div class="meal-name">'+m.ic+' '+(meal.title||m.lb)+'</div><div class="meal-foods">'+foods+'</div></div><div class="meal-kcal">'+(meal.calories||0)+' kcal</div></div>';
       });
-      h+='<div class="card" style="margin-bottom:1.5rem"><div class="card-head"><div class="card-title">\\ud83e\\udd57 Bug\\u00fcn Ne Yemeliyim?</div><a href="myplan.html" class="card-link">Detay \\u2192</a></div>';
-      h+='<div class="meal-row">'+mi+'</div>';
-      h+='<div class="meal-total"><span style="font-size:0.76rem;color:var(--muted)">G\\u00fcnl\\u00fck Toplam</span><span style="font-family:var(--font-head);font-weight:800;font-size:0.82rem;color:var(--lime)">'+totalKcal+' kcal</span></div>';
+      h+='<div class="card" style="margin-bottom:1.5rem"><div class="card-head"><div class="card-title">&#129367; Bugün Ne Yemeliyim?</div><a href="myplan.html" class="card-link">Detay &rarr;</a></div>';
+      h+='<div class="meal-list">'+mi+'</div>';
+      h+='<div style="display:flex;justify-content:space-between;padding:0.5rem 0.75rem;background:#c8f54210;border-radius:10px;border:1px solid #c8f54218;margin-top:0.4rem"><span style="font-size:0.76rem;color:var(--muted)">Günlük Toplam</span><span style="font-family:var(--font-head);font-weight:800;font-size:0.82rem;color:var(--lime)">'+totalKcal+' kcal</span></div>';
       h+='</div>';
     }
 
-    // Upgrade strip
     if(!isPro){
-      h+='<div class="upgrade-strip"><div class="upgrade-strip-text"><h3>\\ud83d\\ude80 Pro\'ya Ge\\u00e7 \\u2014 T\\u00fcm \\u00d6zellikleri A\\u00e7</h3><p>S\\u0131n\\u0131rs\\u0131z AI ko\\u00e7lu\\u011fu \\u00b7 Haftal\\u0131k beslenme ge\\u00e7mi\\u015fi \\u00b7 \\u0130lerleme grafikleri \\u00b7 \\u00d6ncelikli destek</p></div><button class="upgrade-strip-btn" onclick="openCheckout()">Pro\'ya Y\\u00fckselt \\u2014 $19/ay</button></div>';
+      h+='<div class="upgrade-strip"><div class="upgrade-txt"><h3>&#128640; Pro'ya Ge&ccedil; &mdash; Tüm Özellikleri A&ccedil;</h3><p>Sınırsız AI ko&ccedil;lu&gbreve;u &middot; Haftalık beslenme ge&ccedil;mişi &middot; İlerleme grafikleri &middot; Öncelikli destek</p></div><button class="upgrade-btn" onclick="openCheckout()">Pro'ya Yükselt &mdash; $19/ay</button></div>';
     }
 
     el.innerHTML=h;
   }catch(e){
-    el.innerHTML='<div style="color:var(--muted);text-align:center;padding:2rem">Y\\u00fcklenemedi. Sayfay\\u0131 yenileyin.</div>';
+    el.innerHTML='<div style="color:var(--muted);text-align:center;padding:2rem">Yüklenemedi. Sayfayı yenileyin.</div>';
   }
 }
 
@@ -509,27 +490,22 @@ function renderNoPlan(){
   const fn=name.split(' ')[0];
   const pd=!!(userProfile?.goal);
   el.innerHTML='<div class="no-plan">'+
-    '<div class="no-plan-top">'+
-    '<div class="no-plan-icon">\\ud83c\\udfcb\\ufe0f</div>'+
-    '<div class="no-plan-title">Ho\\u015f geldin, '+fn+'!</div>'+
-    '<div class="no-plan-sub">FitMind AI ile <strong style="color:var(--white)">10 saniyede</strong> ki\\u015fisel antrenman ve beslenme plan\\u0131n haz\\u0131r. AI ko\\u00e7un hedeflerine g\\u00f6re 7 g\\u00fcnl\\u00fck program olu\\u015fturur \\u2014 sen sadece antrenman yapars\\u0131n.</div></div>'+
+    '<div class="nph"><div style="font-size:3rem;margin-bottom:0.75rem">&#127947;</div>'+
+    '<div class="nph-title">Ho&scedil; geldin, '+fn+'!</div>'+
+    '<div class="nph-sub">FitMind AI ile <strong style="color:var(--white)">10 saniyede</strong> ki&scedil;isel antrenman ve beslenme planın hazır.</div></div>'+
 
-    '<div class="step-item '+(pd?'step-done':'')+'"><div class="step-num '+(pd?'num-done':'num-lime')+'">'+(pd?'\\u2713':'1')+'</div><div><div class="step-title">Profilini tamamla</div><div class="step-sub">Hedefin, fitness seviyeni ve ekipman tercihini gir.</div></div></div>'+
+    '<div class="step '+(pd?'sdone':'')+'"><div class="snum '+(pd?'sok':'slime')+'">'+(pd?'&#10003;':'1')+'</div><div><div class="stitle">Profilini tamamla</div><div class="ssub">Hedefin, fitness seviyeni ve ekipman tercihini gir.</div></div></div>'+
+    '<div class="step"><div class="snum '+(pd?'slime':'sdim')+'">2</div><div><div class="stitle">AI Ko&ccedil; ile plan yaptır</div><div class="ssub">A&scedil;a&gbreve;ıdaki butona bas, <strong style="color:var(--lime)">"plan yap"</strong> yaz. 10 saniyede 7 günlük planın hazır.</div></div></div>'+
+    '<div class="step"><div class="snum sdim">3</div><div><div class="stitle">Takip et, geli&scedil;im gör</div><div class="ssub">Her gün egzersizleri tamamla, AI ko&ccedil;unla geli&scedil;.</div></div></div>'+
 
-    '<div class="step-item"><div class="step-num '+(pd?'num-lime':'num-dim')+'">2</div><div><div class="step-title">AI Ko\\u00e7 ile plan yapt\\u0131r</div><div class="step-sub">A\\u015fa\\u011f\\u0131daki butona bas, <strong style="color:var(--lime)">"plan yap"</strong> yaz. 10 saniyede 7 g\\u00fcnl\\u00fck antrenman + beslenme plan\\u0131n haz\\u0131r.</div></div></div>'+
-
-    '<div class="step-item"><div class="step-num num-dim">3</div><div><div class="step-title">Takip et, geli\\u015fim g\\u00f6r</div><div class="step-sub">Her g\\u00fcn egzersizleri tamamla, beslenmeni kaydet, AI ko\\u00e7unla geli\\u015fim.</div></div></div>'+
-
-    '<button class="cta-main" onclick="switchTab(\'aicoach\',document.querySelectorAll(\'.nav-item\')[1])">\\ud83e\\udd16 \\u015eimdi Plan Olu\\u015ftur \\u2192</button>'+
-
-    '<div class="sub-btns"><a href="profile.html" class="sub-btn">\\ud83d\\udc64 Profilimi D\\u00fczenle</a><a href="myplan.html" class="sub-btn">\\ud83d\\udccb Benim Plan\\u0131m</a></div>'+
-
-    '<div class="feat-pills"><div class="pill">\\ud83e\\udd16 <strong>7/24</strong> AI Ko\\u00e7</div><div class="pill">\\ud83d\\udcc5 <strong>7 G\\u00fcnl\\u00fck</strong> Plan</div><div class="pill">\\ud83e\\udd57 <strong>Ki\\u015fisel</strong> Beslenme</div><div class="pill">\\ud83d\\udcca <strong>\\u0130lerleme</strong> Takibi</div></div>'+
+    '<button class="cta-big" onclick="switchTab(\'aicoach\',document.querySelectorAll(\'.nav-item\')[1])">&#129302; &Scedil;imdi Plan Olu&scedil;tur &rarr;</button>'+
+    '<div class="sub-row"><a href="profile.html" class="sub-a">&#128100; Profilimi Düzenle</a><a href="myplan.html" class="sub-a">&#128203; Benim Planım</a></div>'+
+    '<div class="pills"><div class="pill">&#129302; <b>7/24</b> AI Ko&ccedil;</div><div class="pill">&#128197; <b>7 Günlük</b> Plan</div><div class="pill">&#129367; <b>Ki&scedil;isel</b> Beslenme</div><div class="pill">&#128202; <b>İlerleme</b> Takibi</div></div>'+
     '</div>';
 }
 
-function addCal(){quickCal+=200;localStorage.setItem('fp_cal_'+TODAY_STR2,quickCal);loadHome();}
-function addWater(){quickWater+=1;localStorage.setItem('fp_water_'+TODAY_STR2,quickWater);loadHome();}
+function addCal(){quickCal+=200;localStorage.setItem('fp_cal_'+TODAY_STR,quickCal);loadHome();}
+function addWater(){quickWater+=1;localStorage.setItem('fp_water_'+TODAY_STR,quickWater);loadHome();}
 function toggleTodayDone(){
   const done=JSON.parse(localStorage.getItem('fp_done')||'{}');
   if(done[TODAY_NAME])delete done[TODAY_NAME];else done[TODAY_NAME]=true;
@@ -537,15 +513,14 @@ function toggleTodayDone(){
 }
 function openCheckout(){Paddle.Checkout.open({items:[{priceId:'pri_01knxscbw8bwh1rrg8byx2cgf0',quantity:1}],successUrl:'https://fitmindai.ai/dashboard.html'});}
 
-/* === AI KO\\u00c7 === */
 function saveChatHistory(){localStorage.setItem('fm_chatHistory',JSON.stringify(chatHistory.slice(-50)));}
-function clearChat(){if(!confirm('Sohbet ge\\u00e7mi\\u015fini silmek istiyor musunuz?'))return;chatHistory=[];saveChatHistory();renderChatMessages();}
+function clearChat(){if(!confirm('Sohbet ge&ccedil;mi&scedil;ini silmek istiyor musunuz?'))return;chatHistory=[];saveChatHistory();renderChatMessages();}
 function quickSend(t){document.getElementById('chatInput').value=t;sendMsg();}
 
 function renderChatMessages(){
   const m=document.getElementById('messages');if(!m)return;
   if(!chatHistory.length){
-    m.innerHTML='<div class="msg ai">Merhaba! Ben FitMind AI ko\\u00e7unum \\ud83e\\udd16<br><br>Sana \\u00f6zel antrenman ve beslenme plan\\u0131 olu\\u015fturabilirim. Egzersiz ekleyip \\u00e7\\u0131karabilir, \\u00f6\\u011f\\u00fcnleri de\\u011fi\\u015ftirebilir, her t\\u00fcrl\\u00fc soruyu yan\\u0131tlayabilirim.<br><br><strong style="color:var(--lime)">Ba\\u015flamak i\\u00e7in:</strong> "Plan yap" yaz veya a\\u015fa\\u011f\\u0131daki butonlar\\u0131 kullan \\ud83d\\udc47</div>';
+    m.innerHTML='<div class="msg ai">Merhaba! Ben FitMind AI ko&ccedil;unum &#129302;<br><br>Sana &ouml;zel antrenman ve beslenme planı olu&scedil;turabilirim. Egzersiz ekleyip &ccedil;ıkarabilir, &ouml;&gbreve;ünleri de&gbreve;i&scedil;tirebilir, her türlü soruyu yanıtlayabilirim.<br><br><strong style="color:var(--lime)">Ba&scedil;lamak i&ccedil;in:</strong> "Plan yap" yaz veya a&scedil;a&gbreve;ıdaki butonları kullan &#128071;</div>';
     return;
   }
   m.innerHTML='';
@@ -561,60 +536,64 @@ function renderChatMessages(){
 
 function buildPlanHTML(plan){
   let s='';
-  if(plan.workout)s+='<div class="plan-section" style="border-color:var(--lime)"><div style="font-size:0.7rem;color:var(--lime);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">\\ud83d\\udcaa Antrenman Plan\\u0131</div><div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">'+fmt(plan.workout)+'</div></div>';
+  if(plan.workout)s+='<div class="plan-section" style="border-color:var(--lime)"><div style="font-size:0.7rem;color:var(--lime);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">&#128170; Antrenman Planı</div><div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">'+fmt(plan.workout)+'</div></div>';
   if(plan.nutrition){
     let nh='';
     if(typeof plan.nutrition==='object'){
-      [{k:'breakfast',ic:'\\ud83c\\udf05',lb:'Kahvalt\\u0131',co:'#f5a623'},{k:'lunch',ic:'\\u2600\\ufe0f',lb:'\\u00d6\\u011fle',co:'#44aaff'},{k:'dinner',ic:'\\ud83c\\udf19',lb:'Ak\\u015fam',co:'#c8f542'},{k:'snack',ic:'\\ud83c\\udf4e',lb:'Ara \\u00d6\\u011f\\u00fcn',co:'#a78bfa'}].forEach(m=>{const md=plan.nutrition[m.k];if(!md)return;nh+='<div style="margin-bottom:0.4rem"><span style="color:'+m.co+';font-weight:700">'+m.ic+' '+(md.title||m.lb)+':</span> <span style="color:#ffffffcc">'+(Array.isArray(md.foods)?md.foods.join(', '):(md.foods||''))+'</span> <span style="color:var(--muted);font-size:0.78rem">('+( md.calories||0)+' kcal)</span></div>';});
+      [{k:'breakfast',ic:'&#127749;',lb:'Kahvaltı',co:'#f5a623'},{k:'lunch',ic:'&#9728;',lb:'Öğle',co:'#44aaff'},{k:'dinner',ic:'&#127769;',lb:'Akşam',co:'#c8f542'},{k:'snack',ic:'&#127822;',lb:'Ara Öğün',co:'#a78bfa'}].forEach(mx=>{
+        const md=plan.nutrition[mx.k];if(!md)return;
+        nh+='<div style="margin-bottom:0.4rem"><span style="color:'+mx.co+';font-weight:700">'+mx.ic+' '+(md.title||mx.lb)+':</span> <span style="color:#ffffffcc">'+(Array.isArray(md.foods)?md.foods.join(', '):(md.foods||''))+'</span> <span style="color:var(--muted);font-size:0.78rem">('+(md.calories||0)+' kcal)</span></div>';
+      });
     } else nh='<div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">'+fmt(String(plan.nutrition))+'</div>';
-    s+='<div class="plan-section" style="border-color:#44aaff"><div style="font-size:0.7rem;color:#44aaff;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">\\ud83e\\udd57 Beslenme Plan\\u0131</div>'+nh+'</div>';
+    s+='<div class="plan-section" style="border-color:#44aaff"><div style="font-size:0.7rem;color:#44aaff;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">&#129367; Beslenme Planı</div>'+nh+'</div>';
   }
-  if(plan.tips)s+='<div class="plan-section" style="border-color:#f5a623"><div style="font-size:0.7rem;color:#f5a623;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">\\u26a1 \\u0130pu\\u00e7lar\\u0131</div><div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">'+fmt(plan.tips)+'</div></div>';
-  return '<div class="plan-card"><div style="font-family:var(--font-head);font-size:1rem;font-weight:800;color:var(--lime);margin-bottom:1rem">\\ud83c\\udfaf 7 G\\u00fcnl\\u00fck Ki\\u015fisel Plan\\u0131n\\u0131z</div>'+s+'<div style="display:flex;gap:0.75rem;margin-top:0.5rem"><button onclick="savePlan()" style="flex:1;background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.7rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer">\\ud83d\\udcbe Plan\\u0131 Kaydet</button><button onclick="window.location.href=\'myplan.html\'" style="flex:1;background:#ffffff10;color:var(--white);border:1px solid #ffffff20;border-radius:100px;padding:0.7rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer">\\ud83d\\udccb Benim Plan\\u0131m</button></div></div>';
+  if(plan.tips)s+='<div class="plan-section" style="border-color:#f5a623"><div style="font-size:0.7rem;color:#f5a623;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">&#9889; İpu&ccedil;ları</div><div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">'+fmt(plan.tips)+'</div></div>';
+  return '<div class="plan-card"><div style="font-family:var(--font-head);font-size:1rem;font-weight:800;color:var(--lime);margin-bottom:1rem">&#127919; 7 Günlük Ki&scedil;isel Planınız</div>'+s+'<div style="display:flex;gap:0.75rem;margin-top:0.5rem"><button onclick="savePlan()" style="flex:1;background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.7rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer">&#128190; Planı Kaydet</button><button onclick="window.location.href=\'myplan.html\'" style="flex:1;background:#ffffff10;color:var(--white);border:1px solid #ffffff20;border-radius:100px;padding:0.7rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer">&#128203; Benim Planım</button></div></div>';
 }
 
 function showPlanCard(plan){_pendingPlan=plan;const m=document.getElementById('messages');const c=document.createElement('div');c.className='msg ai';c.style.cssText='max-width:100%;padding:0;background:transparent;border:none;';c.innerHTML=buildPlanHTML(plan);m.appendChild(c);m.scrollTop=m.scrollHeight;}
 
 async function savePlan(){
   try{
-    if(!_pendingPlan){alert('Plan bulunamad\\u0131.');return;}
+    if(!_pendingPlan){alert('Plan bulunamadı.');return;}
     const {data:{session}}=await sb.auth.getSession();if(!session)return;
     _pendingPlan.createdAt=new Date().toISOString();_pendingPlan.goal=userProfile?.goal||'';
     await sb.from('user_plans').upsert({user_id:session.user.id,plan_data:_pendingPlan,updated_at:new Date().toISOString()},{onConflict:'user_id'});
     localStorage.removeItem('fp_done');localStorage.removeItem('fp_ex');localStorage.removeItem('fp_week');window._workoutSelectedDay=null;
-    alert('\\u2705 Plan\\u0131n\\u0131z kaydedildi!');window.location.href='myplan.html';
+    alert('✅ Planınız kaydedildi!');window.location.href='myplan.html';
   }catch(e){alert('Hata: '+e.message);}
 }
 
 async function callAI(messages,system,max_tokens){
   const body={messages,max_tokens:max_tokens||500};if(system)body.system=system;
   const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error||'API hatas\\u0131');}
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error||'API hatası');}
   const d=await res.json();return d.content?.[0]?.text||'';
 }
-function fmt(t){return t.replace(/^#{1,3}\\s*/gm,'').replace(/\\*\\*(.*?)\\*\\*/g,'<strong>$1</strong>').replace(/\\*(.*?)\\*/g,'<em>$1</em>').replace(/\\n\\n/g,'<br><br>').replace(/\\n/g,'<br>');}
+function fmt(t){return t.replace(/^#{1,3}\s*/gm,'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');}
 
 function quickDetect(text){
   const t=text.toLowerCase();
-  return ['plan yap','program yap','plan olu\\u015ftur','haftal\\u0131k plan','antrenman program\\u0131','beslenme program\\u0131','diyet program\\u0131','program istiyorum','plan istiyorum','spor program\\u0131','fitness program\\u0131','diyet yap','kilo vermek istiyorum','kas yapmak istiyorum','forma girmek istiyorum','haftada','evde spor','spora ba\\u015flamak','yemek plan\\u0131'].some(k=>t.includes(k));
+  return ['plan yap','program yap','plan olu&scedil;tur','haftal&imath;k plan','antrenman program&imath;','beslenme program&imath;','diyet program&imath;','program istiyorum','plan istiyorum','spor program&imath;','fitness program&imath;','diyet yap','kilo vermek','kas yapmak','forma girmek','haftada','evde spor','spora ba&scedil;lamak','yemek plan&imath;',
+  'plan yap','haftalik plan','antrenman programi','beslenme programi','diyet programi','program istiyorum','plan istiyorum','spor programi','fitness programi','diyet yap','kilo vermek','kas yapmak','forma girmek','haftada','evde spor','yemek plani'].some(k=>t.includes(k));
 }
 async function detectPlan(text){
   if(quickDetect(text))return true;
-  try{const r=await callAI([{role:'user',content:text}],'Kullan\\u0131c\\u0131n\\u0131n mesaj\\u0131 fitness/beslenme/antrenman PLANI iste\\u011fi mi? SADECE "evet" veya "hayir".',10);return r.trim().toLowerCase().startsWith('evet');}catch{return false;}
+  try{const r=await callAI([{role:'user',content:text}],'Kullanıcının mesajı fitness/beslenme/antrenman PLANI iste&gbreve;i mi? SADECE "evet" veya "hayir".',10);return r.trim().toLowerCase().startsWith('evet');}catch{return false;}
 }
-function updateCounter(){if(!isPro){const r=Math.max(0,FREE_LIMIT-freeCount);document.getElementById('msgCounter').textContent=r>0?(r+' mesaj kald\\u0131'):"Pro'ya ge\\u00e7 \\u2192 s\\u0131n\\u0131rs\\u0131z";}}
+function updateCounter(){if(!isPro){const r=Math.max(0,FREE_LIMIT-freeCount);document.getElementById('msgCounter').textContent=r>0?(r+' mesaj kaldı'):"Pro'ya ge&ccedil; &rarr; sınırsız";}}
 
 const PLAN_SYS=`Sen bir JSON uretici sistemsin. SADECE gecerli JSON dondur. Ilk karakter { son karakter } olacak.
 Kullanici: Hedef=GOAL, Seviye=LEVEL, Ekipman=EQUIP, Kilo=WEIGHTkg
-Ozel istek: REQUEST
-ONEMLI: Her gun icin FARKLI yiyecekler kullan.
-{"workout":"haftalik antrenman ozeti","tips":"ipucu","calories":2200,"water":3,"days":[{"day":"Pazartesi","type":"Antrenman","focus":"Gogus","duration":45,"exercises":[{"name":"Push-up","sets":"4 set","reps":"12 tekrar","rest":"60sn"}],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["yumurta","ekmek"],"calories":420,"protein":28,"carbs":38,"fat":14},"lunch":{"title":"Ogle","foods":["tavuk","pilav"],"calories":580,"protein":45,"carbs":55,"fat":12},"dinner":{"title":"Aksam","foods":["somon","salata"],"calories":520,"protein":40,"carbs":35,"fat":18},"snack":{"title":"Ara Ogun","foods":["yogurt","muz"],"calories":280,"protein":14,"carbs":32,"fat":9}}},{"day":"Sali","type":"Dinlenme","focus":"Aktif Dinlenme","duration":20,"exercises":[],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["yulaf","meyve"],"calories":380,"protein":12,"carbs":62,"fat":8},"lunch":{"title":"Ogle","foods":["mercimek corbasi","ekmek"],"calories":420,"protein":22,"carbs":58,"fat":10},"dinner":{"title":"Aksam","foods":["hindi","bulgur"],"calories":490,"protein":38,"carbs":42,"fat":14},"snack":{"title":"Ara Ogun","foods":["elma","peynir"],"calories":260,"protein":10,"carbs":28,"fat":12}}},{"day":"Carsamba","type":"Antrenman","focus":"Sirt","duration":45,"exercises":[{"name":"Pull-up","sets":"4 set","reps":"8 tekrar","rest":"90sn"}],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["smoothie","yulaf"],"calories":450,"protein":32,"carbs":48,"fat":15},"lunch":{"title":"Ogle","foods":["ton baligi","makarna"],"calories":560,"protein":42,"carbs":52,"fat":14},"dinner":{"title":"Aksam","foods":["dana kiyma","fasulye"],"calories":540,"protein":44,"carbs":28,"fat":22},"snack":{"title":"Ara Ogun","foods":["cottage cheese","kivi"],"calories":240,"protein":18,"carbs":22,"fat":8}}},{"day":"Persembe","type":"Antrenman","focus":"Bacak","duration":55,"exercises":[{"name":"Squat","sets":"4 set","reps":"12 tekrar","rest":"120sn"}],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["omlet","mantar"],"calories":480,"protein":36,"carbs":12,"fat":28},"lunch":{"title":"Ogle","foods":["tavuk","kinoa"],"calories":620,"protein":48,"carbs":50,"fat":16},"dinner":{"title":"Aksam","foods":["balik","brokoli"],"calories":440,"protein":38,"carbs":18,"fat":16},"snack":{"title":"Ara Ogun","foods":["protein bar","portakal"],"calories":300,"protein":20,"carbs":35,"fat":7}}},{"day":"Cuma","type":"Dinlenme","focus":"Aktif Dinlenme","duration":20,"exercises":[],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["avokado tost","yumurta"],"calories":400,"protein":18,"carbs":42,"fat":18},"lunch":{"title":"Ogle","foods":["nohut salatasi"],"calories":480,"protein":20,"carbs":58,"fat":14},"dinner":{"title":"Aksam","foods":["somon","kuskus"],"calories":510,"protein":42,"carbs":38,"fat":16},"snack":{"title":"Ara Ogun","foods":["kefir","granola"],"calories":250,"protein":10,"carbs":35,"fat":7}}},{"day":"Cumartesi","type":"Antrenman","focus":"Omuz","duration":50,"exercises":[{"name":"Shoulder Press","sets":"4 set","reps":"12 tekrar","rest":"90sn"}],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["pancake","ahududu"],"calories":440,"protein":16,"carbs":68,"fat":12},"lunch":{"title":"Ogle","foods":["tavuk wrap","humus"],"calories":540,"protein":38,"carbs":52,"fat":16},"dinner":{"title":"Aksam","foods":["dana eti","sebze"],"calories":580,"protein":42,"carbs":45,"fat":20},"snack":{"title":"Ara Ogun","foods":["fistik","elma"],"calories":270,"protein":12,"carbs":26,"fat":14}}},{"day":"Pazar","type":"Dinlenme","focus":"Tam Dinlenme","duration":0,"exercises":[],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["menemen","ekmek"],"calories":460,"protein":22,"carbs":38,"fat":22},"lunch":{"title":"Ogle","foods":["corba","yogurt"],"calories":500,"protein":20,"carbs":62,"fat":14},"dinner":{"title":"Aksam","foods":["levrek","patates"],"calories":480,"protein":38,"carbs":40,"fat":14},"snack":{"title":"Ara Ogun","foods":["cikolata","badem"],"calories":290,"protein":8,"carbs":38,"fat":12}}}]}`;
+Istek: REQUEST
+ONEMLI: Her gun icin FARKLI yiyecekler kullan. Tekrar etme.
+{"workout":"haftalik antrenman ozeti","tips":"ipucu","calories":2200,"water":3,"days":[{"day":"Pazartesi","type":"Antrenman","focus":"Gogus","duration":45,"exercises":[{"name":"Push-up","sets":"4 set","reps":"12 tekrar","rest":"60sn"},{"name":"Bench Press","sets":"3 set","reps":"10 tekrar","rest":"90sn"}],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["3 yumurta","tam bugday ekmek","domates"],"calories":420,"protein":28,"carbs":38,"fat":14},"lunch":{"title":"Ogle","foods":["150g tavuk","esmer pirinc","brokoli"],"calories":580,"protein":45,"carbs":55,"fat":12},"dinner":{"title":"Aksam","foods":["200g somon","tatli patates","salata"],"calories":520,"protein":40,"carbs":35,"fat":18},"snack":{"title":"Ara Ogun","foods":["Yunan yogurdu","muz","badem"],"calories":280,"protein":14,"carbs":32,"fat":9}}},{"day":"Sali","type":"Dinlenme","focus":"Aktif Dinlenme","duration":20,"exercises":[],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["yulaf ezmesi","meyve","bal"],"calories":380},"lunch":{"title":"Ogle","foods":["mercimek corbasi","ekmek"],"calories":420},"dinner":{"title":"Aksam","foods":["hindi","bulgur"],"calories":490},"snack":{"title":"Ara Ogun","foods":["elma","peynir"],"calories":260}}},{"day":"Carsamba","type":"Antrenman","focus":"Sirt","duration":45,"exercises":[{"name":"Pull-up","sets":"4 set","reps":"8 tekrar","rest":"90sn"},{"name":"Row","sets":"3 set","reps":"10 tekrar","rest":"90sn"}],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["protein smoothie","yulaf","muz"],"calories":450},"lunch":{"title":"Ogle","foods":["ton baligi","makarna"],"calories":560},"dinner":{"title":"Aksam","foods":["dana kiyma","fasulye"],"calories":540},"snack":{"title":"Ara Ogun","foods":["cottage cheese","kivi"],"calories":240}}},{"day":"Persembe","type":"Antrenman","focus":"Bacak","duration":55,"exercises":[{"name":"Squat","sets":"4 set","reps":"12 tekrar","rest":"120sn"},{"name":"Deadlift","sets":"3 set","reps":"10 tekrar","rest":"90sn"}],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["4 yumurta omlet","mantar"],"calories":480},"lunch":{"title":"Ogle","foods":["tavuk","kinoa"],"calories":620},"dinner":{"title":"Aksam","foods":["balik","brokoli"],"calories":440},"snack":{"title":"Ara Ogun","foods":["protein bar","portakal"],"calories":300}}},{"day":"Cuma","type":"Dinlenme","focus":"Aktif Dinlenme","duration":20,"exercises":[],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["avokado tost","yumurta"],"calories":400},"lunch":{"title":"Ogle","foods":["nohut salatasi"],"calories":480},"dinner":{"title":"Aksam","foods":["somon","kuskus"],"calories":510},"snack":{"title":"Ara Ogun","foods":["kefir","granola"],"calories":250}}},{"day":"Cumartesi","type":"Antrenman","focus":"Omuz","duration":50,"exercises":[{"name":"Shoulder Press","sets":"4 set","reps":"12 tekrar","rest":"90sn"},{"name":"Lateral Raise","sets":"3 set","reps":"15 tekrar","rest":"60sn"}],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["pancake","ahududu"],"calories":440},"lunch":{"title":"Ogle","foods":["tavuk wrap","humus"],"calories":540},"dinner":{"title":"Aksam","foods":["dana eti","sebze"],"calories":580},"snack":{"title":"Ara Ogun","foods":["fistik","elma"],"calories":270}}},{"day":"Pazar","type":"Dinlenme","focus":"Tam Dinlenme","duration":0,"exercises":[],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["menemen","ekmek"],"calories":460},"lunch":{"title":"Ogle","foods":["corba","yogurt"],"calories":500},"dinner":{"title":"Aksam","foods":["levrek","patates"],"calories":480},"snack":{"title":"Ara Ogun","foods":["cikolata","badem"],"calories":290}}}]}`;
 
 async function sendMsg(){
   const inp=document.getElementById('chatInput');const text=inp.value.trim();if(!text)return;
   if(!isPro&&freeCount>=FREE_LIMIT){
     const m=document.getElementById('messages');
-    m.innerHTML+='<div class="msg limit">\\ud83d\\udd12 <strong>\\u00dccretsiz limit doldu</strong><br><button onclick="openCheckout()" style="margin-top:0.5rem;background:var(--lime);color:#000;border:none;padding:0.4rem 1.2rem;border-radius:100px;font-family:var(--font-head);font-weight:700;cursor:pointer">Pro\'ya Y\\u00fckselt \\u2192 $19/ay</button></div>';
+    m.innerHTML+='<div class="msg limit">&#128274; <strong>Ücretsiz limit doldu</strong><br><button onclick="openCheckout()" style="margin-top:0.5rem;background:var(--lime);color:#000;border:none;padding:0.4rem 1.2rem;border-radius:100px;font-family:var(--font-head);font-weight:700;cursor:pointer">Pro'ya Yükselt &rarr; $19/ay</button></div>';
     m.scrollTop=m.scrollHeight;return;
   }
   inp.value='';document.getElementById('sendBtn').disabled=true;
@@ -623,59 +602,59 @@ async function sendMsg(){
   m.innerHTML+='<div class="msg typing"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
   m.scrollTop=m.scrollHeight;
   chatHistory.push({role:'user',content:text});
+
   const isPlanReq=await detectPlan(text);
   if(isPlanReq){
-    const sys=PLAN_SYS.replace('GOAL',userProfile?.goal||'genel').replace('LEVEL',userProfile?.fitness_level||'orta').replace('EQUIP',userProfile?.equipment||'gym').replace('WEIGHT',userProfile?.weight||70).replace('REQUEST',text.replace(/`/g,"'"));
+    const sys=PLAN_SYS.replace('GOAL',userProfile?.goal||'genel').replace('LEVEL',userProfile?.fitness_level||'orta').replace('EQUIP',userProfile?.equipment||'gym').replace('WEIGHT',String(userProfile?.weight||70)).replace('REQUEST',text.replace(/`/g,"'"));
     try{
       const reply=await callAI([{role:'user',content:text}],sys,4000);
       let clean=reply.trim();const s=clean.indexOf('{'),e=clean.lastIndexOf('}');
       if(s!==-1&&e!==-1)clean=clean.slice(s,e+1);clean=clean.replace(/```json|```/g,'').trim();
       const plan=JSON.parse(clean);
-      const dm={'Pazartesi':'Pazartesi','Sali':'Sal\\u0131','Carsamba':'\\u00c7ar\\u015famba','Persembe':'Per\\u015fembe','Cuma':'Cuma','Cumartesi':'Cumartesi','Pazar':'Pazar'};
+      const dm={'Sali':'Salı','Carsamba':'Çarşamba','Persembe':'Perşembe'};
       if(plan.days)plan.days=plan.days.map(d=>({...d,day:dm[d.day]||d.day}));
       const t=m.querySelector('.msg.typing');if(t)t.remove();
       showPlanCard(plan);chatHistory.push({role:'assistant',isPlanCard:true,plan,content:'[Plan]'});saveChatHistory();
-    }catch(err){
+    }catch{
       const t=m.querySelector('.msg.typing');if(t)t.remove();
-      const fb='Plan olu\\u015fturulurken sorun \\u00e7\\u0131kt\\u0131. Tekrar deneyin. \\ud83d\udd04';
+      const fb='Plan olu&scedil;turulurken sorun &ccedil;ıktı. Tekrar deneyin.';
       m.innerHTML+='<div class="msg ai">'+fb+'</div>';chatHistory.push({role:'assistant',content:fb});saveChatHistory();
     }
     m.scrollTop=m.scrollHeight;document.getElementById('sendBtn').disabled=false;if(!isPro){freeCount++;updateCounter();}return;
   }
 
-  // Edit
-  const editKw=['ekle','\\u00e7\\u0131kar','kald\\u0131r','de\\u011fi\\u015ftir','g\\u00fcncelle','yerine'];
+  const editKw=['ekle','çıkar','kaldır','de&gbreve;i&scedil;tir','güncelle','yerine'];
   if(_pendingPlan&&editKw.some(k=>text.toLowerCase().includes(k))){
-    const esys='Sen FitMind AI. Mevcut plan: '+JSON.stringify(_pendingPlan).slice(0,1800)+'. \\u0130stek: '+text.replace(/`/g,"'")+'. SADECE g\\u00fcncellenmi\\u015f JSON d\\u00f6nd\\u00fcr.';
+    const esys='Sen FitMind AI. Mevcut plan: '+JSON.stringify(_pendingPlan).slice(0,1800)+'. İstek: '+text.replace(/`/g,"'")+'. SADECE güncellenmi&scedil; JSON döndür.';
     try{
       const reply=await callAI([{role:'user',content:text}],esys,3000);
       let clean=reply.trim();const s=clean.indexOf('{'),e=clean.lastIndexOf('}');
       if(s!==-1&&e!==-1)clean=clean.slice(s,e+1);
-      const up=JSON.parse(clean);const dm={'Sali':'Sal\\u0131','Carsamba':'\\u00c7ar\\u015famba','Persembe':'Per\\u015fembe'};
+      const up=JSON.parse(clean);
+      const dm={'Sali':'Salı','Carsamba':'Çarşamba','Persembe':'Perşembe'};
       if(up.days)up.days=up.days.map(d=>({...d,day:dm[d.day]||d.day}));
       _pendingPlan=up;const t=m.querySelector('.msg.typing');if(t)t.remove();
-      m.innerHTML+='<div class="msg ai">\\u2705 Plan g\\u00fcncellendi!</div>';
+      m.innerHTML+='<div class="msg ai">&#9989; Plan güncellendi!</div>';
       const bw=document.createElement('div');bw.className='msg ai';bw.style.cssText='background:transparent;border:none;padding:0;display:flex;gap:0.5rem;';
-      bw.innerHTML='<button onclick="savePlan()" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.5rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer">\\ud83d\\udcbe Kaydet</button><button onclick="window.location.href=\'myplan.html\'" style="background:#ffffff10;color:var(--white);border:1px solid #ffffff20;border-radius:100px;padding:0.5rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer">\\ud83d\\udccb Benim Plan\\u0131m</button>';
-      m.appendChild(bw);chatHistory.push({role:'assistant',content:'\\u2705 G\\u00fcncellendi!'});saveChatHistory();
-    }catch{const t=m.querySelector('.msg.typing');if(t)t.remove();m.innerHTML+='<div class="msg ai">G\\u00fcncelleme yap\\u0131lamad\\u0131. Daha a\\u00e7\\u0131k belirtin.</div>';}
+      bw.innerHTML='<button onclick="savePlan()" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.5rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer">&#128190; Kaydet</button><button onclick="window.location.href=\'myplan.html\'" style="background:#ffffff10;color:var(--white);border:1px solid #ffffff20;border-radius:100px;padding:0.5rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer">&#128203; Benim Planım</button>';
+      m.appendChild(bw);chatHistory.push({role:'assistant',content:'&#9989; Güncellendi!'});saveChatHistory();
+    }catch{const t=m.querySelector('.msg.typing');if(t)t.remove();m.innerHTML+='<div class="msg ai">Güncelleme yapılamadı. Daha a&ccedil;ık belirtin.</div>';}
     m.scrollTop=m.scrollHeight;document.getElementById('sendBtn').disabled=false;if(!isPro){freeCount++;updateCounter();}return;
   }
 
-  const sys=userProfile?'Sen FitMind AI, ki\\u015fisel fitness ko\\u00e7usun. T\\u00fcrk\\u00e7e yan\\u0131t ver. Hedef: '+(userProfile.goal||'?')+', Seviye: '+(userProfile.fitness_level||'?')+', Ekipman: '+(userProfile.equipment||'?')+'. K\\u0131sa, net (2-4 c\\u00fcmle).':'Sen FitMind AI, fitness ko\\u00e7usun. T\\u00fcrk\\u00e7e, 2-3 c\\u00fcmle.';
+  const sys2=userProfile?'Sen FitMind AI, ki&scedil;isel fitness ko&ccedil;usun. Türk&ccedil;e yanıt ver. Hedef: '+(userProfile.goal||'?')+', Seviye: '+(userProfile.fitness_level||'?')+'. Kısa, net (2-4 cümle).':'Sen FitMind AI, fitness ko&ccedil;usun. Türk&ccedil;e, 2-3 cümle.';
   try{
-    const reply=await callAI(chatHistory.slice(-10),sys,400);
+    const reply=await callAI(chatHistory.slice(-10),sys2,400);
     chatHistory.push({role:'assistant',content:reply});saveChatHistory();
     const t=m.querySelector('.msg.typing');if(t)t.remove();
     m.innerHTML+='<div class="msg ai">'+fmt(reply)+'</div>';
   }catch{
     const t=m.querySelector('.msg.typing');if(t)t.remove();
-    m.innerHTML+='<div class="msg ai">Tutarl\\u0131 ol ve s\\u00fcrece g\\u00fcven! \\ud83d\\udcaa</div>';
+    m.innerHTML+='<div class="msg ai">Tutarlı ol ve sürece güven! &#128170;</div>';
   }
   m.scrollTop=m.scrollHeight;document.getElementById('sendBtn').disabled=false;if(!isPro){freeCount++;updateCounter();}
 }
 
-/* === ANTRENMANLAR === */
 async function loadWorkoutsTab(){
   const strip=document.getElementById('weeklyCalendarStrip'),detail=document.getElementById('workoutDayDetail'),sub=document.getElementById('workoutTabSub');
   if(!strip||!detail)return;
@@ -684,52 +663,55 @@ async function loadWorkoutsTab(){
     const {data}=await sb.from('user_plans').select('*').eq('user_id',session.user.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
     if(!data?.plan_data?.days){
       strip.innerHTML='';
-      detail.innerHTML='<div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:3rem;text-align:center"><div style="font-size:3rem;margin-bottom:1rem">\\ud83d\\udccb</div><div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;margin-bottom:0.5rem">Hen\\u00fcz antrenman plan\\u0131n yok</div><p style="color:var(--muted);font-size:0.88rem;margin-bottom:1.5rem;line-height:1.6">AI Ko\\u00e7 ile 7 g\\u00fcnl\\u00fck plan\\u0131n\\u0131 olu\\u015ftur.</p><button onclick="switchTab(\'aicoach\',document.querySelectorAll(\'.nav-item\')[1])" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.75rem 1.8rem;font-family:var(--font-head);font-weight:700;font-size:0.9rem;cursor:pointer">\\ud83e\\udd16 Plan Yap</button></div>';
+      detail.innerHTML='<div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:3rem;text-align:center"><div style="font-size:3rem;margin-bottom:1rem">&#128203;</div><div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;margin-bottom:0.5rem">Hen&uuml;z antrenman planın yok</div><p style="color:var(--muted);font-size:0.88rem;margin-bottom:1.5rem;line-height:1.6">AI Ko&ccedil; ile 7 günlük planını olu&scedil;tur.</p><button onclick="switchTab(\'aicoach\',document.querySelectorAll(\'.nav-item\')[1])" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.75rem 1.8rem;font-family:var(--font-head);font-weight:700;font-size:0.9rem;cursor:pointer">&#129302; Plan Yap</button></div>';
       return;
     }
     const plan=data.plan_data,days=plan.days,done=JSON.parse(localStorage.getItem('fp_done')||'{}');
     if(!window._workoutSelectedDay)window._workoutSelectedDay=TODAY_NAME;
+    const SHORT=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
     function renderStrip(){
       strip.innerHTML='';
       days.forEach(dp=>{
         const isT=dp.day===TODAY_NAME,isSel=dp.day===window._workoutSelectedDay,isDone=!!done[dp.day],isRest=dp.type==='Dinlenme'||dp.type==='Rest';
-        const di=DAYS.indexOf(dp.day),sn=['Pzt','Sal','\\u00c7ar','Per','Cum','Cmt','Paz'][di]||dp.day.slice(0,3);
+        const di=DAYS.indexOf(dp.day),sn=SHORT[di]||dp.day.slice(0,3);
         let bg='#0d0d0d',br='#ffffff0a';
         if(isSel){bg='#1a1a1a';br='#ffffff40';}else if(isDone){bg='#051205';br='#4ade8040';}else if(isT){bg='#0f1a06';br='var(--lime)';}
-        const ic=isDone?'\\u2705':isRest?'\\ud83e\\uddd8':['\\ud83d\\udcaa','\\ud83c\\udfc3','\\ud83e\\uddd8','\\u26a1','\\ud83d\\udd25','\\ud83c\\udf1f','\\ud83d\\ude34'][di]||'\\ud83d\\udcaa';
-        const el=document.createElement('div');
-        el.style.cssText='background:'+bg+';border:2px solid '+br+';border-radius:14px;padding:0.75rem 0.3rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative';
-        el.innerHTML='<div style="font-family:var(--font-head);font-size:0.6rem;font-weight:700;color:'+(isT?'var(--lime)':'var(--muted)')+';margin-bottom:0.3rem">'+sn+'</div><div style="font-size:1.3rem;margin-bottom:0.25rem">'+ic+'</div><div style="font-size:0.55rem;color:'+(isDone?'#4ade80':isRest?'var(--muted)':'var(--white)')+';font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 0.2rem">'+(isDone?'Tamam':isRest?'Dinlenme':(dp.focus||'Antrenman').slice(0,10))+'</div>'+(isSel?'<div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--lime);border-radius:0 0 12px 12px"></div>':'');
-        el.onclick=()=>{window._workoutSelectedDay=dp.day;renderStrip();renderDay(dp);};strip.appendChild(el);
+        const icons=['&#128170;','&#127939;','&#129496;','&#9889;','&#128293;','&#11088;','&#128564;'];
+        const ic=isDone?'&#9989;':isRest?'&#129496;':(icons[di]||'&#128170;');
+        const el2=document.createElement('div');
+        el2.style.cssText='background:'+bg+';border:2px solid '+br+';border-radius:14px;padding:0.75rem 0.3rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative';
+        el2.innerHTML='<div style="font-family:var(--font-head);font-size:0.6rem;font-weight:700;color:'+(isT?'var(--lime)':'var(--muted)')+';margin-bottom:0.3rem">'+sn+'</div><div style="font-size:1.3rem;margin-bottom:0.25rem">'+ic+'</div><div style="font-size:0.55rem;color:'+(isDone?'#4ade80':isRest?'var(--muted)':'var(--white)')+';font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 0.2rem">'+(isDone?'Tamam':isRest?'Dinlenme':(dp.focus||'Antrenman').slice(0,10))+'</div>'+(isSel?'<div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--lime);border-radius:0 0 12px 12px"></div>':'');
+        el2.onclick=()=>{window._workoutSelectedDay=dp.day;renderStrip();renderDay(dp);};strip.appendChild(el2);
       });
     }
     function renderDay(dp){
       const isT=dp.day===TODAY_NAME,isRest=dp.type==='Dinlenme'||dp.type==='Rest',isDone=!!done[dp.day];
       const exs=dp.exercises||[],de=JSON.parse(localStorage.getItem('fp_ex')||'{}')[dp.day+'_ex']||[];
-      if(sub)sub.textContent=dp.day+(isT?' \\u00b7 Bug\\u00fcn':'')+(dp.duration?' \\u00b7 '+dp.duration+' dk':'');
-      if(isRest){detail.innerHTML='<div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:3rem;text-align:center"><div style="font-size:3.5rem;margin-bottom:1rem">\\ud83e\\uddd8</div><div style="font-family:var(--font-head);font-size:1.2rem;font-weight:700;margin-bottom:0.5rem">'+dp.day+' \\u2014 Dinlenme</div><p style="color:var(--muted);font-size:0.88rem">V\\u00fccudunun iyile\\u015fmesine izin ver.</p></div>';return;}
-      if(!exs.length){detail.innerHTML='<div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:2rem;text-align:center;color:var(--muted)">Bu g\\u00fcn i\\u00e7in egzersiz bulunamad\\u0131.</div>';return;}
+      if(sub)sub.textContent=dp.day+(isT?' · Bugün':'')+(dp.duration?' · '+dp.duration+' dk':'');
+      if(isRest){detail.innerHTML='<div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:3rem;text-align:center"><div style="font-size:3.5rem;margin-bottom:1rem">&#129496;</div><div style="font-family:var(--font-head);font-size:1.2rem;font-weight:700;margin-bottom:0.5rem">'+dp.day+' &mdash; Dinlenme</div><p style="color:var(--muted);font-size:0.88rem">Vücudunun iyile&scedil;mesine izin ver.</p></div>';return;}
+      if(!exs.length){detail.innerHTML='<div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:2rem;text-align:center;color:var(--muted)">Bu gün i&ccedil;in egzersiz bulunamadı.</div>';return;}
       const pct=Math.round(de.length/exs.length*100);
       let h='<div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem">';
       h+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:0.75rem">';
-      h+='<div><div style="font-family:var(--font-head);font-size:1rem;font-weight:700">'+dp.day+(isT?' <span style="background:#c8f54220;color:var(--lime);font-size:0.7rem;padding:0.2rem 0.6rem;border-radius:100px;border:1px solid #c8f54230">Bug\\u00fcn</span>':'')+'</div>'+(dp.focus?'<div style="display:inline-flex;align-items:center;background:#c8f54215;border:1px solid #c8f54225;border-radius:100px;padding:0.25rem 0.75rem;font-size:0.7rem;font-family:var(--font-head);font-weight:700;color:var(--lime);margin-top:0.4rem">'+dp.focus.toUpperCase()+'</div>':'')+'</div>';
-      h+='<div style="text-align:right"><div style="font-size:0.73rem;color:var(--muted);margin-bottom:0.25rem">'+de.length+'/'+exs.length+' tamamland\\u0131</div><div style="width:110px;height:4px;background:#ffffff10;border-radius:100px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--lime);border-radius:100px"></div></div></div></div>';
+      h+='<div><div style="font-family:var(--font-head);font-size:1rem;font-weight:700">'+dp.day+(isT?' <span style="background:#c8f54220;color:var(--lime);font-size:0.7rem;padding:0.2rem 0.6rem;border-radius:100px;border:1px solid #c8f54230">Bugün</span>':'')+'</div>'+(dp.focus?'<div style="display:inline-flex;align-items:center;background:#c8f54215;border:1px solid #c8f54225;border-radius:100px;padding:0.25rem 0.75rem;font-size:0.7rem;font-family:var(--font-head);font-weight:700;color:var(--lime);margin-top:0.4rem">'+dp.focus.toUpperCase()+'</div>':'')+'</div>';
+      h+='<div style="text-align:right"><div style="font-size:0.73rem;color:var(--muted);margin-bottom:0.25rem">'+de.length+'/'+exs.length+' tamamlandı</div><div style="width:110px;height:4px;background:#ffffff10;border-radius:100px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--lime);border-radius:100px"></div></div></div></div>';
       h+='<div style="display:flex;flex-direction:column;gap:0.6rem">';
       exs.forEach((ex,i)=>{
         const dEx=de.includes(i);
         h+='<div style="display:flex;align-items:center;gap:1rem;padding:0.9rem 1rem;background:'+(dEx?'#4ade8008':'#ffffff05')+';border-radius:14px;border:1.5px solid '+(dEx?'#4ade8025':'#ffffff08')+';cursor:pointer" onclick="toggleEx(this,'+i+',\''+dp.day+'\','+exs.length+')">';
-        h+='<div style="width:30px;height:30px;border-radius:9px;background:'+(dEx?'var(--lime)':'#ffffff10')+';display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.78rem;color:'+(dEx?'#000':'var(--muted)')+';flex-shrink:0">'+(dEx?'\\u2713':(i+1))+'</div>';
+        h+='<div style="width:30px;height:30px;border-radius:9px;background:'+(dEx?'var(--lime)':'#ffffff10')+';display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.78rem;color:'+(dEx?'#000':'var(--muted)')+';flex-shrink:0">'+(dEx?'&#10003;':(i+1))+'</div>';
         h+='<div style="flex:1"><div style="font-size:0.9rem;font-weight:500;'+(dEx?'text-decoration:line-through;opacity:0.45':'')+'">'+ex.name+'</div>';
-        h+='<div style="display:flex;gap:0.35rem;margin-top:0.3rem;flex-wrap:wrap"><span style="background:#c8f54218;border:1px solid #c8f54222;border-radius:7px;padding:0.15rem 0.5rem;font-size:0.68rem;font-family:var(--font-head);font-weight:700;color:var(--lime)">'+ex.sets+'</span><span style="background:#ffffff08;border-radius:7px;padding:0.15rem 0.5rem;font-size:0.68rem;font-family:var(--font-head);font-weight:700">'+ex.reps+'</span>'+(ex.rest?'<span style="background:#ffffff05;border-radius:7px;padding:0.15rem 0.5rem;font-size:0.68rem;color:var(--muted)">\\u23f1 '+ex.rest+'</span>':'')+'</div></div>';
-        h+='<div onclick="event.stopPropagation();window.open(\'https://www.youtube.com/results?search_query='+encodeURIComponent(ex.name)+'+nas%C4%B1l+yap%C4%B1l%C4%B1r\',\'_blank\')" style="background:#ffffff08;border:1px solid #ffffff10;border-radius:9px;padding:0.38rem 0.65rem;font-size:0.7rem;color:var(--muted);cursor:pointer;flex-shrink:0;font-family:var(--font-head);font-weight:700">\\u25b6 Video</div></div>';
+        h+='<div style="display:flex;gap:0.35rem;margin-top:0.3rem;flex-wrap:wrap"><span style="background:#c8f54218;border:1px solid #c8f54222;border-radius:7px;padding:0.15rem 0.5rem;font-size:0.68rem;font-family:var(--font-head);font-weight:700;color:var(--lime)">'+ex.sets+'</span><span style="background:#ffffff08;border-radius:7px;padding:0.15rem 0.5rem;font-size:0.68rem;font-family:var(--font-head);font-weight:700">'+ex.reps+'</span>'+(ex.rest?'<span style="background:#ffffff05;border-radius:7px;padding:0.15rem 0.5rem;font-size:0.68rem;color:var(--muted)">&#8987; '+ex.rest+'</span>':'')+'</div></div>';
+        const ytq=encodeURIComponent(ex.name+' nasil yapilir');
+        h+='<div onclick="event.stopPropagation();window.open(\'https://www.youtube.com/results?search_query='+ytq+'\',\'_blank\')" style="background:#ffffff08;border:1px solid #ffffff10;border-radius:9px;padding:0.38rem 0.65rem;font-size:0.7rem;color:var(--muted);cursor:pointer;flex-shrink:0;font-family:var(--font-head);font-weight:700">&#9658; Video</div></div>';
       });
-      h+='</div><button onclick="toggleDayDone(\''+dp.day+'\')" style="width:100%;margin-top:1rem;padding:0.85rem;border:none;border-radius:14px;font-family:var(--font-head);font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.2s;'+(isDone?'background:#4ade8015;color:#4ade80;border:1.5px solid #4ade8030':'background:linear-gradient(135deg,var(--lime),var(--lime2));color:#000')+'">'+(isDone?'\\u2705 Tamamland\\u0131 \\u2014 Geri Al':'\\ud83c\\udfc1 Antrenman\\u0131 Tamamla')+'</button></div>';
+      h+='</div><button onclick="toggleDayDone(\''+dp.day+'\')" style="width:100%;margin-top:1rem;padding:0.85rem;border:none;border-radius:14px;font-family:var(--font-head);font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.2s;'+(isDone?'background:#4ade8015;color:#4ade80;border:1.5px solid #4ade8030':'background:linear-gradient(135deg,var(--lime),var(--lime2));color:#000')+'">'+(isDone?'&#9989; Tamamlandı &mdash; Geri Al':'&#127937; Antrenmanı Tamamla')+'</button></div>';
       detail.innerHTML=h;
     }
     renderStrip();
     const sel=days.find(d=>d.day===window._workoutSelectedDay)||days.find(d=>d.day===TODAY_NAME)||days[0];
     if(sel)renderDay(sel);
-  }catch(e){if(detail)detail.innerHTML='<div style="color:var(--muted);text-align:center;padding:2rem">Plan y\\u00fcklenemedi.</div>';}
+  }catch(e){if(detail)detail.innerHTML='<div style="color:var(--muted);text-align:center;padding:2rem">Plan yüklenemedi.</div>';}
 }
 
 function toggleEx(el,idx,day,total){
@@ -746,25 +728,24 @@ function toggleDayDone(day){
 }
 async function signOut(){await sb.auth.signOut();window.location.replace('auth.html');}
 
-/* === TOUR === */
 const TOUR=[
-  {i:'\\ud83d\\udc4b',t:'FitMind AI\'ya Ho\\u015f Geldin!',d:'AI destekli ki\\u015fisel fitness ko\\u00e7un burada. Plan\\u0131n\\u0131 olu\\u015ftur, antrenmanlar\\u0131n\\u0131 takip et, beslenmeni d\\u00fczenle \\u2014 hepsi tek yerden, saniyeler i\\u00e7inde.'},
-  {i:'\\ud83e\\udd16',t:'\\u00d6nce Plan Yapt\\u0131r',d:'Sol men\\u00fcden <strong>AI Ko\\u00e7</strong> sekmesine git. <strong style="color:var(--lime)">"Plan yap"</strong> yaz. 10 saniyede ki\\u015fisel 7 g\\u00fcnl\\u00fck antrenman + beslenme plan\\u0131n haz\\u0131r.'},
-  {i:'\\ud83c\\udfe0',t:'Ana Sayfa = G\\u00fcnl\\u00fck Rehberin',d:'Her g\\u00fcn Ana Sayfa\'da bug\\u00fcn ne yapaca\\u011f\\u0131n\\u0131 g\\u00f6recs\\u0131n. Antrenman\\u0131n, beslenmen, su takibin \\u2014 net, sade, anla\\u015f\\u0131l\\u0131r.'},
-  {i:'\\ud83c\\udfcb\\ufe0f',t:'Antrenmanlar\\u0131 Takip Et',d:'<strong>Antrenmanlar</strong> sekmesinde egzersizleri tamamland\\u0131 olarak i\\u015faretle. Her egzersiz i\\u00e7in YouTube video linki mevcut.'},
-  {i:'\\ud83d\\ude80',t:'Haz\\u0131r m\\u0131s\\u0131n?',d:'<strong>AI Ko\\u00e7</strong> sekmesine git ve <strong style="color:var(--lime)">"plan yap"</strong> yaz. 10 saniye i\\u00e7inde sana \\u00f6zel plan\\u0131n haz\\u0131r!'},
+  {i:'&#128075;',t:'FitMind AI'ya Ho&scedil; Geldin!',d:'AI destekli ki&scedil;isel fitness ko&ccedil;un burada. Planını olu&scedil;tur, antrenmanlarını takip et, beslenmeni düzenle.'},
+  {i:'&#129302;',t:'Önce Plan Yaptır',d:'Sol menüden <strong>AI Ko&ccedil;</strong> sekmesine git. <strong style="color:var(--lime)">"Plan yap"</strong> yaz. 10 saniyede ki&scedil;isel 7 günlük planın hazır!'},
+  {i:'&#127968;',t:'Ana Sayfa = Günlük Rehberin',d:'Her gün ne yapaca&gbreve;ını gör. Antrenmanın, beslenmen, su takibin &mdash; net, sade.'},
+  {i:'&#127947;',t:'Antrenmanları Takip Et',d:'<strong>Antrenmanlar</strong> sekmesinde egzersizleri i&scedil;aretle. Her egzersiz i&ccedil;in video linki var.'},
+  {i:'&#128640;',t:'Hazır mısın?',d:'<strong>AI Ko&ccedil;</strong> sekmesine git ve <strong style="color:var(--lime)">"plan yap"</strong> yaz. 10 saniyede planın hazır!'},
 ];
 let tStep=0;
 function startTour(){tStep=0;renderTour();document.getElementById('tourOverlay').style.display='flex';}
 function renderTour(){
   const s=TOUR[tStep];
   document.getElementById('tourBadge').textContent=(tStep+1)+' / '+TOUR.length;
-  document.getElementById('tourIcon').textContent=s.i;
+  document.getElementById('tourIcon').innerHTML=s.i;
   document.getElementById('tourTitle').textContent=s.t;
   document.getElementById('tourDesc').innerHTML=s.d;
   const dots=document.getElementById('tourDots');dots.innerHTML='';
-  TOUR.forEach((_,i)=>{const d=document.createElement('div');d.className='t-dot'+(i===tStep?' on':'');dots.appendChild(d);});
-  document.getElementById('tourNextBtn').textContent=tStep===TOUR.length-1?'Hadi Ba\\u015flayal\\u0131m! \\ud83d\\ude80':'Devam \\u2192';
+  TOUR.forEach((_,i)=>{const d=document.createElement('div');d.className='tdot'+(i===tStep?' on':'');dots.appendChild(d);});
+  document.getElementById('tourNextBtn').innerHTML=tStep===TOUR.length-1?'Hadi Ba&scedil;layalım! &#128640;':'Devam &rarr;';
 }
 function nextTourStep(){if(tStep<TOUR.length-1){tStep++;renderTour();}else{closeTour();switchTab('aicoach',document.querySelectorAll('.nav-item')[1]);}}
 function closeTour(){document.getElementById('tourOverlay').style.display='none';localStorage.setItem('fm_tourDone','1');}
