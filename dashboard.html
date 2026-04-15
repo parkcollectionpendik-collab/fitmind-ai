@@ -476,7 +476,7 @@ async function loadHome(){
     }
 
     if(!isPro){
-      h+='<div class="upgrade-strip"><div class="upgrade-txt"><h3>&#128640; Pro'ya Geç — Tüm Özellikleri Aç</h3><p>Sınırsız AI koçluğu · Haftalık beslenme geçmişi · İlerleme grafikleri · Öncelikli destek</p></div><button class="upgrade-btn" onclick="openCheckout()">Pro'ya Yükselt — $19/ay</button></div>';
+      h+='<div class="upgrade-strip"><div class="upgrade-txt"><h3>&#128640; Pro\'ya Geç — Tüm Özellikleri Aç</h3><p>Sınırsız AI koçluğu · Haftalık beslenme geçmişi · İlerleme grafikleri · Öncelikli destek</p></div><button class="upgrade-btn" onclick="openCheckout()">Pro\'ya Yükselt — $19/ay</button></div>';
     }
 
     el.innerHTML=h;
@@ -582,7 +582,7 @@ async function detectPlan(text){
   if(quickDetect(text))return true;
   try{const r=await callAI([{role:'user',content:text}],'Kullanıcının mesajı fitness/beslenme/antrenman PLANI isteği mi? SADECE "evet" veya "hayir".',10);return r.trim().toLowerCase().startsWith('evet');}catch{return false;}
 }
-function updateCounter(){if(!isPro){const r=Math.max(0,FREE_LIMIT-freeCount);document.getElementById('msgCounter').textContent=r>0?(r+' mesaj kaldı'):"Pro'ya geç → sınırsız";}}
+function updateCounter(){if(!isPro){const r=Math.max(0,FREE_LIMIT-freeCount);document.getElementById('msgCounter').textContent=r>0?(r+' mesaj kaldı'):"Pro\'ya geç → sınırsız";}}
 
 const PLAN_SYS=`Sen bir JSON uretici sistemsin. SADECE gecerli JSON dondur. Ilk karakter { son karakter } olacak.
 Kullanici: Hedef=GOAL, Seviye=LEVEL, Ekipman=EQUIP, Kilo=WEIGHTkg
@@ -594,7 +594,7 @@ async function sendMsg(){
   const inp=document.getElementById('chatInput');const text=inp.value.trim();if(!text)return;
   if(!isPro&&freeCount>=FREE_LIMIT){
     const m=document.getElementById('messages');
-    m.innerHTML+='<div class="msg limit">&#128274; <strong>Ücretsiz limit doldu</strong><br><button onclick="openCheckout()" style="margin-top:0.5rem;background:var(--lime);color:#000;border:none;padding:0.4rem 1.2rem;border-radius:100px;font-family:var(--font-head);font-weight:700;cursor:pointer">Pro'ya Yükselt → $19/ay</button></div>';
+    m.innerHTML+='<div class="msg limit">&#128274; <strong>Ücretsiz limit doldu</strong><br><button onclick="openCheckout()" style="margin-top:0.5rem;background:var(--lime);color:#000;border:none;padding:0.4rem 1.2rem;border-radius:100px;font-family:var(--font-head);font-weight:700;cursor:pointer">Pro\'ya Yükselt → $19/ay</button></div>';
     m.scrollTop=m.scrollHeight;return;
   }
   inp.value='';document.getElementById('sendBtn').disabled=true;
