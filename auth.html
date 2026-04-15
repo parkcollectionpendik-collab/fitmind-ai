@@ -162,6 +162,13 @@ async function signInGoogle() {
     options: {redirectTo: 'https://fitmindai.ai/dashboard.html'}
   });
 }
+async function resetPassword(){
+  const email=document.getElementById('signinEmail').value.trim();
+  if(!email){showMsg('Lütfen e-posta adresinizi girin.','error');return;}
+  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:'https://fitmindai.ai/auth.html'});
+  if(error)showMsg('Hata: '+error.message,'error');
+  else showMsg('Şifre sıfırlama linki e-postanıza gönderildi!','success');
+}
 </script>
 </body>
 </html>
