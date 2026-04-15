@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--lime2:#a8d92e;--gray:#111;--muted:#888;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
@@ -26,9 +27,10 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .signout-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0.25rem;transition:color 0.2s}
 .signout-btn:hover{color:#ff6b6b}
 .main{margin-left:240px;padding:2rem;min-height:100vh}
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
 .page-title{font-family:var(--font-head);font-size:1.5rem;font-weight:800}
 .page-sub{color:var(--muted);font-size:0.9rem;margin-top:0.2rem}
+.pro-banner{display:none;background:linear-gradient(135deg,#0f1a06,#111);border:1px solid #c8f54225;border-radius:16px;padding:1rem 1.5rem;margin-bottom:1.5rem;align-items:center;gap:1rem;flex-wrap:wrap}
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
 .stat-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:16px;padding:1.5rem;transition:border-color 0.3s}
 .stat-card:hover{border-color:#c8f54225}
@@ -90,17 +92,16 @@ textarea{resize:none;height:70px}
 <body>
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
-
 <div class="sidebar">
- <a class="logo" href="dashboard.html" style="text-decoration:none;color:inherit;">Fit<span>Mind</span> AI</a>
+  <a class="logo" href="dashboard.html" style="text-decoration:none;color:inherit;">Fit<span>Mind</span> AI</a>
   <nav class="nav">
     <a href="dashboard.html" class="nav-item"><span class="icon">🏠</span> Ana Sayfa</a>
-<a href="dashboard.html" class="nav-item"><span class="icon">🤖</span> AI Koç</a>
-<a href="dashboard.html" class="nav-item"><span class="icon">🏋️</span> Antrenmanlar</a>
-<a href="myplan.html" class="nav-item"><span class="icon">📋</span> Benim Planım</a>
-<a href="nutrition.html" class="nav-item"><span class="icon">🥗</span> Beslenme</a>
-<a href="progress.html" class="nav-item active"><span class="icon">📈</span> İlerleme</a>
-<a href="community.html" class="nav-item"><span class="icon">👥</span> Topluluk</a>
+    <a href="dashboard.html" class="nav-item"><span class="icon">🤖</span> AI Koç</a>
+    <a href="dashboard.html" class="nav-item"><span class="icon">🏋️</span> Antrenmanlar</a>
+    <a href="myplan.html" class="nav-item"><span class="icon">📋</span> Benim Planım</a>
+    <a href="nutrition.html" class="nav-item"><span class="icon">🥗</span> Beslenme</a>
+    <a href="progress.html" class="nav-item active"><span class="icon">📈</span> İlerleme</a>
+    <a href="community.html" class="nav-item"><span class="icon">👥</span> Topluluk</a>
   </nav>
   <div class="sidebar-bottom">
     <div class="user-info">
@@ -110,13 +111,22 @@ textarea{resize:none;height:70px}
     </div>
   </div>
 </div>
-
 <div class="main">
   <div class="topbar">
     <div>
       <div class="page-title">📈 İlerleme Takibi</div>
       <div class="page-sub">Dönüşümünüzü zaman içinde takip edin</div>
     </div>
+  </div>
+
+  <!-- PRO BANNER -->
+  <div class="pro-banner" id="proBanner">
+    <div style="font-size:1.5rem">⚡</div>
+    <div style="flex:1">
+      <div style="font-family:var(--font-head);font-size:0.9rem;font-weight:700;margin-bottom:0.2rem">Pro ile Daha Fazlası</div>
+      <div style="font-size:0.8rem;color:var(--muted)">Sınırsız ilerleme kaydı, vücut ölçüm grafikleri ve AI analizi Pro üyelere özel.</div>
+    </div>
+    <button onclick="openCheckout()" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.55rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer;white-space:nowrap">Pro'ya Geç → $19/ay</button>
   </div>
 
   <div class="stats-grid">
@@ -147,45 +157,22 @@ textarea{resize:none;height:70px}
       <div class="panel-card">
         <div class="card-title">📝 Bugünkü Ölçümleri Kaydet</div>
         <div class="log-form">
-          <div class="input-group">
-            <label>Tarih</label>
-            <input type="date" id="logDate">
-          </div>
-          <div class="input-group">
-            <label>Kilo (kg)</label>
-            <input type="number" id="logWeight" placeholder="75.5" step="0.1">
-          </div>
-          <div class="input-group">
-            <label>Göğüs (cm)</label>
-            <input type="number" id="logChest" placeholder="95" step="0.5">
-          </div>
-          <div class="input-group">
-            <label>Bel (cm)</label>
-            <input type="number" id="logWaist" placeholder="80" step="0.5">
-          </div>
-          <div class="input-group">
-            <label>Kalça (cm)</label>
-            <input type="number" id="logHips" placeholder="95" step="0.5">
-          </div>
-          <div class="input-group">
-            <label>Notlar</label>
-            <textarea id="logNotesText" placeholder="Nasıl hissediyorsunuz? Gözlemleriniz..."></textarea>
-          </div>
+          <div class="input-group"><label>Tarih</label><input type="date" id="logDate"></div>
+          <div class="input-group"><label>Kilo (kg)</label><input type="number" id="logWeight" placeholder="75.5" step="0.1"></div>
+          <div class="input-group"><label>Göğüs (cm)</label><input type="number" id="logChest" placeholder="95" step="0.5"></div>
+          <div class="input-group"><label>Bel (cm)</label><input type="number" id="logWaist" placeholder="80" step="0.5"></div>
+          <div class="input-group"><label>Kalça (cm)</label><input type="number" id="logHips" placeholder="95" step="0.5"></div>
+          <div class="input-group"><label>Notlar</label><textarea id="logNotesText" placeholder="Nasıl hissediyorsunuz? Gözlemleriniz..."></textarea></div>
         </div>
         <button class="log-btn" onclick="saveLog()" id="saveBtn">İlerlemeyi Kaydet</button>
         <div class="ai-insight" id="aiInsight" style="display:none">
-          <span>🤖</span>
-          <span id="aiInsightText"></span>
+          <span>🤖</span><span id="aiInsightText"></span>
         </div>
       </div>
-
       <div class="panel-card">
         <div class="card-title">⚖️ Kilo Grafiği</div>
-        <div class="chart-wrap">
-          <canvas id="weightChart"></canvas>
-        </div>
+        <div class="chart-wrap"><canvas id="weightChart"></canvas></div>
       </div>
-
       <div class="panel-card">
         <div class="card-title">🗓️ Kayıt Geçmişi</div>
         <div class="history-list" id="historyList">
@@ -193,38 +180,18 @@ textarea{resize:none;height:70px}
         </div>
       </div>
     </div>
-
     <div>
       <div class="panel-card">
         <div class="card-title">🏆 Başarılar</div>
         <div class="badges-grid" id="badgesGrid">
-          <div class="badge-item locked" id="badge-first">
-            <div class="badge-emoji">🌱</div>
-            <div><div class="badge-name">İlk Kayıt</div><div class="badge-desc">İlk girişini yap</div></div>
-          </div>
-          <div class="badge-item locked" id="badge-week">
-            <div class="badge-emoji">📅</div>
-            <div><div class="badge-name">Hafta Savaşçısı</div><div class="badge-desc">7 gün kayıt</div></div>
-          </div>
-          <div class="badge-item locked" id="badge-loss">
-            <div class="badge-emoji">🔥</div>
-            <div><div class="badge-name">Yağ Yakıcı</div><div class="badge-desc">2kg+ verdi</div></div>
-          </div>
-          <div class="badge-item locked" id="badge-streak">
-            <div class="badge-emoji">⚡</div>
-            <div><div class="badge-name">Tutarlı</div><div class="badge-desc">5 ardışık kayıt</div></div>
-          </div>
-          <div class="badge-item locked" id="badge-month">
-            <div class="badge-emoji">🌟</div>
-            <div><div class="badge-name">Ay Ustası</div><div class="badge-desc">30 gün kayıt</div></div>
-          </div>
-          <div class="badge-item locked" id="badge-goal">
-            <div class="badge-emoji">🎯</div>
-            <div><div class="badge-name">Hedef Avcısı</div><div class="badge-desc">Hedef kiloya ulaştı</div></div>
-          </div>
+          <div class="badge-item locked" id="badge-first"><div class="badge-emoji">🌱</div><div><div class="badge-name">İlk Kayıt</div><div class="badge-desc">İlk girişini yap</div></div></div>
+          <div class="badge-item locked" id="badge-week"><div class="badge-emoji">📅</div><div><div class="badge-name">Hafta Savaşçısı</div><div class="badge-desc">7 gün kayıt</div></div></div>
+          <div class="badge-item locked" id="badge-loss"><div class="badge-emoji">🔥</div><div><div class="badge-name">Yağ Yakıcı</div><div class="badge-desc">2kg+ verdi</div></div></div>
+          <div class="badge-item locked" id="badge-streak"><div class="badge-emoji">⚡</div><div><div class="badge-name">Tutarlı</div><div class="badge-desc">5 ardışık kayıt</div></div></div>
+          <div class="badge-item locked" id="badge-month"><div class="badge-emoji">🌟</div><div><div class="badge-name">Ay Ustası</div><div class="badge-desc">30 gün kayıt</div></div></div>
+          <div class="badge-item locked" id="badge-goal"><div class="badge-emoji">🎯</div><div><div class="badge-name">Hedef Avcısı</div><div class="badge-desc">Hedef kiloya ulaştı</div></div></div>
         </div>
       </div>
-
       <div class="panel-card">
         <div class="card-title">📏 Vücut Ölçüleri</div>
         <div style="margin-top:0.5rem" id="measuresList">
@@ -236,40 +203,46 @@ textarea{resize:none;height:70px}
 </div>
 
 <script>
-const SUPABASE_URL = 'https://cypmmayxwbkarvheqoxu.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
-const {createClient} = supabase;
-const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL='https://cypmmayxwbkarvheqoxu.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
+const {createClient}=supabase;
+const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
+Paddle.Initialize({token:'live_eefc76e39bd2263417b9b9ff52b'});
 
 let logs=[],chart=null,userProfile=null,currentUserId=null;
 
-function toggleSidebar(){
-  document.querySelector('.sidebar').classList.toggle('open');
-  document.getElementById('overlay').classList.toggle('open');
-}
-function closeSidebar(){
-  document.querySelector('.sidebar').classList.remove('open');
-  document.getElementById('overlay').classList.remove('open');
+function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open')}
+function closeSidebar(){document.querySelector('.sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open')}
+
+function openCheckout(){
+  Paddle.Checkout.open({items:[{priceId:'pri_01knxscbw8bwh1rrg8byx2cgf0',quantity:1}],successUrl:'https://fitmindai.ai/dashboard.html'});
 }
 
-async function init() {
-  const {data:{session}} = await sb.auth.getSession();
-  if (!session) {window.location.href='auth.html';return;}
-  const user = session.user;
-  currentUserId = user.id;
-  const name = user.user_metadata?.full_name||user.email.split('@')[0];
-  document.getElementById('avatarInitial').textContent = name.charAt(0).toUpperCase();
-  document.getElementById('userName').textContent = name;
-  document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
-  const {data:profile} = await sb.from('profiles').select('*').eq('id',user.id).single();
-  userProfile = profile;
+async function init(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){window.location.href='auth.html';return;}
+  const user=session.user;
+  currentUserId=user.id;
+  const name=user.user_metadata?.full_name||user.email.split('@')[0];
+  document.getElementById('avatarInitial').textContent=name.charAt(0).toUpperCase();
+  document.getElementById('userName').textContent=name;
+  document.getElementById('logDate').value=new Date().toISOString().split('T')[0];
+
+  const {data:profile}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
+  userProfile=profile;
+
+  // Pro değilse banner göster
+  if(!profile?.is_pro){
+    document.getElementById('proBanner').style.display='flex';
+  }
+
   await loadLogs();
   initChart();
 }
 
-async function loadLogs() {
-  const {data} = await sb.from('progress_logs').select('*').eq('user_id',currentUserId).order('log_date',{ascending:true});
-  logs = data||[];
+async function loadLogs(){
+  const {data}=await sb.from('progress_logs').select('*').eq('user_id',currentUserId).order('log_date',{ascending:true});
+  logs=data||[];
   renderStats();
   renderHistory();
   updateChart();
@@ -277,40 +250,34 @@ async function loadLogs() {
   updateMeasurements();
 }
 
-function renderStats() {
-  if (logs.length===0) return;
-  const weightLogs = logs.filter(l=>l.weight);
-  if (weightLogs.length===0) return;
-  const latest = weightLogs[weightLogs.length-1];
-  const first = weightLogs[0];
-  document.getElementById('currentWeight').textContent = latest.weight+' kg';
-  document.getElementById('logCount').textContent = logs.length;
-  const diff = (latest.weight-first.weight).toFixed(1);
-  const diffEl = document.getElementById('totalChange');
-  diffEl.textContent = (diff>0?'+':'')+diff+' kg';
-  diffEl.className = 'stat-value '+(diff<0?'lime':diff>0?'':'');
-  document.getElementById('totalChangeLabel').textContent = new Date(first.log_date+'T12:00:00').toLocaleDateString('tr-TR',{month:'short',day:'numeric'})+' tarihinden beri';
-  if (weightLogs.length>=2) {
-    const days = (new Date(latest.log_date)-new Date(first.log_date))/(1000*60*60*24);
-    const weeks = days/7||1;
-    const perWeek = ((latest.weight-first.weight)/weeks).toFixed(2);
-    document.getElementById('trendVal').textContent = (perWeek>0?'+':'')+perWeek+' kg';
-    document.getElementById('trendLabel').textContent = 'Haftalık ortalama';
-  }
-  if (weightLogs.length>=2) {
-    const prev = weightLogs[weightLogs.length-2];
-    const chg = (latest.weight-prev.weight).toFixed(1);
-    document.getElementById('weightChange').textContent = (chg>0?'↑ +':'↓ ')+chg+' kg öncekinden';
-    document.getElementById('weightChange').className = 'stat-change '+(chg<0?'down':chg>0?'up':'neutral');
+function renderStats(){
+  if(logs.length===0)return;
+  const weightLogs=logs.filter(l=>l.weight);
+  if(weightLogs.length===0)return;
+  const latest=weightLogs[weightLogs.length-1];
+  const first=weightLogs[0];
+  document.getElementById('currentWeight').textContent=latest.weight+' kg';
+  document.getElementById('logCount').textContent=logs.length;
+  const diff=(latest.weight-first.weight).toFixed(1);
+  const diffEl=document.getElementById('totalChange');
+  diffEl.textContent=(diff>0?'+':'')+diff+' kg';
+  diffEl.className='stat-value '+(diff<0?'lime':diff>0?'':'');
+  document.getElementById('totalChangeLabel').textContent=new Date(first.log_date+'T12:00:00').toLocaleDateString('tr-TR',{month:'short',day:'numeric'})+' tarihinden beri';
+  if(weightLogs.length>=2){
+    const days=(new Date(latest.log_date)-new Date(first.log_date))/(1000*60*60*24);
+    const weeks=days/7||1;
+    const perWeek=((latest.weight-first.weight)/weeks).toFixed(2);
+    document.getElementById('trendVal').textContent=(perWeek>0?'+':'')+perWeek+' kg';
+    const prev=weightLogs[weightLogs.length-2];
+    const chg=(latest.weight-prev.weight).toFixed(1);
+    document.getElementById('weightChange').textContent=(chg>0?'↑ +':'↓ ')+chg+' kg öncekinden';
+    document.getElementById('weightChange').className='stat-change '+(chg<0?'down':chg>0?'up':'neutral');
   }
 }
 
-function renderHistory() {
-  const list = document.getElementById('historyList');
-  if (logs.length===0) {
-    list.innerHTML='<div class="empty-state"><div class="big">📊</div><div>Henüz kayıt yok. Bugün takibe başlayın!</div></div>';
-    return;
-  }
+function renderHistory(){
+  const list=document.getElementById('historyList');
+  if(logs.length===0){list.innerHTML='<div class="empty-state"><div class="big">📊</div><div>Henüz kayıt yok. Bugün takibe başlayın!</div></div>';return;}
   list.innerHTML=[...logs].reverse().map(log=>`
     <div class="history-item">
       <div>
@@ -325,46 +292,39 @@ function renderHistory() {
     </div>`).join('');
 }
 
-function initChart() {
-  const ctx = document.getElementById('weightChart').getContext('2d');
-  chart = new Chart(ctx,{
+function initChart(){
+  const ctx=document.getElementById('weightChart').getContext('2d');
+  chart=new Chart(ctx,{
     type:'line',
     data:{labels:[],datasets:[{label:'Kilo (kg)',data:[],borderColor:'#c8f542',backgroundColor:'#c8f54215',borderWidth:2.5,pointBackgroundColor:'#c8f542',pointRadius:5,tension:0.4,fill:true}]},
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{
-        x:{grid:{color:'#ffffff08'},ticks:{color:'#888',font:{family:'DM Sans',size:11}}},
-        y:{grid:{color:'#ffffff08'},ticks:{color:'#888',font:{family:'DM Sans',size:11},callback:v=>v+' kg'}}
-      }
-    }
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'#ffffff08'},ticks:{color:'#888',font:{family:'DM Sans',size:11}}},y:{grid:{color:'#ffffff08'},ticks:{color:'#888',font:{family:'DM Sans',size:11},callback:v=>v+' kg'}}}}
   });
 }
 
-function updateChart() {
-  if (!chart) return;
-  const weightLogs = logs.filter(l=>l.weight);
-  chart.data.labels = weightLogs.map(l=>new Date(l.log_date+'T12:00:00').toLocaleDateString('tr-TR',{month:'short',day:'numeric'}));
-  chart.data.datasets[0].data = weightLogs.map(l=>l.weight);
+function updateChart(){
+  if(!chart)return;
+  const weightLogs=logs.filter(l=>l.weight);
+  chart.data.labels=weightLogs.map(l=>new Date(l.log_date+'T12:00:00').toLocaleDateString('tr-TR',{month:'short',day:'numeric'}));
+  chart.data.datasets[0].data=weightLogs.map(l=>l.weight);
   chart.update();
 }
 
-function updateBadges() {
-  if (logs.length>=1) document.getElementById('badge-first').classList.replace('locked','earned');
-  if (logs.length>=7) document.getElementById('badge-week').classList.replace('locked','earned');
-  if (logs.length>=30) document.getElementById('badge-month').classList.replace('locked','earned');
-  if (logs.length>=5) document.getElementById('badge-streak').classList.replace('locked','earned');
-  const weightLogs = logs.filter(l=>l.weight);
-  if (weightLogs.length>=2) {
-    const diff = weightLogs[0].weight-weightLogs[weightLogs.length-1].weight;
-    if (diff>=2) document.getElementById('badge-loss').classList.replace('locked','earned');
+function updateBadges(){
+  if(logs.length>=1)document.getElementById('badge-first').classList.replace('locked','earned');
+  if(logs.length>=7)document.getElementById('badge-week').classList.replace('locked','earned');
+  if(logs.length>=30)document.getElementById('badge-month').classList.replace('locked','earned');
+  if(logs.length>=5)document.getElementById('badge-streak').classList.replace('locked','earned');
+  const weightLogs=logs.filter(l=>l.weight);
+  if(weightLogs.length>=2){
+    const diff=weightLogs[0].weight-weightLogs[weightLogs.length-1].weight;
+    if(diff>=2)document.getElementById('badge-loss').classList.replace('locked','earned');
   }
 }
 
-function updateMeasurements() {
-  const latest = [...logs].reverse().find(l=>l.chest||l.waist||l.hips);
-  if (!latest) return;
-  const el = document.getElementById('measuresList');
+function updateMeasurements(){
+  const latest=[...logs].reverse().find(l=>l.chest||l.waist||l.hips);
+  if(!latest)return;
+  const el=document.getElementById('measuresList');
   el.innerHTML=`
     ${latest.chest?`<div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #ffffff08;font-size:0.875rem"><span style="color:var(--muted)">Göğüs</span><span>${latest.chest} cm</span></div>`:''}
     ${latest.waist?`<div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #ffffff08;font-size:0.875rem"><span style="color:var(--muted)">Bel</span><span>${latest.waist} cm</span></div>`:''}
@@ -372,68 +332,48 @@ function updateMeasurements() {
     <div style="font-size:0.75rem;color:var(--muted);margin-top:0.75rem">Son güncelleme: ${new Date(latest.log_date+'T12:00:00').toLocaleDateString('tr-TR',{month:'short',day:'numeric'})}</div>`;
 }
 
-async function saveLog() {
-  const btn = document.getElementById('saveBtn');
+async function saveLog(){
+  const btn=document.getElementById('saveBtn');
   btn.disabled=true;btn.textContent='Kaydediliyor...';
-  const logData={
-    user_id:currentUserId,
-    log_date:document.getElementById('logDate').value,
-    weight:parseFloat(document.getElementById('logWeight').value)||null,
-    chest:parseFloat(document.getElementById('logChest').value)||null,
-    waist:parseFloat(document.getElementById('logWaist').value)||null,
-    hips:parseFloat(document.getElementById('logHips').value)||null,
-    notes:document.getElementById('logNotesText').value||null
-  };
-  if (!logData.log_date) {alert('Lütfen bir tarih seçin');btn.disabled=false;btn.textContent='İlerlemeyi Kaydet';return;}
-  const {error} = await sb.from('progress_logs').insert(logData);
-  if (error) {alert('Hata: '+error.message);}
-  else {
+  const logData={user_id:currentUserId,log_date:document.getElementById('logDate').value,weight:parseFloat(document.getElementById('logWeight').value)||null,chest:parseFloat(document.getElementById('logChest').value)||null,waist:parseFloat(document.getElementById('logWaist').value)||null,hips:parseFloat(document.getElementById('logHips').value)||null,notes:document.getElementById('logNotesText').value||null};
+  if(!logData.log_date){alert('Lütfen bir tarih seçin');btn.disabled=false;btn.textContent='İlerlemeyi Kaydet';return;}
+  const {error}=await sb.from('progress_logs').insert(logData);
+  if(error){alert('Hata: '+error.message);}
+  else{
     document.getElementById('logWeight').value='';
     document.getElementById('logChest').value='';
     document.getElementById('logWaist').value='';
     document.getElementById('logHips').value='';
     document.getElementById('logNotesText').value='';
     await loadLogs();
-    if (logData.weight&&logs.length>=2) generateAiInsight(logData.weight);
+    if(logData.weight&&logs.length>=2)generateAiInsight(logData.weight);
   }
   btn.disabled=false;btn.textContent='İlerlemeyi Kaydet';
 }
 
-async function generateAiInsight(newWeight) {
-  const weightLogs = logs.filter(l=>l.weight);
-  if (weightLogs.length<2) return;
-  const first = weightLogs[0];
-  const diff = (newWeight-first.weight).toFixed(1);
-  const insightEl = document.getElementById('aiInsight');
-  const insightText = document.getElementById('aiInsightText');
+async function generateAiInsight(newWeight){
+  const weightLogs=logs.filter(l=>l.weight);
+  if(weightLogs.length<2)return;
+  const first=weightLogs[0];
+  const diff=(newWeight-first.weight).toFixed(1);
+  const insightEl=document.getElementById('aiInsight');
+  const insightText=document.getElementById('aiInsightText');
   insightEl.style.display='flex';
   insightText.innerHTML='<span class="spin"></span> AI ilerlemenizi analiz ediyor...';
-  try {
-    const res = await fetch('/api/chat',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        messages:[{role:'user',content:`Kullanıcının hedefi: ${userProfile?.goal==='lose_weight'?'kilo vermek':userProfile?.goal==='build_muscle'?'kas yapmak':'forma girmek'}. ${first.weight}kg ile başladı, şimdi ${newWeight}kg (${diff>0?'+':''}${diff}kg değişim). Türkçe olarak 2 cümlelik motive edici ve spesifik bir değerlendirme yaz.`}],
-        max_tokens:150
-      })
-    });
-    const data = await res.json();
-    insightText.textContent = data.content?.[0]?.text||'Harika iş! Tutarlılık uzun vadeli sonuçların anahtarıdır.';
-  } catch(e) {
-    insightText.textContent='İlerlemenizi kaydettiğiniz için harikasınız! Tutarlılık her şeydir.';
-  }
+  try{
+    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`Kullanıcının hedefi: ${userProfile?.goal==='lose_weight'?'kilo vermek':userProfile?.goal==='build_muscle'?'kas yapmak':'forma girmek'}. ${first.weight}kg ile başladı, şimdi ${newWeight}kg (${diff>0?'+':''}${diff}kg değişim). Türkçe olarak 2 cümlelik motive edici değerlendirme yaz.`}],max_tokens:150})});
+    const data=await res.json();
+    insightText.textContent=data.content?.[0]?.text||'Harika iş! Tutarlılık uzun vadeli sonuçların anahtarıdır.';
+  }catch(e){insightText.textContent='İlerlemenizi kaydettiğiniz için harikasınız! Tutarlılık her şeydir.';}
 }
 
-async function deleteLog(id) {
-  if (!confirm('Bu kaydı silmek istiyor musunuz?')) return;
+async function deleteLog(id){
+  if(!confirm('Bu kaydı silmek istiyor musunuz?'))return;
   await sb.from('progress_logs').delete().eq('id',id);
   await loadLogs();
 }
 
-async function signOut() {
-  await sb.auth.signOut();
-  window.location.href='index.html';
-}
+async function signOut(){await sb.auth.signOut();window.location.href='index.html';}
 
 init();
 </script>
