@@ -6,6 +6,7 @@
 <title>FitMind AI – Beslenme</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--lime2:#a8d92e;--gray:#111;--muted:#888;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
@@ -25,9 +26,10 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .signout-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0.25rem;transition:color 0.2s}
 .signout-btn:hover{color:#ff6b6b}
 .main{margin-left:240px;padding:2rem;min-height:100vh}
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
 .page-title{font-family:var(--font-head);font-size:1.5rem;font-weight:800}
 .page-sub{color:var(--muted);font-size:0.9rem;margin-top:0.2rem}
+.pro-banner{display:none;background:linear-gradient(135deg,#0f1a06,#111);border:1px solid #c8f54225;border-radius:16px;padding:1rem 1.5rem;margin-bottom:1.5rem;align-items:center;gap:1rem;flex-wrap:wrap}
 .macro-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
 .macro-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:16px;padding:1.5rem;text-align:center;transition:border-color 0.3s}
 .macro-card:hover{border-color:#c8f54225}
@@ -92,17 +94,16 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 <body>
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
-
 <div class="sidebar">
   <a class="logo" href="dashboard.html" style="text-decoration:none;color:inherit;">Fit<span>Mind</span> AI</a>
   <nav class="nav">
-   <a href="dashboard.html" class="nav-item"><span class="icon">🏠</span> Ana Sayfa</a>
-<a href="dashboard.html" class="nav-item"><span class="icon">🤖</span> AI Koç</a>
-<a href="dashboard.html" class="nav-item"><span class="icon">🏋️</span> Antrenmanlar</a>
-<a href="myplan.html" class="nav-item"><span class="icon">📋</span> Benim Planım</a>
-<a href="nutrition.html" class="nav-item active"><span class="icon">🥗</span> Beslenme</a>
-<a href="progress.html" class="nav-item"><span class="icon">📈</span> İlerleme</a>
-<a href="community.html" class="nav-item"><span class="icon">👥</span> Topluluk</a>
+    <a href="dashboard.html" class="nav-item"><span class="icon">🏠</span> Ana Sayfa</a>
+    <a href="dashboard.html" class="nav-item"><span class="icon">🤖</span> AI Koç</a>
+    <a href="dashboard.html" class="nav-item"><span class="icon">🏋️</span> Antrenmanlar</a>
+    <a href="myplan.html" class="nav-item"><span class="icon">📋</span> Benim Planım</a>
+    <a href="nutrition.html" class="nav-item active"><span class="icon">🥗</span> Beslenme</a>
+    <a href="progress.html" class="nav-item"><span class="icon">📈</span> İlerleme</a>
+    <a href="community.html" class="nav-item"><span class="icon">👥</span> Topluluk</a>
   </nav>
   <div class="sidebar-bottom">
     <div class="user-info">
@@ -112,7 +113,6 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
     </div>
   </div>
 </div>
-
 <div class="main">
   <div class="topbar">
     <div>
@@ -122,13 +122,13 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
   </div>
 
   <!-- PRO BANNER -->
-  <div id="proBanner" style="display:none;background:linear-gradient(135deg,#0f1a06,#111);border:1px solid #c8f54225;border-radius:16px;padding:1rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+  <div class="pro-banner" id="proBanner">
     <div style="font-size:1.5rem">⚡</div>
     <div style="flex:1">
       <div style="font-family:var(--font-head);font-size:0.9rem;font-weight:700;margin-bottom:0.2rem">Pro ile Daha Fazlası</div>
       <div style="font-size:0.8rem;color:var(--muted)">Haftalık beslenme geçmişi, kalori trendi ve kişisel öğün planı Pro üyelere özel.</div>
     </div>
-    <button onclick="window.location.href='dashboard.html#upgrade'" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.55rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer;white-space:nowrap">Pro'ya Geç →</button>
+    <button onclick="openCheckout()" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.55rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer;white-space:nowrap">Pro'ya Geç → $19/ay</button>
   </div>
 
   <div class="macro-grid">
@@ -212,7 +212,6 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
         </div>
       </div>
     </div>
-
     <div>
       <div class="panel-card">
         <div class="card-title">💡 AI Önerileri</div>
@@ -233,7 +232,6 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
           <div class="suggestion-item" onclick="fillInput('150g dana eti sebzeli ve pirinçli')"><span class="sug-emoji">🥩</span> Dana eti + pirinç <span class="sug-cal">520 kcal</span></div>
         </div>
       </div>
-
       <div class="panel-card">
         <div class="card-title">🤖 AI Beslenme İpucu</div>
         <div class="ai-tip" id="aiTip">
@@ -246,114 +244,104 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 </div>
 
 <script>
-const SUPABASE_URL = 'https://cypmmayxwbkarvheqoxu.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
-const {createClient} = supabase;
-const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL='https://cypmmayxwbkarvheqoxu.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
+const {createClient}=supabase;
+const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
+Paddle.Initialize({token:'live_eefc76e39bd2263417b9b9ff52b'});
 
 let totals={cal:0,prot:0,carb:0,fat:0};
 let goals={cal:2000,prot:150,carb:250,fat:65};
 let userProfile=null;
 
-function toggleSidebar(){
-  document.querySelector('.sidebar').classList.toggle('open');
-  document.getElementById('overlay').classList.toggle('open');
-}
-function closeSidebar(){
-  document.querySelector('.sidebar').classList.remove('open');
-  document.getElementById('overlay').classList.remove('open');
+function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open')}
+function closeSidebar(){document.querySelector('.sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open')}
+
+function openCheckout(){
+  Paddle.Checkout.open({items:[{priceId:'pri_01knxscbw8bwh1rrg8byx2cgf0',quantity:1}],successUrl:'https://fitmindai.ai/dashboard.html'});
 }
 
-async function init() {
-  const {data:{session}} = await sb.auth.getSession();
-  if (!session) {window.location.href='auth.html';return;}
-  const user = session.user;
-  const name = user.user_metadata?.full_name || user.email.split('@')[0];
-  document.getElementById('avatarInitial').textContent = name.charAt(0).toUpperCase();
-  document.getElementById('userName').textContent = name;
-  document.getElementById('todayDate').textContent = new Date().toLocaleDateString('tr-TR', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+async function init(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){window.location.href='auth.html';return;}
+  const user=session.user;
+  const name=user.user_metadata?.full_name||user.email.split('@')[0];
+  document.getElementById('avatarInitial').textContent=name.charAt(0).toUpperCase();
+  document.getElementById('userName').textContent=name;
+  document.getElementById('todayDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
 
-  const {data:profile} = await sb.from('profiles').select('*').eq('id',user.id).single();
-  userProfile = profile;
+  const {data:profile}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
+  userProfile=profile;
 
-  if (profile) {
-    if (profile.goal==='lose_weight') {goals={cal:1600,prot:140,carb:150,fat:55};}
-    else if (profile.goal==='build_muscle') {goals={cal:2500,prot:180,carb:280,fat:70};}
-    if (profile.weight) {goals.prot=Math.round(profile.weight*2);}
+  // Pro banner — Pro değilse göster
+  if(!profile?.is_pro){
+    document.getElementById('proBanner').style.display='flex';
+  }
+
+  if(profile){
+    if(profile.goal==='lose_weight'){goals={cal:1600,prot:140,carb:150,fat:55};}
+    else if(profile.goal==='build_muscle'){goals={cal:2500,prot:180,carb:280,fat:70};}
+    if(profile.weight){goals.prot=Math.round(profile.weight*2);}
     document.getElementById('calGoal').textContent=goals.cal;
     document.getElementById('protGoal').textContent=goals.prot;
     document.getElementById('carbGoal').textContent=goals.carb;
     document.getElementById('fatGoal').textContent=goals.fat;
     loadAiTip(profile);
-  } else {
+  }else{
     document.getElementById('aiTipText').textContent='Kişisel beslenme tavsiyesi almak için profilinizi tamamlayın!';
   }
 }
 
-async function loadAiTip(profile) {
-  try {
-    const res = await fetch('/api/chat', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        messages:[{role:'user',content:`Hedefi ${profile.goal === 'lose_weight' ? 'kilo vermek' : profile.goal === 'build_muscle' ? 'kas yapmak' : 'forma girmek'} olan, ${profile.weight}kg ağırlığındaki biri için kısa ve pratik bir beslenme ipucu ver. Türkçe olsun. Tek cümle.`}],
-        max_tokens:100
-      })
-    });
-    const data = await res.json();
-    document.getElementById('aiTipText').textContent = data.content?.[0]?.text || 'Önce protein hedefinize ulaşmaya odaklanın — geri kalanı kendiniliğinden yerine gelir!';
-  } catch(e) {
+async function loadAiTip(profile){
+  try{
+    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`Hedefi ${profile.goal==='lose_weight'?'kilo vermek':profile.goal==='build_muscle'?'kas yapmak':'forma girmek'} olan, ${profile.weight}kg ağırlığındaki biri için kısa ve pratik bir beslenme ipucu ver. Türkçe olsun. Tek cümle.`}],max_tokens:100})});
+    const data=await res.json();
+    document.getElementById('aiTipText').textContent=data.content?.[0]?.text||'Önce protein hedefinize ulaşmaya odaklanın!';
+  }catch(e){
     document.getElementById('aiTipText').textContent='Önce protein hedefinize ulaşmaya odaklanın — geri kalanı kendiliğinden yerine gelir!';
   }
 }
 
-async function logFood() {
-  const input = document.getElementById('foodInput');
-  const food = input.value.trim();
-  if (!food) return;
-  input.value = '';
-  const btn = document.getElementById('logBtn');
-  btn.disabled = true;
-  const log = document.getElementById('foodLog');
-  const emptyMsg = log.querySelector('.empty-log');
-  if (emptyMsg) emptyMsg.remove();
-  const loadingEl = document.createElement('div');
-  loadingEl.className = 'ai-loading';
-  loadingEl.innerHTML = '<div class="spin"></div> AI ile analiz ediliyor...';
+async function logFood(){
+  const input=document.getElementById('foodInput');
+  const food=input.value.trim();
+  if(!food)return;
+  input.value='';
+  const btn=document.getElementById('logBtn');
+  btn.disabled=true;
+  const log=document.getElementById('foodLog');
+  const emptyMsg=log.querySelector('.empty-log');
+  if(emptyMsg)emptyMsg.remove();
+  const loadingEl=document.createElement('div');
+  loadingEl.className='ai-loading';
+  loadingEl.innerHTML='<div class="spin"></div> AI ile analiz ediliyor...';
   log.prepend(loadingEl);
-  try {
-    const res = await fetch('/api/chat', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        messages:[{role:'user',content:`Bu besini analiz et: "${food}". SADECE JSON ile yanıt ver, başka metin olmasın:\n{"name":"kısa besin adı","emoji":"tek emoji","calories":sayı,"protein":sayı,"carbs":sayı,"fat":sayı}\nTüm sayılar tam sayı olsun.`}],
-        max_tokens:200
-      })
-    });
-    const data = await res.json();
-    const text = data.content?.[0]?.text||'{}';
-    const clean = text.replace(/```json|```/g,'').trim();
-    const result = JSON.parse(clean);
+  try{
+    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`Bu besini analiz et: "${food}". SADECE JSON ile yanıt ver, başka metin olmasın:\n{"name":"kısa besin adı","emoji":"tek emoji","calories":sayı,"protein":sayı,"carbs":sayı,"fat":sayı}\nTüm sayılar tam sayı olsun.`}],max_tokens:200})});
+    const data=await res.json();
+    const text=data.content?.[0]?.text||'{}';
+    const clean=text.replace(/```json|```/g,'').trim();
+    const result=JSON.parse(clean);
     loadingEl.remove();
     addEntry(result);
-  } catch(e) {
+  }catch(e){
     loadingEl.remove();
     addEntry({name:food,emoji:'🍽️',calories:300,protein:15,carbs:30,fat:10});
   }
-  btn.disabled = false;
+  btn.disabled=false;
 }
 
-function addEntry(result) {
+function addEntry(result){
   totals.cal+=result.calories||0;
   totals.prot+=result.protein||0;
   totals.carb+=result.carbs||0;
   totals.fat+=result.fat||0;
   updateCircles();
-  const now = new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
-  const log = document.getElementById('foodLog');
-  const entry = document.createElement('div');
-  entry.className = 'food-entry';
-  entry.innerHTML = `
+  const now=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+  const log=document.getElementById('foodLog');
+  const entry=document.createElement('div');
+  entry.className='food-entry';
+  entry.innerHTML=`
     <div class="food-entry-left">
       <div class="food-emoji">${result.emoji||'🍽️'}</div>
       <div>
@@ -371,19 +359,19 @@ function addEntry(result) {
   log.prepend(entry);
 }
 
-function deleteEntry(btn,cal,prot,carb,fat) {
+function deleteEntry(btn,cal,prot,carb,fat){
   btn.closest('.food-entry').remove();
   totals.cal=Math.max(0,totals.cal-cal);
   totals.prot=Math.max(0,totals.prot-prot);
   totals.carb=Math.max(0,totals.carb-carb);
   totals.fat=Math.max(0,totals.fat-fat);
   updateCircles();
-  if (document.querySelectorAll('.food-entry').length===0) {
+  if(document.querySelectorAll('.food-entry').length===0){
     document.getElementById('foodLog').innerHTML='<div class="empty-log"><div class="big">🍽️</div><div>Bugün henüz öğün eklenmedi.<br>Yukarıya ne yediğinizi yazın!</div></div>';
   }
 }
 
-function updateCircles() {
+function updateCircles(){
   document.getElementById('calVal').textContent=totals.cal;
   document.getElementById('protVal').textContent=totals.prot;
   document.getElementById('carbVal').textContent=totals.carb;
@@ -394,17 +382,17 @@ function updateCircles() {
   setCircle('fatCircle',totals.fat,goals.fat);
 }
 
-function setCircle(id,val,goal) {
+function setCircle(id,val,goal){
   const pct=Math.min(val/goal,1);
   document.getElementById(id).style.strokeDashoffset=213.6*(1-pct);
 }
 
-function fillInput(text) {
+function fillInput(text){
   document.getElementById('foodInput').value=text;
   document.getElementById('foodInput').focus();
 }
 
-async function signOut() {
+async function signOut(){
   await sb.auth.signOut();
   window.location.href='index.html';
 }
