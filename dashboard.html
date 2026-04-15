@@ -18,7 +18,9 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .nav-item{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 1rem;border-radius:12px;cursor:pointer;transition:all 0.2s;font-size:0.9rem;color:var(--muted);border:none;background:transparent;width:100%;text-align:left;font-family:var(--font-body);text-decoration:none}
 .nav-item:hover{background:#ffffff08;color:var(--white)}
 .nav-item.active{background:#c8f54215;color:var(--lime)}
-.nav-item .icon{width:20px;text-align:center;font-size:1rem}
+.nav-item.locked{opacity:0.5;cursor:not-allowed;pointer-events:none}
+.nav-item .icon{width:18px;text-align:center;font-size:1rem}
+.nav-item .lock{font-size:0.7rem;margin-left:auto;color:var(--muted)}
 .sidebar-bottom{padding-top:1rem;border-top:1px solid #ffffff0f}
 .user-info{display:flex;align-items:center;gap:0.75rem;padding:0.5rem}
 .avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--lime),#4af);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.85rem;color:var(--black);flex-shrink:0}
@@ -26,17 +28,98 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .signout-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0.25rem}
 .signout-btn:hover{color:#ff6b6b}
 .main{margin-left:240px;padding:2rem;min-height:100vh}
+
+.topbar{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
+.page-title{font-family:var(--font-head);font-size:1.8rem;font-weight:800;line-height:1.1}
+.page-title span{color:var(--lime)}
+.page-sub{color:var(--muted);font-size:0.9rem;margin-top:0.4rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap}
+.profile-tag{display:inline-flex;align-items:center;gap:0.3rem;background:#c8f54210;border:1px solid #c8f54220;color:var(--lime);padding:0.2rem 0.6rem;border-radius:100px;font-size:0.7rem;font-family:var(--font-head);font-weight:700}
+.badge-live{display:inline-flex;align-items:center;gap:0.4rem;background:#c8f54215;border:1px solid #c8f54230;color:var(--lime);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.75rem;font-family:var(--font-head);font-weight:700}
+.badge-dot{width:6px;height:6px;background:var(--lime);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 .pro-badge{display:inline-flex;align-items:center;background:linear-gradient(135deg,#c8f542,#a8d92e);color:var(--black);padding:0.2rem 0.7rem;border-radius:100px;font-size:0.7rem;font-family:var(--font-head);font-weight:800}
 .free-badge{display:inline-flex;align-items:center;background:#ffffff15;color:var(--muted);padding:0.2rem 0.7rem;border-radius:100px;font-size:0.7rem;font-family:var(--font-head);font-weight:800}
-.badge-live{display:inline-flex;align-items:center;gap:0.4rem;background:#c8f54215;border:1px solid #c8f54230;color:var(--lime);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.75rem;font-family:var(--font-head);font-weight:700}
-.badge-dot{width:6px;height:6px;background:var(--lime);border-radius:50%;animation:pulse 2s infinite;display:inline-block}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-.tab-section{display:none}
-.tab-section.active{display:block}
-.spin{display:inline-block;width:22px;height:22px;border:2px solid #ffffff15;border-top-color:var(--lime);border-radius:50%;animation:spin-anim 0.8s linear infinite}
-@keyframes spin-anim{to{transform:rotate(360deg)}}
-/* AI KOC */
-.ai-coach-full{display:flex;flex-direction:column;height:calc(100vh - 160px);background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem}
+
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
+.stat-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:16px;padding:1.5rem;transition:all 0.3s;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--lime),transparent);opacity:0;transition:opacity 0.3s}
+.stat-card:hover{border-color:#c8f54225;transform:translateY(-2px)}
+.stat-card:hover::before{opacity:1}
+.stat-icon{font-size:1.4rem;margin-bottom:0.75rem}
+.stat-label{font-size:0.72rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:0.4rem}
+.stat-value{font-family:var(--font-head);font-size:2rem;font-weight:800;line-height:1}
+.stat-value.lime{color:var(--lime)}
+.stat-change{font-size:0.75rem;color:var(--muted);margin-top:0.3rem}
+.stat-change.up{color:#4ade80}
+
+.home-grid{display:grid;grid-template-columns:1fr 1fr 360px;gap:1.5rem;margin-bottom:1.5rem}
+.panel{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem}
+.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
+.panel-title{font-family:var(--font-head);font-size:1rem;font-weight:700;display:flex;align-items:center;gap:0.5rem}
+.panel-title .dot{width:8px;height:8px;background:var(--lime);border-radius:50%;animation:pulse 2s infinite}
+.panel-link{font-size:0.78rem;color:var(--lime);text-decoration:none;font-family:var(--font-head);font-weight:700;opacity:0.7;transition:opacity 0.2s}
+.panel-link:hover{opacity:1}
+
+/* BUGÜNÜN ANTRENMAN LİSTESİ */
+.tw-item{display:flex;align-items:center;gap:0.75rem;padding:0.8rem 1rem;background:#ffffff05;border-radius:12px;cursor:pointer;transition:all 0.2s;border:1.5px solid transparent;margin-bottom:0.4rem}
+.tw-item:hover{background:#ffffff08;border-color:#ffffff10}
+.tw-item.done{background:#4ade8008;border-color:#4ade8020}
+.tw-item:last-child{margin-bottom:0}
+.tw-check{width:22px;height:22px;border-radius:7px;border:2px solid #ffffff20;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.75rem;transition:all 0.2s}
+.tw-check.done{background:var(--lime);border-color:var(--lime);color:#000}
+.tw-name{font-size:0.88rem;font-weight:500;flex:1}
+.tw-item.done .tw-name{text-decoration:line-through;opacity:0.45}
+.tw-sets{font-size:0.72rem;color:var(--muted);margin-top:0.1rem;display:flex;gap:0.5rem}
+
+.spin{display:inline-block;width:16px;height:16px;border:2px solid #ffffff15;border-top-color:var(--lime);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem}
+.quick-card{background:#ffffff06;border:1.5px solid #ffffff0a;border-radius:16px;padding:1.1rem;cursor:pointer;transition:all 0.25s;text-decoration:none;display:block}
+.quick-card:hover{border-color:#c8f54230;background:#ffffff0a;transform:translateY(-2px)}
+.qc-icon{font-size:1.6rem;margin-bottom:0.5rem}
+.qc-title{font-family:var(--font-head);font-size:0.85rem;font-weight:700;margin-bottom:0.2rem;color:var(--white)}
+.qc-sub{font-size:0.72rem;color:var(--muted);line-height:1.4}
+.qc-arrow{font-size:0.7rem;color:var(--lime);margin-top:0.4rem;font-family:var(--font-head);font-weight:700}
+
+.progress-ring-wrap{display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;padding:1rem;background:#ffffff06;border-radius:14px}
+.ring-svg{position:relative;width:60px;height:60px;flex-shrink:0}
+.ring-svg svg{transform:rotate(-90deg)}
+.ring-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-pct{font-family:var(--font-head);font-size:0.9rem;font-weight:800;color:var(--lime);line-height:1}
+.ring-lbl{font-size:0.5rem;color:var(--muted)}
+.ring-info h4{font-family:var(--font-head);font-size:0.88rem;font-weight:700;margin-bottom:0.15rem}
+.ring-info p{font-size:0.75rem;color:var(--muted)}
+.prog-row{margin-bottom:0.75rem}
+.prog-label{display:flex;justify-content:space-between;font-size:0.78rem;color:var(--muted);margin-bottom:0.3rem}
+.prog-bar{height:5px;background:#ffffff10;border-radius:100px;overflow:hidden}
+.prog-fill{height:100%;border-radius:100px;transition:width 1s ease}
+
+.ai-summary{background:linear-gradient(135deg,#0f1a06,#0d0d0d);border:1px solid #c8f54220;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.ai-summary::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:var(--lime);opacity:0.04;border-radius:50%}
+.ai-sum-head{display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem}
+.ai-avatar{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--lime),#4af);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.ai-sum-title{font-family:var(--font-head);font-size:0.9rem;font-weight:700}
+.ai-sum-sub{font-size:0.75rem;color:var(--muted)}
+.ai-sum-text{font-size:0.88rem;line-height:1.7;color:#ffffffdd;margin-bottom:1rem}
+.ai-sum-btn{display:inline-flex;align-items:center;gap:0.4rem;background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.6rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer;transition:all 0.2s;text-decoration:none}
+.ai-sum-btn:hover{background:var(--lime2)}
+
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.meal-item{display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0;border-bottom:1px solid #ffffff07}
+.meal-item:last-child{border:none}
+.meal-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.meal-name{font-size:0.85rem;flex:1}
+.meal-cal{font-size:0.78rem;color:var(--muted);font-family:var(--font-head);font-weight:700}
+
+.upgrade-panel{background:linear-gradient(135deg,#0f1a06,#111);border:1px solid #c8f54225;border-radius:20px;padding:1.5rem;text-align:center;margin-bottom:1.5rem}
+.upgrade-panel h3{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:0.4rem}
+.upgrade-panel p{font-size:0.82rem;color:var(--muted);margin-bottom:1rem;line-height:1.5}
+.upgrade-btn{background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.65rem 1.4rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s;width:100%}
+.upgrade-btn:hover{background:var(--lime2)}
+
+/* AI KOÇU */
+.ai-coach-full{display:flex;flex-direction:column;height:calc(100vh - 200px);background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem}
 .messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1rem;padding-right:0.25rem}
 .messages::-webkit-scrollbar{width:3px}
 .messages::-webkit-scrollbar-thumb{background:#ffffff15;border-radius:10px}
@@ -57,271 +140,436 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .send-btn{background:var(--lime);color:var(--black);border:none;border-radius:50%;width:38px;height:38px;cursor:pointer;font-size:1rem;transition:all 0.2s;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .send-btn:hover{background:var(--lime2)}
 .send-btn:disabled{opacity:0.4;cursor:not-allowed}
+
+/* PLAN KAYDET KARTI */
 .plan-card{background:linear-gradient(135deg,#0f1a06,#0d0d0d);border:1px solid #c8f54230;border-radius:16px;padding:1.4rem;width:100%;max-width:100%}
 .plan-section{background:#ffffff08;border-radius:12px;padding:1rem;margin-bottom:0.75rem;border-left:3px solid}
-/* ANA SAYFA */
-.home-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
-.home-greeting{font-family:var(--font-head);font-size:1.5rem;font-weight:800}
-.home-greeting b{color:var(--lime)}
-.home-date{font-size:0.82rem;color:var(--muted);margin-top:0.25rem}
-/* HERO */
-.today-hero{background:linear-gradient(135deg,#0d1f04,#0a0a0a);border:1px solid #c8f54230;border-radius:24px;padding:2rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
-.today-hero::before{content:'';position:absolute;top:-100px;right:-100px;width:350px;height:350px;background:var(--lime);opacity:0.04;border-radius:50%;pointer-events:none}
-.hero-day-label{font-size:0.7rem;color:var(--lime);font-family:var(--font-head);font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem}
-.hero-focus{font-family:var(--font-head);font-size:1.9rem;font-weight:800;line-height:1.1;margin-bottom:0.6rem}
-.hero-focus b{color:var(--lime)}
-.hero-chips{display:flex;gap:0.75rem;margin-bottom:1.75rem;flex-wrap:wrap}
-.chip{background:#ffffff08;border:1px solid #ffffff10;border-radius:100px;padding:0.35rem 0.9rem;font-size:0.8rem;color:var(--white);display:flex;align-items:center;gap:0.35rem}
-.chip .dim{color:var(--muted);font-size:0.72rem}
-.hero-btns{display:flex;gap:0.75rem;flex-wrap:wrap}
-.btn-go{background:linear-gradient(135deg,var(--lime),var(--lime2));color:#000;border:none;border-radius:14px;padding:0.9rem 2rem;font-family:var(--font-head);font-weight:800;font-size:1rem;cursor:pointer;transition:all 0.25s;display:inline-flex;align-items:center;gap:0.5rem;box-shadow:0 4px 20px #c8f54228;text-decoration:none}
-.btn-go:hover{transform:translateY(-2px);box-shadow:0 8px 32px #c8f54235}
-.btn-out{background:#ffffff08;color:var(--white);border:1px solid #ffffff15;border-radius:14px;padding:0.9rem 1.4rem;font-family:var(--font-head);font-weight:700;font-size:0.88rem;cursor:pointer;transition:all 0.2s;text-decoration:none;display:inline-flex;align-items:center;gap:0.4rem}
-.btn-out:hover{background:#ffffff12;border-color:#ffffff25}
-/* GOREVLER */
-.sec-label{font-family:var(--font-head);font-size:0.68rem;font-weight:700;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem}
-.task-list{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.5rem}
-.task{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--gray);border:1.5px solid #ffffff0a;border-radius:16px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
-.task:hover{border-color:#ffffff18;background:#161616}
-.task.done{border-color:#4ade8025;background:#071507}
-.task.done::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#4ade80;border-radius:3px 0 0 3px}
-.task-box{width:26px;height:26px;border-radius:8px;border:2px solid #ffffff20;display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0;transition:all 0.25s}
-.task.done .task-box{background:#4ade80;border-color:#4ade80;color:#000}
-.task-info{flex:1;min-width:0}
-.task-title{font-size:0.9rem;font-weight:500;margin-bottom:0.15rem}
-.task.done .task-title{text-decoration:line-through;opacity:0.4}
-.task-desc{font-size:0.73rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.task-tag{font-size:0.68rem;font-family:var(--font-head);font-weight:700;padding:0.22rem 0.65rem;border-radius:100px;flex-shrink:0;white-space:nowrap}
-.tag-g{background:#c8f54215;color:var(--lime)}
-.tag-b{background:#44aaff15;color:#44aaff}
-/* 2 KOLON */
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem}
-.card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem}
-.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
-.card-title{font-family:var(--font-head);font-size:0.9rem;font-weight:700}
-.card-link{font-size:0.75rem;color:var(--lime);text-decoration:none;font-family:var(--font-head);font-weight:700;opacity:0.7}
-.card-link:hover{opacity:1}
-/* TAKIP */
-.track-pair{display:flex;gap:0.75rem;margin-bottom:0.75rem}
-.tbox{flex:1;background:#ffffff05;border:1.5px solid #ffffff08;border-radius:14px;padding:1rem;text-align:center;cursor:pointer;transition:all 0.2s}
-.tbox:hover{background:#ffffff09;border-color:#ffffff18}
-.tbox-num{font-family:var(--font-head);font-size:1.4rem;font-weight:800;line-height:1;margin:0.2rem 0}
-.tbox-lbl{font-size:0.65rem;color:var(--muted)}
-.tbar{height:3px;background:#ffffff0f;border-radius:100px;margin-top:0.55rem;overflow:hidden}
-.tfill{height:100%;border-radius:100px;transition:width 0.4s}
-.add-row{display:flex;gap:0.4rem}
-.add-btn{flex:1;padding:0.5rem;border-radius:10px;font-family:var(--font-head);font-weight:700;font-size:0.72rem;cursor:pointer;transition:background 0.2s}
-/* HAFTA BAR */
-.wk-bars{display:flex;gap:0.3rem;align-items:flex-end;height:48px;margin-bottom:0.45rem}
-.wk-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.2rem}
-.wk-bar{width:100%;border-radius:3px 3px 0 0;min-height:3px;transition:height 0.5s}
-.wk-lbl{font-size:0.56rem;font-family:var(--font-head);font-weight:700}
-/* BESLENME */
-.meal-list{display:flex;flex-direction:column;gap:0.45rem}
-.meal-row{display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0.85rem;background:#ffffff04;border-radius:12px}
-.meal-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.meal-info{flex:1;min-width:0}
-.meal-name{font-size:0.82rem;font-weight:500}
-.meal-foods{font-size:0.7rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:0.06rem}
-.meal-kcal{font-family:var(--font-head);font-size:0.75rem;font-weight:700;color:var(--muted);flex-shrink:0}
-/* UPGRADE */
-.upgrade-strip{background:linear-gradient(135deg,#0e1d04,#0a0a0a);border:1px solid #c8f54222;border-radius:20px;padding:1.5rem;display:flex;align-items:center;gap:1.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
-.upgrade-txt{flex:1;min-width:180px}
-.upgrade-txt h3{font-family:var(--font-head);font-size:0.95rem;font-weight:700;margin-bottom:0.3rem}
-.upgrade-txt p{font-size:0.8rem;color:var(--muted);line-height:1.5}
-.upgrade-btn{background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.7rem 1.5rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background 0.2s}
-.upgrade-btn:hover{background:var(--lime2)}
-/* PLAN YOK */
-.no-plan{max-width:600px;margin:0 auto;padding:1rem 0}
-.nph{background:linear-gradient(135deg,#0d1f04,#0a0a0a);border:1px solid #c8f54222;border-radius:24px;padding:2.5rem 2rem;margin-bottom:1.25rem;text-align:center;position:relative;overflow:hidden}
-.nph::before{content:'';position:absolute;top:-80px;right:-80px;width:240px;height:240px;background:var(--lime);opacity:0.05;border-radius:50%}
-.nph-title{font-family:var(--font-head);font-size:1.6rem;font-weight:800;margin-bottom:0.6rem}
-.nph-sub{color:var(--muted);font-size:0.88rem;line-height:1.7;max-width:400px;margin:0 auto}
-.step{background:var(--gray);border:1.5px solid #ffffff0a;border-radius:16px;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1.25rem;margin-bottom:0.6rem;transition:border-color 0.2s}
-.step:hover{border-color:#ffffff18}
-.step.sdone{border-color:#4ade8028;background:#060f06}
-.snum{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:1.1rem;flex-shrink:0}
-.snum.slime{background:var(--lime);color:#000}
-.snum.sdim{background:#ffffff0f;color:var(--muted)}
-.snum.sok{background:#4ade8018;color:#4ade80;font-size:1.3rem}
-.stitle{font-family:var(--font-head);font-size:0.95rem;font-weight:700;margin-bottom:0.2rem}
-.ssub{font-size:0.8rem;color:var(--muted);line-height:1.55}
-.cta-big{width:100%;background:linear-gradient(135deg,var(--lime),var(--lime2));color:#000;border:none;border-radius:16px;padding:1.15rem;font-family:var(--font-head);font-weight:800;font-size:1rem;cursor:pointer;margin:1rem 0 0.75rem;box-shadow:0 4px 24px #c8f54220;display:flex;align-items:center;justify-content:center;gap:0.6rem;transition:all 0.25s}
-.cta-big:hover{transform:translateY(-2px);box-shadow:0 8px 32px #c8f54230}
-.sub-row{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1.25rem}
-.sub-a{background:#ffffff08;color:var(--white);border:1px solid #ffffff10;border-radius:12px;padding:0.85rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;text-decoration:none;text-align:center;display:block;transition:all 0.2s}
-.sub-a:hover{background:#ffffff12;border-color:#ffffff20}
-.pills{display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap}
-.pill{background:var(--gray);border:1px solid #ffffff0e;border-radius:100px;padding:0.45rem 1rem;font-size:0.75rem;color:var(--muted);display:flex;align-items:center;gap:0.35rem}
-.pill b{color:var(--white)}
-/* TOPBAR */
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem;flex-wrap:wrap;gap:1rem}
-.page-title{font-family:var(--font-head);font-size:1.8rem;font-weight:800}
-.page-title b{color:var(--lime)}
-.page-sub{color:var(--muted);font-size:0.88rem;margin-top:0.35rem}
-/* TOUR */
-.tour-ov{position:fixed;inset:0;background:#000000aa;z-index:500;backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center}
-.tour-box{background:#161616;border:1px solid #ffffff18;border-radius:24px;padding:2rem;max-width:420px;width:90%;animation:fadeUp 0.35s ease both}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.tour-badge{display:inline-flex;background:#c8f54215;border:1px solid #c8f54222;color:var(--lime);font-family:var(--font-head);font-weight:700;font-size:0.68rem;padding:0.25rem 0.75rem;border-radius:100px;margin-bottom:0.75rem}
-.tour-icon{font-size:2.5rem;margin-bottom:0.75rem}
-.tour-title{font-family:var(--font-head);font-size:1.2rem;font-weight:800;margin-bottom:0.5rem}
-.tour-desc{font-size:0.87rem;color:#ffffffcc;line-height:1.7;margin-bottom:1.5rem}
-.tour-dots{display:flex;gap:0.4rem;justify-content:center;margin-bottom:1.2rem}
-.tdot{width:8px;height:8px;border-radius:50%;background:#ffffff15;transition:all 0.3s}
-.tdot.on{background:var(--lime);width:20px;border-radius:100px}
-.tour-btns{display:flex;gap:0.6rem}
-.t-skip{background:transparent;color:var(--muted);border:1px solid #ffffff15;border-radius:100px;padding:0.6rem 1.1rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer}
-.t-next{flex:1;background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.6rem;font-family:var(--font-head);font-weight:700;font-size:0.88rem;cursor:pointer}
-.t-next:hover{background:var(--lime2)}
-/* MOBiL */
-.mob-btn{display:none}
+
+.tab-section{display:none}
+.tab-section.active{display:block}
+
+.mobile-menu-btn{display:none}
 .overlay{display:none;position:fixed;inset:0;background:#00000080;z-index:99}
 .overlay.open{display:block}
 @media(max-width:768px){
-  .sidebar{position:fixed;left:-240px;top:0;bottom:0;width:240px;transition:left 0.3s;z-index:100}
+  .sidebar{position:fixed;left:-240px;top:0;bottom:0;width:240px;transition:left 0.3s ease;z-index:100}
   .sidebar.open{left:0}
   .main{margin-left:0;padding:1rem}
-  .mob-btn{display:flex;position:fixed;top:1rem;left:1rem;z-index:200;background:var(--lime);color:var(--black);border:none;border-radius:10px;width:40px;height:40px;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer}
-  .home-topbar,.topbar{margin-top:3.5rem}
-  .two-col{grid-template-columns:1fr}
-  .hero-focus{font-size:1.4rem}
-  .ai-coach-full{height:calc(100vh - 140px)}
-  .sub-row{grid-template-columns:1fr}
-  .hero-btns,.upgrade-strip{flex-direction:column}
-  .btn-go,.btn-out{width:100%;justify-content:center}
+  .mobile-menu-btn{display:flex;position:fixed;top:1rem;left:1rem;z-index:200;background:var(--lime);color:var(--black);border:none;border-radius:10px;width:40px;height:40px;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .home-grid{grid-template-columns:1fr}
+  .bottom-grid{grid-template-columns:1fr}
+  .topbar{margin-top:3.5rem}
+  .page-title{font-size:1.4rem}
+  .ai-coach-full{height:calc(100vh - 160px)}
 }
+/* TOUR */
+.tour-overlay{position:fixed;inset:0;background:#00000085;z-index:500;backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center}
+.tour-card{background:#161616;border:1px solid #ffffff18;border-radius:24px;padding:2rem;max-width:420px;width:90%;position:relative;animation:fadeUp 0.4s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.tour-step-badge{display:inline-flex;align-items:center;gap:0.4rem;background:#c8f54215;border:1px solid #c8f54225;color:var(--lime);font-family:var(--font-head);font-weight:700;font-size:0.7rem;padding:0.25rem 0.75rem;border-radius:100px;margin-bottom:0.75rem;letter-spacing:0.06em}
+.tour-icon{font-size:2.5rem;margin-bottom:0.75rem}
+.tour-title{font-family:var(--font-head);font-size:1.2rem;font-weight:800;margin-bottom:0.5rem}
+.tour-desc{font-size:0.88rem;color:#ffffffcc;line-height:1.7;margin-bottom:1.5rem}
+.tour-dots{display:flex;gap:0.4rem;justify-content:center;margin-bottom:1.2rem}
+.tour-dot{width:8px;height:8px;border-radius:50%;background:#ffffff15;transition:all 0.3s}
+.tour-dot.active{background:var(--lime);width:20px;border-radius:100px}
+.tour-btns{display:flex;gap:0.6rem}
+.tour-btn-skip{background:transparent;color:var(--muted);border:1px solid #ffffff15;border-radius:100px;padding:0.6rem 1.1rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer;transition:all 0.2s}
+.tour-btn-skip:hover{color:var(--white);border-color:#ffffff30}
+.tour-btn-next{flex:1;background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.6rem 1.1rem;font-family:var(--font-head);font-weight:700;font-size:0.88rem;cursor:pointer;transition:all 0.2s}
+.tour-btn-next:hover{background:var(--lime2)}
 </style>
 </head>
 <body>
 
-<div class="tour-ov" id="tourOverlay" style="display:none">
-  <div class="tour-box">
-    <div class="tour-badge" id="tourBadge">1 / 5</div>
-    <div class="tour-icon" id="tourIcon"></div>
-    <div class="tour-title" id="tourTitle"></div>
-    <div class="tour-desc" id="tourDesc"></div>
+<!-- TOUR OVERLAY -->
+<div class="tour-overlay" id="tourOverlay" style="display:none">
+  <div class="tour-card" id="tourCard">
+    <div class="tour-step-badge" id="tourBadge">1 / 5</div>
+    <div class="tour-icon" id="tourIcon">👋</div>
+    <div class="tour-title" id="tourTitle">Hoş geldin!</div>
+    <div class="tour-desc" id="tourDesc">Açıklama</div>
     <div class="tour-dots" id="tourDots"></div>
     <div class="tour-btns">
-      <button class="t-skip" onclick="closeTour()">Geç</button>
-      <button class="t-next" id="tourNextBtn" onclick="nextTourStep()">Devam →</button>
+      <button class="tour-btn-skip" onclick="closeTour()">Geç</button>
+      <button class="tour-btn-next" id="tourNextBtn" onclick="nextTourStep()">Devam →</button>
     </div>
   </div>
 </div>
-
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
-<button class="mob-btn" onclick="toggleSidebar()">&#9776;</button>
+<button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
 
 <div class="sidebar">
   <a class="logo" href="dashboard.html">Fit<span>Mind</span> AI</a>
   <nav class="nav">
-    <button class="nav-item active" onclick="switchTab('home',this)"><span class="icon">&#127968;</span> Ana Sayfa</button>
-    <button class="nav-item" onclick="switchTab('aicoach',this)"><span class="icon">&#129302;</span> AI Koç</button>
-    <button class="nav-item" onclick="switchTab('workouts',this)"><span class="icon">&#127947;</span> Antrenmanlar</button>
-    <a class="nav-item" href="myplan.html"><span class="icon">&#128203;</span> Benim Planım</a>
-    <a class="nav-item" href="nutrition.html"><span class="icon">&#129367;</span> Beslenme</a>
-    <a class="nav-item" href="progress.html"><span class="icon">&#128200;</span> &Iuml;lerleme</a>
-    <a class="nav-item" href="community.html"><span class="icon">&#128101;</span> Topluluk</a>
+    <button class="nav-item active" onclick="switchTab('home',this)"><span class="icon">🏠</span> Ana Sayfa</button>
+    <button class="nav-item" onclick="switchTab('aicoach',this)"><span class="icon">🤖</span> AI Koç</button>
+    <button class="nav-item" onclick="switchTab('workouts',this)"><span class="icon">🏋️</span> Antrenmanlar</button>
+    <a class="nav-item" href="myplan.html"><span class="icon">📋</span> Benim Planım</a>
+    <a class="nav-item" href="nutrition.html" id="navNutrition"><span class="icon">🥗</span> Beslenme</a>
+    <a class="nav-item" href="progress.html" id="navProgress"><span class="icon">📈</span> İlerleme</a>
+    <a class="nav-item" href="community.html"><span class="icon">👥</span> Topluluk</a>
   </nav>
   <div class="sidebar-bottom">
     <div class="user-info">
       <div class="avatar" id="avatarInitial">?</div>
-      <a class="user-name" id="userName" href="profile.html" style="text-decoration:none;color:inherit;cursor:pointer">Yükleniyor...</a>
-      <button class="signout-btn" onclick="signOut()">&#9211;</button>
+      <div class="user-name" id="userName">Yükleniyor...</div>
+      <button class="signout-btn" onclick="signOut()">⏻</button>
     </div>
   </div>
 </div>
 
 <div class="main">
-
-<div class="tab-section active" id="tab-home">
-  <div class="home-topbar">
+  <div class="topbar">
     <div>
-      <div class="home-greeting">Merhaba, <b id="heroName">...</b> &#128075;</div>
-      <div class="home-date" id="heroDate"></div>
+      <div class="page-title" id="welcomeMsg">Yükleniyor...</div>
+      <div class="page-sub" id="profileTags"></div>
     </div>
     <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap">
-      <span id="planBadge" class="free-badge">&#220;CRETSIZ</span>
-      <div class="badge-live"><span class="badge-dot"></span> AI Koç Aktif</div>
+      <span id="planBadge" class="free-badge">ÜCRETSİZ</span>
+      <div class="badge-live"><span class="badge-dot"></span> AI Koç Çevrimiçi</div>
     </div>
   </div>
-  <div id="homeContent">
-    <div style="text-align:center;padding:4rem;color:var(--muted)">
-      <div class="spin" style="margin:0 auto 1rem;display:block"></div>
-      <div style="font-size:0.9rem">Yükleniyor...</div>
-    </div>
-  </div>
-</div>
 
-<div class="tab-section" id="tab-aicoach">
-  <div class="topbar">
-    <div>
-      <div class="page-title">&#129302; AI <b>Koç</b></div>
-      <div class="page-sub">Kişisel fitness koçun 7/24 aktif</div>
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">🏋️</div>
+      <div class="stat-label">Tamamlanan</div>
+      <div class="stat-value lime" id="workoutCount">0</div>
+      <div class="stat-change up">↑ Bu hafta</div>
     </div>
-    <span id="msgCounter" style="font-size:0.8rem;color:var(--muted)"></span>
+    <div class="stat-card">
+      <div class="stat-icon">🔥</div>
+      <div class="stat-label">Yakılan Kalori</div>
+      <div class="stat-value" id="calorieCount">0</div>
+      <div class="stat-change">kcal bugün</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">⚡</div>
+      <div class="stat-label">Seri</div>
+      <div class="stat-value lime" id="streakVal">0🔥</div>
+      <div class="stat-change up">Devam et!</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📈</div>
+      <div class="stat-label">Plan İlerlemesi</div>
+      <div class="stat-value" id="planProgress">%0</div>
+      <div class="stat-change">Bu hafta</div>
+    </div>
   </div>
-  <div class="ai-coach-full">
-    <div style="font-family:var(--font-head);font-size:0.92rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
-      <span class="badge-dot"></span>
-      AI Koç — Sohbet
-      <button onclick="clearChat()" style="margin-left:auto;background:#ffffff08;border:1px solid #ffffff10;color:var(--muted);border-radius:100px;padding:0.25rem 0.75rem;font-size:0.7rem;cursor:pointer;font-family:var(--font-head);font-weight:700">&#128465; Temizle</button>
-    </div>
-    <div class="messages" id="messages"></div>
-    <div style="display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.6rem">
-      <button onclick="quickSend('Plan yap')" style="background:#c8f54215;border:1px solid #c8f54230;color:var(--lime);border-radius:100px;padding:0.3rem 0.85rem;font-size:0.75rem;cursor:pointer;font-family:var(--font-head);font-weight:700">&#128203; Plan Yap</button>
-      <button onclick="quickSend('Antrenman programimi guncelle')" style="background:#ffffff08;border:1px solid #ffffff12;color:var(--white);border-radius:100px;padding:0.3rem 0.85rem;font-size:0.75rem;cursor:pointer;font-family:var(--font-head);font-weight:700">&#128170; Güncelle</button>
-      <button onclick="quickSend('Beslenme planimi degistir')" style="background:#ffffff08;border:1px solid #ffffff12;color:var(--white);border-radius:100px;padding:0.3rem 0.85rem;font-size:0.75rem;cursor:pointer;font-family:var(--font-head);font-weight:700">&#129367; Beslenme</button>
-      <button onclick="quickSend('Bugunku antrenmanima egzersiz ekle')" style="background:#ffffff08;border:1px solid #ffffff12;color:var(--white);border-radius:100px;padding:0.3rem 0.85rem;font-size:0.75rem;cursor:pointer;font-family:var(--font-head);font-weight:700">&#10133; Egzersiz Ekle</button>
-    </div>
-    <div class="chat-input-wrap">
-      <input class="chat-input" id="chatInput" placeholder="Sor, plan yap, egzersiz ekle, öğün değiştir..." onkeydown="if(event.key==='Enter')sendMsg()">
-      <button class="send-btn" onclick="sendMsg()" id="sendBtn">&#9658;</button>
-    </div>
-  </div>
-</div>
 
-<div class="tab-section" id="tab-workouts">
-  <div class="topbar">
-    <div>
-      <div class="page-title">&#127947; <b>Antrenman</b> Planı</div>
-      <div class="page-sub" id="workoutTabSub">Haftalık programın</div>
+  <!-- ANA SAYFA TAB -->
+  <div class="tab-section active" id="tab-home">
+
+    <!-- SATIR 1: HERO KART (tam genişlik) -->
+    <div style="background:linear-gradient(135deg,#0d1a05,#0a0a0a);border:1px solid #c8f54222;border-radius:24px;padding:1.75rem;margin-bottom:1.25rem;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-80px;right:-80px;width:320px;height:320px;background:var(--lime);opacity:0.04;border-radius:50%;pointer-events:none"></div>
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;position:relative">
+        <div>
+          <div style="font-family:var(--font-head);font-size:1.7rem;font-weight:800;line-height:1.2" id="heroGreeting">Merhaba! 👋</div>
+          <div style="font-size:0.82rem;color:var(--muted);margin-top:0.3rem" id="heroDate"></div>
+          <div style="margin-top:0.75rem;font-size:0.88rem;line-height:1.6;color:#ffffffcc;max-width:520px" id="heroMotivation">Kişisel planın yükleniyor...</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:flex-end">
+          <div style="background:#ffffff08;border:1px solid #ffffff10;border-radius:12px;padding:0.6rem 1rem;font-size:0.75rem;color:var(--muted);text-align:center">
+            <div style="font-family:var(--font-head);font-size:1.1rem;font-weight:800;color:var(--lime)" id="heroToday">—</div>
+            <div style="font-size:0.62rem;margin-top:0.1rem">Bugün</div>
+          </div>
+          <div style="display:flex;gap:0.4rem">
+            <button onclick="switchTab('aicoach',document.querySelectorAll('.nav-item')[1])" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.5rem 1rem;font-family:var(--font-head);font-weight:700;font-size:0.78rem;cursor:pointer">🤖 AI Koç</button>
+            <a href="myplan.html" style="background:#ffffff10;color:var(--white);border:1px solid #ffffff15;border-radius:100px;padding:0.5rem 1rem;font-family:var(--font-head);font-weight:700;font-size:0.78rem;text-decoration:none">📋 Planım</a>
+          </div>
+        </div>
+      </div>
     </div>
-    <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
-      <a href="myplan.html" style="background:#ffffff10;color:var(--white);border:1px solid #ffffff15;border-radius:100px;padding:0.55rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;text-decoration:none">&#128203; Benim Planım</a>
-      <button onclick="switchTab('aicoach',document.querySelectorAll('.nav-item')[1])" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.55rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer">&#129302; Planı Güncelle</button>
+
+    <!-- SATIR 2: BUGÜNÜN ANTRENMAN + BESLENME (2 kolon) -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem" id="row2Grid">
+
+      <!-- BUGÜNÜN ANTRENMANINI -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title"><span class="dot"></span> Bugünün Antrenmanı</div>
+          <a href="myplan.html" class="panel-link">Tümü →</a>
+        </div>
+        <div id="todayWorkoutList">
+          <div style="text-align:center;padding:1.5rem;color:var(--muted)">
+            <div class="spin" style="margin:0 auto 0.5rem;display:block;width:22px;height:22px"></div>
+            <div style="font-size:0.85rem">Yükleniyor...</div>
+          </div>
+        </div>
+        <div id="todayWorkoutFooter"></div>
+      </div>
+
+      <!-- BUGÜN NE YEMELİYİM -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">🥗 Bugün Ne Yemeliyim?</div>
+          <a href="myplan.html" class="panel-link">Detay →</a>
+        </div>
+        <div id="homeMealPlan">
+          <div style="text-align:center;padding:1.5rem;color:var(--muted)">
+            <div class="spin" style="margin:0 auto 0.5rem;display:block;width:22px;height:22px"></div>
+            <div style="font-size:0.85rem">Yükleniyor...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SATIR 3: HIZLI TAKİP + BU HAFTA + YAKLAŞAN -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-bottom:1.25rem" id="row3Grid">
+
+      <!-- HIZLI TAKİP -->
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title">⚡ Hızlı Takip</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:0.75rem">
+          <div onclick="quickLogCal()" style="background:#f5a62310;border:1.5px solid #f5a62320;border-radius:14px;padding:0.9rem;text-align:center;cursor:pointer;transition:all 0.2s" onmouseenter="this.style.borderColor='#f5a62345'" onmouseleave="this.style.borderColor='#f5a62320'">
+            <div style="font-size:1.3rem;margin-bottom:0.2rem">🔥</div>
+            <div style="font-family:var(--font-head);font-size:1.2rem;font-weight:800;color:#f5a623" id="qtCalVal">0</div>
+            <div style="font-size:0.62rem;color:var(--muted);margin-top:0.1rem">/ <span id="qtCalTarget">2000</span> kcal</div>
+            <div style="height:3px;background:#ffffff10;border-radius:100px;margin-top:0.5rem;overflow:hidden"><div id="qtCalFill" style="height:100%;width:0%;background:#f5a623;border-radius:100px;transition:width 0.4s"></div></div>
+          </div>
+          <div onclick="quickLogWater()" style="background:#44aaff10;border:1.5px solid #44aaff20;border-radius:14px;padding:0.9rem;text-align:center;cursor:pointer;transition:all 0.2s" onmouseenter="this.style.borderColor='#44aaff45'" onmouseleave="this.style.borderColor='#44aaff20'">
+            <div style="font-size:1.3rem;margin-bottom:0.2rem">💧</div>
+            <div style="font-family:var(--font-head);font-size:1.2rem;font-weight:800;color:#44aaff" id="qtWaterVal">0</div>
+            <div style="font-size:0.62rem;color:var(--muted);margin-top:0.1rem">/ <span id="qtWaterTarget">8</span> bardak</div>
+            <div style="height:3px;background:#ffffff10;border-radius:100px;margin-top:0.5rem;overflow:hidden"><div id="qtWaterFill" style="height:100%;width:0%;background:#44aaff;border-radius:100px;transition:width 0.4s"></div></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:0.4rem">
+          <button onclick="quickLogCal()" style="flex:1;background:#f5a62318;color:#f5a623;border:1px solid #f5a62328;border-radius:10px;padding:0.5rem;font-family:var(--font-head);font-weight:700;font-size:0.7rem;cursor:pointer">+200 kcal</button>
+          <button onclick="quickLogWater()" style="flex:1;background:#44aaff18;color:#44aaff;border:1px solid #44aaff28;border-radius:10px;padding:0.5rem;font-family:var(--font-head);font-weight:700;font-size:0.7rem;cursor:pointer">+1 Bardak</button>
+        </div>
+      </div>
+
+      <!-- BU HAFTA BAR GRAFİK -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">📊 Bu Hafta</div>
+          <div style="font-size:0.72rem;color:var(--muted)" id="weekProgressLabel">0/7 gün</div>
+        </div>
+        <div style="display:flex;gap:0.4rem;align-items:flex-end;height:56px;margin-bottom:0.6rem" id="weekBarGrid"></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--muted);margin-bottom:0.75rem">
+          <span id="weekDoneCount" style="color:var(--lime);font-weight:700">0 gün</span>
+          <span id="weekPct">%0</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.4rem">
+          <div><div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--muted);margin-bottom:0.2rem"><span>Antrenman</span><span id="wProgress">0/7</span></div><div style="height:4px;background:#ffffff10;border-radius:100px;overflow:hidden"><div id="wFill" style="height:100%;width:0%;background:var(--lime);border-radius:100px;transition:width 0.5s"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--muted);margin-bottom:0.2rem"><span>Su</span><span id="wWater">0/8</span></div><div style="height:4px;background:#ffffff10;border-radius:100px;overflow:hidden"><div id="wWaterFill" style="height:100%;width:0%;background:#44aaff;border-radius:100px;transition:width 0.5s"></div></div></div>
+        </div>
+      </div>
+
+      <!-- YAKLAŞAN ANTRENMANLAR -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">📅 Yaklaşan</div>
+          <a href="myplan.html" class="panel-link">Tümü →</a>
+        </div>
+        <div id="upcomingDays"><div style="text-align:center;padding:1rem;color:var(--muted);font-size:0.85rem">Yükleniyor...</div></div>
+      </div>
+    </div>
+
+    <!-- SATIR 4: SERİ + ROZETLER + İPUCU + MOTİVASYON -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-bottom:1.25rem">
+
+      <!-- SERİ -->
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title">🔥 Seri</div></div>
+        <div style="text-align:center;margin-bottom:0.85rem">
+          <div style="font-family:var(--font-head);font-size:3rem;font-weight:800;color:var(--lime);line-height:1" id="bigStreak">0</div>
+          <div style="font-size:0.75rem;color:var(--muted);margin-top:0.2rem">gün üst üste 🔥</div>
+        </div>
+        <div style="font-size:0.7rem;color:var(--muted);font-weight:600;margin-bottom:0.45rem;font-family:var(--font-head)">Bu Hafta</div>
+        <div style="display:flex;gap:0.35rem;flex-wrap:wrap" id="streakBadgesHome"></div>
+        <div style="margin-top:0.75rem;padding:0.65rem;background:#c8f54210;border:1px solid #c8f54220;border-radius:10px;font-size:0.75rem;color:var(--lime);text-align:center;font-weight:500" id="streakMsg">Serini başlat! 💪</div>
+      </div>
+
+      <!-- ROZETLER -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">🏆 Başarılar</div>
+          <div style="font-size:0.7rem;color:var(--muted)" id="badgeCount">0/6</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem" id="achievementGrid"></div>
+      </div>
+
+      <!-- GÜNÜN İPUCU + MOTİVASYON -->
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title">💡 Günün İpucu</div></div>
+        <div style="background:#ffffff06;border-radius:12px;padding:0.85rem;margin-bottom:0.75rem;border-left:3px solid var(--lime)">
+          <div style="font-size:0.65rem;color:var(--lime);text-transform:uppercase;font-weight:700;letter-spacing:0.08em;margin-bottom:0.3rem;font-family:var(--font-head)">📅 Bugün</div>
+          <div style="font-size:0.83rem;color:var(--white)" id="todayFocusText">Yükleniyor...</div>
+        </div>
+        <div id="dailyTip" style="font-size:0.83rem;line-height:1.7;color:#ffffffcc"></div>
+      </div>
+    </div>
+
+    <!-- UPGRADE -->
+    <div class="upgrade-panel" id="upgradeCard">
+      <h3>🚀 Tam Erişimi Aç</h3>
+      <p>Pro ile sınırsız AI koçluğu, özel beslenme planları ve gelişmiş analizlere sahip olun.</p>
+      <button class="upgrade-btn" onclick="openCheckout()">Pro'ya Yükselt — $19/ay</button>
+    </div>
+
+  </div>
+
+    <!-- HERO KART -->
+    <div style="background:linear-gradient(135deg,#0d1a05,#0a0a0a);border:1px solid #c8f54220;border-radius:24px;padding:1.75rem;margin-bottom:1.5rem;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:var(--lime);opacity:0.04;border-radius:50%"></div>
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:1rem;position:relative">
+        <div>
+          <div style="font-family:var(--font-head);font-size:1.6rem;font-weight:800;line-height:1.2" id="heroGreeting">Merhaba! 👋</div>
+          <div style="font-size:0.82rem;color:var(--muted);margin-top:0.3rem" id="heroDate"></div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:0.7rem;color:var(--muted);margin-bottom:0.25rem">Bugün</div>
+          <div style="font-family:var(--font-head);font-weight:800;font-size:1rem;color:var(--lime)" id="heroTarget">—</div>
+        </div>
+      </div>
+
+
+  <!-- AI KOÇU TAB -->
+  <div class="tab-section" id="tab-aicoach">
+    <div class="ai-coach-full">
+      <div style="font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
+        <span style="width:8px;height:8px;background:var(--lime);border-radius:50%;animation:pulse 2s infinite;display:inline-block"></span>
+        AI Koç — Tam Sohbet
+        <span id="msgCounter" style="margin-left:auto;font-size:0.75rem;color:var(--muted);font-weight:400"></span>
+        <button onclick="clearChat()" style="background:#ffffff08;border:1px solid #ffffff10;color:var(--muted);border-radius:100px;padding:0.25rem 0.75rem;font-size:0.72rem;cursor:pointer;font-family:var(--font-head);font-weight:700">🗑 Sohbeti Temizle</button>
+      </div>
+      <div class="messages" id="messages"></div>
+      <div style="display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.6rem" id="quickPrompts">
+        <button onclick="quickSend('Plan yap')" style="background:#c8f54215;border:1px solid #c8f54230;color:var(--lime);border-radius:100px;padding:0.3rem 0.8rem;font-size:0.75rem;cursor:pointer;font-family:var(--font-head);font-weight:700">📋 Plan Yap</button>
+        <button onclick="quickSend('Antrenman programımı güncelle')" style="background:#ffffff08;border:1px solid #ffffff12;color:var(--white);border-radius:100px;padding:0.3rem 0.8rem;font-size:0.75rem;cursor:pointer;font-family:var(--font-head);font-weight:700">💪 Antrenmanı Güncelle</button>
+        <button onclick="quickSend('Beslenme planımı değiştir')" style="background:#ffffff08;border:1px solid #ffffff12;color:var(--white);border-radius:100px;padding:0.3rem 0.8rem;font-size:0.75rem;cursor:pointer;font-family:var(--font-head);font-weight:700">🥗 Beslenmeyi Güncelle</button>
+        <button onclick="quickSend('Bugünkü antrenmanıma yeni egzersiz ekle')" style="background:#ffffff08;border:1px solid #ffffff12;color:var(--white);border-radius:100px;padding:0.3rem 0.8rem;font-size:0.75rem;cursor:pointer;font-family:var(--font-head);font-weight:700">➕ Egzersiz Ekle</button>
+      </div>
+      <div class="chat-input-wrap">
+        <input class="chat-input" id="chatInput" placeholder="Ne yapmak istiyorsun? Plan yap, egzersiz ekle, öğün değiştir..." onkeydown="if(event.key==='Enter')sendMsg()">
+        <button class="send-btn" onclick="sendMsg()" id="sendBtn">➤</button>
+      </div>
     </div>
   </div>
-  <div id="weeklyCalendarStrip" style="display:grid;grid-template-columns:repeat(7,1fr);gap:0.5rem;margin-bottom:1.5rem"></div>
-  <div id="workoutDayDetail">
-    <div style="text-align:center;padding:2rem;color:var(--muted)">
-      <div class="spin" style="margin:0 auto 0.75rem;display:block"></div>
-      <div>Yükleniyor...</div>
+
+  <!-- ANTRENMANLAR TAB -->
+  <div class="tab-section" id="tab-workouts">
+
+    <!-- BAŞLIK -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem">
+      <div>
+        <div style="font-family:var(--font-head);font-size:1.4rem;font-weight:800">🏋️ Antrenman Planı</div>
+        <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem" id="workoutTabSub">Haftalık programınız</div>
+      </div>
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+        <a href="myplan.html" style="background:#ffffff10;color:var(--white);border:1px solid #ffffff15;border-radius:100px;padding:0.55rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;text-decoration:none">📋 Benim Planım</a>
+        <button onclick="switchTab('aicoach',document.querySelectorAll('.nav-item')[1])" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.55rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer">🤖 Planı Güncelle</button>
+      </div>
     </div>
+
+    <!-- HAFTALIK TAKVİM ÖZET -->
+    <div id="weeklyCalendarStrip" style="display:grid;grid-template-columns:repeat(7,1fr);gap:0.5rem;margin-bottom:1.5rem"></div>
+
+    <!-- BUGÜNÜN ANTRENMANINI DETAYLI -->
+    <div id="workoutDayDetail" style="margin-bottom:1.5rem">
+      <div style="text-align:center;padding:2rem;color:var(--muted)">
+        <div class="spin" style="margin:0 auto 0.75rem;display:block;width:24px;height:24px"></div>
+        <div>Antrenman planı yükleniyor...</div>
+      </div>
+    </div>
+
   </div>
-</div>
 
 </div>
 
 <script>
 const SB_URL='https://cypmmayxwbkarvheqoxu.supabase.co';
+function getMonday(d){const dt=new Date(d);const day=dt.getDay();dt.setDate(dt.getDate()-(day===0?6:day-1));dt.setHours(0,0,0,0);return dt;}
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
 const {createClient}=supabase;
 const sb=createClient(SB_URL,SB_KEY);
 Paddle.Initialize({token:'live_eefc76e39bd2263417b9b9ff52b'});
 
-let userProfile=null,isPro=false,freeCount=0;
+let userProfile=null, isPro=false, freeCount=0;
 let chatHistory=JSON.parse(localStorage.getItem('fm_chatHistory')||'[]');
-let _pendingPlan=null;
 const FREE_LIMIT=3;
+const TODAY_STR=new Date().toDateString();
 const jsDay=new Date().getDay();
 const TODAY_IDX=jsDay===0?6:jsDay-1;
 const DAYS=['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
 const TODAY_NAME=DAYS[TODAY_IDX];
-const TODAY_STR=new Date().toDateString();
-let quickCal=parseInt(localStorage.getItem('fp_cal_'+TODAY_STR)||'0');
-let quickWater=parseInt(localStorage.getItem('fp_water_'+TODAY_STR)||'0');
-let calTarget=2000,waterTarget=8;
+
+const goalLabels={lose_weight:'Kilo Vermek',build_muscle:'Kas Yapmak',get_fit:'Forma Girmek',improve_health:'Sağlığı İyileştirmek'};
+const levelLabels={beginner:'Başlangıç',intermediate:'Orta Seviye',advanced:'İleri Seviye'};
+const equipLabels={home_no:'Ev',home_basic:'Ev+Ekipman',gym:'Spor Salonu',outdoor:'Açık Hava'};
+
+function saveChatHistory(){
+  // Son 50 mesajı sakla
+  localStorage.setItem('fm_chatHistory',JSON.stringify(chatHistory.slice(-50)));
+}
+
+function clearChat(){
+  if(!confirm('Sohbet geçmişini silmek istiyor musunuz?'))return;
+  chatHistory=[];
+  saveChatHistory();
+  renderChatMessages();
+}
+
+function quickSend(text){
+  document.getElementById('chatInput').value=text;
+  sendMsg();
+}
+
+function renderChatMessages(){
+  const msgs=document.getElementById('messages');
+  if(!msgs)return;
+  if(chatHistory.length===0){
+    msgs.innerHTML=`<div class="msg ai">Merhaba! Ben sizin kişisel AI fitness koçunuzum 🤖<br><br>
+    İstediğiniz her şeyi yazabilirsiniz — plan oluşturma, egzersiz ekleme/çıkarma, öğün değiştirme, motivasyon, soru sorma...<br><br>
+    Örnek: <em>"Haftanın 3 günü evde spor yapacağım, yumurta seviyorum, kilo vermek istiyorum"</em><br>
+    Örnek: <em>"Pazartesi antrenmanına squat ekle"</em><br>
+    Örnek: <em>"Kahvaltıdaki yumurtayı yulafla değiştir"</em></div>`;
+    return;
+  }
+  msgs.innerHTML='';
+  chatHistory.forEach(m=>{
+    if(m.role==='user'){
+      msgs.innerHTML+=`<div class="msg user">${m.content}</div>`;
+    } else if(m.role==='assistant'){
+      if(m.isPlanCard&&m.plan){
+        // Plan kartını yeniden oluştur
+        _pendingPlan=m.plan;
+        const card=document.createElement('div');
+        card.className='msg ai';
+        card.style.cssText='max-width:100%;padding:0;background:transparent;border:none;';
+        let sectionsHtml='';
+        if(m.plan.workout) sectionsHtml+=`<div class="plan-section" style="border-color:var(--lime)"><div style="font-size:0.7rem;color:var(--lime);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">💪 Antrenman Planı</div><div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">${fmt(m.plan.workout)}</div></div>`;
+        if(m.plan.nutrition){
+          let nutHtml='';
+          if(typeof m.plan.nutrition==='object'){
+            const meals=[{key:'breakfast',icon:'🌅',label:'Kahvaltı',color:'#f5a623'},{key:'lunch',icon:'☀️',label:'Öğle',color:'#44aaff'},{key:'dinner',icon:'🌙',label:'Akşam',color:'#c8f542'},{key:'snack',icon:'🍎',label:'Ara Öğün',color:'#a78bfa'}];
+            meals.forEach(meal=>{const md=m.plan.nutrition[meal.key];if(!md)return;const foods=Array.isArray(md.foods)?md.foods.join(', '):(md.foods||'');nutHtml+=`<div style="margin-bottom:0.5rem"><span style="color:${meal.color};font-weight:700">${meal.icon} ${md.title||meal.label}:</span> <span style="color:#ffffffcc">${foods}</span> <span style="color:var(--muted);font-size:0.8rem">(${md.calories||0} kcal)</span></div>`;});
+          } else { nutHtml=`<div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">${fmt(String(m.plan.nutrition))}</div>`; }
+          sectionsHtml+=`<div class="plan-section" style="border-color:#44aaff"><div style="font-size:0.7rem;color:#44aaff;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">🥗 Beslenme Planı</div>${nutHtml}</div>`;
+        }
+        if(m.plan.tips) sectionsHtml+=`<div class="plan-section" style="border-color:#f5a623"><div style="font-size:0.7rem;color:#f5a623;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">⚡ İpuçları</div><div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">${fmt(m.plan.tips)}</div></div>`;
+        card.innerHTML=`<div class="plan-card">
+          <div style="font-family:var(--font-head);font-size:1rem;font-weight:800;color:var(--lime);margin-bottom:1rem">🎯 7 Günlük Kişisel Planınız</div>
+          ${sectionsHtml}
+          <div style="display:flex;gap:0.75rem;margin-top:0.25rem">
+            <button onclick="savePlan()" style="flex:1;background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.7rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer">💾 Planı Kaydet</button>
+            <button onclick="window.location.href='myplan.html'" style="flex:1;background:#ffffff10;color:var(--white);border:1px solid #ffffff20;border-radius:100px;padding:0.7rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer">📋 Benim Planım</button>
+          </div>
+        </div>`;
+        msgs.appendChild(card);
+      } else {
+        msgs.innerHTML+=`<div class="msg ai">${m.content}</div>`;
+      }
+    }
+  });
+  msgs.scrollTop=msgs.scrollHeight;
+}
 
 function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open')}
 function closeSidebar(){document.querySelector('.sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open')}
@@ -331,7 +579,37 @@ function switchTab(tab,el){
   document.getElementById('tab-'+tab).classList.add('active');
   if(el)el.classList.add('active');
   closeSidebar();
-  if(tab==='workouts')loadWorkoutsTab();
+  if(tab==='workouts')loadQuickWorkoutPreview();
+}
+function openCheckout(){
+  Paddle.Checkout.open({items:[{priceId:'pri_01knxscbw8bwh1rrg8byx2cgf0',quantity:1}],successUrl:'https://fitmindai.ai/dashboard.html'});
+}
+function applyProUI(){
+  const b=document.getElementById('planBadge');
+  b.textContent='⚡ PRO';b.className='pro-badge';
+  document.getElementById('upgradeCard').style.display='none';
+}
+function applyFreeUI(){
+  document.getElementById('navNutrition').classList.add('locked');
+  document.getElementById('navNutrition').innerHTML+='<span class="lock">🔒</span>';
+  document.getElementById('navProgress').classList.add('locked');
+  document.getElementById('navProgress').innerHTML+='<span class="lock">🔒</span>';
+  updateCounter();
+}
+function updateCounter(){
+  if(!isPro){
+    const r=Math.max(0,FREE_LIMIT-freeCount);
+    document.getElementById('msgCounter').textContent=r>0?`${r} ücretsiz mesaj kaldı`:"Pro'ya geç → sınırsız";
+  }
+}
+
+async function callAI(messages,system,max_tokens){
+  const body={messages,max_tokens:max_tokens||500};
+  if(system)body.system=system;
+  const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error||'API hatası');}
+  const d=await res.json();
+  return d.content?.[0]?.text||'';
 }
 
 async function init(){
@@ -341,415 +619,873 @@ async function init(){
   const name=u.user_metadata?.full_name||u.email.split('@')[0];
   document.getElementById('avatarInitial').textContent=name.charAt(0).toUpperCase();
   document.getElementById('userName').textContent=name;
-  document.getElementById('heroName').textContent=name.split(' ')[0];
-  document.getElementById('heroDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const h=new Date().getHours();
+  const gr=h<6?'İyi geceler':h<12?'Günaydın':h<18?'İyi günler':'İyi akşamlar';
+  document.getElementById('welcomeMsg').innerHTML=gr+', <span>'+name.split(' ')[0]+'!</span> 👋';
+  if(document.getElementById('heroGreeting')) document.getElementById('heroGreeting').innerHTML=gr+', <span style="color:var(--lime)">'+name.split(' ')[0]+'!</span> 👋';
+  if(document.getElementById('heroDate')) document.getElementById('heroDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
   const {data:profile}=await sb.from('profiles').select('*').eq('id',u.id).maybeSingle();
-  userProfile=profile;isPro=profile?.is_pro===true;
-  if(isPro){const b=document.getElementById('planBadge');b.textContent='PRO';b.className='pro-badge';}
-  if(profile?.goal){const m={lose_weight:1600,build_muscle:2500,get_fit:2000,improve_health:1800};calTarget=m[profile.goal]||2000;}
+  userProfile=profile; isPro=profile?.is_pro===true;
+  if(isPro)applyProUI(); else applyFreeUI();
+
+  if(profile?.goal){
+    let tags='';
+    if(profile.goal)tags+=`<span class="profile-tag">🎯 ${goalLabels[profile.goal]||profile.goal}</span>`;
+    if(profile.fitness_level)tags+=`<span class="profile-tag">⚡ ${levelLabels[profile.fitness_level]||profile.fitness_level}</span>`;
+    if(profile.equipment)tags+=`<span class="profile-tag">🏋️ ${equipLabels[profile.equipment]||profile.equipment}</span>`;
+    document.getElementById('profileTags').innerHTML=tags;
+  }
+
+  loadWeekProgress();
   renderChatMessages();
-  if(localStorage.getItem('fm_newUser')==='1'&&!localStorage.getItem('fm_tourDone')){localStorage.removeItem('fm_newUser');setTimeout(startTour,800);}
-  try{await loadHome();}catch(e){console.error("init loadHome:",e);document.getElementById("homeContent").innerHTML="<div style='color:red;padding:2rem'>"+e.message+"</div>"}
+  if(localStorage.getItem('fm_newUser')==='1'&&!localStorage.getItem('fm_tourDone')){
+    localStorage.removeItem('fm_newUser');
+    setTimeout(startTour, 800);
+  }
+  updateQuickTrack();
+  loadTodayMeals(profile);
+  loadUpcoming();
+  renderAchievements();
+  loadTodayWorkout(profile,name);
+  loadDailyTip(profile);
 }
 
-async function loadHome(){
-  const el=document.getElementById('homeContent');
+function loadWeekProgress(){
+  // Haftanın başını kontrol et
+  if(!window.getMonday) window.getMonday=getMonday;
+  const weekKey=getMonday(new Date()).toDateString();
+  if(localStorage.getItem('fp_week')!==weekKey)return; // Yeni hafta, sıfır
+  const done=JSON.parse(localStorage.getItem('fp_done')||'{}');
+  const d=Object.keys(done).length;
+  const pct=Math.round(d/7*100);
+  document.getElementById('streakVal').textContent=d+'🔥';
+  document.getElementById('planProgress').textContent='%'+pct;
+  // Eski ring göstergeler (backward compat)
+  if(document.getElementById('homeRingPct')) document.getElementById('homeRingPct').textContent='%'+pct;
+  if(document.getElementById('homeRingCircle')) document.getElementById('homeRingCircle').style.strokeDashoffset=150.8*(1-d/7);
+  if(document.getElementById('homeRingDesc')) document.getElementById('homeRingDesc').textContent=d>0?d+' gün tamamlandı 🔥':'Antrenmanlarını tamamlamaya başla!';
+  if(document.getElementById('wFill')) document.getElementById('wFill').style.width=pct+'%';
+  if(document.getElementById('wProgress')) document.getElementById('wProgress').textContent=d+'/7';
+  document.getElementById('workoutCount').textContent=d;
+  // Yeni özellikler
+  if(document.getElementById('weekProgressLabel')) document.getElementById('weekProgressLabel').textContent=d+'/7 gün';
+  if(document.getElementById('weekDoneCount')) document.getElementById('weekDoneCount').textContent=d+' gün tamamlandı';
+  if(document.getElementById('weekPct')) document.getElementById('weekPct').textContent='%'+pct;
+  if(document.getElementById('bigStreak')) document.getElementById('bigStreak').textContent=d;
+  const streakMsgs=['Başla! Her adım önemli 💪','İyi gidiyorsun! Devam et 🔥','Harika! Alışkanlık oluşuyor ✨','Süper! 4 gün üst üste 🏆','Neredeyse tam hafta! 🌟','6 gün! İnanılmaz! 🎯','Mükemmel hafta! Tam 7 gün! 🏅'];
+  const sm=document.getElementById('streakMsg');if(sm)sm.textContent=streakMsgs[Math.min(d,6)];
+  renderWeekBars(done);
+  renderStreakBadgesHome(done);
+}
+
+async function loadTodayWorkout(profile,name){
+  const list=document.getElementById('todayWorkoutList');
+  // Hero kart güncelle
+  const h=new Date().getHours();
+  const greet=h<6?'Gece geç saatlerde bile':h<12?'Günaydın':h<18?'İyi günler':'İyi akşamlar';
+  if(document.getElementById('heroGreeting')) document.getElementById('heroGreeting').innerHTML=greet+', <span style="color:var(--lime)">'+name.split(' ')[0]+'!</span> 👋';
+  if(document.getElementById('heroDate')) document.getElementById('heroDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+  const quotes=[
+    '💪 Her büyük yolculuk küçük bir adımla başlar. Bugün o adımı at!',
+    '🔥 Dün başlamak istiyordun, bugün başlayabilirsin!',
+    '⚡ Vücudun yapabilir, sadece aklını ikna et!',
+    '🌟 Küçük ilerlemeler, büyük dönüşümler yaratır.',
+    '🎯 Hedeflerin seni bekliyor — bugün ne yapacaksın?',
+    '💡 Sağlıklı yaşam bir alışkanlık, bir istisna değil.',
+    '🏆 Bugün acı çek, yarın gurur duy!'
+  ];
+  const q=quotes[new Date().getDay()%quotes.length];
+  if(document.getElementById('heroMotivation')) document.getElementById('heroMotivation').textContent=q;
+
   try{
     const {data:{session}}=await sb.auth.getSession();
-    if(!session){window.location.replace('auth.html');return;}
     const {data}=await sb.from('user_plans').select('*').eq('user_id',session.user.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
-    if(!data?.plan_data?.days){renderNoPlan();return;}
-    const plan=data.plan_data;
-    if(plan.calories)calTarget=plan.calories;
-    if(plan.water)waterTarget=Math.round(plan.water*2.67);
-    const tp=plan.days.find(d=>d.day===TODAY_NAME);
-    const isRest=!tp||tp.type==='Dinlenme'||tp.type==='Rest';
-    const exs=tp?.exercises||[];
-    const doneEx=JSON.parse(localStorage.getItem('fp_ex')||'{}')[TODAY_NAME+'_ex']||[];
-    const weekDone=JSON.parse(localStorage.getItem('fp_done')||'{}');
-    const todayDone=!!weekDone[TODAY_NAME];
-    const calPct=Math.min(quickCal/calTarget*100,100);
-    const watPct=Math.min(quickWater/waterTarget*100,100);
-    const exPct=exs.length?Math.round(doneEx.length/exs.length*100):0;
-    const weekCount=Object.keys(weekDone).length;
-    const weekPct=Math.round(weekCount/7*100);
-    const tn=tp?.nutrition||plan?.nutrition||null;
-    const totalKcal=tn?['breakfast','lunch','dinner','snack'].reduce((s,k)=>s+(tn[k]?.calories||0),0):0;
-    let h='';
 
-    // HERO
-    h+='<div class="today-hero">';
-    h+='<div class="hero-day-label"><span class="badge-dot"></span>Bugün · '+TODAY_NAME+'</div>';
-    if(isRest){
-      h+='<div style="text-align:center;padding:1.5rem 0">';
-      h+='<div style="font-size:3rem;margin-bottom:0.5rem">&#129496;</div>';
-      h+='<div style="font-family:var(--font-head);font-size:1.35rem;font-weight:700;margin-bottom:0.4rem">Dinlenme Günü</div>';
-      h+='<div style="font-size:0.88rem;color:var(--muted);margin-bottom:1.5rem">Vücudunun iyileşmesine izin ver. Hafif yürüyüş veya esneme yapabilirsin.</div>';
-      h+='<div class="hero-btns" style="justify-content:center">';
-      h+='<button class="btn-out" onclick="switchTab(\'aicoach\',document.querySelectorAll(\'.nav-item\')[1])">&#129302; AI Koç ile Konuş</button>';
-      h+='<a href="myplan.html" class="btn-out">&#128203; Tüm Planım</a>';
-      h+='</div></div>';
+    if(data?.plan_data?.days){
+      const todayPlan=data.plan_data.days.find(d=>d.day===TODAY_NAME);
+
+      // Hero'ya bugünkü odak
+      if(todayPlan&&document.getElementById('heroToday')){
+        const isRest=todayPlan.type==='Dinlenme'||todayPlan.type==='Rest';
+        document.getElementById('heroToday').textContent=isRest?'🧘 Dinlenme':('💪 '+(todayPlan.focus||'Antrenman'));
+      }
+
+      // Beslenme planını yükle
+      loadHomeMealPlan(data.plan_data, todayPlan);
+
+      if(todayPlan){
+        const isRest=todayPlan.type==='Dinlenme'||todayPlan.type==='Rest';
+        if(isRest){
+          list.innerHTML=`<div style="text-align:center;padding:1.5rem;color:var(--muted)">🧘 <strong style="color:var(--white)">Dinlenme Günü</strong><br><span style="font-size:0.78rem;margin-top:0.3rem;display:block">Hafif germe hareketleri önerilir</span></div>`;
+          return;
+        }
+        const exs=todayPlan.exercises||[];
+        if(exs.length>0){
+          const doneExes=JSON.parse(localStorage.getItem('fp_ex')||'{}')[TODAY_NAME+'_ex']||[];
+          let html='';
+          if(todayPlan.focus){
+            html+=`<div style="font-size:0.72rem;color:var(--lime);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;font-family:var(--font-head)">${todayPlan.focus}</div>`;
+          }
+          exs.forEach((ex,i)=>{
+            const done=doneExes.includes(i);
+            html+=`<div class="tw-item ${done?'done':''}" onclick="toggleTWItem(this,${i},'${TODAY_NAME}',${exs.length})">
+              <div class="tw-check ${done?'done':''}">${done?'✓':''}</div>
+              <div style="flex:1">
+                <div class="tw-name">${ex.name}</div>
+                <div class="tw-sets">
+                  <span style="background:#c8f54215;color:var(--lime);border-radius:6px;padding:0.15rem 0.5rem;font-family:var(--font-head);font-weight:700;font-size:0.68rem">${ex.sets}</span>
+                  <span style="background:#ffffff08;color:var(--white);border-radius:6px;padding:0.15rem 0.5rem;font-family:var(--font-head);font-weight:700;font-size:0.68rem">${ex.reps}</span>
+                  ${ex.rest?`<span style="color:var(--muted);font-size:0.68rem">⏱ ${ex.rest}</span>`:''}
+                </div>
+              </div>
+            </div>`;
+          });
+          // İlerleme çubuğu
+          const pct=Math.round(doneExes.length/exs.length*100);
+          html+=`<div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid #ffffff08">
+            <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--muted);margin-bottom:0.3rem"><span>${doneExes.length}/${exs.length} tamamlandı</span><span style="color:var(--lime)">${pct}%</span></div>
+            <div style="height:4px;background:#ffffff10;border-radius:100px;overflow:hidden"><div style="height:100%;width:${pct}%;background:var(--lime);border-radius:100px;transition:width 0.5s"></div></div>
+          </div>`;
+          list.innerHTML=html;
+          document.getElementById('calorieCount').textContent=doneExes.length*50;
+          return;
+        }
+      }
     } else {
-      h+='<div class="hero-focus">&#128170; <b>'+(tp?.focus||'Antrenman')+'</b></div>';
-      h+='<div class="hero-chips">';
-      h+='<div class="chip"><span class="dim">&#8987;</span><strong>'+(tp?.duration||45)+' dk</strong></div>';
-      h+='<div class="chip"><span class="dim">&#127947;</span><strong>'+exs.length+' egzersiz</strong></div>';
-      h+='<div class="chip"><span class="dim">Tamamlanan</span><strong style="color:'+(exPct===100?'#4ade80':'var(--lime)')+'">%'+exPct+'</strong></div>';
-      h+='</div>';
-      h+='<div class="hero-btns">';
-      h+='<button class="btn-go" onclick="switchTab(\'workouts\',document.querySelectorAll(\'.nav-item\')[2])">&#127937; Antrenmanı Başlat</button>';
-      h+='<a href="myplan.html" class="btn-out">&#128203; Tüm Planım</a>';
-      h+='<button class="btn-out" onclick="switchTab(\'aicoach\',document.querySelectorAll(\'.nav-item\')[1])">&#129302; AI Koç</button>';
-      h+='</div>';
-    }
-    h+='</div>';
-
-    // GOREVLER
-    const calDone=quickCal>=calTarget,wtrDone=quickWater>=waterTarget;
-    h+='<div class="sec-label">Bugünün Görevleri</div>';
-    h+='<div class="task-list">';
-
-    h+='<div class="task '+(todayDone?'done':'')+'" onclick="toggleTodayDone()">';
-    h+='<div class="task-box">'+(todayDone?'&#10003;':'')+'</div>';
-    h+='<div class="task-info"><div class="task-title">'+(isRest?'Dinlenme günü — aktif iyileşme':'Antrenmanı tamamla')+'</div>';
-    h+='<div class="task-desc">'+(isRest?'Hafif yürüyüş veya esneme':(tp?.focus||'Antrenman')+' · '+exs.length+' egzersiz · '+(tp?.duration||45)+' dk')+'</div></div>';
-    h+='<span class="task-tag '+(todayDone?'tag-b':'tag-g')+'">'+(todayDone?'&#9989; Tamam':'&#128170; Antrenman')+'</span></div>';
-
-    if(tn){
-      h+='<div class="task '+(calDone?'done':'')+'" onclick="switchTab(\'aicoach\',document.querySelectorAll(\'.nav-item\')[1])">';
-      h+='<div class="task-box">'+(calDone?'&#10003;':'')+'</div>';
-      h+='<div class="task-info"><div class="task-title">Günlük beslenmeni takip et</div>';
-      h+='<div class="task-desc">Hedef '+(totalKcal||calTarget)+' kcal · Kahvaltı, öğle, akşam, ara öğün</div></div>';
-      h+='<span class="task-tag '+(calDone?'tag-b':'tag-g')+'">'+(calDone?'&#9989; Tamam':'&#129367; Beslenme')+'</span></div>';
+      // Plan yok — mesaj göster
+      if(document.getElementById('heroToday')) document.getElementById('heroToday').textContent='📋 Plan Yok';
+      loadHomeMealPlan(null, null);
     }
 
-    h+='<div class="task '+(wtrDone?'done':'')+'" onclick="addWater()">';
-    h+='<div class="task-box">'+(wtrDone?'&#10003;':'')+'</div>';
-    h+='<div class="task-info"><div class="task-title">Su içmeyi unutma</div>';
-    h+='<div class="task-desc">'+quickWater+'/'+waterTarget+' bardak tamamlandı</div></div>';
-    h+='<span class="task-tag '+(wtrDone?'tag-b':'tag-g')+'">'+(wtrDone?'&#9989; Tamam':'&#128167; '+quickWater+'/'+waterTarget)+'</span></div>';
-
-    h+='</div>';
-
-    // 2 KOLON
-    const SHORT=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
-    h+='<div class="two-col">';
-
-    // Takip
-    h+='<div class="card"><div class="card-head"><div class="card-title">&#9889; Hızlı Takip</div><a href="nutrition.html" class="card-link">Detay →</a></div>';
-    h+='<div class="track-pair">';
-    h+='<div class="tbox" onclick="addCal()"><div style="font-size:1.3rem">&#128293;</div><div class="tbox-num" id="calNum" style="color:#f5a623">'+quickCal+'</div><div class="tbox-lbl">/ '+calTarget+' kcal</div><div class="tbar"><div class="tfill" id="calFill" style="width:'+calPct+'%;background:#f5a623"></div></div></div>';
-    h+='<div class="tbox" onclick="addWater()"><div style="font-size:1.3rem">&#128167;</div><div class="tbox-num" id="watNum" style="color:#44aaff">'+quickWater+'</div><div class="tbox-lbl">/ '+waterTarget+' bardak</div><div class="tbar"><div class="tfill" id="watFill" style="width:'+watPct+'%;background:#44aaff"></div></div></div>';
-    h+='</div>';
-    h+='<div class="add-row"><button class="add-btn" style="color:#f5a623;border:1px solid #f5a62325;background:#f5a62310" onclick="addCal()">+200 kcal</button><button class="add-btn" style="color:#44aaff;border:1px solid #44aaff25;background:#44aaff10" onclick="addWater()">+1 Bardak</button></div>';
-    h+='</div>';
-
-    // Hafta
-    let bars='';
-    DAYS.forEach((day,i)=>{
-      const done=!!weekDone[day],today=i===TODAY_IDX;
-      const bh=done?100:today?38:10,bc=done?'var(--lime)':today?'#ffffff28':'#ffffff10';
-      bars+='<div class="wk-col"><div class="wk-bar" style="height:'+bh+'%;background:'+bc+'"></div><div class="wk-lbl" style="color:'+(today?'var(--lime)':done?'#4ade80':'var(--muted)')+'">'+SHORT[i]+'</div></div>';
-    });
-    const motivs=['Serini başlat! &#128170;','İyi gidiyorsun! &#128293;','Alışkanlık oluyor! &#10024;','4 gün üst üste! &#127942;','Neredeyse tam hafta! &#11088;','6 gün! &#127919;','Mükemmel hafta! &#127941;'];
-    h+='<div class="card"><div class="card-head"><div class="card-title">&#128202; Bu Hafta</div><div style="font-family:var(--font-head);font-weight:700;font-size:0.78rem;color:var(--lime)">'+weekCount+'/7 gün</div></div>';
-    h+='<div class="wk-bars">'+bars+'</div>';
-    h+='<div style="display:flex;justify-content:space-between;font-size:0.76rem;margin-top:0.35rem"><span style="color:var(--muted)">'+weekCount+' gün tamamlandı</span><span style="color:var(--lime);font-family:var(--font-head);font-weight:700">%'+weekPct+'</span></div>';
-    h+='<div style="height:4px;background:#ffffff0f;border-radius:100px;overflow:hidden;margin-top:0.4rem"><div style="height:100%;width:'+weekPct+'%;background:var(--lime);border-radius:100px;transition:width 0.5s"></div></div>';
-    h+='<div style="margin-top:0.85rem;font-size:0.78rem;color:var(--muted)">'+motivs[Math.min(weekCount,6)]+'</div></div>';
-
-    h+='</div>';
-
-    // Beslenme ozet
-    if(tn&&typeof tn==='object'){
-      const mDefs=[{k:'breakfast',lb:'Kahvaltı',co:'#f5a623',ic:'&#127749;'},{k:'lunch',lb:'Öğle',co:'#44aaff',ic:'&#9728;'},{k:'dinner',lb:'Akşam',co:'#c8f542',ic:'&#127769;'},{k:'snack',lb:'Ara Öğün',co:'#a78bfa',ic:'&#127822;'}];
-      let mi='';
-      mDefs.forEach(m=>{
-        const meal=tn[m.k];if(!meal)return;
-        const foods=Array.isArray(meal.foods)?meal.foods.slice(0,2).join(', '):(meal.foods||'');
-        mi+='<div class="meal-row"><div class="meal-dot" style="background:'+m.co+'"></div><div class="meal-info"><div class="meal-name">'+m.ic+' '+(meal.title||m.lb)+'</div><div class="meal-foods">'+foods+'</div></div><div class="meal-kcal">'+(meal.calories||0)+' kcal</div></div>';
+    if(profile?.goal){
+      const prompt=`${profile.goal} hedefli, ${profile.fitness_level} seviyeli biri için bugün ${profile.equipment||'gym'} ekipmanıyla 4 egzersiz. SADECE JSON array: [{"name":"Egzersiz","sets":"3 set","reps":"12 tekrar","rest":"60sn"}]`;
+      const text=await callAI([{role:'user',content:prompt}],null,300);
+      const exs=JSON.parse(text.replace(/```json|```/g,'').trim());
+      let html='<div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem">AI Önerisi — Plan oluşturmak için AI Koç\'u kullanın</div>';
+      exs.forEach((ex,i)=>{
+        html+=`<div class="tw-item" onclick="toggleTWItem(this,${i},'ai',${exs.length})">
+          <div class="tw-check"></div>
+          <div style="flex:1"><div class="tw-name">${ex.name}</div><div class="tw-sets"><span>${ex.sets} × ${ex.reps}</span></div></div>
+        </div>`;
       });
-      h+='<div class="card" style="margin-bottom:1.5rem"><div class="card-head"><div class="card-title">&#129367; Bugün Ne Yemeliyim?</div><a href="myplan.html" class="card-link">Detay →</a></div>';
-      h+='<div class="meal-list">'+mi+'</div>';
-      h+='<div style="display:flex;justify-content:space-between;padding:0.5rem 0.75rem;background:#c8f54210;border-radius:10px;border:1px solid #c8f54218;margin-top:0.4rem"><span style="font-size:0.76rem;color:var(--muted)">Günlük Toplam</span><span style="font-family:var(--font-head);font-weight:800;font-size:0.82rem;color:var(--lime)">'+totalKcal+' kcal</span></div>';
-      h+='</div>';
+      list.innerHTML=html;
+    }else{
+      list.innerHTML=`<div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:1.5rem;line-height:1.6">
+        <div style="font-size:2rem;margin-bottom:0.5rem">📋</div>
+        Profilinizi tamamlayın ve AI Koç ile plan oluşturun 💪
+        <br><button onclick="switchTab('aicoach',document.querySelectorAll('.nav-item')[1])" style="margin-top:0.75rem;background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.5rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.8rem;cursor:pointer">🤖 Plan Yap</button>
+      </div>`;
     }
-
-    if(!isPro){
-      h+='<div class="upgrade-strip"><div class="upgrade-txt"><h3>&#128640; Pro\'ya Geç — Tüm Özellikleri Aç</h3><p>Sınırsız AI koçluğu · Haftalık beslenme geçmişi · İlerleme grafikleri · Öncelikli destek</p></div><button class="upgrade-btn" onclick="openCheckout()">Pro\'ya Yükselt — $19/ay</button></div>';
-    }
-
-    el.innerHTML=h;
   }catch(e){
-    console.error('loadHome error:',e);el.innerHTML='<div style="color:var(--muted);text-align:center;padding:2rem">Hata: '+e.message+'</div>';
+    list.innerHTML=`<div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:1rem">Plan yüklenemedi</div>`;
   }
 }
 
-function renderNoPlan(){
-  const el=document.getElementById('homeContent');
-  const name=document.getElementById('userName')?.textContent||'';
-  const fn=name.split(' ')[0];
-  const pd=!!(userProfile?.goal);
-  el.innerHTML='<div class="no-plan">'+
-    '<div class="nph"><div style="font-size:3rem;margin-bottom:0.75rem">&#127947;</div>'+
-    '<div class="nph-title">Hoş geldin, '+fn+'!</div>'+
-    '<div class="nph-sub">FitMind AI ile <strong style="color:var(--white)">10 saniyede</strong> kişisel antrenman ve beslenme planın hazır.</div></div>'+
-
-    '<div class="step '+(pd?'sdone':'')+'"><div class="snum '+(pd?'sok':'slime')+'">'+(pd?'&#10003;':'1')+'</div><div><div class="stitle">Profilini tamamla</div><div class="ssub">Hedefin, fitness seviyeni ve ekipman tercihini gir.</div></div></div>'+
-    '<div class="step"><div class="snum '+(pd?'slime':'sdim')+'">2</div><div><div class="stitle">AI Koç ile plan yaptır</div><div class="ssub">Aşağıdaki butona bas, <strong style="color:var(--lime)">"plan yap"</strong> yaz. 10 saniyede 7 günlük planın hazır.</div></div></div>'+
-    '<div class="step"><div class="snum sdim">3</div><div><div class="stitle">Takip et, gelişim gör</div><div class="ssub">Her gün egzersizleri tamamla, AI koçunla geliş.</div></div></div>'+
-
-    '<button class="cta-big" onclick="switchTab(\'aicoach\',document.querySelectorAll(\'.nav-item\')[1])">&#129302; Şimdi Plan Oluştur →</button>'+
-    '<div class="sub-row"><a href="profile.html" class="sub-a">&#128100; Profilimi Düzenle</a><a href="myplan.html" class="sub-a">&#128203; Benim Planım</a></div>'+
-    '<div class="pills"><div class="pill">&#129302; <b>7/24</b> AI Koç</div><div class="pill">&#128197; <b>7 Günlük</b> Plan</div><div class="pill">&#129367; <b>Kişisel</b> Beslenme</div><div class="pill">&#128202; <b>İlerleme</b> Takibi</div></div>'+
-    '</div>';
-}
-
-function addCal(){quickCal+=200;localStorage.setItem('fp_cal_'+TODAY_STR,quickCal);loadHome();}
-function addWater(){quickWater+=1;localStorage.setItem('fp_water_'+TODAY_STR,quickWater);loadHome();}
-function toggleTodayDone(){
-  const done=JSON.parse(localStorage.getItem('fp_done')||'{}');
-  if(done[TODAY_NAME])delete done[TODAY_NAME];else done[TODAY_NAME]=true;
-  localStorage.setItem('fp_done',JSON.stringify(done));loadHome();
-}
-function openCheckout(){Paddle.Checkout.open({items:[{priceId:'pri_01knxscbw8bwh1rrg8byx2cgf0',quantity:1}],successUrl:'https://fitmindai.ai/dashboard.html'});}
-
-function saveChatHistory(){localStorage.setItem('fm_chatHistory',JSON.stringify(chatHistory.slice(-50)));}
-function clearChat(){if(!confirm('Sohbet geçmişini silmek istiyor musunuz?'))return;chatHistory=[];saveChatHistory();renderChatMessages();}
-function quickSend(t){document.getElementById('chatInput').value=t;sendMsg();}
-
-function renderChatMessages(){
-  const m=document.getElementById('messages');if(!m)return;
-  if(!chatHistory.length){
-    m.innerHTML='<div class="msg ai">Merhaba! Ben FitMind AI koçunum &#129302;<br><br>Sana özel antrenman ve beslenme planı oluşturabilirim. Egzersiz ekleyip çıkarabilir, öğünleri değiştirebilir, her türlü soruyu yanıtlayabilirim.<br><br><strong style="color:var(--lime)">Başlamak için:</strong> "Plan yap" yaz veya aşağıdaki butonları kullan &#128071;</div>';
+function loadHomeMealPlan(planData, todayPlan){
+  const el=document.getElementById('homeMealPlan');
+  if(!el)return;
+  // Bugünün nutrition'ını al
+  const nut=todayPlan?.nutrition||planData?.nutrition||null;
+  if(!nut||typeof nut!=='object'){
+    // Plan yok — hedef bazlı kalori göster
+    const calMap={lose_weight:1600,build_muscle:2500,get_fit:2000,improve_health:1800};
+    const cal=calMap[userProfile?.goal]||2000;
+    el.innerHTML=`
+      <div style="display:flex;flex-direction:column;gap:0.5rem">
+        ${[['🌅','Kahvaltı','#f5a623',Math.round(cal*0.25)],['☀️','Öğle','#44aaff',Math.round(cal*0.35)],['🌙','Akşam','#c8f542',Math.round(cal*0.3)],['🍎','Ara Öğün','#a78bfa',Math.round(cal*0.1)]].map(([ic,lb,co,kcal])=>`
+          <div style="display:flex;align-items:center;gap:0.75rem;padding:0.55rem 0.75rem;background:#ffffff05;border-radius:10px">
+            <span style="font-size:1rem">${ic}</span>
+            <span style="flex:1;font-size:0.85rem;color:var(--muted)">${lb}</span>
+            <span style="font-family:var(--font-head);font-weight:700;font-size:0.8rem;color:${co}">${kcal} kcal</span>
+          </div>`).join('')}
+        <div style="margin-top:0.5rem;text-align:center;font-size:0.75rem;color:var(--muted)">
+          <a href="javascript:void(0)" onclick="switchTab('aicoach',document.querySelectorAll('.nav-item')[1])" style="color:var(--lime);font-weight:700;text-decoration:none">Plan oluştur →</a>
+        </div>
+      </div>`;
     return;
   }
-  m.innerHTML='';
-  chatHistory.forEach(msg=>{
-    if(msg.role==='user')m.innerHTML+='<div class="msg user">'+msg.content+'</div>';
-    else if(msg.role==='assistant'){
-      if(msg.isPlanCard&&msg.plan){_pendingPlan=msg.plan;const c=document.createElement('div');c.className='msg ai';c.style.cssText='max-width:100%;padding:0;background:transparent;border:none;';c.innerHTML=buildPlanHTML(msg.plan);m.appendChild(c);}
-      else m.innerHTML+='<div class="msg ai">'+msg.content+'</div>';
-    }
+  const mealDefs=[
+    {key:'breakfast',icon:'🌅',label:'Kahvaltı',color:'#f5a623'},
+    {key:'lunch',icon:'☀️',label:'Öğle',color:'#44aaff'},
+    {key:'dinner',icon:'🌙',label:'Akşam',color:'#c8f542'},
+    {key:'snack',icon:'🍎',label:'Ara Öğün',color:'#a78bfa'}
+  ];
+  let html='<div style="display:flex;flex-direction:column;gap:0.5rem">';
+  let totalCal=0;
+  mealDefs.forEach(m=>{
+    const meal=nut[m.key];
+    if(!meal)return;
+    totalCal+=(meal.calories||0);
+    const foods=Array.isArray(meal.foods)?meal.foods.slice(0,3).join(', '):(meal.foods||'');
+    html+=`<div style="padding:0.65rem 0.85rem;background:#ffffff05;border-radius:12px;border-left:3px solid ${m.color}30;border:1px solid ${m.color}15;border-left:3px solid ${m.color}">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.2rem">
+        <span style="font-size:0.8rem;font-weight:600;color:${m.color}">${m.icon} ${meal.title||m.label}</span>
+        <span style="font-family:var(--font-head);font-weight:700;font-size:0.75rem;color:var(--muted)">${meal.calories||0} kcal</span>
+      </div>
+      <div style="font-size:0.75rem;color:#ffffffaa;line-height:1.4">${foods}</div>
+    </div>`;
   });
-  m.scrollTop=m.scrollHeight;
+  html+=`<div style="display:flex;justify-content:space-between;padding:0.5rem 0.75rem;background:#c8f54210;border-radius:10px;border:1px solid #c8f54220;margin-top:0.25rem">
+    <span style="font-size:0.75rem;color:var(--muted)">Günlük Toplam</span>
+    <span style="font-family:var(--font-head);font-weight:800;font-size:0.82rem;color:var(--lime)">${totalCal} kcal</span>
+  </div></div>`;
+  el.innerHTML=html;
 }
 
-function buildPlanHTML(plan){
-  let s='';
-  if(plan.workout)s+='<div class="plan-section" style="border-color:var(--lime)"><div style="font-size:0.7rem;color:var(--lime);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">&#128170; Antrenman Planı</div><div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">'+fmt(plan.workout)+'</div></div>';
-  if(plan.nutrition){
-    let nh='';
-    if(typeof plan.nutrition==='object'){
-      [{k:'breakfast',ic:'&#127749;',lb:'Kahvaltı',co:'#f5a623'},{k:'lunch',ic:'&#9728;',lb:'Öğle',co:'#44aaff'},{k:'dinner',ic:'&#127769;',lb:'Akşam',co:'#c8f542'},{k:'snack',ic:'&#127822;',lb:'Ara Öğün',co:'#a78bfa'}].forEach(mx=>{
-        const md=plan.nutrition[mx.k];if(!md)return;
-        nh+='<div style="margin-bottom:0.4rem"><span style="color:'+mx.co+';font-weight:700">'+mx.ic+' '+(md.title||mx.lb)+':</span> <span style="color:#ffffffcc">'+(Array.isArray(md.foods)?md.foods.join(', '):(md.foods||''))+'</span> <span style="color:var(--muted);font-size:0.78rem">('+(md.calories||0)+' kcal)</span></div>';
-      });
-    } else nh='<div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">'+fmt(String(plan.nutrition))+'</div>';
-    s+='<div class="plan-section" style="border-color:#44aaff"><div style="font-size:0.7rem;color:#44aaff;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">&#129367; Beslenme Planı</div>'+nh+'</div>';
+function toggleTWItem(el,idx,day,total){
+  const check=el.querySelector('.tw-check');
+  const key=localStorage.getItem('fp_ex')?JSON.parse(localStorage.getItem('fp_ex')):{};
+  const dayKey=day+'_ex';
+  if(!key[dayKey])key[dayKey]=[];
+  const arr=key[dayKey];
+  const pos=arr.indexOf(idx);
+  if(pos>-1){arr.splice(pos,1);el.classList.remove('done');check.classList.remove('done');check.textContent='';}
+  else{arr.push(idx);el.classList.add('done');check.classList.add('done');check.textContent='✓';}
+  localStorage.setItem('fp_ex',JSON.stringify(key));
+  document.getElementById('calorieCount').textContent=arr.length*50;
+}
+
+async function loadAISummary(profile,name){
+  if(!profile?.goal){
+    if(document.getElementById('aiSummaryText')) document.getElementById('aiSummaryText').textContent=`Merhaba ${name.split(' ')[0]}! 👋 Profilini tamamla ve AI koçun sana özel plan oluştursun!`;
+    if(document.getElementById('todayFocusText')) document.getElementById('todayFocusText').textContent='Profil tamamlanmadı';
+    return;
   }
-  if(plan.tips)s+='<div class="plan-section" style="border-color:#f5a623"><div style="font-size:0.7rem;color:#f5a623;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">&#9889; İpuçları</div><div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">'+fmt(plan.tips)+'</div></div>';
-  return '<div class="plan-card"><div style="font-family:var(--font-head);font-size:1rem;font-weight:800;color:var(--lime);margin-bottom:1rem">&#127919; 7 Günlük Kişisel Planınız</div>'+s+'<div style="display:flex;gap:0.75rem;margin-top:0.5rem"><button onclick="savePlan()" style="flex:1;background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.7rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer">&#128190; Planı Kaydet</button><button onclick="window.location.href=\'myplan.html\'" style="flex:1;background:#ffffff10;color:var(--white);border:1px solid #ffffff20;border-radius:100px;padding:0.7rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer">&#128203; Benim Planım</button></div></div>';
-}
-
-function showPlanCard(plan){_pendingPlan=plan;const m=document.getElementById('messages');const c=document.createElement('div');c.className='msg ai';c.style.cssText='max-width:100%;padding:0;background:transparent;border:none;';c.innerHTML=buildPlanHTML(plan);m.appendChild(c);m.scrollTop=m.scrollHeight;}
-
-async function savePlan(){
   try{
-    if(!_pendingPlan){alert('Plan bulunamadı.');return;}
-    const {data:{session}}=await sb.auth.getSession();if(!session)return;
-    _pendingPlan.createdAt=new Date().toISOString();_pendingPlan.goal=userProfile?.goal||'';
-    await sb.from('user_plans').upsert({user_id:session.user.id,plan_data:_pendingPlan,updated_at:new Date().toISOString()},{onConflict:'user_id'});
-    localStorage.removeItem('fp_done');localStorage.removeItem('fp_ex');localStorage.removeItem('fp_week');window._workoutSelectedDay=null;
-    alert('✅ Planınız kaydedildi!');window.location.href='myplan.html';
-  }catch(e){alert('Hata: '+e.message);}
-}
-
-async function callAI(messages,system,max_tokens){
-  const body={messages,max_tokens:max_tokens||500};if(system)body.system=system;
-  const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error||'API hatası');}
-  const d=await res.json();return d.content?.[0]?.text||'';
-}
-function fmt(t){return t.replace(/^#{1,3}\s*/gm,'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');}
-
-function quickDetect(text){
-  const t=text.toLowerCase();
-  return ['plan yap','program yap','plan oluştur','haftalık plan','antrenman programı','beslenme programı','diyet programı','program istiyorum','plan istiyorum','spor programı','fitness programı','diyet yap','kilo vermek','kas yapmak','forma girmek','haftada','evde spor','spora başlamak','yemek planı',
-  'plan yap','haftalik plan','antrenman programi','beslenme programi','diyet programi','program istiyorum','plan istiyorum','spor programi','fitness programi','diyet yap','kilo vermek','kas yapmak','forma girmek','haftada','evde spor','yemek plani'].some(k=>t.includes(k));
-}
-async function detectPlan(text){
-  if(quickDetect(text))return true;
-  try{const r=await callAI([{role:'user',content:text}],'Kullanıcının mesajı fitness/beslenme/antrenman PLANI isteği mi? SADECE "evet" veya "hayir".',10);return r.trim().toLowerCase().startsWith('evet');}catch{return false;}
-}
-function updateCounter(){if(!isPro){const r=Math.max(0,FREE_LIMIT-freeCount);document.getElementById('msgCounter').textContent=r>0?(r+' mesaj kaldı'):"Pro\'ya geç → sınırsız";}}
-
-const PLAN_SYS=`Sen bir JSON uretici sistemsin. SADECE gecerli JSON dondur. Ilk karakter { son karakter } olacak.
-Kullanici: Hedef=GOAL, Seviye=LEVEL, Ekipman=EQUIP, Kilo=WEIGHTkg
-Istek: REQUEST
-ONEMLI: Her gun icin FARKLI yiyecekler kullan. Tekrar etme.
-{"workout":"haftalik antrenman ozeti","tips":"ipucu","calories":2200,"water":3,"days":[{"day":"Pazartesi","type":"Antrenman","focus":"Gogus","duration":45,"exercises":[{"name":"Push-up","sets":"4 set","reps":"12 tekrar","rest":"60sn"},{"name":"Bench Press","sets":"3 set","reps":"10 tekrar","rest":"90sn"}],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["3 yumurta","tam bugday ekmek","domates"],"calories":420,"protein":28,"carbs":38,"fat":14},"lunch":{"title":"Ogle","foods":["150g tavuk","esmer pirinc","brokoli"],"calories":580,"protein":45,"carbs":55,"fat":12},"dinner":{"title":"Aksam","foods":["200g somon","tatli patates","salata"],"calories":520,"protein":40,"carbs":35,"fat":18},"snack":{"title":"Ara Ogun","foods":["Yunan yogurdu","muz","badem"],"calories":280,"protein":14,"carbs":32,"fat":9}}},{"day":"Sali","type":"Dinlenme","focus":"Aktif Dinlenme","duration":20,"exercises":[],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["yulaf ezmesi","meyve","bal"],"calories":380},"lunch":{"title":"Ogle","foods":["mercimek corbasi","ekmek"],"calories":420},"dinner":{"title":"Aksam","foods":["hindi","bulgur"],"calories":490},"snack":{"title":"Ara Ogun","foods":["elma","peynir"],"calories":260}}},{"day":"Carsamba","type":"Antrenman","focus":"Sirt","duration":45,"exercises":[{"name":"Pull-up","sets":"4 set","reps":"8 tekrar","rest":"90sn"},{"name":"Row","sets":"3 set","reps":"10 tekrar","rest":"90sn"}],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["protein smoothie","yulaf","muz"],"calories":450},"lunch":{"title":"Ogle","foods":["ton baligi","makarna"],"calories":560},"dinner":{"title":"Aksam","foods":["dana kiyma","fasulye"],"calories":540},"snack":{"title":"Ara Ogun","foods":["cottage cheese","kivi"],"calories":240}}},{"day":"Persembe","type":"Antrenman","focus":"Bacak","duration":55,"exercises":[{"name":"Squat","sets":"4 set","reps":"12 tekrar","rest":"120sn"},{"name":"Deadlift","sets":"3 set","reps":"10 tekrar","rest":"90sn"}],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["4 yumurta omlet","mantar"],"calories":480},"lunch":{"title":"Ogle","foods":["tavuk","kinoa"],"calories":620},"dinner":{"title":"Aksam","foods":["balik","brokoli"],"calories":440},"snack":{"title":"Ara Ogun","foods":["protein bar","portakal"],"calories":300}}},{"day":"Cuma","type":"Dinlenme","focus":"Aktif Dinlenme","duration":20,"exercises":[],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["avokado tost","yumurta"],"calories":400},"lunch":{"title":"Ogle","foods":["nohut salatasi"],"calories":480},"dinner":{"title":"Aksam","foods":["somon","kuskus"],"calories":510},"snack":{"title":"Ara Ogun","foods":["kefir","granola"],"calories":250}}},{"day":"Cumartesi","type":"Antrenman","focus":"Omuz","duration":50,"exercises":[{"name":"Shoulder Press","sets":"4 set","reps":"12 tekrar","rest":"90sn"},{"name":"Lateral Raise","sets":"3 set","reps":"15 tekrar","rest":"60sn"}],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["pancake","ahududu"],"calories":440},"lunch":{"title":"Ogle","foods":["tavuk wrap","humus"],"calories":540},"dinner":{"title":"Aksam","foods":["dana eti","sebze"],"calories":580},"snack":{"title":"Ara Ogun","foods":["fistik","elma"],"calories":270}}},{"day":"Pazar","type":"Dinlenme","focus":"Tam Dinlenme","duration":0,"exercises":[],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["menemen","ekmek"],"calories":460},"lunch":{"title":"Ogle","foods":["corba","yogurt"],"calories":500},"dinner":{"title":"Aksam","foods":["levrek","patates"],"calories":480},"snack":{"title":"Ara Ogun","foods":["cikolata","badem"],"calories":290}}}]}`;
-
-async function sendMsg(){
-  const inp=document.getElementById('chatInput');const text=inp.value.trim();if(!text)return;
-  if(!isPro&&freeCount>=FREE_LIMIT){
-    const m=document.getElementById('messages');
-    m.innerHTML+='<div class="msg limit">&#128274; <strong>Ücretsiz limit doldu</strong><br><button onclick="openCheckout()" style="margin-top:0.5rem;background:var(--lime);color:#000;border:none;padding:0.4rem 1.2rem;border-radius:100px;font-family:var(--font-head);font-weight:700;cursor:pointer">Pro\'ya Yükselt → $19/ay</button></div>';
-    m.scrollTop=m.scrollHeight;return;
+    const prompt=`${name.split(' ')[0]} adlı kullanıcıyı Türkçe karşıla. Hedef: ${profile.goal}, Seviye: ${profile.fitness_level}. 2 cümle, motive edici, kişisel.`;
+    const text=await callAI([{role:'user',content:prompt}],null,120);
+    if(document.getElementById('aiSummaryText')) document.getElementById('aiSummaryText').innerHTML=fmt(text);
+    if(document.getElementById('todayFocusText')) document.getElementById('todayFocusText').textContent='💪 Bugün harika bir antrenman günü!';
+  }catch(e){
+    if(document.getElementById('aiSummaryText')) document.getElementById('aiSummaryText').textContent=`Merhaba ${name.split(' ')[0]}! Bugün harika bir gün olacak 💪`;
+    if(document.getElementById('todayFocusText')) document.getElementById('todayFocusText').textContent='Devam et!';
   }
-  inp.value='';document.getElementById('sendBtn').disabled=true;
-  const m=document.getElementById('messages');
-  m.innerHTML+='<div class="msg user">'+text+'</div>';
-  m.innerHTML+='<div class="msg typing"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
-  m.scrollTop=m.scrollHeight;
-  chatHistory.push({role:'user',content:text});
-
-  const isPlanReq=await detectPlan(text);
-  if(isPlanReq){
-    const sys=PLAN_SYS.replace('GOAL',userProfile?.goal||'genel').replace('LEVEL',userProfile?.fitness_level||'orta').replace('EQUIP',userProfile?.equipment||'gym').replace('WEIGHT',String(userProfile?.weight||70)).replace('REQUEST',text.replace(/`/g,"'"));
-    try{
-      const reply=await callAI([{role:'user',content:text}],sys,4000);
-      let clean=reply.trim();const s=clean.indexOf('{'),e=clean.lastIndexOf('}');
-      if(s!==-1&&e!==-1)clean=clean.slice(s,e+1);clean=clean.replace(/```json|```/g,'').trim();
-      const plan=JSON.parse(clean);
-      const dm={'Sali':'Salı','Carsamba':'Çarşamba','Persembe':'Perşembe'};
-      if(plan.days)plan.days=plan.days.map(d=>({...d,day:dm[d.day]||d.day}));
-      const t=m.querySelector('.msg.typing');if(t)t.remove();
-      showPlanCard(plan);chatHistory.push({role:'assistant',isPlanCard:true,plan,content:'[Plan]'});saveChatHistory();
-    }catch{
-      const t=m.querySelector('.msg.typing');if(t)t.remove();
-      const fb='Plan oluşturulurken sorun çıktı. Tekrar deneyin.';
-      m.innerHTML+='<div class="msg ai">'+fb+'</div>';chatHistory.push({role:'assistant',content:fb});saveChatHistory();
-    }
-    m.scrollTop=m.scrollHeight;document.getElementById('sendBtn').disabled=false;if(!isPro){freeCount++;updateCounter();}return;
-  }
-
-  const editKw=['ekle','çıkar','kaldır','değiştir','güncelle','yerine'];
-  if(_pendingPlan&&editKw.some(k=>text.toLowerCase().includes(k))){
-    const esys='Sen FitMind AI. Mevcut plan: '+JSON.stringify(_pendingPlan).slice(0,1800)+'. İstek: '+text.replace(/`/g,"'")+'. SADECE güncellenmiş JSON döndür.';
-    try{
-      const reply=await callAI([{role:'user',content:text}],esys,3000);
-      let clean=reply.trim();const s=clean.indexOf('{'),e=clean.lastIndexOf('}');
-      if(s!==-1&&e!==-1)clean=clean.slice(s,e+1);
-      const up=JSON.parse(clean);
-      const dm={'Sali':'Salı','Carsamba':'Çarşamba','Persembe':'Perşembe'};
-      if(up.days)up.days=up.days.map(d=>({...d,day:dm[d.day]||d.day}));
-      _pendingPlan=up;const t=m.querySelector('.msg.typing');if(t)t.remove();
-      m.innerHTML+='<div class="msg ai">&#9989; Plan güncellendi!</div>';
-      const bw=document.createElement('div');bw.className='msg ai';bw.style.cssText='background:transparent;border:none;padding:0;display:flex;gap:0.5rem;';
-      bw.innerHTML='<button onclick="savePlan()" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.5rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer">&#128190; Kaydet</button><button onclick="window.location.href=\'myplan.html\'" style="background:#ffffff10;color:var(--white);border:1px solid #ffffff20;border-radius:100px;padding:0.5rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer">&#128203; Benim Planım</button>';
-      m.appendChild(bw);chatHistory.push({role:'assistant',content:'&#9989; Güncellendi!'});saveChatHistory();
-    }catch{const t=m.querySelector('.msg.typing');if(t)t.remove();m.innerHTML+='<div class="msg ai">Güncelleme yapılamadı. Daha açık belirtin.</div>';}
-    m.scrollTop=m.scrollHeight;document.getElementById('sendBtn').disabled=false;if(!isPro){freeCount++;updateCounter();}return;
-  }
-
-  const sys2=userProfile?'Sen FitMind AI, kişisel fitness koçusun. Türkçe yanıt ver. Hedef: '+(userProfile.goal||'?')+', Seviye: '+(userProfile.fitness_level||'?')+'. Kısa, net (2-4 cümle).':'Sen FitMind AI, fitness koçusun. Türkçe, 2-3 cümle.';
-  try{
-    const reply=await callAI(chatHistory.slice(-10),sys2,400);
-    chatHistory.push({role:'assistant',content:reply});saveChatHistory();
-    const t=m.querySelector('.msg.typing');if(t)t.remove();
-    m.innerHTML+='<div class="msg ai">'+fmt(reply)+'</div>';
-  }catch{
-    const t=m.querySelector('.msg.typing');if(t)t.remove();
-    m.innerHTML+='<div class="msg ai">Tutarlı ol ve sürece güven! &#128170;</div>';
-  }
-  m.scrollTop=m.scrollHeight;document.getElementById('sendBtn').disabled=false;if(!isPro){freeCount++;updateCounter();}
 }
 
-async function loadWorkoutsTab(){
-  const strip=document.getElementById('weeklyCalendarStrip'),detail=document.getElementById('workoutDayDetail'),sub=document.getElementById('workoutTabSub');
+function loadMealSuggestions(profile){
+  if(!profile?.goal)return;
+  const calMap={lose_weight:1600,build_muscle:2500,get_fit:2000,improve_health:1800};
+  const cal=calMap[profile.goal]||2000;
+  if(document.getElementById('calGoalText')) document.getElementById('calGoalText').textContent=cal+' kcal';
+  if(document.getElementById('breakfastSug')) document.getElementById('breakfastSug').textContent=Math.round(cal*0.25)+' kcal';
+  if(document.getElementById('lunchSug')) document.getElementById('lunchSug').textContent=Math.round(cal*0.35)+' kcal';
+  if(document.getElementById('dinnerSug')) document.getElementById('dinnerSug').textContent=Math.round(cal*0.3)+' kcal';
+  if(document.getElementById('snackSug')) document.getElementById('snackSug').textContent=Math.round(cal*0.1)+' kcal';
+}
+
+function loadDailyTip(profile){
+  const MOTIVATIONS=['"Başarı bir anda gelmez, her günkü çabanın birikimidir." 🌟','"Vücudun yapabilir. Onu durduran sadece zihnin." 💪','"Dünden daha iyi olmak için çalış, başkasından değil." ⚡','"Mükemmel olmak zorunda değilsin, sadece devam et." 🔥','"Her antrenman seni hedefine bir adım daha yaklaştırır." 🎯','"Terlediğin her damla, yarınki sen için bir yatırım." 💧','"Zor günlerde bile ayağa kalk. O günler seni güçlendirir." 🏆'];
+  const tips=profile?.goal?[
+    `${goalLabels[profile.goal]||''} hedefiniz için bugün en önemli şey tutarlılık. Her gün biraz daha iyi olmak yeterli! 💪`,
+    `Protein alımınıza dikkat edin — kilonuzun 2 katı kadar gram protein almanız önerilir.`,
+    `Antrenman öncesi hafif karbonhidrat, sonrasında protein alın. Bu altın kuraldır.`,
+    `Uyku kalitesi antrenman kadar önemli. Kaslar uyurken büyür. 7-8 saat hedefleyin.`,
+    `Su içmeyi unutmayın! Günde en az 2-3 litre performansınızı artırır.`,
+    `Isınma ve soğuma hareketleri sakatlıkları önler. Her antrenmanın 5 dakikasını buna ayırın.`,
+    `Haftalık ilerlemenizi takip etmek motivasyonu artırır. Streak'inizi koruyun!`
+  ]:['Profilinizi tamamlayın ve kişisel planınızı oluşturun! 🚀'];
+  const d=new Date().getDay();
+  if(document.getElementById('dailyTip')) document.getElementById('dailyTip').textContent=tips[d%tips.length];
+  if(document.getElementById('heroQuote')) document.getElementById('heroQuote').textContent=MOTIVATIONS[d%MOTIVATIONS.length];
+  if(document.getElementById('todayFocusText')) document.getElementById('todayFocusText').textContent=profile?.goal?(TODAY_IDX%2===0?'💪 Antrenman Günü — Hazır mısın?':'🧘 Dinlenme Günü — Toparlan!'):'Profilinizi tamamlayın';
+}
+
+async function loadQuickWorkoutPreview(){
+  const strip=document.getElementById('weeklyCalendarStrip');
+  const detail=document.getElementById('workoutDayDetail');
+  const sub=document.getElementById('workoutTabSub');
   if(!strip||!detail)return;
+
   try{
-    const {data:{session}}=await sb.auth.getSession();if(!session)return;
+    const {data:{session}}=await sb.auth.getSession();
+    if(!session)return;
     const {data}=await sb.from('user_plans').select('*').eq('user_id',session.user.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+
     if(!data?.plan_data?.days){
       strip.innerHTML='';
-      detail.innerHTML='<div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:3rem;text-align:center"><div style="font-size:3rem;margin-bottom:1rem">&#128203;</div><div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;margin-bottom:0.5rem">Henüz antrenman planın yok</div><p style="color:var(--muted);font-size:0.88rem;margin-bottom:1.5rem;line-height:1.6">AI Koç ile 7 günlük planını oluştur.</p><button onclick="switchTab(\'aicoach\',document.querySelectorAll(\'.nav-item\')[1])" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.75rem 1.8rem;font-family:var(--font-head);font-weight:700;font-size:0.9rem;cursor:pointer">&#129302; Plan Yap</button></div>';
+      detail.innerHTML=`
+        <div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:3rem;text-align:center">
+          <div style="font-size:3rem;margin-bottom:1rem">📋</div>
+          <div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;margin-bottom:0.5rem">Henüz antrenman planınız yok</div>
+          <p style="color:var(--muted);font-size:0.88rem;margin-bottom:1.5rem;line-height:1.6">AI Koç ile konuşarak kişisel 7 günlük planınızı oluşturun.</p>
+          <button onclick="switchTab('aicoach',document.querySelectorAll('.nav-item')[1])" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.75rem 1.8rem;font-family:var(--font-head);font-weight:700;font-size:0.9rem;cursor:pointer">🤖 AI Koç ile Plan Yap</button>
+        </div>`;
       return;
     }
-    const plan=data.plan_data,days=plan.days,done=JSON.parse(localStorage.getItem('fp_done')||'{}');
-    if(!window._workoutSelectedDay)window._workoutSelectedDay=TODAY_NAME;
-    const SHORT=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
+
+    const plan=data.plan_data;
+    const days=plan.days;
+    const done=JSON.parse(localStorage.getItem('fp_done')||'{}');
+
+    // selectedDay global değişkenden al, ilk açılışta bugüne set et
+    if(!window._workoutSelectedDay) window._workoutSelectedDay=TODAY_NAME;
+
+    // Haftalık takvim şeridi
     function renderStrip(){
       strip.innerHTML='';
       days.forEach(dp=>{
-        const isT=dp.day===TODAY_NAME,isSel=dp.day===window._workoutSelectedDay,isDone=!!done[dp.day],isRest=dp.type==='Dinlenme'||dp.type==='Rest';
-        const di=DAYS.indexOf(dp.day),sn=SHORT[di]||dp.day.slice(0,3);
-        let bg='#0d0d0d',br='#ffffff0a';
-        if(isSel){bg='#1a1a1a';br='#ffffff40';}else if(isDone){bg='#051205';br='#4ade8040';}else if(isT){bg='#0f1a06';br='var(--lime)';}
-        const icons=['&#128170;','&#127939;','&#129496;','&#9889;','&#128293;','&#11088;','&#128564;'];
-        const ic=isDone?'&#9989;':isRest?'&#129496;':(icons[di]||'&#128170;');
-        const el2=document.createElement('div');
-        el2.style.cssText='background:'+bg+';border:2px solid '+br+';border-radius:14px;padding:0.75rem 0.3rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative';
-        el2.innerHTML='<div style="font-family:var(--font-head);font-size:0.6rem;font-weight:700;color:'+(isT?'var(--lime)':'var(--muted)')+';margin-bottom:0.3rem">'+sn+'</div><div style="font-size:1.3rem;margin-bottom:0.25rem">'+ic+'</div><div style="font-size:0.55rem;color:'+(isDone?'#4ade80':isRest?'var(--muted)':'var(--white)')+';font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 0.2rem">'+(isDone?'Tamam':isRest?'Dinlenme':(dp.focus||'Antrenman').slice(0,10))+'</div>'+(isSel?'<div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--lime);border-radius:0 0 12px 12px"></div>':'');
-        el2.onclick=()=>{window._workoutSelectedDay=dp.day;renderStrip();renderDay(dp);};strip.appendChild(el2);
+        const isToday=dp.day===TODAY_NAME;
+        const isSel=dp.day===window._workoutSelectedDay;
+        const isDone=!!done[dp.day];
+        const isRest=dp.type==='Dinlenme'||dp.type==='Rest';
+        const dayIdx=DAYS.indexOf(dp.day);
+        const shortName=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'][dayIdx]||dp.day.slice(0,3);
+
+        let bg='#0d0d0d', border='#ffffff0a', nameCol='var(--muted)';
+        if(isSel){bg='#1a1a1a';border='#ffffff40';}
+        else if(isDone){bg='#051205';border='#4ade8040';}
+        else if(isToday){bg='#0f1a06';border='var(--lime)';}
+
+        const icon=isDone?'✅':isRest?'🧘':['💪','🏃','🧘','⚡','🔥','🌟','😴'][dayIdx]||'💪';
+
+        const el=document.createElement('div');
+        el.style.cssText=`background:${bg};border:2px solid ${border};border-radius:14px;padding:0.75rem 0.3rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative`;
+        el.innerHTML=`
+          <div style="font-family:var(--font-head);font-size:0.6rem;font-weight:700;color:${isToday?'var(--lime)':'var(--muted)'};margin-bottom:0.3rem;letter-spacing:0.05em">${shortName}</div>
+          <div style="font-size:1.3rem;margin-bottom:0.25rem">${icon}</div>
+          <div style="font-size:0.55rem;color:${isDone?'#4ade80':isRest?'var(--muted)':'var(--white)'};font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 0.2rem">${isDone?'Tamam':isRest?'Dinlenme':(dp.focus||'Antrenman').slice(0,10)}</div>
+          ${isSel?'<div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--lime);border-radius:0 0 12px 12px"></div>':''}`;
+        el.onclick=()=>{window._workoutSelectedDay=dp.day;renderStrip();renderDayDetail(dp,plan);};
+        strip.appendChild(el);
       });
     }
-    function renderDay(dp){
-      const isT=dp.day===TODAY_NAME,isRest=dp.type==='Dinlenme'||dp.type==='Rest',isDone=!!done[dp.day];
-      const exs=dp.exercises||[],de=JSON.parse(localStorage.getItem('fp_ex')||'{}')[dp.day+'_ex']||[];
-      if(sub)sub.textContent=dp.day+(isT?' · Bugün':'')+(dp.duration?' · '+dp.duration+' dk':'');
-      if(isRest){detail.innerHTML='<div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:3rem;text-align:center"><div style="font-size:3.5rem;margin-bottom:1rem">&#129496;</div><div style="font-family:var(--font-head);font-size:1.2rem;font-weight:700;margin-bottom:0.5rem">'+dp.day+' — Dinlenme</div><p style="color:var(--muted);font-size:0.88rem">Vücudunun iyileşmesine izin ver.</p></div>';return;}
-      if(!exs.length){detail.innerHTML='<div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:2rem;text-align:center;color:var(--muted)">Bu gün için egzersiz bulunamadı.</div>';return;}
-      const pct=Math.round(de.length/exs.length*100);
-      let h='<div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem">';
-      h+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:0.75rem">';
-      h+='<div><div style="font-family:var(--font-head);font-size:1rem;font-weight:700">'+dp.day+(isT?' <span style="background:#c8f54220;color:var(--lime);font-size:0.7rem;padding:0.2rem 0.6rem;border-radius:100px;border:1px solid #c8f54230">Bugün</span>':'')+'</div>'+(dp.focus?'<div style="display:inline-flex;align-items:center;background:#c8f54215;border:1px solid #c8f54225;border-radius:100px;padding:0.25rem 0.75rem;font-size:0.7rem;font-family:var(--font-head);font-weight:700;color:var(--lime);margin-top:0.4rem">'+dp.focus.toUpperCase()+'</div>':'')+'</div>';
-      h+='<div style="text-align:right"><div style="font-size:0.73rem;color:var(--muted);margin-bottom:0.25rem">'+de.length+'/'+exs.length+' tamamlandı</div><div style="width:110px;height:4px;background:#ffffff10;border-radius:100px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--lime);border-radius:100px"></div></div></div></div>';
-      h+='<div style="display:flex;flex-direction:column;gap:0.6rem">';
+
+    // Seçili günün detaylı antrenmanı
+    function renderDayDetail(dp, plan){
+      const isToday=dp.day===TODAY_NAME;
+      const isRest=dp.type==='Dinlenme'||dp.type==='Rest';
+      const isDone=!!done[dp.day];
+      const exs=dp.exercises||[];
+      const doneExes=JSON.parse(localStorage.getItem('fp_ex')||'{}')[dp.day+'_ex']||[];
+
+      if(sub) sub.textContent=dp.day+(isToday?' · Bugün':'')+(dp.duration?' · '+dp.duration+' dk':'');
+
+      if(isRest){
+        detail.innerHTML=`
+          <div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:3rem;text-align:center">
+            <div style="font-size:3.5rem;margin-bottom:1rem">🧘</div>
+            <div style="font-family:var(--font-head);font-size:1.2rem;font-weight:700;margin-bottom:0.5rem">${dp.day} — Dinlenme Günü</div>
+            <p style="color:var(--muted);font-size:0.88rem;line-height:1.7">Vücudunun iyileşmesine izin ver.<br>Hafif yürüyüş veya esneme hareketleri yapabilirsin.</p>
+          </div>`;
+        return;
+      }
+
+      if(exs.length===0){
+        detail.innerHTML=`<div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:2rem;text-align:center;color:var(--muted)">Bu gün için egzersiz bulunamadı.</div>`;
+        return;
+      }
+
+      const pct=Math.round(doneExes.length/exs.length*100);
+      let html=`
+        <div style="background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:0.75rem">
+            <div>
+              <div style="font-family:var(--font-head);font-size:1rem;font-weight:700">${dp.day}${isToday?' <span style="background:#c8f54220;color:var(--lime);font-size:0.7rem;padding:0.2rem 0.6rem;border-radius:100px;border:1px solid #c8f54230">Bugün</span>':''}</div>
+              ${dp.focus?`<div style="display:inline-flex;align-items:center;background:#c8f54215;border:1px solid #c8f54225;border-radius:100px;padding:0.25rem 0.75rem;font-size:0.72rem;font-family:var(--font-head);font-weight:700;color:var(--lime);letter-spacing:0.05em;margin-top:0.4rem">${dp.focus.toUpperCase()}</div>`:''}
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.3rem">${doneExes.length}/${exs.length} tamamlandı</div>
+              <div style="width:120px;height:5px;background:#ffffff10;border-radius:100px;overflow:hidden">
+                <div style="height:100%;width:${pct}%;background:var(--lime);border-radius:100px;transition:width 0.5s"></div>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0.6rem">`;
+
       exs.forEach((ex,i)=>{
-        const dEx=de.includes(i);
-        h+='<div style="display:flex;align-items:center;gap:1rem;padding:0.9rem 1rem;background:'+(dEx?'#4ade8008':'#ffffff05')+';border-radius:14px;border:1.5px solid '+(dEx?'#4ade8025':'#ffffff08')+';cursor:pointer" onclick="toggleEx(this,'+i+',\''+dp.day+'\','+exs.length+')">';
-        h+='<div style="width:30px;height:30px;border-radius:9px;background:'+(dEx?'var(--lime)':'#ffffff10')+';display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.78rem;color:'+(dEx?'#000':'var(--muted)')+';flex-shrink:0">'+(dEx?'&#10003;':(i+1))+'</div>';
-        h+='<div style="flex:1"><div style="font-size:0.9rem;font-weight:500;'+(dEx?'text-decoration:line-through;opacity:0.45':'')+'">'+ex.name+'</div>';
-        h+='<div style="display:flex;gap:0.35rem;margin-top:0.3rem;flex-wrap:wrap"><span style="background:#c8f54218;border:1px solid #c8f54222;border-radius:7px;padding:0.15rem 0.5rem;font-size:0.68rem;font-family:var(--font-head);font-weight:700;color:var(--lime)">'+ex.sets+'</span><span style="background:#ffffff08;border-radius:7px;padding:0.15rem 0.5rem;font-size:0.68rem;font-family:var(--font-head);font-weight:700">'+ex.reps+'</span>'+(ex.rest?'<span style="background:#ffffff05;border-radius:7px;padding:0.15rem 0.5rem;font-size:0.68rem;color:var(--muted)">&#8987; '+ex.rest+'</span>':'')+'</div></div>';
-        const ytq=encodeURIComponent(ex.name+' nasil yapilir');
-        h+='<div onclick="event.stopPropagation();window.open(\'https://www.youtube.com/results?search_query='+ytq+'\',\'_blank\')" style="background:#ffffff08;border:1px solid #ffffff10;border-radius:9px;padding:0.38rem 0.65rem;font-size:0.7rem;color:var(--muted);cursor:pointer;flex-shrink:0;font-family:var(--font-head);font-weight:700">&#9658; Video</div></div>';
+        const isDoneEx=doneExes.includes(i);
+        html+=`
+          <div style="display:flex;align-items:center;gap:1rem;padding:1rem 1.1rem;background:${isDoneEx?'#4ade8008':'#ffffff05'};border-radius:14px;border:1.5px solid ${isDoneEx?'#4ade8025':'#ffffff08'};cursor:pointer;transition:all 0.2s"
+            onclick="toggleWorkoutTabEx(this,${i},'${dp.day}',${exs.length})"
+            onmouseenter="this.style.borderColor='${isDoneEx?'#4ade8040':'#ffffff18'}'"
+            onmouseleave="this.style.borderColor='${isDoneEx?'#4ade8025':'#ffffff08'}'">
+            <div style="width:32px;height:32px;border-radius:10px;background:${isDoneEx?'var(--lime)':'#ffffff10'};display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.8rem;color:${isDoneEx?'#000':'var(--muted)'};flex-shrink:0;transition:all 0.2s">
+              ${isDoneEx?'✓':(i+1)}
+            </div>
+            <div style="flex:1">
+              <div style="font-size:0.92rem;font-weight:600;margin-bottom:0.35rem;${isDoneEx?'text-decoration:line-through;opacity:0.5':''}">${ex.name}</div>
+              <div style="display:flex;gap:0.4rem;flex-wrap:wrap">
+                <span style="background:#c8f54218;border:1px solid #c8f54225;border-radius:8px;padding:0.18rem 0.55rem;font-family:var(--font-head);font-weight:700;font-size:0.7rem;color:var(--lime)">🔄 ${ex.sets}</span>
+                <span style="background:#ffffff08;border-radius:8px;padding:0.18rem 0.55rem;font-family:var(--font-head);font-weight:700;font-size:0.7rem;color:var(--white)">💪 ${ex.reps}</span>
+                ${ex.rest?`<span style="background:#4af10;border-radius:8px;padding:0.18rem 0.55rem;font-family:var(--font-head);font-weight:700;font-size:0.7rem;color:#4af">⏱ ${ex.rest}</span>`:''}
+              </div>
+            </div>
+            <div onclick="event.stopPropagation();window.open('https://www.youtube.com/results?search_query='+encodeURIComponent('${ex.name.replace(/'/g,'')} nasıl yapılır'),'_blank')"
+              style="background:#ffffff08;border:1px solid #ffffff10;border-radius:10px;padding:0.4rem 0.7rem;font-size:0.72rem;color:var(--muted);cursor:pointer;flex-shrink:0;font-family:var(--font-head);font-weight:700;white-space:nowrap">
+              ▶ Video
+            </div>
+          </div>`;
       });
-      h+='</div><button onclick="toggleDayDone(\''+dp.day+'\')" style="width:100%;margin-top:1rem;padding:0.85rem;border:none;border-radius:14px;font-family:var(--font-head);font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.2s;'+(isDone?'background:#4ade8015;color:#4ade80;border:1.5px solid #4ade8030':'background:linear-gradient(135deg,var(--lime),var(--lime2));color:#000')+'">'+(isDone?'&#9989; Tamamlandı — Geri Al':'&#127937; Antrenmanı Tamamla')+'</button></div>';
-      detail.innerHTML=h;
+
+      html+=`</div>
+          <button onclick="toggleWorkoutTabDone('${dp.day}')" style="width:100%;margin-top:1rem;padding:0.85rem;border:none;border-radius:14px;font-family:var(--font-head);font-weight:700;font-size:0.92rem;cursor:pointer;transition:all 0.2s;${isDone?'background:#4ade8015;color:#4ade80;border:1.5px solid #4ade8030':'background:linear-gradient(135deg,var(--lime),var(--lime2));color:#000'}">
+            ${isDone?'✅ Tamamlandı — Geri Al':'🏁 Antrenmanı Tamamla'}
+          </button>
+        </div>`;
+
+      detail.innerHTML=html;
     }
+
+    // İlk render — seçili günü koru, yoksa bugünü göster
     renderStrip();
-    const sel=days.find(d=>d.day===window._workoutSelectedDay)||days.find(d=>d.day===TODAY_NAME)||days[0];
-    if(sel)renderDay(sel);
-  }catch(e){if(detail)detail.innerHTML='<div style="color:var(--muted);text-align:center;padding:2rem">Plan yüklenemedi.</div>';}
+    const selPlan=days.find(d=>d.day===window._workoutSelectedDay)||days.find(d=>d.day===TODAY_NAME)||days[0];
+    if(selPlan) renderDayDetail(selPlan, plan);
+
+  }catch(e){
+    if(detail) detail.innerHTML=`<div style="color:var(--muted);text-align:center;padding:2rem">Plan yüklenemedi. Lütfen sayfayı yenileyin.</div>`;
+  }
 }
 
-function toggleEx(el,idx,day,total){
-  const s=JSON.parse(localStorage.getItem('fp_ex')||'{}'),k=day+'_ex';
-  if(!s[k])s[k]=[];const a=s[k],p=a.indexOf(idx);
-  if(p>-1)a.splice(p,1);else a.push(idx);localStorage.setItem('fp_ex',JSON.stringify(s));
-  if(a.length>=total){const d=JSON.parse(localStorage.getItem('fp_done')||'{}');d[day]=true;localStorage.setItem('fp_done',JSON.stringify(d));}
-  loadWorkoutsTab();
+function toggleWorkoutTabEx(el, idx, day, total){
+  const stored=JSON.parse(localStorage.getItem('fp_ex')||'{}');
+  const key=day+'_ex';
+  if(!stored[key]) stored[key]=[];
+  const arr=stored[key];
+  const pos=arr.indexOf(idx);
+  if(pos>-1) arr.splice(pos,1); else arr.push(idx);
+  localStorage.setItem('fp_ex',JSON.stringify(stored));
+  // Otomatik gün tamamlama
+  if(arr.length>=total){
+    const done=JSON.parse(localStorage.getItem('fp_done')||'{}');
+    done[day]=true;
+    localStorage.setItem('fp_done',JSON.stringify(done));
+  }
+  loadQuickWorkoutPreview(); // Yeniden render
 }
-function toggleDayDone(day){
-  const d=JSON.parse(localStorage.getItem('fp_done')||'{}');
-  if(d[day])delete d[day];else d[day]=true;
-  localStorage.setItem('fp_done',JSON.stringify(d));loadWorkoutsTab();
+
+function toggleWorkoutTabDone(day){
+  const done=JSON.parse(localStorage.getItem('fp_done')||'{}');
+  if(done[day]) delete done[day]; else done[day]=true;
+  localStorage.setItem('fp_done',JSON.stringify(done));
+  loadQuickWorkoutPreview();
+  loadWeekProgress();
 }
+
+function fmt(text){
+  return text.replace(/^#{1,3}\s*/gm,'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
+}
+
+// Hızlı keyword kontrolü — açık plan isteklerini anında yakala
+function quickDetectPlan(text){
+  const t=text.toLowerCase();
+  return ['plan yap','program yap','plan oluştur','haftalık plan','programı yap','programı çıkar',
+    'program çıkar','antrenman programı','beslenme programı','diyet programı','benim için plan',
+    'program istiyorum','plan istiyorum','antrenman istiyorum','beslenme istiyorum',
+    'spor programı','fitness programı','egzersiz programı','diyet yap','rejim',
+    'kilo vermek istiyorum','kas yapmak istiyorum','forma girmek istiyorum',
+    'haftanın','haftada','günde','evde spor','spora başlamak','sağlıklı beslenme',
+    'öğün planı','yemek planı','kalori','protein almak'].some(k=>t.includes(k));
+}
+
+// AI tabanlı akıllı plan tespiti — keyword yakalamadıysa AI'a sor
+async function detectPlan(text){
+  // Önce hızlı kontrolü dene
+  if(quickDetectPlan(text)) return true;
+  // Keyword bulamadıysa AI'a sor (max 50 token, çok hızlı)
+  try{
+    const res=await callAI(
+      [{role:'user',content:text}],
+      `Kullanıcının mesajı bir fitness/beslenme/antrenman PLANI veya PROGRAM isteği mi? SADECE "evet" veya "hayir" yaz, başka hiçbir şey yazma.`,
+      10
+    );
+    return res.trim().toLowerCase().startsWith('evet');
+  }catch(e){
+    return false;
+  }
+}
+
+let _pendingPlan = null; // Global plan değişkeni — onclick tırnak sorununu önler
+
+function showPlanCard(plan){
+  _pendingPlan = plan; // Planı global'e kaydet
+  const msgs=document.getElementById('messages');
+  const card=document.createElement('div');
+  card.className='msg ai';
+  card.style.cssText='max-width:100%;padding:0;background:transparent;border:none;';
+  let sectionsHtml='';
+  if(plan.workout) sectionsHtml+=`<div class="plan-section" style="border-color:var(--lime)"><div style="font-size:0.7rem;color:var(--lime);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">💪 Antrenman Planı</div><div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">${fmt(plan.workout)}</div></div>`;
+
+  // Beslenme planı — object veya string olabilir
+  if(plan.nutrition){
+    let nutHtml='';
+    if(typeof plan.nutrition==='object'){
+      const meals=[
+        {key:'breakfast',icon:'🌅',label:'Kahvaltı',color:'#f5a623'},
+        {key:'lunch',icon:'☀️',label:'Öğle',color:'#44aaff'},
+        {key:'dinner',icon:'🌙',label:'Akşam',color:'#c8f542'},
+        {key:'snack',icon:'🍎',label:'Ara Öğün',color:'#a78bfa'}
+      ];
+      meals.forEach(m=>{
+        const meal=plan.nutrition[m.key];
+        if(!meal)return;
+        const foods=Array.isArray(meal.foods)?meal.foods.join(', '):(meal.foods||'');
+        nutHtml+=`<div style="margin-bottom:0.5rem"><span style="color:${m.color};font-weight:700">${m.icon} ${meal.title||m.label}:</span> <span style="color:#ffffffcc">${foods}</span> <span style="color:var(--muted);font-size:0.8rem">(${meal.calories||0} kcal)</span></div>`;
+      });
+    } else {
+      nutHtml=`<div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">${fmt(String(plan.nutrition))}</div>`;
+    }
+    sectionsHtml+=`<div class="plan-section" style="border-color:#44aaff"><div style="font-size:0.7rem;color:#44aaff;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">🥗 Beslenme Planı</div>${nutHtml}</div>`;
+  }
+
+  if(plan.tips) sectionsHtml+=`<div class="plan-section" style="border-color:#f5a623"><div style="font-size:0.7rem;color:#f5a623;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">⚡ İpuçları</div><div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">${fmt(plan.tips)}</div></div>`;
+  card.innerHTML=`<div class="plan-card">
+    <div style="font-family:var(--font-head);font-size:1rem;font-weight:800;color:var(--lime);margin-bottom:1rem">🎯 7 Günlük Kişisel Planınız</div>
+    ${sectionsHtml}
+    <div style="display:flex;gap:0.75rem;margin-top:0.25rem">
+      <button onclick="savePlan()" style="flex:1;background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.7rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer">💾 Planı Kaydet</button>
+      <button onclick="window.location.href='myplan.html'" style="flex:1;background:#ffffff10;color:var(--white);border:1px solid #ffffff20;border-radius:100px;padding:0.7rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer">📋 Benim Planım</button>
+    </div>
+  </div>`;
+  msgs.appendChild(card);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+async function savePlan(){
+  try{
+    const plan=_pendingPlan;
+    if(!plan){alert('Plan bulunamadı, lütfen tekrar plan oluşturun.');return;}
+    const {data:{session}}=await sb.auth.getSession();
+    if(!session)return;
+    plan.createdAt=new Date().toISOString();
+    plan.goal=userProfile?.goal||'';
+    plan.level=userProfile?.fitness_level||'';
+    await sb.from('user_plans').upsert({user_id:session.user.id,plan_data:plan,updated_at:new Date().toISOString()},{onConflict:'user_id'});
+    // Yeni plan kaydedilince eski ilerleme verilerini sıfırla
+    localStorage.removeItem('fp_done');
+    localStorage.removeItem('fp_ex');
+    localStorage.removeItem('fp_week');
+    window._workoutSelectedDay=null;
+    alert('✅ Planınız kaydedildi! "Benim Planım" sayfasından takip edebilirsiniz.');
+    window.location.href='myplan.html';
+  }catch(e){alert('Hata: '+e.message);}
+}
+
+async function sendMsg(){
+  const input=document.getElementById('chatInput');
+  const text=input.value.trim();
+  if(!text)return;
+  if(!isPro&&freeCount>=FREE_LIMIT){
+    const msgs=document.getElementById('messages');
+    msgs.innerHTML+=`<div class="msg limit">🔒 <strong>Ücretsiz limit doldu</strong><br><button onclick="openCheckout()" style="margin-top:0.5rem;background:var(--lime);color:#000;border:none;padding:0.4rem 1.2rem;border-radius:100px;font-family:var(--font-head);font-weight:700;cursor:pointer">Pro'ya Yükselt → $19/ay</button></div>`;
+    msgs.scrollTop=msgs.scrollHeight;return;
+  }
+  input.value='';
+  document.getElementById('sendBtn').disabled=true;
+  const msgs=document.getElementById('messages');
+  msgs.innerHTML+=`<div class="msg user">${text}</div>`;
+  msgs.innerHTML+=`<div class="msg typing"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  msgs.scrollTop=msgs.scrollHeight;
+  chatHistory.push({role:'user',content:text});
+
+  // Plan isteği mi kontrol et (AI destekli)
+  const isPlanReq = await detectPlan(text);
+
+  if(isPlanReq){
+    const planSys=`Sen bir JSON üretici sistemsin. SADECE geçerli JSON döndür. Hicbir sey yazma. Ilk karakter { son karakter } olacak.
+Kullanici: Hedef=${userProfile?.goal||'genel'}, Seviye=${userProfile?.fitness_level||'orta'}, Ekipman=${userProfile?.equipment||'gym'}, Kilo=${userProfile?.weight||70}kg
+Ozel istek: ${text.replace(/`/g,"'").replace(/\$/g,"S")}
+ONEMLI: Her gun icin FARKLI yiyecekler kullan. Tekrar etme. Kullanici tercihlerini yansit.
+Bu sablonu doldur — her gun ayri nutrition objesi var:
+{"workout":"haftalik antrenman ozeti","tips":"1) ipucu 2) ipucu 3) ipucu","calories":2200,"water":3,"days":[{"day":"Pazartesi","type":"Antrenman","focus":"Gogus ve Triseps","duration":45,"exercises":[{"name":"Push-up","sets":"4 set","reps":"12-15 tekrar","rest":"60sn"},{"name":"Dumbbell Press","sets":"3 set","reps":"10-12 tekrar","rest":"90sn"},{"name":"Tricep Dips","sets":"3 set","reps":"12 tekrar","rest":"60sn"}],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["3 yumurta","2 dilim tam bugday ekmek","domates","sut"],"calories":420,"protein":28,"carbs":38,"fat":14},"lunch":{"title":"Ogle","foods":["150g tavuk gogsu","esmer pirinc","brokoli","zeytinyagi"],"calories":580,"protein":45,"carbs":55,"fat":12},"dinner":{"title":"Aksam","foods":["200g somon","tatli patates","yesil salata"],"calories":520,"protein":40,"carbs":35,"fat":18},"snack":{"title":"Ara Ogun","foods":["Yunan yogurdu","muz","badem"],"calories":280,"protein":14,"carbs":32,"fat":9}}},{"day":"Sali","type":"Dinlenme","focus":"Aktif Dinlenme","duration":20,"exercises":[],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["yulaf ezmesi","meyve","bal","sut"],"calories":380,"protein":12,"carbs":62,"fat":8},"lunch":{"title":"Ogle","foods":["mercimek corbasi","tam bugday ekmek","salata"],"calories":420,"protein":22,"carbs":58,"fat":10},"dinner":{"title":"Aksam","foods":["izgara hindi","sebze soteleme","bulgur"],"calories":490,"protein":38,"carbs":42,"fat":14},"snack":{"title":"Ara Ogun","foods":["elma","kasar peyniri","ceviz"],"calories":260,"protein":10,"carbs":28,"fat":12}}},{"day":"Carsamba","type":"Antrenman","focus":"Sirt ve Biseps","duration":45,"exercises":[{"name":"Pull-ups","sets":"4 set","reps":"8-10 tekrar","rest":"90sn"},{"name":"Bent-over Row","sets":"4 set","reps":"10-12 tekrar","rest":"90sn"},{"name":"Bicep Curl","sets":"3 set","reps":"12-15 tekrar","rest":"60sn"}],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["protein smoothie","yulaf","muz","fistik ezmesi"],"calories":450,"protein":32,"carbs":48,"fat":15},"lunch":{"title":"Ogle","foods":["ton baligi","makarna","domates sosu","roka"],"calories":560,"protein":42,"carbs":52,"fat":14},"dinner":{"title":"Aksam","foods":["dana kiyma","fasulye","avokado","limon"],"calories":540,"protein":44,"carbs":28,"fat":22},"snack":{"title":"Ara Ogun","foods":["cottage cheese","kivi","findik"],"calories":240,"protein":18,"carbs":22,"fat":8}}},{"day":"Persembe","type":"Antrenman","focus":"Bacak ve Kalca","duration":55,"exercises":[{"name":"Squat","sets":"4 set","reps":"10-12 tekrar","rest":"120sn"},{"name":"Romanian Deadlift","sets":"3 set","reps":"10-12 tekrar","rest":"90sn"},{"name":"Leg Press","sets":"3 set","reps":"12-15 tekrar","rest":"90sn"}],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["4 yumurta omlet","mantar","ispanak","peynir"],"calories":480,"protein":36,"carbs":12,"fat":28},"lunch":{"title":"Ogle","foods":["izgara tavuk kanat","kinoa","renkli biber","yogurt"],"calories":620,"protein":48,"carbs":50,"fat":16},"dinner":{"title":"Aksam","foods":["balik bugulama","haslama brokoli","zeytinyagi","limon"],"calories":440,"protein":38,"carbs":18,"fat":16},"snack":{"title":"Ara Ogun","foods":["protein bar","portakal","sut"],"calories":300,"protein":20,"carbs":35,"fat":7}}},{"day":"Cuma","type":"Dinlenme","focus":"Aktif Dinlenme","duration":20,"exercises":[],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["tam bugday tost","avokado","yumurta","domates"],"calories":400,"protein":18,"carbs":42,"fat":18},"lunch":{"title":"Ogle","foods":["nohut salatasi","zeytinyagi","maydanoz","limon"],"calories":480,"protein":20,"carbs":58,"fat":14},"dinner":{"title":"Aksam","foods":["izgara somon","kuskus","mevsim sebzesi"],"calories":510,"protein":42,"carbs":38,"fat":16},"snack":{"title":"Ara Ogun","foods":["kefir","yaban mersini","granola"],"calories":250,"protein":10,"carbs":35,"fat":7}}},{"day":"Cumartesi","type":"Antrenman","focus":"Omuz ve Core","duration":50,"exercises":[{"name":"Shoulder Press","sets":"4 set","reps":"10-12 tekrar","rest":"90sn"},{"name":"Lateral Raise","sets":"3 set","reps":"15 tekrar","rest":"60sn"},{"name":"Plank","sets":"3 set","reps":"45-60 sn","rest":"45sn"}],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["pancake","ahududu","akce sekeri","sut"],"calories":440,"protein":16,"carbs":68,"fat":12},"lunch":{"title":"Ogle","foods":["sebzeli tavuk wrap","humus","salata"],"calories":540,"protein":38,"carbs":52,"fat":16},"dinner":{"title":"Aksam","foods":["dana eti","kizartilmis sebze","cevizli pilav"],"calories":580,"protein":42,"carbs":45,"fat":20},"snack":{"title":"Ara Ogun","foods":["antep fistig","elma","lor peyniri"],"calories":270,"protein":12,"carbs":26,"fat":14}}},{"day":"Pazar","type":"Dinlenme","focus":"Tam Dinlenme","duration":0,"exercises":[],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["menemen","tam bugday ekmek","zeytin","peynir"],"calories":460,"protein":22,"carbs":38,"fat":22},"lunch":{"title":"Ogle","foods":["ev yapimi corba","sebzeli kuskus","yogurt"],"calories":500,"protein":20,"carbs":62,"fat":14},"dinner":{"title":"Aksam","foods":["izgara levrek","patates puresi","sebze"],"calories":480,"protein":38,"carbs":40,"fat":14},"snack":{"title":"Ara Ogun","foods":["bitter cikolata","badem sut","muz"],"calories":290,"protein":8,"carbs":38,"fat":12}}}]}`;
+    try{
+      const reply=await callAI([{role:'user',content:text}],planSys,4000);
+      // JSON'u yanıttan çıkar — baştan { bul, sondan } bul
+      let clean=reply.trim();
+      const start=clean.indexOf('{');
+      const end=clean.lastIndexOf('}');
+      if(start!==-1&&end!==-1) clean=clean.slice(start,end+1);
+      clean=clean.replace(/```json|```/g,'').trim();
+      const plan=JSON.parse(clean);
+      // Gün isimlerini Türkçeye çevir (ASCII'den)
+      const dayMap={'Pazartesi':'Pazartesi','Sali':'Salı','Carsamba':'Çarşamba','Persembe':'Perşembe','Cuma':'Cuma','Cumartesi':'Cumartesi','Pazar':'Pazar','Salı':'Salı','Çarşamba':'Çarşamba','Perşembe':'Perşembe'};
+      if(plan.days) plan.days=plan.days.map(d=>({...d,day:dayMap[d.day]||d.day}));
+      const t=msgs.querySelector('.msg.typing');
+      if(t)t.remove();
+      // Plan kartını göster ve geçmişe kaydet
+      showPlanCard(plan);
+      chatHistory.push({role:'assistant',isPlanCard:true,plan:plan,content:'[Plan Kartı]'});
+      saveChatHistory();
+      document.getElementById('sendBtn').disabled=false;
+      if(!isPro){freeCount++;updateCounter();}
+      return;
+    }catch(e){
+      const t=msgs.querySelector('.msg.typing');
+      if(t)t.remove();
+      const errMsg='Plan oluşturulurken bir sorun oluştu. Lütfen tekrar deneyin. 🔄';
+      msgs.innerHTML+=`<div class="msg ai">${errMsg}</div>`;
+      chatHistory.push({role:'assistant',content:errMsg});
+      saveChatHistory();
+      msgs.scrollTop=msgs.scrollHeight;
+      document.getElementById('sendBtn').disabled=false;
+      if(!isPro){freeCount++;updateCounter();}
+      return;
+    }
+  }
+
+  // Plan düzenleme isteği mi? (mevcut planı güncelle)
+  const isEditReq = _pendingPlan && await detectPlanEdit(text);
+  if(isEditReq){
+    await handlePlanEdit(text, msgs);
+    return;
+  }
+
+  const sys=userProfile
+    ?`Sen FitMind AI'sın, kişisel fitness koçusun. Her zaman Türkçe yanıt ver. Kullanıcı: Hedef: ${userProfile.goal}, Seviye: ${userProfile.fitness_level}, Ekipman: ${userProfile.equipment}, Yaş: ${userProfile.age||'?'}, Kilo: ${userProfile.weight||'?'}kg. Kısa, net, motive edici yanıt ver (2-4 cümle).`
+    :`Sen FitMind AI'sın, fitness koçusun. Her zaman Türkçe yanıt ver. 2-3 cümle.`;
+  try{
+    const reply=await callAI(chatHistory.slice(-10),sys,400);
+    chatHistory.push({role:'assistant',content:reply});
+    saveChatHistory();
+    const t=msgs.querySelector('.msg.typing');
+    if(t)t.remove();
+    msgs.innerHTML+=`<div class="msg ai">${fmt(reply)}</div>`;
+  }catch(e){
+    const t=msgs.querySelector('.msg.typing');
+    if(t)t.remove();
+    const fb='Tutarlı ol ve sürece güven! 💪';
+    msgs.innerHTML+=`<div class="msg ai">${fb}</div>`;
+    chatHistory.push({role:'assistant',content:fb});
+    saveChatHistory();
+  }
+  msgs.scrollTop=msgs.scrollHeight;
+  document.getElementById('sendBtn').disabled=false;
+  if(!isPro){freeCount++;updateCounter();}
+}
+
+// Plan düzenleme tespiti
+async function detectPlanEdit(text){
+  const t=text.toLowerCase();
+  const editKw=['ekle','çıkar','kaldır','değiştir','güncelle','yerine','swap','remove','add','değiştirmek','eklemek','çıkarmak'];
+  return editKw.some(k=>t.includes(k));
+}
+
+// Plan düzenleme işlemi
+async function handlePlanEdit(text, msgs){
+  const currentPlanStr=JSON.stringify(_pendingPlan||{});
+  const editSys=`Sen FitMind AI'sın. Kullanıcının mevcut planını güncelliyorsun.
+Mevcut plan: ${currentPlanStr.slice(0,2000)}
+Kullanıcının isteği: ${text.replace(/`/g,"'")}
+SADECE güncellenmiş JSON döndür — aynı format, başka hiçbir şey yazma. İlk karakter { son karakter } olacak.`;
+  try{
+    const reply=await callAI([{role:'user',content:text}],editSys,3000);
+    let clean=reply.trim();
+    const start=clean.indexOf('{');const end=clean.lastIndexOf('}');
+    if(start!==-1&&end!==-1) clean=clean.slice(start,end+1);
+    const updatedPlan=JSON.parse(clean);
+    const dayMap={'Sali':'Salı','Carsamba':'Çarşamba','Persembe':'Perşembe'};
+    if(updatedPlan.days) updatedPlan.days=updatedPlan.days.map(d=>({...d,day:dayMap[d.day]||d.day}));
+    const t=msgs.querySelector('.msg.typing');
+    if(t)t.remove();
+    const confirmMsg='✅ Planınız güncellendi! Kaydetmek ister misiniz?';
+    msgs.innerHTML+=`<div class="msg ai">${confirmMsg}</div>`;
+    _pendingPlan=updatedPlan;
+    // Kaydet butonu ekle
+    const btnWrap=document.createElement('div');
+    btnWrap.className='msg ai';
+    btnWrap.style.cssText='background:transparent;border:none;padding:0;display:flex;gap:0.5rem;';
+    btnWrap.innerHTML=`
+      <button onclick="savePlan()" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.5rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer">💾 Güncellemeyi Kaydet</button>
+      <button onclick="window.location.href='myplan.html'" style="background:#ffffff10;color:var(--white);border:1px solid #ffffff20;border-radius:100px;padding:0.5rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer">📋 Benim Planım</button>`;
+    msgs.appendChild(btnWrap);
+    chatHistory.push({role:'assistant',content:confirmMsg});
+    saveChatHistory();
+  }catch(e){
+    const t=msgs.querySelector('.msg.typing');
+    if(t)t.remove();
+    const fb='Güncelleme yapılamadı, lütfen daha açık bir şekilde belirtin. Örnek: "Pazartesi antrenmanına squat ekle"';
+    msgs.innerHTML+=`<div class="msg ai">${fb}</div>`;
+    chatHistory.push({role:'assistant',content:fb});
+    saveChatHistory();
+  }
+  msgs.scrollTop=msgs.scrollHeight;
+  document.getElementById('sendBtn').disabled=false;
+  if(!isPro){freeCount++;updateCounter();}
+}
+
 async function signOut(){await sb.auth.signOut();window.location.replace('auth.html');}
 
-const TOUR=[
-  {i:'&#128075;',t:'FitMind AI'ya Hoş Geldin!',d:'AI destekli kişisel fitness koçun burada. Planını oluştur, antrenmanlarını takip et, beslenmeni düzenle.'},
-  {i:'&#129302;',t:'Önce Plan Yaptır',d:'Sol menüden <strong>AI Koç</strong> sekmesine git. <strong style="color:var(--lime)">"Plan yap"</strong> yaz. 10 saniyede kişisel 7 günlük planın hazır!'},
-  {i:'&#127968;',t:'Ana Sayfa = Günlük Rehberin',d:'Her gün ne yapacağını gör. Antrenmanın, beslenmen, su takibin — net, sade.'},
-  {i:'&#127947;',t:'Antrenmanları Takip Et',d:'<strong>Antrenmanlar</strong> sekmesinde egzersizleri işaretle. Her egzersiz için video linki var.'},
-  {i:'&#128640;',t:'Hazır mısın?',d:'<strong>AI Koç</strong> sekmesine git ve <strong style="color:var(--lime)">"plan yap"</strong> yaz. 10 saniyede planın hazır!'},
-];
-let tStep=0;
-function startTour(){tStep=0;renderTour();document.getElementById('tourOverlay').style.display='flex';}
-function renderTour(){
-  const s=TOUR[tStep];
-  document.getElementById('tourBadge').textContent=(tStep+1)+' / '+TOUR.length;
-  document.getElementById('tourIcon').innerHTML=s.i;
-  document.getElementById('tourTitle').textContent=s.t;
-  document.getElementById('tourDesc').innerHTML=s.d;
-  const dots=document.getElementById('tourDots');dots.innerHTML='';
-  TOUR.forEach((_,i)=>{const d=document.createElement('div');d.className='tdot'+(i===tStep?' on':'');dots.appendChild(d);});
-  document.getElementById('tourNextBtn').innerHTML=tStep===TOUR.length-1?'Hadi Başlayalım! &#128640;':'Devam →';
+// ---- HIZLI TAKİP ----
+const TODAY_STR2=new Date().toDateString();
+let quickCal=parseInt(localStorage.getItem('fp_cal_'+TODAY_STR2)||'0');
+let quickWater=parseInt(localStorage.getItem('fp_water_'+TODAY_STR2)||'0');
+
+function quickLogCal(){quickCal+=200;localStorage.setItem('fp_cal_'+TODAY_STR2,quickCal);updateQuickTrack();}
+function quickLogWater(){quickWater+=1;localStorage.setItem('fp_water_'+TODAY_STR2,quickWater);updateQuickTrack();}
+
+function updateQuickTrack(){
+  if(document.getElementById('calorieCount')) document.getElementById('calorieCount').textContent=quickCal;
+  if(document.getElementById('qtCalVal')) document.getElementById('qtCalVal').textContent=quickCal;
+  if(document.getElementById('qtWaterVal')) document.getElementById('qtWaterVal').textContent=quickWater;
+  const calT=parseInt(document.getElementById('qtCalTarget')?.textContent||'2000');
+  const watT=parseInt(document.getElementById('qtWaterTarget')?.textContent||'8');
+  if(document.getElementById('qtCalFill')) document.getElementById('qtCalFill').style.width=Math.min(quickCal/calT*100,100)+'%';
+  if(document.getElementById('qtWaterFill')) document.getElementById('qtWaterFill').style.width=Math.min(quickWater/watT*100,100)+'%';
+  if(document.getElementById('wWater')) document.getElementById('wWater').textContent=quickWater+'/'+watT;
+  if(document.getElementById('wWaterFill')) document.getElementById('wWaterFill').style.width=Math.min(quickWater/watT*100,100)+'%';
+  renderAchievements();
 }
-function nextTourStep(){if(tStep<TOUR.length-1){tStep++;renderTour();}else{closeTour();switchTab('aicoach',document.querySelectorAll('.nav-item')[1]);}}
-function closeTour(){document.getElementById('tourOverlay').style.display='none';localStorage.setItem('fm_tourDone','1');}
+
+// ---- HAFTALIK BAR GRAFİK ----
+function renderWeekBars(done){
+  const grid=document.getElementById('weekBarGrid');if(!grid)return;
+  grid.innerHTML='';
+  const short=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
+  DAYS.forEach((day,i)=>{
+    const isDone=!!done[day];const isToday=i===TODAY_IDX;
+    const col=document.createElement('div');
+    col.style.cssText='flex:1;display:flex;flex-direction:column;align-items:center;gap:0.25rem';
+    const bh=isDone?100:isToday?40:15;
+    const bc=isDone?'var(--lime)':isToday?'#ffffff25':'#ffffff10';
+    col.innerHTML=`<div style="width:100%;height:${bh}%;min-height:4px;background:${bc};border-radius:5px 5px 0 0;transition:height 0.5s ease" title="${day}"></div><div style="font-size:0.58rem;color:${isToday?'var(--lime)':isDone?'#4ade80':'var(--muted)'};font-family:var(--font-head);font-weight:700">${short[i]}</div>`;
+    grid.appendChild(col);
+  });
+}
+
+// ---- STREAK ROZETLER (home) ----
+function renderStreakBadgesHome(done){
+  const row=document.getElementById('streakBadgesHome');if(!row)return;
+  row.innerHTML='';
+  const short=['P','S','Ç','P','C','C','P'];
+  DAYS.forEach((day,i)=>{
+    const isDone=!!done[day];const isToday=i===TODAY_IDX;
+    const el=document.createElement('div');
+    el.style.cssText=`width:30px;height:30px;border-radius:8px;border:1.5px solid ${isDone?'var(--lime)':isToday?'#ffffff30':'#ffffff10'};background:${isDone?'#c8f54220':isToday?'#ffffff08':'transparent'};display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-family:var(--font-head);font-weight:700;color:${isDone?'var(--lime)':isToday?'var(--white)':'var(--muted)'}`;
+    el.textContent=isDone?'✓':short[i];el.title=day;
+    row.appendChild(el);
+  });
+}
+
+// ---- ROZETLER ----
+function renderAchievements(){
+  const done=JSON.parse(localStorage.getItem('fp_done')||'{}');
+  const dc=Object.keys(done).length;
+  const weekKey=getMonday(new Date()).toDateString();
+  const hasWeek=localStorage.getItem('fp_week')===weekKey;
+  const hasPlan=!!localStorage.getItem('fp_ex');
+  const achievements=[
+    {icon:'🌱',name:'İlk Adım',earned:hasPlan},
+    {icon:'🔥',name:'3 Gün Seri',earned:hasWeek&&dc>=3},
+    {icon:'💪',name:'Yarı Yol',earned:hasWeek&&dc>=4},
+    {icon:'🏆',name:'Tam Hafta',earned:hasWeek&&dc>=7},
+    {icon:'💧',name:'Hidrate',earned:quickWater>=8},
+    {icon:'⚡',name:'Pro Üye',earned:isPro},
+  ];
+  const grid=document.getElementById('achievementGrid');if(!grid)return;
+  let earned=0;
+  grid.innerHTML=achievements.map(a=>{
+    if(a.earned)earned++;
+    return `<div style="background:${a.earned?'#c8f54208':'#ffffff06'};border:1px solid ${a.earned?'#c8f54230':'#ffffff0a'};border-radius:12px;padding:0.75rem 0.5rem;text-align:center;opacity:${a.earned?1:0.35}">
+      <div style="font-size:1.4rem;margin-bottom:0.25rem">${a.icon}</div>
+      <div style="font-size:0.65rem;font-family:var(--font-head);font-weight:700;color:var(--white);line-height:1.3">${a.name}</div>
+    </div>`;
+  }).join('');
+  if(document.getElementById('badgeCount')) document.getElementById('badgeCount').textContent=earned+'/'+achievements.length;
+}
+
+// ---- BUGÜNÜN BESLENMESİ ----
+async function loadTodayMeals(profile){
+  const c=document.getElementById('todayMeals');if(!c)return;
+  try{
+    const {data:{session}}=await sb.auth.getSession();
+    const {data}=await sb.from('user_plans').select('*').eq('user_id',session.user.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+    if(data?.plan_data?.days){
+      const todayPlan=data.plan_data.days.find(d=>d.day===TODAY_NAME);
+      const nut=todayPlan?.nutrition||data.plan_data.nutrition;
+      if(data.plan_data.calories&&document.getElementById('qtCalTarget')) document.getElementById('qtCalTarget').textContent=data.plan_data.calories;
+      if(data.plan_data.water&&document.getElementById('qtWaterTarget')) document.getElementById('qtWaterTarget').textContent=Math.round(data.plan_data.water*2.67);
+      if(document.getElementById('heroTarget')) document.getElementById('heroTarget').textContent=todayPlan?.type==='Dinlenme'?'🧘 Dinlenme Günü':'💪 '+(todayPlan?.focus||'Antrenman Günü');
+      updateQuickTrack();
+      if(nut&&typeof nut==='object'){
+        const meals=[{key:'breakfast',icon:'🌅',label:'Kahvaltı',color:'#f5a623'},{key:'lunch',icon:'☀️',label:'Öğle',color:'#44aaff'},{key:'dinner',icon:'🌙',label:'Akşam',color:'#c8f542'},{key:'snack',icon:'🍎',label:'Ara Öğün',color:'#a78bfa'}];
+        let html='';
+        meals.forEach(m=>{
+          const meal=nut[m.key];if(!meal)return;
+          const foods=Array.isArray(meal.foods)?meal.foods.slice(0,3).join(', '):'';
+          html+=`<div style="display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0;border-bottom:1px solid #ffffff07"><div style="width:9px;height:9px;border-radius:50%;background:${m.color};flex-shrink:0"></div><div style="flex:1;min-width:0"><div style="font-size:0.84rem;font-weight:500">${m.icon} ${meal.title||m.label}</div><div style="font-size:0.7rem;color:var(--muted);margin-top:0.08rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${foods}</div></div><div style="font-size:0.75rem;color:var(--muted);font-family:var(--font-head);font-weight:700;flex-shrink:0">${meal.calories||0} kcal</div></div>`;
+        });
+        const totalCal=['breakfast','lunch','dinner','snack'].reduce((s,k)=>s+(nut[k]?.calories||0),0);
+        html+=`<div style="margin-top:0.65rem;display:flex;justify-content:space-between;font-size:0.75rem"><span style="color:var(--muted)">Toplam</span><span style="color:var(--white);font-family:var(--font-head);font-weight:700">${totalCal} kcal</span></div>`;
+        c.innerHTML=html;return;
+      }
+    }
+    if(profile?.goal){
+      const calMap={lose_weight:1600,build_muscle:2500,get_fit:2000,improve_health:1800};
+      const cal=calMap[profile.goal]||2000;
+      c.innerHTML=`<div style="display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0;border-bottom:1px solid #ffffff07"><div style="width:9px;height:9px;border-radius:50%;background:#f5a623"></div><div style="flex:1"><div style="font-size:0.84rem">🌅 Kahvaltı</div></div><div style="font-size:0.75rem;color:var(--muted);font-family:var(--font-head);font-weight:700">${Math.round(cal*0.25)} kcal</div></div><div style="display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0;border-bottom:1px solid #ffffff07"><div style="width:9px;height:9px;border-radius:50%;background:#44aaff"></div><div style="flex:1"><div style="font-size:0.84rem">☀️ Öğle</div></div><div style="font-size:0.75rem;color:var(--muted);font-family:var(--font-head);font-weight:700">${Math.round(cal*0.35)} kcal</div></div><div style="display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0;border-bottom:1px solid #ffffff07"><div style="width:9px;height:9px;border-radius:50%;background:var(--lime)"></div><div style="flex:1"><div style="font-size:0.84rem">🌙 Akşam</div></div><div style="font-size:0.75rem;color:var(--muted);font-family:var(--font-head);font-weight:700">${Math.round(cal*0.3)} kcal</div></div><div style="display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0"><div style="width:9px;height:9px;border-radius:50%;background:#a78bfa"></div><div style="flex:1"><div style="font-size:0.84rem">🍎 Ara Öğün</div></div><div style="font-size:0.75rem;color:var(--muted);font-family:var(--font-head);font-weight:700">${Math.round(cal*0.1)} kcal</div></div><div style="margin-top:0.65rem;padding:0.55rem;background:#c8f54208;border:1px solid #c8f54218;border-radius:10px;font-size:0.72rem;color:var(--muted);text-align:center">💡 <strong style="color:var(--lime)">"Plan yap"</strong> yazarak detaylı plan oluştur</div>`;
+    }else{c.innerHTML=`<div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:1rem">Plan oluşturulmamış</div>`;}
+  }catch(e){if(c)c.innerHTML=`<div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:1rem">Yüklenemedi</div>`;}
+}
+
+// ---- YAKLAŞAN ANTRENMANLAR ----
+async function loadUpcoming(){
+  const c=document.getElementById('upcomingDays');if(!c)return;
+  try{
+    const {data:{session}}=await sb.auth.getSession();
+    const {data}=await sb.from('user_plans').select('*').eq('user_id',session.user.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+    if(!data?.plan_data?.days){c.innerHTML=`<div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:1rem">Plan yok</div>`;return;}
+    const days=data.plan_data.days;let shown=0,html='';
+    for(let i=1;i<=7&&shown<3;i++){
+      const idx=(TODAY_IDX+i)%7;const dp=days.find(d=>d.day===DAYS[idx]);if(!dp)continue;shown++;
+      const isRest=dp.type==='Dinlenme'||dp.type==='Rest';
+      html+=`<div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.85rem;background:#ffffff05;border-radius:12px;margin-bottom:0.4rem;border:1px solid #ffffff08"><div style="width:8px;height:8px;border-radius:50%;background:${isRest?'#ffffff20':'var(--lime)'};flex-shrink:0"></div><div style="flex:1;min-width:0"><div style="font-size:0.83rem;font-weight:500">${dp.day}</div><div style="font-size:0.68rem;color:var(--muted)">${isRest?'Dinlenme':(dp.focus||'Antrenman')+(dp.duration?' · '+dp.duration+' dk':'')}</div></div><span style="font-size:0.65rem;font-family:var(--font-head);font-weight:700;padding:0.2rem 0.5rem;border-radius:6px;background:${isRest?'#ffffff08':'#c8f54215'};color:${isRest?'var(--muted)':'var(--lime)'};flex-shrink:0">${isRest?'Dinlenme':'Antrenman'}</span></div>`;
+    }
+    c.innerHTML=html||`<div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:1rem">Yaklaşan yok</div>`;
+  }catch(e){if(c)c.innerHTML=`<div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:1rem">Yüklenemedi</div>`;}
+}
+
+// ---- TOUR ----
+const TOUR_STEPS=[
+  {icon:'👋',title:'FitMind AI\'ya Hoş Geldin!',desc:'Sana özel yapay zeka destekli fitness koçun burada. Planını oluştur, antrenmanlarını takip et, beslenmeni düzenle — hepsi tek yerden.'},
+  {icon:'🤖',title:'AI Koçun Her Zaman Hazır',desc:'Sol menüden <strong>AI Koç</strong> sekmesine gir. Dilediğin her şeyi yaz — antrenman soruları, beslenme önerileri veya "plan yap" yazarak 7 günlük kişisel planını oluştur.'},
+  {icon:'📋',title:'Planını Takip Et',desc:'AI ile plan oluşturduktan sonra <strong>Benim Planım</strong> sayfasında haftalık takvimini gör, egzersizleri işaretle ve beslenme planını düzenle.'},
+  {icon:'🏋️',title:'Antrenmanlarını Yönet',desc:'<strong>Antrenmanlar</strong> sekmesinde haftanın her günü için planını gör, egzersizleri tamamla ve YouTube video linklerine eriş.'},
+  {icon:'🚀',title:'Başlamaya Hazır mısın?',desc:'İlk adım olarak <strong>AI Koç</strong> sekmesine git ve "plan yap" yaz. 10 saniyede sana özel 7 günlük plan hazır olacak!'},
+];
+
+let tourStep=0;
+
+function startTour(){
+  tourStep=0;
+  renderTourStep();
+  document.getElementById('tourOverlay').style.display='flex';
+}
+
+function renderTourStep(){
+  const s=TOUR_STEPS[tourStep];
+  document.getElementById('tourBadge').textContent=(tourStep+1)+' / '+TOUR_STEPS.length;
+  document.getElementById('tourIcon').textContent=s.icon;
+  document.getElementById('tourTitle').textContent=s.title;
+  document.getElementById('tourDesc').innerHTML=s.desc;
+  // Dots
+  const dots=document.getElementById('tourDots');
+  dots.innerHTML='';
+  TOUR_STEPS.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='tour-dot'+(i===tourStep?' active':'');
+    dots.appendChild(d);
+  });
+  // Son adımda buton değişir
+  const btn=document.getElementById('tourNextBtn');
+  btn.textContent=tourStep===TOUR_STEPS.length-1?"Hadi Başlayalım! 🚀":"Devam →";
+}
+
+function nextTourStep(){
+  if(tourStep<TOUR_STEPS.length-1){
+    tourStep++;
+    renderTourStep();
+  } else {
+    closeTour();
+    // Son adımda AI Koç'a yönlendir
+    switchTab('aicoach',document.querySelectorAll('.nav-item')[1]);
+  }
+}
+
+function closeTour(){
+  document.getElementById('tourOverlay').style.display='none';
+  localStorage.setItem('fm_tourDone','1');
+}
 
 init();
 </script>
