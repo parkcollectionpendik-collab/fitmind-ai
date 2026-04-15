@@ -263,23 +263,30 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
   <!-- ANA SAYFA TAB -->
   <div class="tab-section active" id="tab-home">
 
-    <!-- AI ÖZET -->
-    <div class="ai-summary">
-      <div class="ai-sum-head">
-        <div class="ai-avatar">🤖</div>
+    <!-- SATIR 1: HERO KART (tam genişlik) -->
+    <div style="background:linear-gradient(135deg,#0d1a05,#0a0a0a);border:1px solid #c8f54222;border-radius:24px;padding:1.75rem;margin-bottom:1.25rem;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-80px;right:-80px;width:320px;height:320px;background:var(--lime);opacity:0.04;border-radius:50%;pointer-events:none"></div>
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;position:relative">
         <div>
-          <div class="ai-sum-title">AI Koçunuzdan Mesaj</div>
-          <div class="ai-sum-sub" id="aiSummaryDate"></div>
+          <div style="font-family:var(--font-head);font-size:1.7rem;font-weight:800;line-height:1.2" id="heroGreeting">Merhaba! 👋</div>
+          <div style="font-size:0.82rem;color:var(--muted);margin-top:0.3rem" id="heroDate"></div>
+          <div style="margin-top:0.75rem;font-size:0.88rem;line-height:1.6;color:#ffffffcc;max-width:520px" id="heroMotivation">Kişisel planın yükleniyor...</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:flex-end">
+          <div style="background:#ffffff08;border:1px solid #ffffff10;border-radius:12px;padding:0.6rem 1rem;font-size:0.75rem;color:var(--muted);text-align:center">
+            <div style="font-family:var(--font-head);font-size:1.1rem;font-weight:800;color:var(--lime)" id="heroToday">—</div>
+            <div style="font-size:0.62rem;margin-top:0.1rem">Bugün</div>
+          </div>
+          <div style="display:flex;gap:0.4rem">
+            <button onclick="switchTab('aicoach',document.querySelectorAll('.nav-item')[1])" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.5rem 1rem;font-family:var(--font-head);font-weight:700;font-size:0.78rem;cursor:pointer">🤖 AI Koç</button>
+            <a href="myplan.html" style="background:#ffffff10;color:var(--white);border:1px solid #ffffff15;border-radius:100px;padding:0.5rem 1rem;font-family:var(--font-head);font-weight:700;font-size:0.78rem;text-decoration:none">📋 Planım</a>
+          </div>
         </div>
       </div>
-      <div class="ai-sum-text" id="aiSummaryText">Kişisel planınız yükleniyor... 🤖</div>
-      <a href="javascript:void(0)" class="ai-sum-btn" onclick="switchTab('aicoach',document.querySelectorAll('.nav-item')[1])">
-        🤖 AI Koç ile Konuş →
-      </a>
     </div>
 
-    <!-- ANA GRID -->
-    <div class="home-grid">
+    <!-- SATIR 2: BUGÜNÜN ANTRENMAN + BESLENME (2 kolon) -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem" id="row2Grid">
 
       <!-- BUGÜNÜN ANTRENMANINI -->
       <div class="panel">
@@ -293,101 +300,109 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
             <div style="font-size:0.85rem">Yükleniyor...</div>
           </div>
         </div>
+        <div id="todayWorkoutFooter"></div>
       </div>
 
-      <!-- HIZLI ERİŞİM -->
+      <!-- BUGÜN NE YEMELİYİM -->
       <div class="panel">
-        <div class="panel-head"><div class="panel-title">⚡ Hızlı Erişim</div></div>
-        <div class="quick-grid">
-          <a href="myplan.html" class="quick-card">
-            <div class="qc-icon">📋</div>
-            <div class="qc-title">Benim Planım</div>
-            <div class="qc-sub">Haftalık program takibi</div>
-            <div class="qc-arrow">→</div>
-          </a>
-          <a href="javascript:void(0)" class="quick-card" onclick="switchTab('aicoach',document.querySelectorAll('.nav-item')[1])">
-            <div class="qc-icon">🤖</div>
-            <div class="qc-title">AI Koç</div>
-            <div class="qc-sub">Soru sor, plan yap</div>
-            <div class="qc-arrow">→</div>
-          </a>
-          <a href="nutrition.html" class="quick-card">
-            <div class="qc-icon">🥗</div>
-            <div class="qc-title">Beslenme</div>
-            <div class="qc-sub">Öğün takibi</div>
-            <div class="qc-arrow">→</div>
-          </a>
-          <a href="progress.html" class="quick-card">
-            <div class="qc-icon">📈</div>
-            <div class="qc-title">İlerleme</div>
-            <div class="qc-sub">Kilo & ölçüm</div>
-            <div class="qc-arrow">→</div>
-          </a>
+        <div class="panel-head">
+          <div class="panel-title">🥗 Bugün Ne Yemeliyim?</div>
+          <a href="myplan.html" class="panel-link">Detay →</a>
         </div>
-      </div>
-
-      <!-- HAFTALIK İLERLEME -->
-      <div class="panel">
-        <div class="panel-head"><div class="panel-title">📊 Haftalık İlerleme</div></div>
-        <div class="progress-ring-wrap">
-          <div class="ring-svg">
-            <svg width="60" height="60" viewBox="0 0 60 60">
-              <circle cx="30" cy="30" r="24" fill="none" stroke="#ffffff08" stroke-width="5"/>
-              <circle cx="30" cy="30" r="24" fill="none" stroke="#c8f542" stroke-width="5"
-                stroke-linecap="round" stroke-dasharray="150.8" id="homeRingCircle"
-                stroke-dashoffset="150.8" style="transition:stroke-dashoffset 1s ease"/>
-            </svg>
-            <div class="ring-inner">
-              <div class="ring-pct" id="homeRingPct">%0</div>
-              <div class="ring-lbl">bitti</div>
-            </div>
+        <div id="homeMealPlan">
+          <div style="text-align:center;padding:1.5rem;color:var(--muted)">
+            <div class="spin" style="margin:0 auto 0.5rem;display:block;width:22px;height:22px"></div>
+            <div style="font-size:0.85rem">Yükleniyor...</div>
           </div>
-          <div class="ring-info">
-            <h4>Bu Hafta</h4>
-            <p id="homeRingDesc">Antrenmanlarını tamamla!</p>
-          </div>
-        </div>
-        <div class="prog-row">
-          <div class="prog-label"><span>Antrenmanlar</span><span id="wProgress">0/7</span></div>
-          <div class="prog-bar"><div class="prog-fill" id="wFill" style="width:0%;background:var(--lime)"></div></div>
-        </div>
-        <div class="prog-row">
-          <div class="prog-label"><span>Beslenme</span><span>0/7 gün</span></div>
-          <div class="prog-bar"><div class="prog-fill" style="width:0%;background:#4af"></div></div>
-        </div>
-        <div class="prog-row">
-          <div class="prog-label"><span>Su tüketimi</span><span>0/8 bardak</span></div>
-          <div class="prog-bar"><div class="prog-fill" style="width:0%;background:#60a5fa"></div></div>
         </div>
       </div>
     </div>
 
-    <!-- ALT GRID -->
-    <div class="bottom-grid">
+    <!-- SATIR 3: HIZLI TAKİP + BU HAFTA + YAKLAŞAN -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-bottom:1.25rem" id="row3Grid">
+
+      <!-- HIZLI TAKİP -->
       <div class="panel">
-        <div class="panel-head">
-          <div class="panel-title">🥗 Bugün Ne Yemeliyim?</div>
-          <a href="nutrition.html" class="panel-link">Takip Et →</a>
+        <div class="panel-head"><div class="panel-title">⚡ Hızlı Takip</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:0.75rem">
+          <div onclick="quickLogCal()" style="background:#f5a62310;border:1.5px solid #f5a62320;border-radius:14px;padding:0.9rem;text-align:center;cursor:pointer;transition:all 0.2s" onmouseenter="this.style.borderColor='#f5a62345'" onmouseleave="this.style.borderColor='#f5a62320'">
+            <div style="font-size:1.3rem;margin-bottom:0.2rem">🔥</div>
+            <div style="font-family:var(--font-head);font-size:1.2rem;font-weight:800;color:#f5a623" id="qtCalVal">0</div>
+            <div style="font-size:0.62rem;color:var(--muted);margin-top:0.1rem">/ <span id="qtCalTarget">2000</span> kcal</div>
+            <div style="height:3px;background:#ffffff10;border-radius:100px;margin-top:0.5rem;overflow:hidden"><div id="qtCalFill" style="height:100%;width:0%;background:#f5a623;border-radius:100px;transition:width 0.4s"></div></div>
+          </div>
+          <div onclick="quickLogWater()" style="background:#44aaff10;border:1.5px solid #44aaff20;border-radius:14px;padding:0.9rem;text-align:center;cursor:pointer;transition:all 0.2s" onmouseenter="this.style.borderColor='#44aaff45'" onmouseleave="this.style.borderColor='#44aaff20'">
+            <div style="font-size:1.3rem;margin-bottom:0.2rem">💧</div>
+            <div style="font-family:var(--font-head);font-size:1.2rem;font-weight:800;color:#44aaff" id="qtWaterVal">0</div>
+            <div style="font-size:0.62rem;color:var(--muted);margin-top:0.1rem">/ <span id="qtWaterTarget">8</span> bardak</div>
+            <div style="height:3px;background:#ffffff10;border-radius:100px;margin-top:0.5rem;overflow:hidden"><div id="qtWaterFill" style="height:100%;width:0%;background:#44aaff;border-radius:100px;transition:width 0.4s"></div></div>
+          </div>
         </div>
-        <div class="meal-item"><div class="meal-dot" style="background:#f5a623"></div><div class="meal-name">🌅 Kahvaltı</div><div class="meal-cal" id="breakfastSug">—</div></div>
-        <div class="meal-item"><div class="meal-dot" style="background:#4af"></div><div class="meal-name">☀️ Öğle</div><div class="meal-cal" id="lunchSug">—</div></div>
-        <div class="meal-item"><div class="meal-dot" style="background:var(--lime)"></div><div class="meal-name">🌙 Akşam</div><div class="meal-cal" id="dinnerSug">—</div></div>
-        <div class="meal-item"><div class="meal-dot" style="background:#a78bfa"></div><div class="meal-name">🍎 Ara Öğün</div><div class="meal-cal" id="snackSug">—</div></div>
-        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid #ffffff08;display:flex;justify-content:space-between;font-size:0.78rem;color:var(--muted)">
-          <span>Günlük Hedef</span>
-          <span id="calGoalText" style="color:var(--white);font-family:var(--font-head);font-weight:700">— kcal</span>
+        <div style="display:flex;gap:0.4rem">
+          <button onclick="quickLogCal()" style="flex:1;background:#f5a62318;color:#f5a623;border:1px solid #f5a62328;border-radius:10px;padding:0.5rem;font-family:var(--font-head);font-weight:700;font-size:0.7rem;cursor:pointer">+200 kcal</button>
+          <button onclick="quickLogWater()" style="flex:1;background:#44aaff18;color:#44aaff;border:1px solid #44aaff28;border-radius:10px;padding:0.5rem;font-family:var(--font-head);font-weight:700;font-size:0.7rem;cursor:pointer">+1 Bardak</button>
         </div>
       </div>
 
+      <!-- BU HAFTA BAR GRAFİK -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">📊 Bu Hafta</div>
+          <div style="font-size:0.72rem;color:var(--muted)" id="weekProgressLabel">0/7 gün</div>
+        </div>
+        <div style="display:flex;gap:0.4rem;align-items:flex-end;height:56px;margin-bottom:0.6rem" id="weekBarGrid"></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--muted);margin-bottom:0.75rem">
+          <span id="weekDoneCount" style="color:var(--lime);font-weight:700">0 gün</span>
+          <span id="weekPct">%0</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.4rem">
+          <div><div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--muted);margin-bottom:0.2rem"><span>Antrenman</span><span id="wProgress">0/7</span></div><div style="height:4px;background:#ffffff10;border-radius:100px;overflow:hidden"><div id="wFill" style="height:100%;width:0%;background:var(--lime);border-radius:100px;transition:width 0.5s"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--muted);margin-bottom:0.2rem"><span>Su</span><span id="wWater">0/8</span></div><div style="height:4px;background:#ffffff10;border-radius:100px;overflow:hidden"><div id="wWaterFill" style="height:100%;width:0%;background:#44aaff;border-radius:100px;transition:width 0.5s"></div></div></div>
+        </div>
+      </div>
+
+      <!-- YAKLAŞAN ANTRENMANLAR -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">📅 Yaklaşan</div>
+          <a href="myplan.html" class="panel-link">Tümü →</a>
+        </div>
+        <div id="upcomingDays"><div style="text-align:center;padding:1rem;color:var(--muted);font-size:0.85rem">Yükleniyor...</div></div>
+      </div>
+    </div>
+
+    <!-- SATIR 4: SERİ + ROZETLER + İPUCU + MOTİVASYON -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-bottom:1.25rem">
+
+      <!-- SERİ -->
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title">🔥 Seri</div></div>
+        <div style="text-align:center;margin-bottom:0.85rem">
+          <div style="font-family:var(--font-head);font-size:3rem;font-weight:800;color:var(--lime);line-height:1" id="bigStreak">0</div>
+          <div style="font-size:0.75rem;color:var(--muted);margin-top:0.2rem">gün üst üste 🔥</div>
+        </div>
+        <div style="font-size:0.7rem;color:var(--muted);font-weight:600;margin-bottom:0.45rem;font-family:var(--font-head)">Bu Hafta</div>
+        <div style="display:flex;gap:0.35rem;flex-wrap:wrap" id="streakBadgesHome"></div>
+        <div style="margin-top:0.75rem;padding:0.65rem;background:#c8f54210;border:1px solid #c8f54220;border-radius:10px;font-size:0.75rem;color:var(--lime);text-align:center;font-weight:500" id="streakMsg">Serini başlat! 💪</div>
+      </div>
+
+      <!-- ROZETLER -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">🏆 Başarılar</div>
+          <div style="font-size:0.7rem;color:var(--muted)" id="badgeCount">0/6</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem" id="achievementGrid"></div>
+      </div>
+
+      <!-- GÜNÜN İPUCU + MOTİVASYON -->
       <div class="panel">
         <div class="panel-head"><div class="panel-title">💡 Günün İpucu</div></div>
-        <div id="dailyTip" style="font-size:0.88rem;line-height:1.75;color:#ffffffdd;margin-bottom:1.2rem">
-          <div style="text-align:center;padding:1rem;color:var(--muted)"><div class="spin" style="margin:0 auto 0.5rem;display:block;width:22px;height:22px"></div></div>
+        <div style="background:#ffffff06;border-radius:12px;padding:0.85rem;margin-bottom:0.75rem;border-left:3px solid var(--lime)">
+          <div style="font-size:0.65rem;color:var(--lime);text-transform:uppercase;font-weight:700;letter-spacing:0.08em;margin-bottom:0.3rem;font-family:var(--font-head)">📅 Bugün</div>
+          <div style="font-size:0.83rem;color:var(--white)" id="todayFocusText">Yükleniyor...</div>
         </div>
-        <div style="background:#ffffff06;border-radius:14px;padding:1rem;border-left:3px solid var(--lime)">
-          <div style="font-size:0.7rem;color:var(--lime);text-transform:uppercase;font-weight:700;letter-spacing:0.08em;margin-bottom:0.4rem">📅 Bugün</div>
-          <div style="font-size:0.85rem;color:var(--white)" id="todayFocusText">Yükleniyor...</div>
-        </div>
+        <div id="dailyTip" style="font-size:0.83rem;line-height:1.7;color:#ffffffcc"></div>
       </div>
     </div>
 
@@ -399,6 +414,21 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
     </div>
 
   </div>
+
+    <!-- HERO KART -->
+    <div style="background:linear-gradient(135deg,#0d1a05,#0a0a0a);border:1px solid #c8f54220;border-radius:24px;padding:1.75rem;margin-bottom:1.5rem;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:var(--lime);opacity:0.04;border-radius:50%"></div>
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:1rem;position:relative">
+        <div>
+          <div style="font-family:var(--font-head);font-size:1.6rem;font-weight:800;line-height:1.2" id="heroGreeting">Merhaba! 👋</div>
+          <div style="font-size:0.82rem;color:var(--muted);margin-top:0.3rem" id="heroDate"></div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:0.7rem;color:var(--muted);margin-bottom:0.25rem">Bugün</div>
+          <div style="font-family:var(--font-head);font-weight:800;font-size:1rem;color:var(--lime)" id="heroTarget">—</div>
+        </div>
+      </div>
+
 
   <!-- AI KOÇU TAB -->
   <div class="tab-section" id="tab-aicoach">
@@ -455,6 +485,7 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 
 <script>
 const SB_URL='https://cypmmayxwbkarvheqoxu.supabase.co';
+function getMonday(d){const dt=new Date(d);const day=dt.getDay();dt.setDate(dt.getDate()-(day===0?6:day-1));dt.setHours(0,0,0,0);return dt;}
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
 const {createClient}=supabase;
 const sb=createClient(SB_URL,SB_KEY);
@@ -589,8 +620,10 @@ async function init(){
   document.getElementById('avatarInitial').textContent=name.charAt(0).toUpperCase();
   document.getElementById('userName').textContent=name;
   const h=new Date().getHours();
-  document.getElementById('welcomeMsg').innerHTML=(h<12?'Günaydın':'İyi günler')+', <span>'+name.split(' ')[0]+'!</span> 👋';
-  document.getElementById('aiSummaryDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long'});
+  const gr=h<6?'İyi geceler':h<12?'Günaydın':h<18?'İyi günler':'İyi akşamlar';
+  document.getElementById('welcomeMsg').innerHTML=gr+', <span>'+name.split(' ')[0]+'!</span> 👋';
+  if(document.getElementById('heroGreeting')) document.getElementById('heroGreeting').innerHTML=gr+', <span style="color:var(--lime)">'+name.split(' ')[0]+'!</span> 👋';
+  if(document.getElementById('heroDate')) document.getElementById('heroDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
   const {data:profile}=await sb.from('profiles').select('*').eq('id',u.id).maybeSingle();
   userProfile=profile; isPro=profile?.is_pro===true;
@@ -602,29 +635,25 @@ async function init(){
     if(profile.fitness_level)tags+=`<span class="profile-tag">⚡ ${levelLabels[profile.fitness_level]||profile.fitness_level}</span>`;
     if(profile.equipment)tags+=`<span class="profile-tag">🏋️ ${equipLabels[profile.equipment]||profile.equipment}</span>`;
     document.getElementById('profileTags').innerHTML=tags;
-  }else{
-    document.getElementById('profileTags').textContent='Kişisel plan almak için profilinizi tamamlayın!';
   }
 
-  // Haftalık ilerlemeyi güncelle
   loadWeekProgress();
-  // Chat geçmişini yükle
   renderChatMessages();
-  // Yeni kullanıcı turu
   if(localStorage.getItem('fm_newUser')==='1'&&!localStorage.getItem('fm_tourDone')){
     localStorage.removeItem('fm_newUser');
     setTimeout(startTour, 800);
   }
-  // Paralel yükle
+  updateQuickTrack();
+  loadTodayMeals(profile);
+  loadUpcoming();
+  renderAchievements();
   loadTodayWorkout(profile,name);
-  loadAISummary(profile,name);
-  loadMealSuggestions(profile);
   loadDailyTip(profile);
 }
 
 function loadWeekProgress(){
   // Haftanın başını kontrol et
-  function getMonday(d){const dt=new Date(d);const day=dt.getDay();dt.setDate(dt.getDate()-(day===0?6:day-1));dt.setHours(0,0,0,0);return dt;}
+  if(!window.getMonday) window.getMonday=getMonday;
   const weekKey=getMonday(new Date()).toDateString();
   if(localStorage.getItem('fp_week')!==weekKey)return; // Yeni hafta, sıfır
   const done=JSON.parse(localStorage.getItem('fp_done')||'{}');
@@ -632,22 +661,60 @@ function loadWeekProgress(){
   const pct=Math.round(d/7*100);
   document.getElementById('streakVal').textContent=d+'🔥';
   document.getElementById('planProgress').textContent='%'+pct;
-  document.getElementById('homeRingPct').textContent='%'+pct;
-  document.getElementById('homeRingCircle').style.strokeDashoffset=150.8*(1-d/7);
-  document.getElementById('homeRingDesc').textContent=d>0?d+' gün tamamlandı 🔥':'Antrenmanlarını tamamlamaya başla!';
-  document.getElementById('wFill').style.width=pct+'%';
-  document.getElementById('wProgress').textContent=d+'/7';
+  // Eski ring göstergeler (backward compat)
+  if(document.getElementById('homeRingPct')) document.getElementById('homeRingPct').textContent='%'+pct;
+  if(document.getElementById('homeRingCircle')) document.getElementById('homeRingCircle').style.strokeDashoffset=150.8*(1-d/7);
+  if(document.getElementById('homeRingDesc')) document.getElementById('homeRingDesc').textContent=d>0?d+' gün tamamlandı 🔥':'Antrenmanlarını tamamlamaya başla!';
+  if(document.getElementById('wFill')) document.getElementById('wFill').style.width=pct+'%';
+  if(document.getElementById('wProgress')) document.getElementById('wProgress').textContent=d+'/7';
   document.getElementById('workoutCount').textContent=d;
+  // Yeni özellikler
+  if(document.getElementById('weekProgressLabel')) document.getElementById('weekProgressLabel').textContent=d+'/7 gün';
+  if(document.getElementById('weekDoneCount')) document.getElementById('weekDoneCount').textContent=d+' gün tamamlandı';
+  if(document.getElementById('weekPct')) document.getElementById('weekPct').textContent='%'+pct;
+  if(document.getElementById('bigStreak')) document.getElementById('bigStreak').textContent=d;
+  const streakMsgs=['Başla! Her adım önemli 💪','İyi gidiyorsun! Devam et 🔥','Harika! Alışkanlık oluşuyor ✨','Süper! 4 gün üst üste 🏆','Neredeyse tam hafta! 🌟','6 gün! İnanılmaz! 🎯','Mükemmel hafta! Tam 7 gün! 🏅'];
+  const sm=document.getElementById('streakMsg');if(sm)sm.textContent=streakMsgs[Math.min(d,6)];
+  renderWeekBars(done);
+  renderStreakBadgesHome(done);
 }
 
 async function loadTodayWorkout(profile,name){
   const list=document.getElementById('todayWorkoutList');
+  // Hero kart güncelle
+  const h=new Date().getHours();
+  const greet=h<6?'Gece geç saatlerde bile':h<12?'Günaydın':h<18?'İyi günler':'İyi akşamlar';
+  if(document.getElementById('heroGreeting')) document.getElementById('heroGreeting').innerHTML=greet+', <span style="color:var(--lime)">'+name.split(' ')[0]+'!</span> 👋';
+  if(document.getElementById('heroDate')) document.getElementById('heroDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+  const quotes=[
+    '💪 Her büyük yolculuk küçük bir adımla başlar. Bugün o adımı at!',
+    '🔥 Dün başlamak istiyordun, bugün başlayabilirsin!',
+    '⚡ Vücudun yapabilir, sadece aklını ikna et!',
+    '🌟 Küçük ilerlemeler, büyük dönüşümler yaratır.',
+    '🎯 Hedeflerin seni bekliyor — bugün ne yapacaksın?',
+    '💡 Sağlıklı yaşam bir alışkanlık, bir istisna değil.',
+    '🏆 Bugün acı çek, yarın gurur duy!'
+  ];
+  const q=quotes[new Date().getDay()%quotes.length];
+  if(document.getElementById('heroMotivation')) document.getElementById('heroMotivation').textContent=q;
+
   try{
     const {data:{session}}=await sb.auth.getSession();
     const {data}=await sb.from('user_plans').select('*').eq('user_id',session.user.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
 
     if(data?.plan_data?.days){
       const todayPlan=data.plan_data.days.find(d=>d.day===TODAY_NAME);
+
+      // Hero'ya bugünkü odak
+      if(todayPlan&&document.getElementById('heroToday')){
+        const isRest=todayPlan.type==='Dinlenme'||todayPlan.type==='Rest';
+        document.getElementById('heroToday').textContent=isRest?'🧘 Dinlenme':('💪 '+(todayPlan.focus||'Antrenman'));
+      }
+
+      // Beslenme planını yükle
+      loadHomeMealPlan(data.plan_data, todayPlan);
+
       if(todayPlan){
         const isRest=todayPlan.type==='Dinlenme'||todayPlan.type==='Rest';
         if(isRest){
@@ -656,7 +723,6 @@ async function loadTodayWorkout(profile,name){
         }
         const exs=todayPlan.exercises||[];
         if(exs.length>0){
-          // Sadece antrenman egzersizleri — beslenme bilgisi BURAYA GİRMEZ
           const doneExes=JSON.parse(localStorage.getItem('fp_ex')||'{}')[TODAY_NAME+'_ex']||[];
           let html='';
           if(todayPlan.focus){
@@ -669,42 +735,103 @@ async function loadTodayWorkout(profile,name){
               <div style="flex:1">
                 <div class="tw-name">${ex.name}</div>
                 <div class="tw-sets">
-                  <span style="background:#c8f54215;color:var(--lime);border-radius:6px;padding:0.15rem 0.5rem;font-family:var(--font-head);font-weight:700;font-size:0.68rem">${ex.sets} SET</span>
+                  <span style="background:#c8f54215;color:var(--lime);border-radius:6px;padding:0.15rem 0.5rem;font-family:var(--font-head);font-weight:700;font-size:0.68rem">${ex.sets}</span>
                   <span style="background:#ffffff08;color:var(--white);border-radius:6px;padding:0.15rem 0.5rem;font-family:var(--font-head);font-weight:700;font-size:0.68rem">${ex.reps}</span>
                   ${ex.rest?`<span style="color:var(--muted);font-size:0.68rem">⏱ ${ex.rest}</span>`:''}
                 </div>
               </div>
             </div>`;
           });
+          // İlerleme çubuğu
+          const pct=Math.round(doneExes.length/exs.length*100);
+          html+=`<div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid #ffffff08">
+            <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--muted);margin-bottom:0.3rem"><span>${doneExes.length}/${exs.length} tamamlandı</span><span style="color:var(--lime)">${pct}%</span></div>
+            <div style="height:4px;background:#ffffff10;border-radius:100px;overflow:hidden"><div style="height:100%;width:${pct}%;background:var(--lime);border-radius:100px;transition:width 0.5s"></div></div>
+          </div>`;
           list.innerHTML=html;
-          document.getElementById('calorieCount').textContent=exs.length*50;
+          document.getElementById('calorieCount').textContent=doneExes.length*50;
           return;
         }
       }
+    } else {
+      // Plan yok — mesaj göster
+      if(document.getElementById('heroToday')) document.getElementById('heroToday').textContent='📋 Plan Yok';
+      loadHomeMealPlan(null, null);
     }
 
-    // Plan yoksa profil tabanlı öneri
     if(profile?.goal){
       const prompt=`${profile.goal} hedefli, ${profile.fitness_level} seviyeli biri için bugün ${profile.equipment||'gym'} ekipmanıyla 4 egzersiz. SADECE JSON array: [{"name":"Egzersiz","sets":"3 set","reps":"12 tekrar","rest":"60sn"}]`;
       const text=await callAI([{role:'user',content:prompt}],null,300);
       const exs=JSON.parse(text.replace(/```json|```/g,'').trim());
-      let html='<div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem">AI Önerisi (Plan oluşturmak için AI Koç\'u kullanın)</div>';
+      let html='<div style="font-size:0.72rem;color:var(--muted);margin-bottom:0.75rem">AI Önerisi — Plan oluşturmak için AI Koç\'u kullanın</div>';
       exs.forEach((ex,i)=>{
         html+=`<div class="tw-item" onclick="toggleTWItem(this,${i},'ai',${exs.length})">
           <div class="tw-check"></div>
-          <div style="flex:1">
-            <div class="tw-name">${ex.name}</div>
-            <div class="tw-sets"><span>${ex.sets} × ${ex.reps}</span></div>
-          </div>
+          <div style="flex:1"><div class="tw-name">${ex.name}</div><div class="tw-sets"><span>${ex.sets} × ${ex.reps}</span></div></div>
         </div>`;
       });
       list.innerHTML=html;
     }else{
-      list.innerHTML=`<div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:1.5rem;line-height:1.6">Profilinizi tamamlayın ve AI Koç ile plan oluşturun 💪</div>`;
+      list.innerHTML=`<div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:1.5rem;line-height:1.6">
+        <div style="font-size:2rem;margin-bottom:0.5rem">📋</div>
+        Profilinizi tamamlayın ve AI Koç ile plan oluşturun 💪
+        <br><button onclick="switchTab('aicoach',document.querySelectorAll('.nav-item')[1])" style="margin-top:0.75rem;background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.5rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.8rem;cursor:pointer">🤖 Plan Yap</button>
+      </div>`;
     }
   }catch(e){
     list.innerHTML=`<div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:1rem">Plan yüklenemedi</div>`;
   }
+}
+
+function loadHomeMealPlan(planData, todayPlan){
+  const el=document.getElementById('homeMealPlan');
+  if(!el)return;
+  // Bugünün nutrition'ını al
+  const nut=todayPlan?.nutrition||planData?.nutrition||null;
+  if(!nut||typeof nut!=='object'){
+    // Plan yok — hedef bazlı kalori göster
+    const calMap={lose_weight:1600,build_muscle:2500,get_fit:2000,improve_health:1800};
+    const cal=calMap[userProfile?.goal]||2000;
+    el.innerHTML=`
+      <div style="display:flex;flex-direction:column;gap:0.5rem">
+        ${[['🌅','Kahvaltı','#f5a623',Math.round(cal*0.25)],['☀️','Öğle','#44aaff',Math.round(cal*0.35)],['🌙','Akşam','#c8f542',Math.round(cal*0.3)],['🍎','Ara Öğün','#a78bfa',Math.round(cal*0.1)]].map(([ic,lb,co,kcal])=>`
+          <div style="display:flex;align-items:center;gap:0.75rem;padding:0.55rem 0.75rem;background:#ffffff05;border-radius:10px">
+            <span style="font-size:1rem">${ic}</span>
+            <span style="flex:1;font-size:0.85rem;color:var(--muted)">${lb}</span>
+            <span style="font-family:var(--font-head);font-weight:700;font-size:0.8rem;color:${co}">${kcal} kcal</span>
+          </div>`).join('')}
+        <div style="margin-top:0.5rem;text-align:center;font-size:0.75rem;color:var(--muted)">
+          <a href="javascript:void(0)" onclick="switchTab('aicoach',document.querySelectorAll('.nav-item')[1])" style="color:var(--lime);font-weight:700;text-decoration:none">Plan oluştur →</a>
+        </div>
+      </div>`;
+    return;
+  }
+  const mealDefs=[
+    {key:'breakfast',icon:'🌅',label:'Kahvaltı',color:'#f5a623'},
+    {key:'lunch',icon:'☀️',label:'Öğle',color:'#44aaff'},
+    {key:'dinner',icon:'🌙',label:'Akşam',color:'#c8f542'},
+    {key:'snack',icon:'🍎',label:'Ara Öğün',color:'#a78bfa'}
+  ];
+  let html='<div style="display:flex;flex-direction:column;gap:0.5rem">';
+  let totalCal=0;
+  mealDefs.forEach(m=>{
+    const meal=nut[m.key];
+    if(!meal)return;
+    totalCal+=(meal.calories||0);
+    const foods=Array.isArray(meal.foods)?meal.foods.slice(0,3).join(', '):(meal.foods||'');
+    html+=`<div style="padding:0.65rem 0.85rem;background:#ffffff05;border-radius:12px;border-left:3px solid ${m.color}30;border:1px solid ${m.color}15;border-left:3px solid ${m.color}">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.2rem">
+        <span style="font-size:0.8rem;font-weight:600;color:${m.color}">${m.icon} ${meal.title||m.label}</span>
+        <span style="font-family:var(--font-head);font-weight:700;font-size:0.75rem;color:var(--muted)">${meal.calories||0} kcal</span>
+      </div>
+      <div style="font-size:0.75rem;color:#ffffffaa;line-height:1.4">${foods}</div>
+    </div>`;
+  });
+  html+=`<div style="display:flex;justify-content:space-between;padding:0.5rem 0.75rem;background:#c8f54210;border-radius:10px;border:1px solid #c8f54220;margin-top:0.25rem">
+    <span style="font-size:0.75rem;color:var(--muted)">Günlük Toplam</span>
+    <span style="font-family:var(--font-head);font-weight:800;font-size:0.82rem;color:var(--lime)">${totalCal} kcal</span>
+  </div></div>`;
+  el.innerHTML=html;
 }
 
 function toggleTWItem(el,idx,day,total){
@@ -722,44 +849,47 @@ function toggleTWItem(el,idx,day,total){
 
 async function loadAISummary(profile,name){
   if(!profile?.goal){
-    document.getElementById('aiSummaryText').textContent=`Merhaba ${name.split(' ')[0]}! 👋 Profilini tamamla ve AI koçun sana özel plan oluştursun!`;
-    document.getElementById('todayFocusText').textContent='Profil tamamlanmadı';
+    if(document.getElementById('aiSummaryText')) document.getElementById('aiSummaryText').textContent=`Merhaba ${name.split(' ')[0]}! 👋 Profilini tamamla ve AI koçun sana özel plan oluştursun!`;
+    if(document.getElementById('todayFocusText')) document.getElementById('todayFocusText').textContent='Profil tamamlanmadı';
     return;
   }
   try{
     const prompt=`${name.split(' ')[0]} adlı kullanıcıyı Türkçe karşıla. Hedef: ${profile.goal}, Seviye: ${profile.fitness_level}. 2 cümle, motive edici, kişisel.`;
     const text=await callAI([{role:'user',content:prompt}],null,120);
-    document.getElementById('aiSummaryText').innerHTML=fmt(text);
-    document.getElementById('todayFocusText').textContent='💪 Bugün harika bir antrenman günü!';
+    if(document.getElementById('aiSummaryText')) document.getElementById('aiSummaryText').innerHTML=fmt(text);
+    if(document.getElementById('todayFocusText')) document.getElementById('todayFocusText').textContent='💪 Bugün harika bir antrenman günü!';
   }catch(e){
-    document.getElementById('aiSummaryText').textContent=`Merhaba ${name.split(' ')[0]}! Bugün harika bir gün olacak 💪`;
-    document.getElementById('todayFocusText').textContent='Devam et!';
+    if(document.getElementById('aiSummaryText')) document.getElementById('aiSummaryText').textContent=`Merhaba ${name.split(' ')[0]}! Bugün harika bir gün olacak 💪`;
+    if(document.getElementById('todayFocusText')) document.getElementById('todayFocusText').textContent='Devam et!';
   }
 }
 
 function loadMealSuggestions(profile){
-  if(!profile?.goal){return;}
+  if(!profile?.goal)return;
   const calMap={lose_weight:1600,build_muscle:2500,get_fit:2000,improve_health:1800};
   const cal=calMap[profile.goal]||2000;
-  document.getElementById('calGoalText').textContent=cal+' kcal';
-  document.getElementById('breakfastSug').textContent=Math.round(cal*0.25)+' kcal';
-  document.getElementById('lunchSug').textContent=Math.round(cal*0.35)+' kcal';
-  document.getElementById('dinnerSug').textContent=Math.round(cal*0.3)+' kcal';
-  document.getElementById('snackSug').textContent=Math.round(cal*0.1)+' kcal';
+  if(document.getElementById('calGoalText')) document.getElementById('calGoalText').textContent=cal+' kcal';
+  if(document.getElementById('breakfastSug')) document.getElementById('breakfastSug').textContent=Math.round(cal*0.25)+' kcal';
+  if(document.getElementById('lunchSug')) document.getElementById('lunchSug').textContent=Math.round(cal*0.35)+' kcal';
+  if(document.getElementById('dinnerSug')) document.getElementById('dinnerSug').textContent=Math.round(cal*0.3)+' kcal';
+  if(document.getElementById('snackSug')) document.getElementById('snackSug').textContent=Math.round(cal*0.1)+' kcal';
 }
 
 function loadDailyTip(profile){
-  if(!profile?.goal){document.getElementById('dailyTip').textContent='Profilinizi tamamlayın!';return;}
-  const tips=[
-    `${goalLabels[profile.goal]} hedefiniz için bugün en önemli şey tutarlılık. Her gün biraz daha iyi olmak yeterli! 💪`,
+  const MOTIVATIONS=['"Başarı bir anda gelmez, her günkü çabanın birikimidir." 🌟','"Vücudun yapabilir. Onu durduran sadece zihnin." 💪','"Dünden daha iyi olmak için çalış, başkasından değil." ⚡','"Mükemmel olmak zorunda değilsin, sadece devam et." 🔥','"Her antrenman seni hedefine bir adım daha yaklaştırır." 🎯','"Terlediğin her damla, yarınki sen için bir yatırım." 💧','"Zor günlerde bile ayağa kalk. O günler seni güçlendirir." 🏆'];
+  const tips=profile?.goal?[
+    `${goalLabels[profile.goal]||''} hedefiniz için bugün en önemli şey tutarlılık. Her gün biraz daha iyi olmak yeterli! 💪`,
     `Protein alımınıza dikkat edin — kilonuzun 2 katı kadar gram protein almanız önerilir.`,
-    `Antrenman öncesi 30 dakika hafif yemek, sonrasında protein alın. Bu kural altın kuraldır.`,
+    `Antrenman öncesi hafif karbonhidrat, sonrasında protein alın. Bu altın kuraldır.`,
     `Uyku kalitesi antrenman kadar önemli. Kaslar uyurken büyür. 7-8 saat hedefleyin.`,
-    `${equipLabels[profile.equipment]||'Ekipman'} ile çalışıyorsunuz — her seansı verimli kullanın!`,
-    `Su içmeyi unutmayın! Günde en az 2-3 litre su kas performansınızı artırır.`,
-    `Isınma ve soğuma hareketleri sakatlıkları önler. Her antrenmanın 5 dakikasını buna ayırın.`
-  ];
-  document.getElementById('dailyTip').textContent=tips[new Date().getDay()%tips.length];
+    `Su içmeyi unutmayın! Günde en az 2-3 litre performansınızı artırır.`,
+    `Isınma ve soğuma hareketleri sakatlıkları önler. Her antrenmanın 5 dakikasını buna ayırın.`,
+    `Haftalık ilerlemenizi takip etmek motivasyonu artırır. Streak'inizi koruyun!`
+  ]:['Profilinizi tamamlayın ve kişisel planınızı oluşturun! 🚀'];
+  const d=new Date().getDay();
+  if(document.getElementById('dailyTip')) document.getElementById('dailyTip').textContent=tips[d%tips.length];
+  if(document.getElementById('heroQuote')) document.getElementById('heroQuote').textContent=MOTIVATIONS[d%MOTIVATIONS.length];
+  if(document.getElementById('todayFocusText')) document.getElementById('todayFocusText').textContent=profile?.goal?(TODAY_IDX%2===0?'💪 Antrenman Günü — Hazır mısın?':'🧘 Dinlenme Günü — Toparlan!'):'Profilinizi tamamlayın';
 }
 
 async function loadQuickWorkoutPreview(){
@@ -1175,6 +1305,135 @@ SADECE güncellenmiş JSON döndür — aynı format, başka hiçbir şey yazma.
 }
 
 async function signOut(){await sb.auth.signOut();window.location.replace('auth.html');}
+
+// ---- HIZLI TAKİP ----
+const TODAY_STR2=new Date().toDateString();
+let quickCal=parseInt(localStorage.getItem('fp_cal_'+TODAY_STR2)||'0');
+let quickWater=parseInt(localStorage.getItem('fp_water_'+TODAY_STR2)||'0');
+
+function quickLogCal(){quickCal+=200;localStorage.setItem('fp_cal_'+TODAY_STR2,quickCal);updateQuickTrack();}
+function quickLogWater(){quickWater+=1;localStorage.setItem('fp_water_'+TODAY_STR2,quickWater);updateQuickTrack();}
+
+function updateQuickTrack(){
+  if(document.getElementById('calorieCount')) document.getElementById('calorieCount').textContent=quickCal;
+  if(document.getElementById('qtCalVal')) document.getElementById('qtCalVal').textContent=quickCal;
+  if(document.getElementById('qtWaterVal')) document.getElementById('qtWaterVal').textContent=quickWater;
+  const calT=parseInt(document.getElementById('qtCalTarget')?.textContent||'2000');
+  const watT=parseInt(document.getElementById('qtWaterTarget')?.textContent||'8');
+  if(document.getElementById('qtCalFill')) document.getElementById('qtCalFill').style.width=Math.min(quickCal/calT*100,100)+'%';
+  if(document.getElementById('qtWaterFill')) document.getElementById('qtWaterFill').style.width=Math.min(quickWater/watT*100,100)+'%';
+  if(document.getElementById('wWater')) document.getElementById('wWater').textContent=quickWater+'/'+watT;
+  if(document.getElementById('wWaterFill')) document.getElementById('wWaterFill').style.width=Math.min(quickWater/watT*100,100)+'%';
+  renderAchievements();
+}
+
+// ---- HAFTALIK BAR GRAFİK ----
+function renderWeekBars(done){
+  const grid=document.getElementById('weekBarGrid');if(!grid)return;
+  grid.innerHTML='';
+  const short=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
+  DAYS.forEach((day,i)=>{
+    const isDone=!!done[day];const isToday=i===TODAY_IDX;
+    const col=document.createElement('div');
+    col.style.cssText='flex:1;display:flex;flex-direction:column;align-items:center;gap:0.25rem';
+    const bh=isDone?100:isToday?40:15;
+    const bc=isDone?'var(--lime)':isToday?'#ffffff25':'#ffffff10';
+    col.innerHTML=`<div style="width:100%;height:${bh}%;min-height:4px;background:${bc};border-radius:5px 5px 0 0;transition:height 0.5s ease" title="${day}"></div><div style="font-size:0.58rem;color:${isToday?'var(--lime)':isDone?'#4ade80':'var(--muted)'};font-family:var(--font-head);font-weight:700">${short[i]}</div>`;
+    grid.appendChild(col);
+  });
+}
+
+// ---- STREAK ROZETLER (home) ----
+function renderStreakBadgesHome(done){
+  const row=document.getElementById('streakBadgesHome');if(!row)return;
+  row.innerHTML='';
+  const short=['P','S','Ç','P','C','C','P'];
+  DAYS.forEach((day,i)=>{
+    const isDone=!!done[day];const isToday=i===TODAY_IDX;
+    const el=document.createElement('div');
+    el.style.cssText=`width:30px;height:30px;border-radius:8px;border:1.5px solid ${isDone?'var(--lime)':isToday?'#ffffff30':'#ffffff10'};background:${isDone?'#c8f54220':isToday?'#ffffff08':'transparent'};display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-family:var(--font-head);font-weight:700;color:${isDone?'var(--lime)':isToday?'var(--white)':'var(--muted)'}`;
+    el.textContent=isDone?'✓':short[i];el.title=day;
+    row.appendChild(el);
+  });
+}
+
+// ---- ROZETLER ----
+function renderAchievements(){
+  const done=JSON.parse(localStorage.getItem('fp_done')||'{}');
+  const dc=Object.keys(done).length;
+  const weekKey=getMonday(new Date()).toDateString();
+  const hasWeek=localStorage.getItem('fp_week')===weekKey;
+  const hasPlan=!!localStorage.getItem('fp_ex');
+  const achievements=[
+    {icon:'🌱',name:'İlk Adım',earned:hasPlan},
+    {icon:'🔥',name:'3 Gün Seri',earned:hasWeek&&dc>=3},
+    {icon:'💪',name:'Yarı Yol',earned:hasWeek&&dc>=4},
+    {icon:'🏆',name:'Tam Hafta',earned:hasWeek&&dc>=7},
+    {icon:'💧',name:'Hidrate',earned:quickWater>=8},
+    {icon:'⚡',name:'Pro Üye',earned:isPro},
+  ];
+  const grid=document.getElementById('achievementGrid');if(!grid)return;
+  let earned=0;
+  grid.innerHTML=achievements.map(a=>{
+    if(a.earned)earned++;
+    return `<div style="background:${a.earned?'#c8f54208':'#ffffff06'};border:1px solid ${a.earned?'#c8f54230':'#ffffff0a'};border-radius:12px;padding:0.75rem 0.5rem;text-align:center;opacity:${a.earned?1:0.35}">
+      <div style="font-size:1.4rem;margin-bottom:0.25rem">${a.icon}</div>
+      <div style="font-size:0.65rem;font-family:var(--font-head);font-weight:700;color:var(--white);line-height:1.3">${a.name}</div>
+    </div>`;
+  }).join('');
+  if(document.getElementById('badgeCount')) document.getElementById('badgeCount').textContent=earned+'/'+achievements.length;
+}
+
+// ---- BUGÜNÜN BESLENMESİ ----
+async function loadTodayMeals(profile){
+  const c=document.getElementById('todayMeals');if(!c)return;
+  try{
+    const {data:{session}}=await sb.auth.getSession();
+    const {data}=await sb.from('user_plans').select('*').eq('user_id',session.user.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+    if(data?.plan_data?.days){
+      const todayPlan=data.plan_data.days.find(d=>d.day===TODAY_NAME);
+      const nut=todayPlan?.nutrition||data.plan_data.nutrition;
+      if(data.plan_data.calories&&document.getElementById('qtCalTarget')) document.getElementById('qtCalTarget').textContent=data.plan_data.calories;
+      if(data.plan_data.water&&document.getElementById('qtWaterTarget')) document.getElementById('qtWaterTarget').textContent=Math.round(data.plan_data.water*2.67);
+      if(document.getElementById('heroTarget')) document.getElementById('heroTarget').textContent=todayPlan?.type==='Dinlenme'?'🧘 Dinlenme Günü':'💪 '+(todayPlan?.focus||'Antrenman Günü');
+      updateQuickTrack();
+      if(nut&&typeof nut==='object'){
+        const meals=[{key:'breakfast',icon:'🌅',label:'Kahvaltı',color:'#f5a623'},{key:'lunch',icon:'☀️',label:'Öğle',color:'#44aaff'},{key:'dinner',icon:'🌙',label:'Akşam',color:'#c8f542'},{key:'snack',icon:'🍎',label:'Ara Öğün',color:'#a78bfa'}];
+        let html='';
+        meals.forEach(m=>{
+          const meal=nut[m.key];if(!meal)return;
+          const foods=Array.isArray(meal.foods)?meal.foods.slice(0,3).join(', '):'';
+          html+=`<div style="display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0;border-bottom:1px solid #ffffff07"><div style="width:9px;height:9px;border-radius:50%;background:${m.color};flex-shrink:0"></div><div style="flex:1;min-width:0"><div style="font-size:0.84rem;font-weight:500">${m.icon} ${meal.title||m.label}</div><div style="font-size:0.7rem;color:var(--muted);margin-top:0.08rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${foods}</div></div><div style="font-size:0.75rem;color:var(--muted);font-family:var(--font-head);font-weight:700;flex-shrink:0">${meal.calories||0} kcal</div></div>`;
+        });
+        const totalCal=['breakfast','lunch','dinner','snack'].reduce((s,k)=>s+(nut[k]?.calories||0),0);
+        html+=`<div style="margin-top:0.65rem;display:flex;justify-content:space-between;font-size:0.75rem"><span style="color:var(--muted)">Toplam</span><span style="color:var(--white);font-family:var(--font-head);font-weight:700">${totalCal} kcal</span></div>`;
+        c.innerHTML=html;return;
+      }
+    }
+    if(profile?.goal){
+      const calMap={lose_weight:1600,build_muscle:2500,get_fit:2000,improve_health:1800};
+      const cal=calMap[profile.goal]||2000;
+      c.innerHTML=`<div style="display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0;border-bottom:1px solid #ffffff07"><div style="width:9px;height:9px;border-radius:50%;background:#f5a623"></div><div style="flex:1"><div style="font-size:0.84rem">🌅 Kahvaltı</div></div><div style="font-size:0.75rem;color:var(--muted);font-family:var(--font-head);font-weight:700">${Math.round(cal*0.25)} kcal</div></div><div style="display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0;border-bottom:1px solid #ffffff07"><div style="width:9px;height:9px;border-radius:50%;background:#44aaff"></div><div style="flex:1"><div style="font-size:0.84rem">☀️ Öğle</div></div><div style="font-size:0.75rem;color:var(--muted);font-family:var(--font-head);font-weight:700">${Math.round(cal*0.35)} kcal</div></div><div style="display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0;border-bottom:1px solid #ffffff07"><div style="width:9px;height:9px;border-radius:50%;background:var(--lime)"></div><div style="flex:1"><div style="font-size:0.84rem">🌙 Akşam</div></div><div style="font-size:0.75rem;color:var(--muted);font-family:var(--font-head);font-weight:700">${Math.round(cal*0.3)} kcal</div></div><div style="display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0"><div style="width:9px;height:9px;border-radius:50%;background:#a78bfa"></div><div style="flex:1"><div style="font-size:0.84rem">🍎 Ara Öğün</div></div><div style="font-size:0.75rem;color:var(--muted);font-family:var(--font-head);font-weight:700">${Math.round(cal*0.1)} kcal</div></div><div style="margin-top:0.65rem;padding:0.55rem;background:#c8f54208;border:1px solid #c8f54218;border-radius:10px;font-size:0.72rem;color:var(--muted);text-align:center">💡 <strong style="color:var(--lime)">"Plan yap"</strong> yazarak detaylı plan oluştur</div>`;
+    }else{c.innerHTML=`<div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:1rem">Plan oluşturulmamış</div>`;}
+  }catch(e){if(c)c.innerHTML=`<div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:1rem">Yüklenemedi</div>`;}
+}
+
+// ---- YAKLAŞAN ANTRENMANLAR ----
+async function loadUpcoming(){
+  const c=document.getElementById('upcomingDays');if(!c)return;
+  try{
+    const {data:{session}}=await sb.auth.getSession();
+    const {data}=await sb.from('user_plans').select('*').eq('user_id',session.user.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+    if(!data?.plan_data?.days){c.innerHTML=`<div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:1rem">Plan yok</div>`;return;}
+    const days=data.plan_data.days;let shown=0,html='';
+    for(let i=1;i<=7&&shown<3;i++){
+      const idx=(TODAY_IDX+i)%7;const dp=days.find(d=>d.day===DAYS[idx]);if(!dp)continue;shown++;
+      const isRest=dp.type==='Dinlenme'||dp.type==='Rest';
+      html+=`<div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.85rem;background:#ffffff05;border-radius:12px;margin-bottom:0.4rem;border:1px solid #ffffff08"><div style="width:8px;height:8px;border-radius:50%;background:${isRest?'#ffffff20':'var(--lime)'};flex-shrink:0"></div><div style="flex:1;min-width:0"><div style="font-size:0.83rem;font-weight:500">${dp.day}</div><div style="font-size:0.68rem;color:var(--muted)">${isRest?'Dinlenme':(dp.focus||'Antrenman')+(dp.duration?' · '+dp.duration+' dk':'')}</div></div><span style="font-size:0.65rem;font-family:var(--font-head);font-weight:700;padding:0.2rem 0.5rem;border-radius:6px;background:${isRest?'#ffffff08':'#c8f54215'};color:${isRest?'var(--muted)':'var(--lime)'};flex-shrink:0">${isRest?'Dinlenme':'Antrenman'}</span></div>`;
+    }
+    c.innerHTML=html||`<div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:1rem">Yaklaşan yok</div>`;
+  }catch(e){if(c)c.innerHTML=`<div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:1rem">Yüklenemedi</div>`;}
+}
 
 // ---- TOUR ----
 const TOUR_STEPS=[
