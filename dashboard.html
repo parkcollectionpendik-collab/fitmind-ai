@@ -774,11 +774,7 @@ async function loadTodayWorkout(profile,name){
       });
       list.innerHTML=html;
     }else{
-      list.innerHTML=`<div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:1.5rem;line-height:1.6">
-        <div style="font-size:2rem;margin-bottom:0.5rem">📋</div>
-        Profilinizi tamamlayın ve AI Koç ile plan oluşturun 💪
-        <br><button onclick="switchTab('aicoach',document.querySelectorAll('.nav-item')[1])" style="margin-top:0.75rem;background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.5rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.8rem;cursor:pointer">🤖 Plan Yap</button>
-      </div>`;
+      showNoPlanScreen();
     }
   }catch(e){
     list.innerHTML=`<div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:1rem">Plan yüklenemedi</div>`;
