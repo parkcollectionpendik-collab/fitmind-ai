@@ -128,6 +128,7 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
   .main .topbar{margin-top:3.5rem}
 }
 </style>
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 </head>
 <body>
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
@@ -348,6 +349,13 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 </div>
 
 <script>
+  Paddle.Initialize({token:'live_eefc76e39bd2263417b9b9ff52b'});
+function openClinicCheckout(){
+  Paddle.Checkout.open({
+    items:[{priceId:'pri_01kpb09vecn3edj363cxw88rmd',quantity:1}],
+    successUrl:'https://fitmindai.ai/physio-dashboard.html',
+  });
+}
 const SB_URL='https://cypmmayxwbkarvheqoxu.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
 const {createClient}=supabase;
