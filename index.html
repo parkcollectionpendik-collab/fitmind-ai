@@ -257,24 +257,41 @@ footer a:hover{color:var(--white)}
     <div class="section-tag" data-en="Pricing" data-tr="Fiyatlandırma">Pricing</div>
     <div class="section-title" data-en="Simple pricing. Cancel anytime." data-tr="Sade fiyat. İstediğinde iptal et.">Simple pricing.<br>Cancel anytime.</div>
     <p class="section-sub" style="margin:0 auto 0" data-en="One plan. Everything included. No hidden fees." data-tr="Tek plan. Her şey dahil. Gizli ücret yok.">One plan. Everything included. No hidden fees.</p>
-    <div class="pricing-wrap">
-      <div class="price-card" data-popular="Most popular" id="popularLabel">
-        <div class="price-name">Pro</div>
-        <div class="price-amount">$19<span>/mo</span></div>
-        <div class="price-period" data-en="Billed monthly · Cancel anytime" data-tr="Aylık faturalandırılır · İstediğinde iptal et">Billed monthly · Cancel anytime</div>
-        <ul class="price-features">
-          <li data-en="Unlimited AI coach chat" data-tr="Sınırsız AI koç sohbeti">Unlimited AI coach chat</li>
-          <li data-en="Custom weekly workout plans" data-tr="Kişisel haftalık antrenman planları">Custom weekly workout plans</li>
-          <li data-en="Full nutrition & macro tracking" data-tr="Tam beslenme ve makro takibi">Full nutrition &amp; macro tracking</li>
-          <li data-en="Progress analytics & charts" data-tr="İlerleme analitiği ve grafikler">Progress analytics &amp; charts</li>
-          <li data-en="Community access & challenges" data-tr="Topluluk erişimi ve meydan okumalar">Community access &amp; challenges</li>
-          <li data-en="Priority support" data-tr="Öncelikli destek">Priority support</li>
-        </ul>
-        <button class="price-btn" onclick="openCheckout()" data-en="Start 7-day free trial →" data-tr="7 günlük ücretsiz denemeyi başlat →">Start 7-day free trial →</button>
-        <div class="price-note" data-en="No credit card required to sign up" data-tr="Kayıt için kredi kartı gerekmez">No credit card required to sign up</div>
-      </div>
-    </div>
+    <div style="display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin-top:3rem">
+
+  <!-- AYLIK PRO -->
+  <div class="price-card" data-popular="En popüler" id="popularLabel">
+    <div class="price-name">Pro — Aylık</div>
+    <div class="price-amount">$19<span>/ay</span></div>
+    <div class="price-period" data-en="Billed monthly · Cancel anytime" data-tr="Aylık faturalandırılır · İstediğinde iptal et">Billed monthly · Cancel anytime</div>
+    <ul class="price-features">
+      <li data-en="Unlimited AI coach chat" data-tr="Sınırsız AI koç sohbeti">Unlimited AI coach chat</li>
+      <li data-en="Custom weekly workout plans" data-tr="Kişisel haftalık antrenman planları">Custom weekly workout plans</li>
+      <li data-en="Full nutrition & macro tracking" data-tr="Tam beslenme ve makro takibi">Full nutrition &amp; macro tracking</li>
+      <li data-en="Progress analytics & charts" data-tr="İlerleme analitiği ve grafikler">Progress analytics &amp; charts</li>
+      <li data-en="Community access & challenges" data-tr="Topluluk erişimi ve meydan okumalar">Community access &amp; challenges</li>
+      <li data-en="Priority support" data-tr="Öncelikli destek">Priority support</li>
+    </ul>
+    <button class="price-btn" onclick="openCheckout('monthly')" data-en="Start 7-day free trial →" data-tr="7 günlük ücretsiz denemeyi başlat →">Start 7-day free trial →</button>
+    <div class="price-note" data-en="No credit card required to sign up" data-tr="Kayıt için kredi kartı gerekmez">No credit card required to sign up</div>
   </div>
+
+  <!-- YILLIK PRO -->
+  <div class="price-card" style="border-color:#f5a623;background:linear-gradient(135deg,#1a1200,#0a0a0a)" data-popular="🔥 %37 Tasarruf" id="annualLabel">
+    <div class="price-name" style="color:#f5a623">Pro — Yıllık</div>
+    <div class="price-amount">$12<span>/ay</span></div>
+    <div class="price-period" data-en="Billed $144/year — save 37%" data-tr="Yılda $144 faturalandırılır — %37 tasarruf">Billed $144/year — save 37%</div>
+    <ul class="price-features">
+      <li data-en="Everything in monthly Pro" data-tr="Aylık Pro'daki her şey">Everything in monthly Pro</li>
+      <li data-en="2 months free" data-tr="2 ay ücretsiz">2 months free</li>
+      <li data-en="Early access to new features" data-tr="Yeni özelliklere erken erişim">Early access to new features</li>
+      <li data-en="Best value for long-term results" data-tr="Uzun vadeli sonuçlar için en iyi fiyat">Best value for long-term results</li>
+    </ul>
+    <button class="price-btn" onclick="openCheckout('annual')" style="background:linear-gradient(135deg,#f5a623,#e8920f);color:#000" data-en="Get annual plan →" data-tr="Yıllık planı al →">Get annual plan →</button>
+    <div class="price-note" data-en="Save $84 compared to monthly" data-tr="Aylığa göre $84 tasarruf et">Save $84 compared to monthly</div>
+  </div>
+
+</div>
 </section>
 
 <section class="cta-section">
