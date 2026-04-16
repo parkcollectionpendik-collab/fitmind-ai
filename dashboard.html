@@ -621,6 +621,11 @@ localStorage.setItem('fm_lastVisit',today);
   if(document.getElementById('heroDate')) document.getElementById('heroDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
   const {data:profile}=await sb.from('profiles').select('*').eq('id',u.id).maybeSingle();
+  // Fizyoterapist ise panele yönlendir
+if(profile?.user_role === 'physio'){
+  window.location.replace('physio-dashboard.html');
+  return;
+}
   userProfile=profile; isPro=profile?.is_pro===true;
   if(isPro)applyProUI(); else applyFreeUI();
 // Doktor takibi banner
