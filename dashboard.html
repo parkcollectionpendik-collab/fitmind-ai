@@ -624,7 +624,16 @@ localStorage.setItem('fm_lastVisit',today);
   const {data:profile}=await sb.from('profiles').select('*').eq('id',u.id).maybeSingle();
   userProfile=profile; isPro=profile?.is_pro===true;
   if(isPro)applyProUI(); else applyFreeUI();
-
+// Doktor takibi banner
+if(profile?.physio_id){
+  const {data:physio}=await sb.from('profiles').select('physio_clinic,physio_spec').eq('id',profile.physio_id).maybeSingle();
+  if(physio){
+    const banner=document.createElement('div');
+    banner.style.cssText='background:#0a0f1a;border:1px solid #44aaff25;border-radius:14px;padding:0.75rem 1.2rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.75rem;font-size:0.85rem';
+    banner.innerHTML='<span style="font-size:1.2rem">🏥</span><span style="color:#44aaff;font-weight:700">Doktorunuz sizi takip ediyor:</span> <span style="color:var(--muted)">'+(physio.physio_clinic||'Klinik')+(physio.physio_spec?' · '+physio.physio_spec:'')+'</span>';
+    document.querySelector('.main').insertBefore(banner,document.querySelector('.topbar'));
+  }
+}
   if(profile?.goal){
     let tags='';
     if(profile.goal)tags+=`<span class="profile-tag">🎯 ${goalLabels[profile.goal]||profile.goal}</span>`;
