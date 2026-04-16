@@ -152,6 +152,12 @@ async function signUp() {
     btn.disabled = false;
     btn.textContent = 'Hesap Oluştur →';
   } else {
+    // Hos geldin emaili gonder
+    fetch('/api/send-welcome', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email, name})
+    }).catch(()=>{}); // Email hatasi kaydi engellesin
     window.location.replace('onboarding.html');
   }
 }
