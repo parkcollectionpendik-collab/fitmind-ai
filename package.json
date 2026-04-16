@@ -1,11 +1,8 @@
-<div style="background:#1e1e1e;color:#d4d4d4;font-family:monospace;padding:1.5rem;border-radius:12px;font-size:0.9rem;line-height:1.6">
-<pre>{
+{
   "name": "fitmind-ai",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0"
   }
-}</pre>
-<button onclick="navigator.clipboard.writeText('{\n  \"name\": \"fitmind-ai\",\n  \"version\": \"1.0.0\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@supabase/supabase-js\": \"^2.39.0\"\n  }\n}').then(()=>this.textContent='✓ Kopyalandı!').catch(()=>{})" style="margin-top:1rem;background:#c8f542;color:#000;border:none;border-radius:8px;padding:0.5rem 1rem;cursor:pointer;font-weight:700;font-size:0.85rem">📋 Kopyala</button>
-</div>
+}
