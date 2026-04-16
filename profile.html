@@ -6,6 +6,7 @@
 <title>FitMind AI – Profilim</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--lime2:#a8d92e;--gray:#111;--muted:#888;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
@@ -17,78 +18,74 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .nav-item{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 1rem;border-radius:12px;cursor:pointer;transition:all 0.2s;font-size:0.9rem;color:var(--muted);border:none;background:transparent;width:100%;text-align:left;font-family:var(--font-body);text-decoration:none}
 .nav-item:hover{background:#ffffff08;color:var(--white)}
 .nav-item.active{background:#c8f54215;color:var(--lime)}
-.nav-item .icon{width:18px;text-align:center;font-size:1rem}
+.nav-item .icon{width:18px;text-align:center}
 .sidebar-bottom{padding-top:1rem;border-top:1px solid #ffffff0f}
 .user-info{display:flex;align-items:center;gap:0.75rem;padding:0.5rem}
-.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--lime),#4af);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.85rem;color:var(--black);flex-shrink:0}
+.avatar-sm{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--lime),#4af);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.85rem;color:#000;flex-shrink:0}
 .user-name{font-size:0.85rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.signout-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0.25rem}
+.signout-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:1rem}
 .signout-btn:hover{color:#ff6b6b}
 .main{margin-left:240px;padding:2rem;min-height:100vh}
-.topbar{margin-bottom:2rem}
-.page-title{font-family:var(--font-head);font-size:1.5rem;font-weight:800}
-.page-sub{color:var(--muted);font-size:0.9rem;margin-top:0.2rem}
-
-.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
-.card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
-.card-title{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1.25rem;display:flex;align-items:center;gap:0.5rem}
-.card-title .icon{font-size:1.1rem}
-
-.avatar-section{display:flex;align-items:center;gap:1.25rem;margin-bottom:1.5rem;padding:1.25rem;background:#ffffff05;border-radius:16px;border:1px solid #ffffff08}
-.avatar-big{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--lime),#4af);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:1.8rem;color:var(--black);flex-shrink:0}
-.avatar-info h3{font-family:var(--font-head);font-size:1.1rem;font-weight:700;margin-bottom:0.2rem}
-.avatar-info p{font-size:0.82rem;color:var(--muted)}
-.pro-tag{display:inline-flex;align-items:center;gap:0.3rem;background:linear-gradient(135deg,#c8f542,#a8d92e);color:#000;padding:0.2rem 0.6rem;border-radius:100px;font-size:0.7rem;font-family:var(--font-head);font-weight:800;margin-top:0.3rem}
-.free-tag{display:inline-flex;align-items:center;background:#ffffff15;color:var(--muted);padding:0.2rem 0.6rem;border-radius:100px;font-size:0.7rem;font-family:var(--font-head);font-weight:800;margin-top:0.3rem}
-
-.form-group{margin-bottom:1rem}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem}
-label{display:block;font-size:0.72rem;color:var(--muted);letter-spacing:0.07em;text-transform:uppercase;font-weight:700;margin-bottom:0.4rem;font-family:var(--font-head)}
-input[type=text],input[type=email],input[type=number],input[type=password],select{width:100%;background:#ffffff08;border:1.5px solid #ffffff12;border-radius:12px;padding:0.75rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.95rem;outline:none;transition:border-color 0.2s}
-input:focus,select:focus{border-color:#c8f54250}
+.panel{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
+.panel-title{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1.25rem;display:flex;align-items:center;gap:0.5rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.form-group{display:flex;flex-direction:column;gap:0.4rem}
+.form-group.full{grid-column:1/-1}
+label{font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;font-weight:700;font-family:var(--font-head)}
+input,select{background:#ffffff08;border:1.5px solid #ffffff12;border-radius:12px;padding:0.75rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.9rem;outline:none;transition:border-color 0.2s;width:100%}
+input:focus,select:focus{border-color:#c8f54240}
 select option{background:#1a1a1a}
-input:disabled{opacity:0.5;cursor:not-allowed}
+.btn-save{background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.7rem 1.8rem;font-family:var(--font-head);font-weight:700;font-size:0.88rem;cursor:pointer;transition:all 0.2s}
+.btn-save:hover{background:var(--lime2)}
+.btn-outline{background:transparent;color:var(--white);border:1px solid #ffffff20;border-radius:100px;padding:0.65rem 1.4rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer;transition:all 0.2s}
+.btn-outline:hover{border-color:#ffffff40}
+.btn-danger{background:transparent;color:#ff6b6b;border:1px solid #ff6b6b30;border-radius:100px;padding:0.65rem 1.4rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer;transition:all 0.2s}
+.btn-danger:hover{background:#ff6b6b15;border-color:#ff6b6b50}
 
-.option-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:1rem}
-.option-btn{background:#ffffff06;border:1.5px solid #ffffff10;border-radius:12px;padding:0.75rem 1rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.6rem;font-size:0.85rem;color:var(--muted);font-family:var(--font-body)}
-.option-btn:hover{border-color:#ffffff25;color:var(--white)}
-.option-btn.selected{border-color:var(--lime);background:#c8f54212;color:var(--white)}
-.option-btn .opt-icon{font-size:1.1rem;flex-shrink:0}
+/* AVATAR BÜYÜK */
+.profile-header{display:flex;align-items:center;gap:1.5rem;margin-bottom:2rem;flex-wrap:wrap}
+.avatar-big{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--lime),#4af);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:2rem;color:#000;flex-shrink:0}
+.profile-name{font-family:var(--font-head);font-size:1.5rem;font-weight:800}
+.profile-email{font-size:0.88rem;color:var(--muted);margin-top:0.2rem}
+.pro-badge{display:inline-flex;align-items:center;background:linear-gradient(135deg,var(--lime),#a8d92e);color:#000;padding:0.25rem 0.8rem;border-radius:100px;font-size:0.72rem;font-family:var(--font-head);font-weight:800;margin-top:0.4rem}
+.free-badge{display:inline-flex;align-items:center;background:#ffffff15;color:var(--muted);padding:0.25rem 0.8rem;border-radius:100px;font-size:0.72rem;font-family:var(--font-head);font-weight:800;margin-top:0.4rem}
 
-.save-btn{background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.8rem 2rem;font-family:var(--font-head);font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.2s;width:100%;margin-top:0.5rem}
-.save-btn:hover{background:var(--lime2)}
-.save-btn:disabled{opacity:0.5;cursor:not-allowed}
+/* STAT KARTLARI */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+.mini-stat{background:var(--gray);border:1px solid #ffffff0f;border-radius:14px;padding:1rem;text-align:center}
+.mini-stat-val{font-family:var(--font-head);font-size:1.4rem;font-weight:800;color:var(--lime)}
+.mini-stat-lbl{font-size:0.7rem;color:var(--muted);margin-top:0.2rem;text-transform:uppercase;letter-spacing:0.06em;font-weight:700}
 
-.danger-btn{background:transparent;color:#ff6b6b;border:1.5px solid #ff6b6b30;border-radius:100px;padding:0.75rem 1.5rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s;width:100%}
-.danger-btn:hover{background:#ff6b6b15;border-color:#ff6b6b60}
+/* ABONELİK */
+.sub-card{background:linear-gradient(135deg,#0f1a06,#111);border:1px solid #c8f54225;border-radius:16px;padding:1.25rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.sub-info h4{font-family:var(--font-head);font-size:0.95rem;font-weight:700;margin-bottom:0.25rem}
+.sub-info p{font-size:0.82rem;color:var(--muted)}
 
-.msg{padding:0.7rem 1rem;border-radius:10px;font-size:0.85rem;margin-top:0.75rem;display:none}
-.msg.success{background:#c8f54215;border:1px solid #c8f54230;color:var(--lime)}
-.msg.error{background:#ff444415;border:1px solid #ff444430;color:#ff8888}
+/* HEDEF SEÇENEKLER */
+.goal-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem}
+.goal-opt{background:#ffffff06;border:1.5px solid #ffffff10;border-radius:12px;padding:0.75rem 1rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.6rem;font-size:0.85rem}
+.goal-opt:hover{border-color:#ffffff20}
+.goal-opt.selected{border-color:var(--lime);background:#c8f54210;color:var(--lime)}
 
-.divider{height:1px;background:#ffffff08;margin:1.25rem 0}
+/* BAŞARI */
+.msg{padding:0.75rem 1rem;border-radius:10px;font-size:0.85rem;margin-top:1rem;display:none}
+.msg.success{background:#c8f54215;border:1px solid #c8f54230;color:var(--lime);display:block}
+.msg.error{background:#ff6b6b15;border:1px solid #ff6b6b30;color:#ff6b6b;display:block}
 
-.stat-row{display:flex;justify-content:space-between;align-items:center;padding:0.65rem 0;border-bottom:1px solid #ffffff06;font-size:0.88rem}
-.stat-row:last-child{border:none}
-.stat-row-label{color:var(--muted)}
-.stat-row-val{font-family:var(--font-head);font-weight:700;color:var(--white)}
-
-.spin{display:inline-block;width:14px;height:14px;border:2px solid #ffffff15;border-top-color:var(--lime);border-radius:50%;animation:spin 0.8s linear infinite}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid #ffffff15;border-top-color:var(--lime);border-radius:50%;animation:spin 0.8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 .mobile-menu-btn{display:none}
 .overlay{display:none;position:fixed;inset:0;background:#00000080;z-index:99}
 .overlay.open{display:block}
-
 @media(max-width:768px){
-  .sidebar{position:fixed;left:-240px;top:0;bottom:0;width:240px;transition:left 0.3s ease;z-index:100}
+  .sidebar{position:fixed;left:-240px;transition:left 0.3s ease;z-index:100}
   .sidebar.open{left:0}
   .main{margin-left:0;padding:1rem}
-  .mobile-menu-btn{display:flex;position:fixed;top:1rem;left:1rem;z-index:200;background:var(--lime);color:var(--black);border:none;border-radius:10px;width:40px;height:40px;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer}
-  .profile-grid{grid-template-columns:1fr}
-  .topbar{margin-top:3.5rem}
+  .mobile-menu-btn{display:flex;position:fixed;top:1rem;left:1rem;z-index:200;background:var(--lime);color:#000;border:none;border-radius:10px;width:40px;height:40px;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer}
   .form-row{grid-template-columns:1fr}
-  .option-grid{grid-template-columns:1fr}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .main{padding-top:4rem}
 }
 </style>
 </head>
@@ -99,18 +96,18 @@ input:disabled{opacity:0.5;cursor:not-allowed}
 <div class="sidebar">
   <a class="logo" href="dashboard.html">Fit<span>Mind</span> AI</a>
   <nav class="nav">
-    <a href="dashboard.html" class="nav-item"><span class="icon">🏠</span> Ana Sayfa</a>
-    <a href="dashboard.html" class="nav-item"><span class="icon">🤖</span> AI Koç</a>
-    <a href="dashboard.html" class="nav-item"><span class="icon">🏋️</span> Antrenmanlar</a>
-    <a href="myplan.html" class="nav-item"><span class="icon">📋</span> Benim Planım</a>
-    <a href="nutrition.html" class="nav-item"><span class="icon">🥗</span> Beslenme</a>
-    <a href="progress.html" class="nav-item"><span class="icon">📈</span> İlerleme</a>
-    <a href="community.html" class="nav-item"><span class="icon">👥</span> Topluluk</a>
-    <a href="profile.html" class="nav-item active"><span class="icon">👤</span> Profilim</a>
+    <a class="nav-item" href="dashboard.html"><span class="icon">🏠</span> Ana Sayfa</a>
+    <a class="nav-item" href="dashboard.html#aicoach"><span class="icon">🤖</span> AI Koç</a>
+    <a class="nav-item" href="dashboard.html#workouts"><span class="icon">🏋️</span> Antrenmanlar</a>
+    <a class="nav-item" href="myplan.html"><span class="icon">📋</span> Benim Planım</a>
+    <a class="nav-item" href="nutrition.html"><span class="icon">🥗</span> Beslenme</a>
+    <a class="nav-item" href="progress.html"><span class="icon">📈</span> İlerleme</a>
+    <a class="nav-item" href="community.html"><span class="icon">👥</span> Topluluk</a>
+    <a class="nav-item active" href="profile.html"><span class="icon">👤</span> Profilim</a>
   </nav>
   <div class="sidebar-bottom">
     <div class="user-info">
-      <div class="avatar" id="avatarInitial">?</div>
+      <div class="avatar-sm" id="avatarInitial">?</div>
       <div class="user-name" id="userName">Yükleniyor...</div>
       <button class="signout-btn" onclick="signOut()">⏻</button>
     </div>
@@ -118,309 +115,310 @@ input:disabled{opacity:0.5;cursor:not-allowed}
 </div>
 
 <div class="main">
-  <div class="topbar">
-    <div class="page-title">👤 Profilim</div>
-    <div class="page-sub">Kişisel bilgilerini ve hedeflerini güncelle</div>
+  <div style="margin-bottom:2rem">
+    <div style="font-family:var(--font-head);font-size:1.6rem;font-weight:800">👤 Profilim</div>
+    <div style="font-size:0.85rem;color:var(--muted);margin-top:0.2rem">Hesap bilgilerini ve tercihlerini yönet</div>
   </div>
 
-  <div class="profile-grid">
-    <!-- SOL KOLON -->
-    <div>
-      <!-- PROFİL KARTI -->
-      <div class="card">
-        <div class="avatar-section">
-          <div class="avatar-big" id="avatarBig">?</div>
-          <div class="avatar-info">
-            <h3 id="profileName">Yükleniyor...</h3>
-            <p id="profileEmail">—</p>
-            <div id="profileBadge" class="free-tag">ÜCRETSİZ</div>
-          </div>
-        </div>
-
-        <div class="card-title"><span class="icon">✏️</span> Kişisel Bilgiler</div>
-        <div class="form-group">
-          <label>Ad Soyad</label>
-          <input type="text" id="fullName" placeholder="Ad Soyad">
-        </div>
-        <div class="form-group">
-          <label>E-posta</label>
-          <input type="email" id="emailField" disabled>
-        </div>
-        <div class="form-row">
-          <div class="form-group" style="margin:0">
-            <label>Yaş</label>
-            <input type="number" id="age" placeholder="25" min="16" max="80">
-          </div>
-          <div class="form-group" style="margin:0">
-            <label>Cinsiyet</label>
-            <select id="gender">
-              <option value="">Seçin...</option>
-              <option value="male">Erkek</option>
-              <option value="female">Kadın</option>
-              <option value="other">Belirtmek istemiyorum</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group" style="margin:0">
-            <label>Boy (cm)</label>
-            <input type="number" id="height" placeholder="175">
-          </div>
-          <div class="form-group" style="margin:0">
-            <label>Kilo (kg)</label>
-            <input type="number" id="weight" placeholder="75" step="0.1">
-          </div>
-        </div>
-        <button class="save-btn" onclick="saveProfile()" id="saveProfileBtn">Profili Kaydet</button>
-        <div class="msg" id="profileMsg"></div>
-      </div>
-
-      <!-- ŞİFRE DEĞİŞTİR -->
-      <div class="card">
-        <div class="card-title"><span class="icon">🔒</span> Şifre Değiştir</div>
-        <div class="form-group">
-          <label>Yeni Şifre</label>
-          <input type="password" id="newPassword" placeholder="En az 8 karakter">
-        </div>
-        <div class="form-group">
-          <label>Şifre Tekrar</label>
-          <input type="password" id="confirmPassword" placeholder="Şifreyi tekrar girin">
-        </div>
-        <button class="save-btn" onclick="changePassword()" id="changePassBtn">Şifreyi Güncelle</button>
-        <div class="msg" id="passMsg"></div>
+  <!-- PROFİL HEADER -->
+  <div class="panel">
+    <div class="profile-header">
+      <div class="avatar-big" id="avatarBig">?</div>
+      <div>
+        <div class="profile-name" id="profileName">Yükleniyor...</div>
+        <div class="profile-email" id="profileEmail"></div>
+        <div id="planBadgeWrap"></div>
       </div>
     </div>
 
-    <!-- SAĞ KOLON -->
-    <div>
-      <!-- FITNESS HEDEFİ -->
-      <div class="card">
-        <div class="card-title"><span class="icon">🎯</span> Fitness Hedefi</div>
-        <div class="option-grid" id="goalGrid">
-          <div class="option-btn" onclick="selectOpt(this,'goal','lose_weight')" data-val="lose_weight">
-            <span class="opt-icon">🔥</span> Kilo Vermek
-          </div>
-          <div class="option-btn" onclick="selectOpt(this,'goal','build_muscle')" data-val="build_muscle">
-            <span class="opt-icon">💪</span> Kas Yapmak
-          </div>
-          <div class="option-btn" onclick="selectOpt(this,'goal','get_fit')" data-val="get_fit">
-            <span class="opt-icon">⚡</span> Forma Girmek
-          </div>
-          <div class="option-btn" onclick="selectOpt(this,'goal','improve_health')" data-val="improve_health">
-            <span class="opt-icon">❤️</span> Sağlığı İyileştirmek
-          </div>
-        </div>
-
-        <div class="card-title" style="margin-top:0.5rem"><span class="icon">📊</span> Fitness Seviyesi</div>
-        <div class="option-grid" id="levelGrid">
-          <div class="option-btn" onclick="selectOpt(this,'level','beginner')" data-val="beginner">
-            <span class="opt-icon">🌱</span> Başlangıç
-          </div>
-          <div class="option-btn" onclick="selectOpt(this,'level','intermediate')" data-val="intermediate">
-            <span class="opt-icon">🏃</span> Orta Seviye
-          </div>
-          <div class="option-btn" onclick="selectOpt(this,'level','advanced')" data-val="advanced" style="grid-column:span 2">
-            <span class="opt-icon">🏆</span> İleri Seviye
-          </div>
-        </div>
-
-        <div class="card-title" style="margin-top:0.5rem"><span class="icon">🏋️</span> Ekipman / Konum</div>
-        <div class="option-grid" id="equipGrid">
-          <div class="option-btn" onclick="selectOpt(this,'equipment','home_no')" data-val="home_no">
-            <span class="opt-icon">🏠</span> Evde (ekipmansız)
-          </div>
-          <div class="option-btn" onclick="selectOpt(this,'equipment','home_basic')" data-val="home_basic">
-            <span class="opt-icon">🏋️</span> Evde (ekipman var)
-          </div>
-          <div class="option-btn" onclick="selectOpt(this,'equipment','gym')" data-val="gym">
-            <span class="opt-icon">🏢</span> Spor Salonu
-          </div>
-          <div class="option-btn" onclick="selectOpt(this,'equipment','outdoor')" data-val="outdoor">
-            <span class="opt-icon">🌳</span> Açık Hava
-          </div>
-        </div>
-
-        <button class="save-btn" onclick="saveFitnessProfile()" id="saveFitnessBtn">Hedefleri Kaydet</button>
-        <div class="msg" id="fitnessMsg"></div>
+    <!-- ABONELİK KARTI -->
+    <div class="sub-card" id="subCard">
+      <div class="sub-info">
+        <h4 id="subTitle">Ücretsiz Plan</h4>
+        <p id="subDesc">3 AI mesaj hakkı · Temel özellikler</p>
       </div>
+      <button id="subBtn" onclick="openCheckout()" class="btn-save" style="padding:0.6rem 1.4rem;font-size:0.82rem">⚡ Pro'ya Yükselt</button>
+    </div>
+  </div>
 
-      <!-- HESAP BİLGİLERİ -->
-      <div class="card">
-        <div class="card-title"><span class="icon">📋</span> Hesap Bilgileri</div>
-        <div class="stat-row">
-          <span class="stat-row-label">Üyelik Türü</span>
-          <span class="stat-row-val" id="membershipType">—</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-row-label">Kayıt Tarihi</span>
-          <span class="stat-row-val" id="joinDate">—</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-row-label">Pro Başlangıç</span>
-          <span class="stat-row-val" id="proSince">—</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-row-label">Kullanıcı ID</span>
-          <span class="stat-row-val" id="userId" style="font-size:0.7rem;color:var(--muted)">—</span>
-        </div>
+  <!-- İSTATİSTİKLER -->
+  <div class="stats-row">
+    <div class="mini-stat">
+      <div class="mini-stat-val" id="statWorkouts">0</div>
+      <div class="mini-stat-lbl">Antrenman</div>
+    </div>
+    <div class="mini-stat">
+      <div class="mini-stat-val" id="statStreak">0🔥</div>
+      <div class="mini-stat-lbl">Seri</div>
+    </div>
+    <div class="mini-stat">
+      <div class="mini-stat-val" id="statWeight">—</div>
+      <div class="mini-stat-lbl">Kilo (kg)</div>
+    </div>
+    <div class="mini-stat">
+      <div class="mini-stat-val" id="statDays">0</div>
+      <div class="mini-stat-lbl">Üyelik Günü</div>
+    </div>
+  </div>
 
-        <div class="divider"></div>
-        <div class="card-title"><span class="icon">⚠️</span> Tehlikeli Bölge</div>
-        <button class="danger-btn" onclick="confirmDelete()">🗑️ Hesabımı Sil</button>
-        <div style="font-size:0.75rem;color:var(--muted);margin-top:0.5rem;text-align:center">Bu işlem geri alınamaz. Tüm verileriniz silinir.</div>
+  <!-- KİŞİSEL BİLGİLER -->
+  <div class="panel">
+    <div class="panel-title">📋 Kişisel Bilgiler</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Ad Soyad</label>
+        <input type="text" id="fullName" placeholder="Ad Soyad">
+      </div>
+      <div class="form-group">
+        <label>E-posta</label>
+        <input type="email" id="email" placeholder="E-posta" disabled style="opacity:0.5">
+      </div>
+      <div class="form-group">
+        <label>Yaş</label>
+        <input type="number" id="age" placeholder="25" min="16" max="80">
+      </div>
+      <div class="form-group">
+        <label>Cinsiyet</label>
+        <select id="gender">
+          <option value="">Seçin...</option>
+          <option value="male">Erkek</option>
+          <option value="female">Kadın</option>
+          <option value="other">Belirtmek istemiyorum</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Boy (cm)</label>
+        <input type="number" id="height" placeholder="175">
+      </div>
+      <div class="form-group">
+        <label>Kilo (kg)</label>
+        <input type="number" id="weight" placeholder="75">
       </div>
     </div>
+    <div id="personalMsg"></div>
+    <button class="btn-save" onclick="savePersonal()">💾 Kaydet</button>
+  </div>
+
+  <!-- FITNESS TERCİHLERİ -->
+  <div class="panel">
+    <div class="panel-title">🏋️ Fitness Tercihleri</div>
+    <div style="margin-bottom:1rem">
+      <label style="display:block;margin-bottom:0.6rem">Hedefin</label>
+      <div class="goal-grid" id="goalGrid">
+        <div class="goal-opt" onclick="selectGoal(this,'lose_weight')">🔥 Kilo Vermek</div>
+        <div class="goal-opt" onclick="selectGoal(this,'build_muscle')">💪 Kas Yapmak</div>
+        <div class="goal-opt" onclick="selectGoal(this,'get_fit')">⚡ Forma Girmek</div>
+        <div class="goal-opt" onclick="selectGoal(this,'improve_health')">❤️ Sağlığı İyileştirmek</div>
+      </div>
+    </div>
+    <div class="form-row" style="margin-top:1rem">
+      <div class="form-group">
+        <label>Fitness Seviyesi</label>
+        <select id="fitnessLevel">
+          <option value="">Seçin...</option>
+          <option value="beginner">Başlangıç</option>
+          <option value="intermediate">Orta Seviye</option>
+          <option value="advanced">İleri Seviye</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Ekipman / Lokasyon</label>
+        <select id="equipment">
+          <option value="">Seçin...</option>
+          <option value="home_no">Evde — Ekipmansız</option>
+          <option value="home_basic">Evde — Temel Ekipman</option>
+          <option value="gym">Spor Salonu</option>
+          <option value="outdoor">Açık Hava</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Antrenman Süresi (dk)</label>
+        <select id="workoutDuration">
+          <option value="20">20 dakika</option>
+          <option value="30">30 dakika</option>
+          <option value="45">45 dakika</option>
+          <option value="60">60 dakika</option>
+          <option value="90">90 dakika</option>
+        </select>
+      </div>
+    </div>
+    <div id="fitnessMsg"></div>
+    <button class="btn-save" onclick="saveFitness()">💾 Kaydet</button>
+  </div>
+
+  <!-- ŞİFRE DEĞİŞTİR -->
+  <div class="panel">
+    <div class="panel-title">🔒 Şifre Değiştir</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Yeni Şifre</label>
+        <input type="password" id="newPassword" placeholder="En az 8 karakter">
+      </div>
+      <div class="form-group">
+        <label>Şifre Tekrar</label>
+        <input type="password" id="confirmPassword" placeholder="Şifreyi tekrar girin">
+      </div>
+    </div>
+    <div id="passwordMsg"></div>
+    <button class="btn-save" onclick="changePassword()">🔒 Şifreyi Güncelle</button>
+  </div>
+
+  <!-- TEHLİKELİ BÖLGE -->
+  <div class="panel" style="border-color:#ff6b6b20">
+    <div class="panel-title" style="color:#ff6b6b">⚠️ Tehlikeli Bölge</div>
+    <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1rem;line-height:1.6">Hesabınızı silmek tüm verilerinizi, planlarınızı ve ilerleme kayıtlarınızı kalıcı olarak siler. Bu işlem geri alınamaz.</p>
+    <button class="btn-danger" onclick="deleteAccount()">🗑 Hesabı Sil</button>
   </div>
 </div>
 
 <script>
-const SUPABASE_URL='https://cypmmayxwbkarvheqoxu.supabase.co';
-const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
+const SB_URL='https://cypmmayxwbkarvheqoxu.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
 const {createClient}=supabase;
-const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
+const sb=createClient(SB_URL,SB_KEY);
+Paddle.Initialize({token:'live_eefc76e39bd2263417b9b9ff52b'});
 
-let currentUser=null;
-const selections={goal:'',level:'',equipment:''};
+let selectedGoal='';
 
 function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open')}
 function closeSidebar(){document.querySelector('.sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open')}
 
-async function init(){
-  const {data:{session}}=await sb.auth.getSession();
-  if(!session){window.location.href='auth.html';return;}
-  currentUser=session.user;
-  const name=currentUser.user_metadata?.full_name||currentUser.email.split('@')[0];
-  const initial=name.charAt(0).toUpperCase();
-
-  document.getElementById('avatarInitial').textContent=initial;
-  document.getElementById('avatarBig').textContent=initial;
-  document.getElementById('userName').textContent=name;
-  document.getElementById('profileName').textContent=name;
-  document.getElementById('profileEmail').textContent=currentUser.email;
-  document.getElementById('emailField').value=currentUser.email;
-  document.getElementById('fullName').value=name;
-  document.getElementById('userId').textContent=currentUser.id.slice(0,16)+'...';
-  document.getElementById('joinDate').textContent=new Date(currentUser.created_at).toLocaleDateString('tr-TR',{year:'numeric',month:'long',day:'numeric'});
-
-  const {data:profile}=await sb.from('profiles').select('*').eq('id',currentUser.id).maybeSingle();
-  if(profile){
-    if(profile.age) document.getElementById('age').value=profile.age;
-    if(profile.height) document.getElementById('height').value=profile.height;
-    if(profile.weight) document.getElementById('weight').value=profile.weight;
-    if(profile.gender) document.getElementById('gender').value=profile.gender;
-    if(profile.goal) setSelected('goalGrid',profile.goal,'goal');
-    if(profile.fitness_level) setSelected('levelGrid',profile.fitness_level,'level');
-    if(profile.equipment) setSelected('equipGrid',profile.equipment,'equipment');
-    const isPro=profile.is_pro===true;
-    document.getElementById('profileBadge').className=isPro?'pro-tag':'free-tag';
-    document.getElementById('profileBadge').textContent=isPro?'⚡ PRO':'ÜCRETSİZ';
-    document.getElementById('membershipType').textContent=isPro?'Pro ⚡':'Ücretsiz';
-    if(profile.pro_since){
-      document.getElementById('proSince').textContent=new Date(profile.pro_since).toLocaleDateString('tr-TR',{year:'numeric',month:'long',day:'numeric'});
-    } else {
-      document.getElementById('proSince').textContent='—';
-    }
-  }
+function selectGoal(el, val){
+  document.querySelectorAll('.goal-opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedGoal=val;
 }
 
-function setSelected(gridId,val,key){
-  selections[key]=val;
-  document.querySelectorAll('#'+gridId+' .option-btn').forEach(btn=>{
-    btn.classList.toggle('selected',btn.dataset.val===val);
+function openCheckout(){
+  Paddle.Checkout.open({
+    items:[{priceId:'pri_01knxscbw8bwh1rrg8byx2cgf0',quantity:1}],
+    successUrl:'https://fitmindai.ai/dashboard.html'
   });
 }
 
-function selectOpt(el,key,val){
-  selections[key]=val;
-  const grid=el.closest('.option-grid');
-  grid.querySelectorAll('.option-btn').forEach(b=>b.classList.remove('selected'));
-  el.classList.add('selected');
+async function init(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){window.location.replace('auth.html');return;}
+  const u=session.user;
+  const name=u.user_metadata?.full_name||u.email.split('@')[0];
+
+  document.getElementById('avatarInitial').textContent=name.charAt(0).toUpperCase();
+  document.getElementById('avatarBig').textContent=name.charAt(0).toUpperCase();
+  document.getElementById('userName').textContent=name;
+  document.getElementById('profileName').textContent=name;
+  document.getElementById('profileEmail').textContent=u.email;
+  document.getElementById('fullName').value=name;
+  document.getElementById('email').value=u.email;
+
+  // Üyelik süresi
+  const created=new Date(u.created_at);
+  const days=Math.floor((new Date()-created)/(1000*60*60*24));
+  document.getElementById('statDays').textContent=days;
+
+  const {data:profile}=await sb.from('profiles').select('*').eq('id',u.id).maybeSingle();
+  if(profile){
+    if(profile.age) document.getElementById('age').value=profile.age;
+    if(profile.gender) document.getElementById('gender').value=profile.gender;
+    if(profile.height) document.getElementById('height').value=profile.height;
+    if(profile.weight){document.getElementById('weight').value=profile.weight;document.getElementById('statWeight').textContent=profile.weight;}
+    if(profile.fitness_level) document.getElementById('fitnessLevel').value=profile.fitness_level;
+    if(profile.equipment) document.getElementById('equipment').value=profile.equipment;
+    if(profile.workout_duration) document.getElementById('workoutDuration').value=profile.workout_duration;
+    if(profile.goal){
+      selectedGoal=profile.goal;
+      document.querySelectorAll('.goal-opt').forEach(o=>{
+        if(o.onclick.toString().includes(profile.goal)) o.classList.add('selected');
+      });
+      // Daha güvenli seçim
+      const goalMap={lose_weight:0,build_muscle:1,get_fit:2,improve_health:3};
+      const idx=goalMap[profile.goal];
+      if(idx!==undefined) document.querySelectorAll('.goal-opt')[idx]?.classList.add('selected');
+    }
+
+    // Pro badge
+    if(profile.is_pro){
+      document.getElementById('planBadgeWrap').innerHTML='<span class="pro-badge">⚡ PRO</span>';
+      document.getElementById('subCard').style.borderColor='#c8f54225';
+      document.getElementById('subTitle').textContent='Pro Plan ⚡';
+      document.getElementById('subDesc').textContent='Sınırsız AI koçluğu · Tüm özellikler açık';
+      document.getElementById('subBtn').textContent='✓ Aktif';
+      document.getElementById('subBtn').style.background='#4ade8020';
+      document.getElementById('subBtn').style.color='#4ade80';
+      document.getElementById('subBtn').style.border='1px solid #4ade8030';
+      document.getElementById('subBtn').onclick=null;
+    } else {
+      document.getElementById('planBadgeWrap').innerHTML='<span class="free-badge">ÜCRETSİZ</span>';
+    }
+  }
+
+  // Haftalık istatistikler
+  const done=JSON.parse(localStorage.getItem('fp_done')||'{}');
+  const streak=Object.keys(done).length;
+  document.getElementById('statWorkouts').textContent=streak;
+  document.getElementById('statStreak').textContent=streak+'🔥';
 }
 
-function showMsg(id,text,type){
+function showMsg(id, text, type){
   const el=document.getElementById(id);
   el.textContent=text;
   el.className='msg '+type;
-  el.style.display='block';
-  setTimeout(()=>el.style.display='none',3500);
+  setTimeout(()=>{el.className='msg';el.textContent='';},3000);
 }
 
-async function saveProfile(){
-  const btn=document.getElementById('saveProfileBtn');
-  btn.disabled=true;btn.textContent='Kaydediliyor...';
-  try{
-    const name=document.getElementById('fullName').value.trim();
-    if(!name){showMsg('profileMsg','Ad soyad boş olamaz','error');return;}
-    // Auth metadata güncelle
-    await sb.auth.updateUser({data:{full_name:name}});
-    // Profiles tablosunu güncelle
-    await sb.from('profiles').upsert({
-      id:currentUser.id,
-      age:parseInt(document.getElementById('age').value)||null,
-      height:parseInt(document.getElementById('height').value)||null,
-      weight:parseFloat(document.getElementById('weight').value)||null,
-      gender:document.getElementById('gender').value||null,
-      updated_at:new Date().toISOString()
-    },{onConflict:'id'});
-    document.getElementById('profileName').textContent=name;
-    document.getElementById('userName').textContent=name;
-    document.getElementById('avatarInitial').textContent=name.charAt(0).toUpperCase();
-    document.getElementById('avatarBig').textContent=name.charAt(0).toUpperCase();
-    showMsg('profileMsg','✅ Profil güncellendi!','success');
-  }catch(e){showMsg('profileMsg','Hata: '+e.message,'error');}
-  finally{btn.disabled=false;btn.textContent='Profili Kaydet';}
+async function savePersonal(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session)return;
+  const age=parseInt(document.getElementById('age').value)||null;
+  const gender=document.getElementById('gender').value;
+  const height=parseInt(document.getElementById('height').value)||null;
+  const weight=parseFloat(document.getElementById('weight').value)||null;
+  const {error}=await sb.from('profiles').upsert({
+    id:session.user.id,age,gender,height,weight,updated_at:new Date().toISOString()
+  });
+  if(error) showMsg('personalMsg','Hata: '+error.message,'error');
+  else{showMsg('personalMsg','✓ Kaydedildi!','success');if(weight) document.getElementById('statWeight').textContent=weight;}
 }
 
-async function saveFitnessProfile(){
-  const btn=document.getElementById('saveFitnessBtn');
-  btn.disabled=true;btn.textContent='Kaydediliyor...';
-  try{
-    await sb.from('profiles').upsert({
-      id:currentUser.id,
-      goal:selections.goal||null,
-      fitness_level:selections.level||null,
-      equipment:selections.equipment||null,
-      updated_at:new Date().toISOString()
-    },{onConflict:'id'});
-    showMsg('fitnessMsg','✅ Hedefler güncellendi!','success');
-  }catch(e){showMsg('fitnessMsg','Hata: '+e.message,'error');}
-  finally{btn.disabled=false;btn.textContent='Hedefleri Kaydet';}
+async function saveFitness(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session)return;
+  const {error}=await sb.from('profiles').upsert({
+    id:session.user.id,
+    goal:selectedGoal||undefined,
+    fitness_level:document.getElementById('fitnessLevel').value||undefined,
+    equipment:document.getElementById('equipment').value||undefined,
+    workout_duration:parseInt(document.getElementById('workoutDuration').value)||undefined,
+    updated_at:new Date().toISOString()
+  });
+  if(error) showMsg('fitnessMsg','Hata: '+error.message,'error');
+  else showMsg('fitnessMsg','✓ Tercihler kaydedildi!','success');
 }
 
 async function changePassword(){
-  const btn=document.getElementById('changePassBtn');
   const np=document.getElementById('newPassword').value;
   const cp=document.getElementById('confirmPassword').value;
-  if(!np||!cp){showMsg('passMsg','Lütfen tüm alanları doldurun.','error');return;}
-  if(np.length<8){showMsg('passMsg','Şifre en az 8 karakter olmalıdır.','error');return;}
-  if(np!==cp){showMsg('passMsg','Şifreler eşleşmiyor.','error');return;}
-  btn.disabled=true;btn.textContent='Güncelleniyor...';
-  try{
-    const {error}=await sb.auth.updateUser({password:np});
-    if(error) showMsg('passMsg','Hata: '+error.message,'error');
-    else{
-      showMsg('passMsg','✅ Şifre güncellendi!','success');
-      document.getElementById('newPassword').value='';
-      document.getElementById('confirmPassword').value='';
-    }
-  }catch(e){showMsg('passMsg','Hata: '+e.message,'error');}
-  finally{btn.disabled=false;btn.textContent='Şifreyi Güncelle';}
+  if(!np||!cp){showMsg('passwordMsg','Şifreyi girin.','error');return;}
+  if(np.length<8){showMsg('passwordMsg','En az 8 karakter olmalı.','error');return;}
+  if(np!==cp){showMsg('passwordMsg','Şifreler eşleşmiyor.','error');return;}
+  const {error}=await sb.auth.updateUser({password:np});
+  if(error) showMsg('passwordMsg','Hata: '+error.message,'error');
+  else{showMsg('passwordMsg','✓ Şifre güncellendi!','success');document.getElementById('newPassword').value='';document.getElementById('confirmPassword').value='';}
 }
 
-async function confirmDelete(){
-  const confirmed=confirm('Hesabınızı silmek istediğinize emin misiniz?\n\nBu işlem GERİ ALINAMAZ. Tüm verileriniz (planlar, ilerleme kayıtları) silinecektir.');
-  if(!confirmed)return;
-  const reconfirm=prompt('Onaylamak için "SİL" yazın:');
-  if(reconfirm!=='SİL')return;
-  try{
-    // Kullanıcı verilerini sil
-    await sb.from('user_plans').delete().eq('user_id',currentUser.id);
-    await sb.from('progress_logs').delete().eq('user_id',currentUser.id);
-    await sb.from('profiles').delete().eq('id',currentUser.id);
-    await sb.auth.signOut();
-    localStorage.clear();
-    window.location.href='auth.html';
-  }catch(e){alert('Hata oluştu: '+e.message);}
+async function deleteAccount(){
+  const confirm1=confirm('Hesabınızı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.');
+  if(!confirm1)return;
+  const confirm2=confirm('Tüm verileriniz, planlarınız ve ilerleme kayıtlarınız silinecek. Devam etmek istiyor musunuz?');
+  if(!confirm2)return;
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session)return;
+  // Kullanıcı verilerini sil
+  await sb.from('user_plans').delete().eq('user_id',session.user.id);
+  await sb.from('progress_logs').delete().eq('user_id',session.user.id);
+  await sb.from('profiles').delete().eq('id',session.user.id);
+  await sb.auth.signOut();
+  localStorage.clear();
+  window.location.replace('index.html');
 }
 
 async function signOut(){await sb.auth.signOut();window.location.replace('auth.html');}
