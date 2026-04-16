@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard.html
+Disallow: /myplan.html
+Disallow: /nutrition.html
+Disallow: /progress.html
+Disallow: /community.html
+Disallow: /profile.html
+Disallow: /physio-dashboard.html
+Disallow: /onboarding.html
+Sitemap: https://fitmindai.ai/sitemap.xml
