@@ -63,7 +63,7 @@ select option{background:#1a1a1a}
 .btn-back{background:transparent;color:var(--muted);border:1.5px solid #ffffff15;border-radius:100px;padding:0.85rem 1.4rem;font-family:var(--font-head);font-weight:700;font-size:0.88rem;cursor:pointer;transition:all 0.2s}
 .btn-back:hover{border-color:#ffffff30;color:var(--white)}
 
-/* PLAN OLUŞTURMA EKRANI */
+/* PLAN OLUSTURMA EKRANI */
 .creating-screen{display:none;text-align:center;padding:1rem 0}
 .creating-steps{display:flex;flex-direction:column;gap:0.75rem;margin:2rem 0;text-align:left}
 .cs-item{display:flex;align-items:center;gap:0.9rem;padding:0.85rem 1rem;background:#ffffff05;border-radius:12px;border:1px solid #ffffff08;opacity:0.4;transition:all 0.5s}
@@ -98,7 +98,7 @@ select option{background:#1a1a1a}
   <div class="progress-wrap">
     <div class="progress-steps">
       <span class="progress-step active" id="ps1">Hedef</span>
-      <span class="progress-step" id="ps2">Vücut</span>
+      <span class="progress-step" id="ps2">Vucut</span>
       <span class="progress-step" id="ps3">Seviye</span>
       <span class="progress-step" id="ps4">Ekipman</span>
       <span class="progress-step" id="ps5">Program</span>
@@ -108,25 +108,25 @@ select option{background:#1a1a1a}
 
   <!-- ADIM 1: HEDEF -->
   <div class="step active" id="step1">
-    <div class="step-tag">Adım 1 / 5</div>
+    <div class="step-tag">Adim 1 / 5</div>
     <div class="step-title">Ana hedefiniz ne?</div>
-    <div class="step-sub">Tüm planınızı bu hedefe göre oluşturacağız.</div>
+    <div class="step-sub">Tum planinizi bu hedefe gore olusturacagiz.</div>
     <div class="options">
       <div class="option" onclick="selectOption(this,'goal','lose_weight')">
         <div class="option-icon">🔥</div>
-        <div><div class="option-label">Kilo vermek</div><div class="option-desc">Yağ yak, forma gir</div></div>
+        <div><div class="option-label">Kilo vermek</div><div class="option-desc">Yag yak, forma gir</div></div>
       </div>
       <div class="option" onclick="selectOption(this,'goal','build_muscle')">
         <div class="option-icon">💪</div>
-        <div><div class="option-label">Kas yapmak</div><div class="option-desc">Güçlen, hacim kazan</div></div>
+        <div><div class="option-label">Kas yapmak</div><div class="option-desc">Guclen, hacim kazan</div></div>
       </div>
       <div class="option" onclick="selectOption(this,'goal','get_fit')">
         <div class="option-icon">⚡</div>
-        <div><div class="option-label">Forma girmek</div><div class="option-desc">Genel kondisyonu artır</div></div>
+        <div><div class="option-label">Forma girmek</div><div class="option-desc">Genel kondisyonu artir</div></div>
       </div>
       <div class="option" onclick="selectOption(this,'goal','improve_health')">
         <div class="option-icon">❤️</div>
-        <div><div class="option-label">Sağlığı iyileştirmek</div><div class="option-desc">Daha iyi hisset, enerji kazan</div></div>
+        <div><div class="option-label">Sagligi iyilestirmek</div><div class="option-desc">Daha iyi hisset, enerji kazan</div></div>
       </div>
     </div>
     <div class="btn-row">
@@ -134,22 +134,22 @@ select option{background:#1a1a1a}
     </div>
   </div>
 
-  <!-- ADIM 2: VÜCUT -->
+  <!-- ADIM 2: VUCUT -->
   <div class="step" id="step2">
-    <div class="step-tag">Adım 2 / 5</div>
-    <div class="step-title">Vücudunuz hakkında bilgi verin</div>
-    <div class="step-sub">İdeal planınızı hesaplamamıza yardımcı olur.</div>
+    <div class="step-tag">Adim 2 / 5</div>
+    <div class="step-title">Vucudunuz hakkinda bilgi verin</div>
+    <div class="step-sub">Ideal planinizi hesaplamamiza yardimci olur.</div>
     <div class="input-row">
       <div class="input-group">
-        <label>Yaş</label>
+        <label>Yas</label>
         <input type="number" id="age" placeholder="25" min="16" max="80">
       </div>
       <div class="input-group">
         <label>Cinsiyet</label>
         <select id="gender">
-          <option value="">Seçin...</option>
+          <option value="">Secin...</option>
           <option value="male">Erkek</option>
-          <option value="female">Kadın</option>
+          <option value="female">Kadin</option>
           <option value="other">Belirtmek istemiyorum</option>
         </select>
       </div>
@@ -170,15 +170,15 @@ select option{background:#1a1a1a}
     </div>
   </div>
 
-  <!-- ADIM 3: FİTNES SEVİYESİ -->
+  <!-- ADIM 3: FITNESS SEVIYESI -->
   <div class="step" id="step3">
-    <div class="step-tag">Adım 3 / 5</div>
+    <div class="step-tag">Adim 3 / 5</div>
     <div class="step-title">Fitness seviyeniz nedir?</div>
-    <div class="step-sub">Dürüst olun — planınızı buna göre ayarlayacağız.</div>
+    <div class="step-sub">Donust olun — planinizi buna gore ayarlayacagiz.</div>
     <div class="options">
       <div class="option" onclick="selectOption(this,'level','beginner')">
         <div class="option-icon">🌱</div>
-        <div><div class="option-label">Başlangıç</div><div class="option-desc">Az ya da hiç deneyim yok</div></div>
+        <div><div class="option-label">Baslangic</div><div class="option-desc">Az ya da hic deneyim yok</div></div>
       </div>
       <div class="option" onclick="selectOption(this,'level','intermediate')">
         <div class="option-icon">🏃</div>
@@ -186,7 +186,7 @@ select option{background:#1a1a1a}
       </div>
       <div class="option" onclick="selectOption(this,'level','advanced')">
         <div class="option-icon">🏆</div>
-        <div><div class="option-label">İleri Seviye</div><div class="option-desc">Düzenli antrenman, haftada 4+</div></div>
+        <div><div class="option-label">Ileri Seviye</div><div class="option-desc">Duzenli antrenman, haftada 4+</div></div>
       </div>
     </div>
     <div class="btn-row">
@@ -195,27 +195,27 @@ select option{background:#1a1a1a}
     </div>
   </div>
 
-  <!-- ADIM 4: EKİPMAN -->
+  <!-- ADIM 4: EKIPMAN -->
   <div class="step" id="step4">
-    <div class="step-tag">Adım 4 / 5</div>
-    <div class="step-title">Nerede antrenman yapıyorsunuz?</div>
-    <div class="step-sub">Sadece yapabileceğiniz egzersizleri vereceğiz.</div>
+    <div class="step-tag">Adim 4 / 5</div>
+    <div class="step-title">Nerede antrenman yapiyorsunuz?</div>
+    <div class="step-sub">Sadece yapabileceginiz egzersizleri verecegiz.</div>
     <div class="options">
       <div class="option" onclick="selectOption(this,'equipment','home_no')">
         <div class="option-icon">🏠</div>
-        <div><div class="option-label">Evde — ekipmansız</div><div class="option-desc">Sadece vücut ağırlığı</div></div>
+        <div><div class="option-label">Evde — ekipmansiz</div><div class="option-desc">Sadece vucut agirligi</div></div>
       </div>
       <div class="option" onclick="selectOption(this,'equipment','home_basic')">
         <div class="option-icon">🏋️</div>
-        <div><div class="option-label">Evde — temel ekipman</div><div class="option-desc">Dumbbell, direnç bandı</div></div>
+        <div><div class="option-label">Evde — temel ekipman</div><div class="option-desc">Dumbbell, direnc bandi</div></div>
       </div>
       <div class="option" onclick="selectOption(this,'equipment','gym')">
         <div class="option-icon">🏢</div>
-        <div><div class="option-label">Spor Salonu</div><div class="option-desc">Tam ekipman erişimi</div></div>
+        <div><div class="option-label">Spor Salonu</div><div class="option-desc">Tam ekipman erisimi</div></div>
       </div>
       <div class="option" onclick="selectOption(this,'equipment','outdoor')">
         <div class="option-icon">🌳</div>
-        <div><div class="option-label">Açık Hava</div><div class="option-desc">Park, koşu, kalistenik</div></div>
+        <div><div class="option-label">Acik Hava</div><div class="option-desc">Park, kosu, kalistenik</div></div>
       </div>
     </div>
     <div class="btn-row">
@@ -226,39 +226,39 @@ select option{background:#1a1a1a}
 
   <!-- ADIM 5: PROGRAM -->
   <div class="step" id="step5">
-    <div class="step-tag">Adım 5 / 5</div>
-    <div class="step-title">Antrenman programınız</div>
-    <div class="step-sub">Hangi günler ve ne kadar süre antrenman yapmak istiyorsunuz?</div>
-    <div style="font-size:0.72rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.6rem;font-family:var(--font-head)">Antrenman Günleri</div>
+    <div class="step-tag">Adim 5 / 5</div>
+    <div class="step-title">Antrenman programiniz</div>
+    <div class="step-sub">Hangi gunler ve ne kadar sure antrenman yapmak istiyorsunuz?</div>
+    <div style="font-size:0.72rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.6rem;font-family:var(--font-head)">Antrenman Gunleri</div>
     <div class="days-grid">
       <div class="day-btn" onclick="toggleDay(this,'Pazartesi')">Pzt</div>
-      <div class="day-btn" onclick="toggleDay(this,'Salı')">Sal</div>
-      <div class="day-btn" onclick="toggleDay(this,'Çarşamba')">Çar</div>
-      <div class="day-btn" onclick="toggleDay(this,'Perşembe')">Per</div>
+      <div class="day-btn" onclick="toggleDay(this,'Sali')">Sal</div>
+      <div class="day-btn" onclick="toggleDay(this,'Carsamba')">Car</div>
+      <div class="day-btn" onclick="toggleDay(this,'Persembe')">Per</div>
       <div class="day-btn" onclick="toggleDay(this,'Cuma')">Cum</div>
       <div class="day-btn" onclick="toggleDay(this,'Cumartesi')">Cmt</div>
       <div class="day-btn" onclick="toggleDay(this,'Pazar')">Paz</div>
     </div>
     <div class="input-group">
-      <label>Tercih ettiğiniz antrenman süresi</label>
+      <label>Tercih ettiginiz antrenman suresi</label>
       <select id="duration">
-        <option value="20">20 dakika — Hızlı seans</option>
+        <option value="20">20 dakika — Hizli seans</option>
         <option value="30">30 dakika — Standart</option>
-        <option value="45" selected>45 dakika — Sağlam antrenman</option>
+        <option value="45" selected>45 dakika — Salam antrenman</option>
         <option value="60">60 dakika — Tam seans</option>
         <option value="90">90 dakika — Ciddi antrenman</option>
       </select>
     </div>
     <div class="btn-row">
       <button class="btn-back" onclick="prevStep(4)">← Geri</button>
-      <button class="btn-next" onclick="finish()">Planımı Oluştur 🚀</button>
+      <button class="btn-next" onclick="finish()">Planimi Olustur 🚀</button>
     </div>
   </div>
 
-  <!-- PLAN OLUŞTURMA -->
+  <!-- PLAN OLUSTURMA -->
   <div class="creating-screen" id="creatingScreen">
-    <div style="font-family:var(--font-head);font-size:1.3rem;font-weight:800;margin-bottom:0.4rem">🤖 Planınız Hazırlanıyor</div>
-    <div style="font-size:0.85rem;color:var(--muted)">Bu işlem 10-15 saniye sürebilir...</div>
+    <div style="font-family:var(--font-head);font-size:1.3rem;font-weight:800;margin-bottom:0.4rem">🤖 Planiniz Hazirlaniyor</div>
+    <div style="font-size:0.85rem;color:var(--muted)">Bu islem 10-15 saniye surebilir...</div>
     <div class="creating-steps" id="creatingSteps">
       <div class="cs-item" id="cs1">
         <div class="cs-icon">👤</div>
@@ -267,17 +267,17 @@ select option{background:#1a1a1a}
       </div>
       <div class="cs-item" id="cs2">
         <div class="cs-icon">🧠</div>
-        <div class="cs-text">AI koçunuz analiz ediyor</div>
+        <div class="cs-text">AI kocunuz analiz ediyor</div>
         <div class="cs-check">✓</div>
       </div>
       <div class="cs-item" id="cs3">
         <div class="cs-icon">💪</div>
-        <div class="cs-text">7 günlük antrenman planı oluşturuluyor</div>
+        <div class="cs-text">7 gunluk antrenman plani olusturuluyor</div>
         <div class="cs-check">✓</div>
       </div>
       <div class="cs-item" id="cs4">
         <div class="cs-icon">🥗</div>
-        <div class="cs-text">Beslenme planı kişiselleştiriliyor</div>
+        <div class="cs-text">Beslenme plani kisiselletiriliyor</div>
         <div class="cs-check">✓</div>
       </div>
       <div class="cs-item" id="cs5">
@@ -291,15 +291,25 @@ select option{background:#1a1a1a}
   <!-- SON EKRAN -->
   <div class="final-screen" id="finalScreen">
     <div class="final-icon">🎉</div>
-    <div class="final-title">Planınız Hazır!</div>
-    <div class="final-sub">Yapay zeka koçunuz size özel 7 günlük antrenman ve beslenme planı oluşturdu.</div>
+    <div class="final-title">Planiniz Hazir!</div>
+    <div class="final-sub">Yapay zeka kocunuz size ozel 7 gunluk antrenman ve beslenme plani olusturdu.</div>
     <div class="final-features">
-      <div class="ff-item"><div class="ff-icon">📅</div><div class="ff-label">7 günlük haftalık plan</div></div>
-      <div class="ff-item"><div class="ff-icon">🥗</div><div class="ff-label">Kişisel beslenme planı</div></div>
-      <div class="ff-item"><div class="ff-icon">🤖</div><div class="ff-label">7/24 AI koç desteği</div></div>
-      <div class="ff-item"><div class="ff-icon">📊</div><div class="ff-label">İlerleme takibi</div></div>
+      <div class="ff-item"><div class="ff-icon">📅</div><div class="ff-label">7 gunluk haftalik plan</div></div>
+      <div class="ff-item"><div class="ff-icon">🥗</div><div class="ff-label">Kisisel beslenme plani</div></div>
+      <div class="ff-item"><div class="ff-icon">🤖</div><div class="ff-label">7/24 AI koc destegi</div></div>
+      <div class="ff-item"><div class="ff-icon">📊</div><div class="ff-label">Ilerleme takibi</div></div>
     </div>
-    <button class="start-btn" onclick="goToDashboard()">Antrenmana Başla! 🚀</button>
+
+    <!-- YONLENDIRME BLOGU -->
+    <div style="background:#ffffff06;border:1px solid #c8f54225;border-radius:16px;padding:1rem 1.2rem;margin-bottom:1.2rem;text-align:left">
+      <div style="font-size:0.7rem;color:var(--lime);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;font-family:var(--font-head);margin-bottom:0.4rem">💡 Onerilen Ilk Adim</div>
+      <div style="font-size:0.85rem;color:#ffffffcc;line-height:1.6">AI Kocuna <strong style="color:var(--white)">"planimi goster"</strong> yaz — planini gorebilir, degistirebilir ve sorular sorabilirsin.</div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:0.6rem">
+      <button class="start-btn" onclick="goToAICoach()">🤖 AI Koc ile Basla — Onerilen</button>
+      <button onclick="goToDashboard()" style="width:100%;background:transparent;color:var(--muted);border:1.5px solid #ffffff15;border-radius:100px;padding:0.75rem;font-family:var(--font-head);font-weight:700;font-size:0.88rem;cursor:pointer;transition:all 0.2s" onmouseover="this.style.borderColor='#ffffff30';this.style.color='var(--white)'" onmouseout="this.style.borderColor='#ffffff15';this.style.color='var(--muted)'">Ana Sayfaya Git →</button>
+    </div>
   </div>
 </div>
 
@@ -361,12 +371,10 @@ async function stepAnim(id,delay){
 }
 
 async function startCreating(){
-  // Adım formlarını gizle, creating'i göster
   document.querySelectorAll('.step').forEach(s=>s.style.display='none');
   document.querySelector('.progress-wrap').style.display='none';
   document.getElementById('creatingScreen').style.display='block';
 
-  // Adım 1: Profil kaydet
   await stepAnim('cs1',300);
   const {data:{session}}=await sb.auth.getSession();
   if(session){
@@ -386,10 +394,8 @@ async function startCreating(){
     });
   }
 
-  // Adım 2: AI analiz
   await stepAnim('cs2',200);
 
-  // Adım 3-4: Plan oluştur (AI çağrısı)
   document.getElementById('cs3').classList.add('active');
   document.getElementById('cs4').classList.add('active');
 
@@ -416,19 +422,16 @@ Bu sablonu doldur (sadece belirtilen antrenman gunlerinde type=Antrenman, digerl
     if(start!==-1&&end!==-1) clean=clean.slice(start,end+1);
     plan=JSON.parse(clean);
 
-    // Gün isimlerini düzelt
-    const dayMap={Sali:'Salı',Carsamba:'Çarşamba',Persembe:'Perşembe'};
+    const dayMap={Sali:'Sali',Carsamba:'Carsamba',Persembe:'Persembe'};
     if(plan.days) plan.days=plan.days.map(d=>({...d,day:dayMap[d.day]||d.day}));
 
   }catch(e){
-    // Plan oluşturulamazsa boş plan
-    plan={workout:'Kişisel plan',nutrition:{},tips:'',calories:2000,water:3,days:[]};
+    plan={workout:'Kisisel plan',nutrition:{},tips:'',calories:2000,water:3,days:[]};
   }
 
   document.getElementById('cs3').classList.add('done');
   document.getElementById('cs4').classList.add('done');
 
-  // Adım 5: Kaydet
   await stepAnim('cs5',200);
   if(session&&plan){
     plan.createdAt=new Date().toISOString();
@@ -441,15 +444,19 @@ Bu sablonu doldur (sadece belirtilen antrenman gunlerinde type=Antrenman, digerl
     },{onConflict:'user_id'});
   }
 
-  // Son ekranı göster
   setTimeout(()=>{
     document.getElementById('creatingScreen').style.display='none';
     document.getElementById('finalScreen').style.display='block';
   },600);
 }
 
+function goToAICoach(){
+  localStorage.setItem('fm_newUser','1');
+  localStorage.setItem('fm_openTab','aicoach');
+  window.location.href='dashboard.html';
+}
+
 function goToDashboard(){
-  // Yeni kullanıcı bayrağı koy — dashboard'da tour gösterilsin
   localStorage.setItem('fm_newUser','1');
   window.location.href='dashboard.html';
 }
