@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<script>
+const sb=supabase.createClient('https://cypmmayxwbkarvheqoxu.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk');
+async function check(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){window.location.replace('auth.html');return;}
+  const {data:profile}=await sb.from('profiles').select('onboarding_done,user_role').eq('id',session.user.id).maybeSingle();
+  if(profile?.user_role==='physio') window.location.replace('physio-dashboard.html');
+  else if(!profile?.onboarding_done) window.location.replace('onboarding.html');
+  else window.location.replace('dashboard.html');
+}
+check();
+</script>
+</body>
+</html>
