@@ -536,9 +536,45 @@ function saveNote(patientId){
 }
 
 async function assignPlan(patientId){
-  alert('Plan atama özelliği yakında! Şimdilik hastanızdan AI Koç kullanmasını isteyin.');
+  const patient=patients.find(p=>p.id===patientId);
+  const name=patient?.full_name||patient?.email||'Hasta';
+  const exercises=prompt(`${name} için egzersiz planı girin.\n\nÖrnek format:\nSquat: 3 set x 12 tekrar\nLunge: 3 set x 10 tekrar\nPlank: 3 set x 30sn`);
+  if(!exercises)return;
+  const notes=prompt('Özel notlar (isteğe bağlı):\nÖrnek: Diz egzersizlerinde dikkatli ol, squat derinliğini sınırla');
+  const planData={
+    workout: exercises,
+    tips: notes||'',
+    createdBy: physioProfile?.id,
+    createdAt: new Date().toISOString(),
+    isPhysioPlan: true,
+    days: [{
+      day:'Her Gün',
+      type:'Antrenman',
+      focus:'Rehabilitasyon',
+      duration:30,
+      exercises: exercises.split('\n').filter(e=>e.trim()).map(e=>{
+        const parts=e.split(':');
+        return {
+          name: parts[0]?.trim()||e,
+          sets: parts[1]?.split('x')[0]?.trim()||'3 set',
+          reps: parts[1]?.split('x')[1]?.trim()||'10 tekrar',
+          rest: '60sn'
+        };
+      })
+    }]
+  };
+  try{
+    await sb.from('user_plans').upsert({
+      user_id:patientId,
+      plan_data:planData,
+      updated_at:new Date().toISOString()
+    },{onConflict:'user_id'});
+    alert(`✅ ${name} için plan kaydedildi!`);
+    closeModal();
+  }catch(e){
+    alert('Hata: '+e.message);
+  }
 }
-
 function renderExercises(area){
   const filtered=area==='all'?EXERCISES:EXERCISES.filter(e=>e.area===area);
   document.getElementById('exerciseGrid').innerHTML=filtered.map(e=>`
