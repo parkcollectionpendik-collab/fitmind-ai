@@ -8,7 +8,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--lime2:#a8d92e;--muted:#888;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
+:root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--lime2:#a8d92e;--blue:#44aaff;--muted:#888;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
 body{background:var(--black);color:var(--white);font-family:var(--font-body);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;overflow-x:hidden}
 .bg{position:fixed;inset:0;z-index:0}
 .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.12}
@@ -16,54 +16,58 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .orb2{width:300px;height:300px;background:#4af;bottom:-50px;right:-50px;animation:float2 10s ease-in-out infinite}
 @keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,20px)}}
 @keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-20px,-15px)}}
-
 .card{position:relative;z-index:1;background:#111;border:1px solid #ffffff15;border-radius:24px;padding:2.5rem;width:100%;max-width:560px;animation:fadeUp 0.6s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .logo{font-family:var(--font-head);font-weight:800;font-size:1.1rem;text-align:center;margin-bottom:2rem}
 .logo span{color:var(--lime)}
-
 .progress-wrap{margin-bottom:2rem}
 .progress-steps{display:flex;justify-content:space-between;margin-bottom:0.5rem}
-.progress-step{font-size:0.72rem;color:var(--muted);font-family:var(--font-head);font-weight:700;transition:color 0.3s}
+.progress-step{font-size:0.68rem;color:var(--muted);font-family:var(--font-head);font-weight:700;transition:color 0.3s}
 .progress-step.active{color:var(--lime)}
 .progress-bar{height:4px;background:#ffffff10;border-radius:100px}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--lime),#4af);border-radius:100px;transition:width 0.4s ease}
-
 .step{display:none;animation:fadeUp 0.3s ease both}
 .step.active{display:block}
 .step-tag{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--lime);font-weight:700;margin-bottom:0.5rem;font-family:var(--font-head)}
 .step-title{font-family:var(--font-head);font-size:1.5rem;font-weight:800;line-height:1.15;margin-bottom:0.4rem}
 .step-sub{color:var(--muted);font-size:0.875rem;margin-bottom:1.8rem;line-height:1.6}
-
 .options{display:grid;gap:0.6rem;margin-bottom:1.5rem}
-.options.cols2{grid-template-columns:1fr 1fr}
 .option{background:#ffffff06;border:1.5px solid #ffffff10;border-radius:14px;padding:1rem 1.1rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.75rem}
 .option:hover{border-color:#ffffff25;background:#ffffff0a;transform:translateX(2px)}
 .option.selected{border-color:var(--lime);background:#c8f54212;box-shadow:0 0 20px #c8f54210}
 .option-icon{font-size:1.4rem;flex-shrink:0}
 .option-label{font-family:var(--font-head);font-size:0.88rem;font-weight:700}
 .option-desc{font-size:0.73rem;color:var(--muted);margin-top:0.1rem}
-
 .input-row{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem}
 .input-group{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:0.75rem}
 label{font-size:0.72rem;color:var(--muted);letter-spacing:0.07em;text-transform:uppercase;font-weight:700;font-family:var(--font-head)}
 input[type=number],input[type=text],select{background:#ffffff08;border:1.5px solid #ffffff12;border-radius:12px;padding:0.8rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.95rem;outline:none;transition:border-color 0.2s;width:100%}
 input:focus,select:focus{border-color:#c8f54250}
 select option{background:#1a1a1a}
-
 .days-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:0.4rem;margin-bottom:1.5rem}
 .day-btn{background:#ffffff06;border:1.5px solid #ffffff10;border-radius:10px;padding:0.6rem 0.2rem;cursor:pointer;transition:all 0.2s;text-align:center;font-family:var(--font-head);font-weight:700;font-size:0.72rem;color:var(--muted)}
 .day-btn:hover{border-color:#ffffff25}
 .day-btn.selected{border-color:var(--lime);background:#c8f54215;color:var(--lime)}
-
 .btn-row{display:flex;gap:0.75rem;align-items:center}
 .btn-next{background:var(--lime);color:var(--black);border:none;border-radius:100px;padding:0.85rem 2rem;font-family:var(--font-head);font-weight:700;font-size:0.92rem;cursor:pointer;transition:all 0.25s;flex:1}
 .btn-next:hover{background:var(--lime2);transform:translateY(-1px)}
 .btn-next:disabled{opacity:0.35;cursor:not-allowed;transform:none}
 .btn-back{background:transparent;color:var(--muted);border:1.5px solid #ffffff15;border-radius:100px;padding:0.85rem 1.4rem;font-family:var(--font-head);font-weight:700;font-size:0.88rem;cursor:pointer;transition:all 0.2s}
 .btn-back:hover{border-color:#ffffff30;color:var(--white)}
-
-/* PLAN OLUSTURMA EKRANI */
+.doctor-option{background:#ffffff06;border:1.5px solid #ffffff10;border-radius:16px;padding:1.1rem 1.2rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.85rem;margin-bottom:0.6rem}
+.doctor-option:hover{border-color:#ffffff25;background:#ffffff0a}
+.doctor-option.selected{border-color:var(--blue);background:#44aaff12}
+.doctor-option.selected-no{border-color:var(--lime);background:#c8f54212}
+.code-input-wrap{display:none;margin-top:1rem;animation:fadeUp 0.3s ease}
+.code-input-wrap.show{display:block}
+.code-input{width:100%;background:#44aaff10;border:1.5px solid #44aaff30;border-radius:12px;padding:0.9rem 1rem;color:var(--white);font-family:var(--font-head);font-size:1.2rem;font-weight:700;outline:none;transition:border-color 0.2s;text-align:center;letter-spacing:0.15em;text-transform:uppercase}
+.code-input:focus{border-color:#44aaff60}
+.code-input::placeholder{color:#ffffff25;letter-spacing:0;font-size:0.9rem;font-weight:400}
+.code-verify{width:100%;background:var(--blue);color:#000;border:none;border-radius:100px;padding:0.8rem;font-family:var(--font-head);font-weight:700;font-size:0.88rem;cursor:pointer;transition:all 0.2s;margin-top:0.6rem}
+.code-verify:hover{background:#2288dd}
+.code-result{margin-top:0.75rem;padding:0.75rem 1rem;border-radius:10px;font-size:0.85rem;display:none}
+.code-result.success{background:#4ade8015;border:1px solid #4ade8025;color:#4ade80}
+.code-result.error{background:#ff6b6b15;border:1px solid #ff6b6b25;color:#ff6b6b}
 .creating-screen{display:none;text-align:center;padding:1rem 0}
 .creating-steps{display:flex;flex-direction:column;gap:0.75rem;margin:2rem 0;text-align:left}
 .cs-item{display:flex;align-items:center;gap:0.9rem;padding:0.85rem 1rem;background:#ffffff05;border-radius:12px;border:1px solid #ffffff08;opacity:0.4;transition:all 0.5s}
@@ -75,8 +79,6 @@ select option{background:#1a1a1a}
 .cs-item.done .cs-check{opacity:1}
 .spin{display:inline-block;width:18px;height:18px;border:2px solid #ffffff20;border-top-color:var(--lime);border-radius:50%;animation:spin 0.8s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* SON EKRAN */
 .final-screen{display:none;text-align:center}
 .final-icon{font-size:4rem;margin-bottom:1rem;animation:pop 0.5s ease both}
 @keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
@@ -92,7 +94,6 @@ select option{background:#1a1a1a}
 </head>
 <body>
 <div class="bg"><div class="orb orb1"></div><div class="orb orb2"></div></div>
-
 <div class="card" id="mainCard">
   <div class="logo">Fit<span>Mind</span> AI</div>
   <div class="progress-wrap">
@@ -102,131 +103,66 @@ select option{background:#1a1a1a}
       <span class="progress-step" id="ps3">Seviye</span>
       <span class="progress-step" id="ps4">Ekipman</span>
       <span class="progress-step" id="ps5">Program</span>
+      <span class="progress-step" id="ps6">Doktor</span>
     </div>
-    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:20%"></div></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:16%"></div></div>
   </div>
 
-  <!-- ADIM 1: HEDEF -->
   <div class="step active" id="step1">
-    <div class="step-tag">Adim 1 / 5</div>
+    <div class="step-tag">Adim 1 / 6</div>
     <div class="step-title">Ana hedefiniz ne?</div>
     <div class="step-sub">Tum planinizi bu hedefe gore olusturacagiz.</div>
     <div class="options">
-      <div class="option" onclick="selectOption(this,'goal','lose_weight')">
-        <div class="option-icon">🔥</div>
-        <div><div class="option-label">Kilo vermek</div><div class="option-desc">Yag yak, forma gir</div></div>
-      </div>
-      <div class="option" onclick="selectOption(this,'goal','build_muscle')">
-        <div class="option-icon">💪</div>
-        <div><div class="option-label">Kas yapmak</div><div class="option-desc">Guclen, hacim kazan</div></div>
-      </div>
-      <div class="option" onclick="selectOption(this,'goal','get_fit')">
-        <div class="option-icon">⚡</div>
-        <div><div class="option-label">Forma girmek</div><div class="option-desc">Genel kondisyonu artir</div></div>
-      </div>
-      <div class="option" onclick="selectOption(this,'goal','improve_health')">
-        <div class="option-icon">❤️</div>
-        <div><div class="option-label">Sagligi iyilestirmek</div><div class="option-desc">Daha iyi hisset, enerji kazan</div></div>
-      </div>
+      <div class="option" onclick="selectOption(this,'goal','lose_weight')"><div class="option-icon">🔥</div><div><div class="option-label">Kilo vermek</div><div class="option-desc">Yag yak, forma gir</div></div></div>
+      <div class="option" onclick="selectOption(this,'goal','build_muscle')"><div class="option-icon">💪</div><div><div class="option-label">Kas yapmak</div><div class="option-desc">Guclen, hacim kazan</div></div></div>
+      <div class="option" onclick="selectOption(this,'goal','get_fit')"><div class="option-icon">⚡</div><div><div class="option-label">Forma girmek</div><div class="option-desc">Genel kondisyonu artir</div></div></div>
+      <div class="option" onclick="selectOption(this,'goal','improve_health')"><div class="option-icon">❤️</div><div><div class="option-label">Sagligi iyilestirmek</div><div class="option-desc">Daha iyi hisset, enerji kazan</div></div></div>
     </div>
-    <div class="btn-row">
-      <button class="btn-next" onclick="nextStep(2)" id="btn1" disabled>Devam Et →</button>
-    </div>
+    <div class="btn-row"><button class="btn-next" onclick="nextStep(2)" id="btn1" disabled>Devam Et →</button></div>
   </div>
 
-  <!-- ADIM 2: VUCUT -->
   <div class="step" id="step2">
-    <div class="step-tag">Adim 2 / 5</div>
+    <div class="step-tag">Adim 2 / 6</div>
     <div class="step-title">Vucudunuz hakkinda bilgi verin</div>
     <div class="step-sub">Ideal planinizi hesaplamamiza yardimci olur.</div>
     <div class="input-row">
-      <div class="input-group">
-        <label>Yas</label>
-        <input type="number" id="age" placeholder="25" min="16" max="80">
-      </div>
-      <div class="input-group">
-        <label>Cinsiyet</label>
-        <select id="gender">
-          <option value="">Secin...</option>
-          <option value="male">Erkek</option>
-          <option value="female">Kadin</option>
-          <option value="other">Belirtmek istemiyorum</option>
-        </select>
-      </div>
+      <div class="input-group"><label>Yas</label><input type="number" id="age" placeholder="25" min="16" max="80"></div>
+      <div class="input-group"><label>Cinsiyet</label><select id="gender"><option value="">Secin...</option><option value="male">Erkek</option><option value="female">Kadin</option><option value="other">Belirtmek istemiyorum</option></select></div>
     </div>
     <div class="input-row">
-      <div class="input-group">
-        <label>Boy (cm)</label>
-        <input type="number" id="height" placeholder="175" min="140" max="220">
-      </div>
-      <div class="input-group">
-        <label>Kilo (kg)</label>
-        <input type="number" id="weight" placeholder="75" min="40" max="200">
-      </div>
+      <div class="input-group"><label>Boy (cm)</label><input type="number" id="height" placeholder="175" min="140" max="220"></div>
+      <div class="input-group"><label>Kilo (kg)</label><input type="number" id="weight" placeholder="75" min="40" max="200"></div>
     </div>
-    <div class="btn-row">
-      <button class="btn-back" onclick="prevStep(1)">← Geri</button>
-      <button class="btn-next" onclick="nextStep(3)">Devam Et →</button>
-    </div>
+    <div class="btn-row"><button class="btn-back" onclick="prevStep(1)">← Geri</button><button class="btn-next" onclick="nextStep(3)">Devam Et →</button></div>
   </div>
 
-  <!-- ADIM 3: FITNESS SEVIYESI -->
   <div class="step" id="step3">
-    <div class="step-tag">Adim 3 / 5</div>
+    <div class="step-tag">Adim 3 / 6</div>
     <div class="step-title">Fitness seviyeniz nedir?</div>
     <div class="step-sub">Donust olun — planinizi buna gore ayarlayacagiz.</div>
     <div class="options">
-      <div class="option" onclick="selectOption(this,'level','beginner')">
-        <div class="option-icon">🌱</div>
-        <div><div class="option-label">Baslangic</div><div class="option-desc">Az ya da hic deneyim yok</div></div>
-      </div>
-      <div class="option" onclick="selectOption(this,'level','intermediate')">
-        <div class="option-icon">🏃</div>
-        <div><div class="option-label">Orta Seviye</div><div class="option-desc">Haftada 1-3 kez egzersiz</div></div>
-      </div>
-      <div class="option" onclick="selectOption(this,'level','advanced')">
-        <div class="option-icon">🏆</div>
-        <div><div class="option-label">Ileri Seviye</div><div class="option-desc">Duzenli antrenman, haftada 4+</div></div>
-      </div>
+      <div class="option" onclick="selectOption(this,'level','beginner')"><div class="option-icon">🌱</div><div><div class="option-label">Baslangic</div><div class="option-desc">Az ya da hic deneyim yok</div></div></div>
+      <div class="option" onclick="selectOption(this,'level','intermediate')"><div class="option-icon">🏃</div><div><div class="option-label">Orta Seviye</div><div class="option-desc">Haftada 1-3 kez egzersiz</div></div></div>
+      <div class="option" onclick="selectOption(this,'level','advanced')"><div class="option-icon">🏆</div><div><div class="option-label">Ileri Seviye</div><div class="option-desc">Duzenli antrenman, haftada 4+</div></div></div>
     </div>
-    <div class="btn-row">
-      <button class="btn-back" onclick="prevStep(2)">← Geri</button>
-      <button class="btn-next" onclick="nextStep(4)" id="btn3" disabled>Devam Et →</button>
-    </div>
+    <div class="btn-row"><button class="btn-back" onclick="prevStep(2)">← Geri</button><button class="btn-next" onclick="nextStep(4)" id="btn3" disabled>Devam Et →</button></div>
   </div>
 
-  <!-- ADIM 4: EKIPMAN -->
   <div class="step" id="step4">
-    <div class="step-tag">Adim 4 / 5</div>
+    <div class="step-tag">Adim 4 / 6</div>
     <div class="step-title">Nerede antrenman yapiyorsunuz?</div>
     <div class="step-sub">Sadece yapabileceginiz egzersizleri verecegiz.</div>
     <div class="options">
-      <div class="option" onclick="selectOption(this,'equipment','home_no')">
-        <div class="option-icon">🏠</div>
-        <div><div class="option-label">Evde — ekipmansiz</div><div class="option-desc">Sadece vucut agirligi</div></div>
-      </div>
-      <div class="option" onclick="selectOption(this,'equipment','home_basic')">
-        <div class="option-icon">🏋️</div>
-        <div><div class="option-label">Evde — temel ekipman</div><div class="option-desc">Dumbbell, direnc bandi</div></div>
-      </div>
-      <div class="option" onclick="selectOption(this,'equipment','gym')">
-        <div class="option-icon">🏢</div>
-        <div><div class="option-label">Spor Salonu</div><div class="option-desc">Tam ekipman erisimi</div></div>
-      </div>
-      <div class="option" onclick="selectOption(this,'equipment','outdoor')">
-        <div class="option-icon">🌳</div>
-        <div><div class="option-label">Acik Hava</div><div class="option-desc">Park, kosu, kalistenik</div></div>
-      </div>
+      <div class="option" onclick="selectOption(this,'equipment','home_no')"><div class="option-icon">🏠</div><div><div class="option-label">Evde — ekipmansiz</div><div class="option-desc">Sadece vucut agirligi</div></div></div>
+      <div class="option" onclick="selectOption(this,'equipment','home_basic')"><div class="option-icon">🏋️</div><div><div class="option-label">Evde — temel ekipman</div><div class="option-desc">Dumbbell, direnc bandi</div></div></div>
+      <div class="option" onclick="selectOption(this,'equipment','gym')"><div class="option-icon">🏢</div><div><div class="option-label">Spor Salonu</div><div class="option-desc">Tam ekipman erisimi</div></div></div>
+      <div class="option" onclick="selectOption(this,'equipment','outdoor')"><div class="option-icon">🌳</div><div><div class="option-label">Acik Hava</div><div class="option-desc">Park, kosu, kalistenik</div></div></div>
     </div>
-    <div class="btn-row">
-      <button class="btn-back" onclick="prevStep(3)">← Geri</button>
-      <button class="btn-next" onclick="nextStep(5)" id="btn4" disabled>Devam Et →</button>
-    </div>
+    <div class="btn-row"><button class="btn-back" onclick="prevStep(3)">← Geri</button><button class="btn-next" onclick="nextStep(5)" id="btn4" disabled>Devam Et →</button></div>
   </div>
 
-  <!-- ADIM 5: PROGRAM -->
   <div class="step" id="step5">
-    <div class="step-tag">Adim 5 / 5</div>
+    <div class="step-tag">Adim 5 / 6</div>
     <div class="step-title">Antrenman programiniz</div>
     <div class="step-sub">Hangi gunler ve ne kadar sure antrenman yapmak istiyorsunuz?</div>
     <div style="font-size:0.72rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.6rem;font-family:var(--font-head)">Antrenman Gunleri</div>
@@ -249,9 +185,40 @@ select option{background:#1a1a1a}
         <option value="90">90 dakika — Ciddi antrenman</option>
       </select>
     </div>
-    <div class="btn-row">
-      <button class="btn-back" onclick="prevStep(4)">← Geri</button>
-      <button class="btn-next" onclick="finish()">Planimi Olustur 🚀</button>
+    <div class="btn-row"><button class="btn-back" onclick="prevStep(4)">← Geri</button><button class="btn-next" onclick="nextStep(6)">Devam Et →</button></div>
+  </div>
+
+  <!-- ADIM 6: DOKTOR KODU -->
+  <div class="step" id="step6">
+    <div class="step-tag">Adim 6 / 6</div>
+    <div class="step-title">Sizi takip eden bir doktor var mi?</div>
+    <div class="step-sub">Fizyoterapist veya doktorunuzun davet kodunu girerek onlara baglanabilirsiniz.</div>
+
+    <div class="doctor-option" id="optYes" onclick="selectDoctorOpt('yes')">
+      <div class="option-icon">🏥</div>
+      <div>
+        <div class="option-label">Evet, doktor kodum var / Yes, I have a code</div>
+        <div class="option-desc">Fizyoterapistim bana bir kod verdi</div>
+      </div>
+    </div>
+    <div class="doctor-option" id="optNo" onclick="selectDoctorOpt('no')">
+      <div class="option-icon">🚀</div>
+      <div>
+        <div class="option-label">Hayir, doktorsuz devam / No doctor</div>
+        <div class="option-desc">AI Koc ile kendi basima ilerleyecegim</div>
+      </div>
+    </div>
+
+    <div class="code-input-wrap" id="codeInputWrap">
+      <label style="color:var(--blue);margin-top:0.5rem;display:block">Doktor Davet Kodu / Invite Code</label>
+      <input class="code-input" type="text" id="doctorCode" placeholder="PHY-XXXXXX" maxlength="10" oninput="this.value=this.value.toUpperCase()">
+      <button class="code-verify" onclick="verifyCode()">Kodu Dogrula / Verify</button>
+      <div class="code-result" id="codeResult"></div>
+    </div>
+
+    <div class="btn-row" style="margin-top:1.25rem">
+      <button class="btn-back" onclick="prevStep(5)">← Geri</button>
+      <button class="btn-next" onclick="finish()" id="btn6">Planimi Olustur 🚀</button>
     </div>
   </div>
 
@@ -259,32 +226,12 @@ select option{background:#1a1a1a}
   <div class="creating-screen" id="creatingScreen">
     <div style="font-family:var(--font-head);font-size:1.3rem;font-weight:800;margin-bottom:0.4rem">🤖 Planiniz Hazirlaniyor</div>
     <div style="font-size:0.85rem;color:var(--muted)">Bu islem 10-15 saniye surebilir...</div>
-    <div class="creating-steps" id="creatingSteps">
-      <div class="cs-item" id="cs1">
-        <div class="cs-icon">👤</div>
-        <div class="cs-text">Profiliniz kaydediliyor</div>
-        <div class="cs-check">✓</div>
-      </div>
-      <div class="cs-item" id="cs2">
-        <div class="cs-icon">🧠</div>
-        <div class="cs-text">AI kocunuz analiz ediyor</div>
-        <div class="cs-check">✓</div>
-      </div>
-      <div class="cs-item" id="cs3">
-        <div class="cs-icon">💪</div>
-        <div class="cs-text">7 gunluk antrenman plani olusturuluyor</div>
-        <div class="cs-check">✓</div>
-      </div>
-      <div class="cs-item" id="cs4">
-        <div class="cs-icon">🥗</div>
-        <div class="cs-text">Beslenme plani kisiselletiriliyor</div>
-        <div class="cs-check">✓</div>
-      </div>
-      <div class="cs-item" id="cs5">
-        <div class="cs-icon">🎯</div>
-        <div class="cs-text">Plan kaydediliyor</div>
-        <div class="cs-check">✓</div>
-      </div>
+    <div class="creating-steps">
+      <div class="cs-item" id="cs1"><div class="cs-icon">👤</div><div class="cs-text">Profiliniz kaydediliyor</div><div class="cs-check">✓</div></div>
+      <div class="cs-item" id="cs2"><div class="cs-icon">🧠</div><div class="cs-text">AI kocunuz analiz ediyor</div><div class="cs-check">✓</div></div>
+      <div class="cs-item" id="cs3"><div class="cs-icon">💪</div><div class="cs-text">7 gunluk antrenman plani olusturuluyor</div><div class="cs-check">✓</div></div>
+      <div class="cs-item" id="cs4"><div class="cs-icon">🥗</div><div class="cs-text">Beslenme plani kisiselletiriliyor</div><div class="cs-check">✓</div></div>
+      <div class="cs-item" id="cs5"><div class="cs-icon">🎯</div><div class="cs-text">Plan kaydediliyor</div><div class="cs-check">✓</div></div>
     </div>
   </div>
 
@@ -292,22 +239,20 @@ select option{background:#1a1a1a}
   <div class="final-screen" id="finalScreen">
     <div class="final-icon">🎉</div>
     <div class="final-title">Planiniz Hazir!</div>
-    <div class="final-sub">Yapay zeka kocunuz size ozel 7 gunluk antrenman ve beslenme plani olusturdu.</div>
+    <div class="final-sub" id="finalSub">Yapay zeka kocunuz size ozel 7 gunluk antrenman ve beslenme plani olusturdu.</div>
     <div class="final-features">
       <div class="ff-item"><div class="ff-icon">📅</div><div class="ff-label">7 gunluk haftalik plan</div></div>
       <div class="ff-item"><div class="ff-icon">🥗</div><div class="ff-label">Kisisel beslenme plani</div></div>
       <div class="ff-item"><div class="ff-icon">🤖</div><div class="ff-label">7/24 AI koc destegi</div></div>
+      <div class="ff-item" id="doctorFeature" style="display:none"><div class="ff-icon">🏥</div><div class="ff-label">Doktor takibinde</div></div>
       <div class="ff-item"><div class="ff-icon">📊</div><div class="ff-label">Ilerleme takibi</div></div>
     </div>
-
-    <!-- YONLENDIRME BLOGU -->
     <div style="background:#ffffff06;border:1px solid #c8f54225;border-radius:16px;padding:1rem 1.2rem;margin-bottom:1.2rem;text-align:left">
-      <div style="font-size:0.7rem;color:var(--lime);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;font-family:var(--font-head);margin-bottom:0.4rem">💡 Onerilen Ilk Adim</div>
+      <div style="font-size:0.7rem;color:var(--lime);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;font-family:var(--font-head);margin-bottom:0.4rem">Onerilen Ilk Adim</div>
       <div style="font-size:0.85rem;color:#ffffffcc;line-height:1.6">AI Kocuna <strong style="color:var(--white)">"planimi goster"</strong> yaz — planini gorebilir, degistirebilir ve sorular sorabilirsin.</div>
     </div>
-
     <div style="display:flex;flex-direction:column;gap:0.6rem">
-      <button class="start-btn" onclick="goToAICoach()">🤖 AI Koc ile Basla — Onerilen</button>
+      <button class="start-btn" onclick="goToAICoach()">🤖 AI Koc ile Basla</button>
       <button onclick="goToDashboard()" style="width:100%;background:transparent;color:var(--muted);border:1.5px solid #ffffff15;border-radius:100px;padding:0.75rem;font-family:var(--font-head);font-weight:700;font-size:0.88rem;cursor:pointer;transition:all 0.2s" onmouseover="this.style.borderColor='#ffffff30';this.style.color='var(--white)'" onmouseout="this.style.borderColor='#ffffff15';this.style.color='var(--muted)'">Ana Sayfaya Git →</button>
     </div>
   </div>
@@ -319,8 +264,9 @@ const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSI
 const {createClient}=supabase;
 const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
 
-const userData={goal:'',level:'',equipment:'',days:[],duration:45,age:'',height:'',weight:'',gender:''};
-const progressMap={1:20,2:40,3:60,4:80,5:100};
+const userData={goal:'',level:'',equipment:'',days:[],duration:45,age:'',height:'',weight:'',gender:'',physioId:null};
+const progressMap={1:16,2:33,3:50,4:66,5:83,6:100};
+let verifiedPhysioId=null;
 
 async function checkAuth(){
   const {data:{session}}=await sb.auth.getSession();
@@ -351,12 +297,48 @@ function nextStep(n){
 
 function prevStep(n){nextStep(n);}
 
+function selectDoctorOpt(opt){
+  document.getElementById('optYes').classList.remove('selected','selected-no');
+  document.getElementById('optNo').classList.remove('selected','selected-no');
+  const codeWrap=document.getElementById('codeInputWrap');
+  if(opt==='yes'){
+    document.getElementById('optYes').classList.add('selected');
+    codeWrap.classList.add('show');
+    document.getElementById('btn6').disabled=true;
+  } else {
+    document.getElementById('optNo').classList.add('selected-no');
+    codeWrap.classList.remove('show');
+    verifiedPhysioId=null;
+    document.getElementById('btn6').disabled=false;
+  }
+}
+
+async function verifyCode(){
+  const code=document.getElementById('doctorCode').value.trim().toUpperCase();
+  const result=document.getElementById('codeResult');
+  if(!code){result.textContent='Lutfen kod girin.';result.className='code-result error';result.style.display='block';return;}
+  result.textContent='Dogrulanıyor...';result.className='code-result';result.style.display='block';
+  const {data}=await sb.from('profiles').select('id,physio_clinic,physio_spec').eq('physio_code',code).eq('user_role','physio').maybeSingle();
+  if(data){
+    verifiedPhysioId=data.id;
+    result.textContent='Doktor bulundu! '+(data.physio_clinic||'')+(data.physio_spec?' - '+data.physio_spec:'');
+    result.className='code-result success';
+    document.getElementById('btn6').disabled=false;
+  } else {
+    verifiedPhysioId=null;
+    result.textContent='Gecersiz kod. Doktorunuzdan tekrar isteyin.';
+    result.className='code-result error';
+    document.getElementById('btn6').disabled=true;
+  }
+}
+
 function finish(){
   userData.duration=parseInt(document.getElementById('duration').value);
   userData.age=parseInt(document.getElementById('age').value)||null;
   userData.height=parseInt(document.getElementById('height').value)||null;
   userData.weight=parseFloat(document.getElementById('weight').value)||null;
   userData.gender=document.getElementById('gender').value;
+  userData.physioId=verifiedPhysioId;
   startCreating();
 }
 
@@ -374,11 +356,10 @@ async function startCreating(){
   document.querySelectorAll('.step').forEach(s=>s.style.display='none');
   document.querySelector('.progress-wrap').style.display='none';
   document.getElementById('creatingScreen').style.display='block';
-
   await stepAnim('cs1',300);
   const {data:{session}}=await sb.auth.getSession();
   if(session){
-    await sb.from('profiles').upsert({
+    const profileData={
       id:session.user.id,
       goal:userData.goal,
       fitness_level:userData.level,
@@ -391,62 +372,53 @@ async function startCreating(){
       gender:userData.gender,
       onboarding_done:true,
       updated_at:new Date().toISOString()
-    });
+    };
+    if(userData.physioId){
+      profileData.physio_id=userData.physioId;
+      profileData.user_role='patient';
+    }
+    await sb.from('profiles').upsert(profileData);
   }
-
   await stepAnim('cs2',200);
-
   document.getElementById('cs3').classList.add('active');
   document.getElementById('cs4').classList.add('active');
-
   let plan=null;
   try{
     const goalLabels={lose_weight:'kilo vermek',build_muscle:'kas yapmak',get_fit:'forma girmek',improve_health:'sagligi iyilestirmek'};
     const equipLabels={home_no:'ev ekipmansiz',home_basic:'ev temel ekipman',gym:'spor salonu',outdoor:'acik hava'};
     const daysStr=userData.days.length>0?userData.days.join(', '):'Pazartesi, Carsamba, Cuma';
-
-    const planSys=`Sen bir JSON uretici sistemsin. SADECE gecerli JSON dondur. Hicbir sey yazma. Ilk karakter { son karakter } olacak.
+    const planSys=`Sen bir JSON uretici sistemsin. SADECE gecerli JSON dondur. Ilk karakter { son karakter } olacak.
 Kullanici: Hedef=${goalLabels[userData.goal]||'genel'}, Seviye=${userData.level||'orta'}, Ekipman=${equipLabels[userData.equipment]||'gym'}, Kilo=${userData.weight||70}kg, Antrenman gunleri=${daysStr}, Sure=${userData.duration} dk
-Bu sablonu doldur (sadece belirtilen antrenman gunlerinde type=Antrenman, digerleri Dinlenme):
-{"workout":"haftalik antrenman ozeti","nutrition":{"breakfast":{"title":"Kahvalti","foods":["yiyecek1","yiyecek2","yiyecek3","yiyecek4"],"calories":500,"protein":30,"carbs":45,"fat":15},"lunch":{"title":"Ogle Yemegi","foods":["yiyecek1","yiyecek2","yiyecek3","yiyecek4"],"calories":650,"protein":45,"carbs":60,"fat":15},"dinner":{"title":"Aksam Yemegi","foods":["yiyecek1","yiyecek2","yiyecek3"],"calories":550,"protein":40,"carbs":35,"fat":18},"snack":{"title":"Ara Ogun","foods":["yiyecek1","yiyecek2","yiyecek3"],"calories":300,"protein":15,"carbs":35,"fat":10}},"tips":"1) ipucu 2) ipucu 3) ipucu","calories":2200,"water":3,"days":[{"day":"Pazartesi","type":"Antrenman","focus":"Gogus ve Triseps","duration":45,"exercises":[{"name":"Push-up","sets":"4 set","reps":"12-15 tekrar","rest":"60sn"},{"name":"Dumbbell Press","sets":"3 set","reps":"10-12 tekrar","rest":"90sn"},{"name":"Tricep Dips","sets":"3 set","reps":"12 tekrar","rest":"60sn"}]},{"day":"Sali","type":"Dinlenme","focus":"Aktif Dinlenme","duration":20,"exercises":[]},{"day":"Carsamba","type":"Antrenman","focus":"Sirt ve Biseps","duration":45,"exercises":[{"name":"Pull-ups","sets":"4 set","reps":"8-10 tekrar","rest":"90sn"},{"name":"Bent-over Row","sets":"3 set","reps":"10-12 tekrar","rest":"90sn"},{"name":"Bicep Curl","sets":"3 set","reps":"12-15 tekrar","rest":"60sn"}]},{"day":"Persembe","type":"Dinlenme","focus":"Aktif Dinlenme","duration":20,"exercises":[]},{"day":"Cuma","type":"Antrenman","focus":"Bacak ve Core","duration":45,"exercises":[{"name":"Squat","sets":"4 set","reps":"10-12 tekrar","rest":"120sn"},{"name":"Lunge","sets":"3 set","reps":"12 tekrar","rest":"90sn"},{"name":"Plank","sets":"3 set","reps":"45 sn","rest":"45sn"}]},{"day":"Cumartesi","type":"Dinlenme","focus":"Aktif Dinlenme","duration":20,"exercises":[]},{"day":"Pazar","type":"Dinlenme","focus":"Tam Dinlenme","duration":0,"exercises":[]}]}`;
-
-    const res=await fetch('/api/chat',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({messages:[{role:'user',content:'Plan olustur'}],system:planSys,max_tokens:4000})
-    });
+KRITIK: Her gun icin nutrition objesi OLMALIDIR.
+{"workout":"ozet","tips":"ipuclari","calories":2200,"water":3,"days":[{"day":"Pazartesi","type":"Antrenman","focus":"Gogus","duration":45,"exercises":[{"name":"Push-up","sets":"3 set","reps":"12 tekrar","rest":"60sn"}],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["yumurta","ekmek"],"calories":400,"protein":25,"carbs":35,"fat":12},"lunch":{"title":"Ogle","foods":["tavuk","pilav"],"calories":550,"protein":40,"carbs":50,"fat":10},"dinner":{"title":"Aksam","foods":["somon","sebze"],"calories":500,"protein":38,"carbs":30,"fat":16},"snack":{"title":"Ara Ogun","foods":["yogurt","muz"],"calories":250,"protein":12,"carbs":30,"fat":6}}},{"day":"Sali","type":"Dinlenme","focus":"Dinlenme","duration":0,"exercises":[],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["yulaf","meyve"],"calories":350,"protein":12,"carbs":55,"fat":8},"lunch":{"title":"Ogle","foods":["mercimek","ekmek"],"calories":420,"protein":20,"carbs":55,"fat":8},"dinner":{"title":"Aksam","foods":["hindi","sebze"],"calories":460,"protein":36,"carbs":28,"fat":14},"snack":{"title":"Ara Ogun","foods":["elma","peynir"],"calories":220,"protein":8,"carbs":25,"fat":10}}},{"day":"Carsamba","type":"Antrenman","focus":"Sirt","duration":45,"exercises":[{"name":"Pull-up","sets":"3 set","reps":"10 tekrar","rest":"90sn"}],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["omlet","domates"],"calories":420,"protein":28,"carbs":15,"fat":20},"lunch":{"title":"Ogle","foods":["ton baligi","makarna"],"calories":520,"protein":38,"carbs":48,"fat":12},"dinner":{"title":"Aksam","foods":["dana eti","brokoli"],"calories":510,"protein":42,"carbs":20,"fat":18},"snack":{"title":"Ara Ogun","foods":["protein bar"],"calories":230,"protein":18,"carbs":22,"fat":7}}},{"day":"Persembe","type":"Antrenman","focus":"Bacak","duration":50,"exercises":[{"name":"Squat","sets":"4 set","reps":"12 tekrar","rest":"90sn"}],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["smoothie","yulaf"],"calories":400,"protein":22,"carbs":52,"fat":10},"lunch":{"title":"Ogle","foods":["tavuk wrap","salata"],"calories":500,"protein":36,"carbs":45,"fat":14},"dinner":{"title":"Aksam","foods":["levrek","patates"],"calories":480,"protein":36,"carbs":38,"fat":14},"snack":{"title":"Ara Ogun","foods":["yogurt","ceviz"],"calories":260,"protein":14,"carbs":18,"fat":14}}},{"day":"Cuma","type":"Dinlenme","focus":"Dinlenme","duration":0,"exercises":[],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["tost","avokado"],"calories":380,"protein":14,"carbs":40,"fat":16},"lunch":{"title":"Ogle","foods":["nohut","sebze"],"calories":440,"protein":18,"carbs":52,"fat":12},"dinner":{"title":"Aksam","foods":["somon","kuskus"],"calories":490,"protein":38,"carbs":36,"fat":16},"snack":{"title":"Ara Ogun","foods":["kefir","granola"],"calories":240,"protein":10,"carbs":32,"fat":6}}},{"day":"Cumartesi","type":"Antrenman","focus":"Omuz","duration":45,"exercises":[{"name":"Shoulder Press","sets":"3 set","reps":"12 tekrar","rest":"60sn"}],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["pancake","meyve"],"calories":420,"protein":14,"carbs":65,"fat":10},"lunch":{"title":"Ogle","foods":["kofte","pilav"],"calories":560,"protein":38,"carbs":48,"fat":18},"dinner":{"title":"Aksam","foods":["tavuk","sebze"],"calories":460,"protein":38,"carbs":25,"fat":14},"snack":{"title":"Ara Ogun","foods":["findik","elma"],"calories":250,"protein":6,"carbs":28,"fat":12}}},{"day":"Pazar","type":"Dinlenme","focus":"Tam Dinlenme","duration":0,"exercises":[],"nutrition":{"breakfast":{"title":"Kahvalti","foods":["menemen","ekmek"],"calories":440,"protein":20,"carbs":36,"fat":20},"lunch":{"title":"Ogle","foods":["corba","salata"],"calories":380,"protein":14,"carbs":45,"fat":12},"dinner":{"title":"Aksam","foods":["izgara balik","sebze"],"calories":450,"protein":36,"carbs":25,"fat":16},"snack":{"title":"Ara Ogun","foods":["cikolata","sut"],"calories":270,"protein":8,"carbs":35,"fat":10}}}]}`;
+    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:'Plan olustur'}],system:planSys,max_tokens:4000})});
     const aiData=await res.json();
     const text=aiData.content?.[0]?.text||'';
     let clean=text.trim();
     const start=clean.indexOf('{');const end=clean.lastIndexOf('}');
     if(start!==-1&&end!==-1) clean=clean.slice(start,end+1);
     plan=JSON.parse(clean);
-
     const dayMap={Sali:'Sali',Carsamba:'Carsamba',Persembe:'Persembe'};
     if(plan.days) plan.days=plan.days.map(d=>({...d,day:dayMap[d.day]||d.day}));
-
   }catch(e){
     plan={workout:'Kisisel plan',nutrition:{},tips:'',calories:2000,water:3,days:[]};
   }
-
   document.getElementById('cs3').classList.add('done');
   document.getElementById('cs4').classList.add('done');
-
   await stepAnim('cs5',200);
   if(session&&plan){
     plan.createdAt=new Date().toISOString();
     plan.goal=userData.goal;
     plan.level=userData.level;
-    await sb.from('user_plans').upsert({
-      user_id:session.user.id,
-      plan_data:plan,
-      updated_at:new Date().toISOString()
-    },{onConflict:'user_id'});
+    await sb.from('user_plans').upsert({user_id:session.user.id,plan_data:plan,updated_at:new Date().toISOString()},{onConflict:'user_id'});
   }
-
   setTimeout(()=>{
     document.getElementById('creatingScreen').style.display='none';
     document.getElementById('finalScreen').style.display='block';
+    if(userData.physioId){
+      document.getElementById('doctorFeature').style.display='flex';
+      document.getElementById('finalSub').textContent='Planiniz hazir ve doktorunuz sizi takip edecek!';
+    }
   },600);
 }
 
