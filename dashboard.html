@@ -600,6 +600,17 @@ async function callAI(messages,system,max_tokens){
 async function init(){
   const {data:{session}}=await sb.auth.getSession();
   if(!session){window.location.replace('auth.html');return;}
+  // Son giris tarihini kaydet ve hatirlatma kontrolu yap
+const lastVisit=localStorage.getItem('fm_lastVisit');
+const today=new Date().toDateString();
+if(lastVisit&&lastVisit!==today){
+  const diffDays=Math.floor((new Date()-new Date(lastVisit))/(1000*60*60*24));
+  if(diffDays>=3){
+    const u=session.user;
+    fetch('/api/send-reminder',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:u.email,name:u.user_metadata?.full_name||''})}).catch(()=>{});
+  }
+}
+localStorage.setItem('fm_lastVisit',today);
   const u=session.user;
   const name=u.user_metadata?.full_name||u.email.split('@')[0];
   document.getElementById('avatarInitial').textContent=name.charAt(0).toUpperCase();
