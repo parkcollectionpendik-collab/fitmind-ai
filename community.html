@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FitMind AI – Topluluk</title>
+<title>FitMind AI – Haftalık Meydan Okuma</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -11,7 +11,7 @@
 :root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--lime2:#a8d92e;--gray:#111;--muted:#888;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
 body{background:var(--black);color:var(--white);font-family:var(--font-body);min-height:100vh}
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:#0d0d0d;border-right:1px solid #ffffff0f;padding:1.5rem;display:flex;flex-direction:column;z-index:10}
-.logo{font-family:var(--font-head);font-weight:800;font-size:1.1rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid #ffffff0f}
+.logo{font-family:var(--font-head);font-weight:800;font-size:1.1rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid #ffffff0f;text-decoration:none;color:inherit;display:block}
 .logo span{color:var(--lime)}
 .nav{display:flex;flex-direction:column;gap:0.3rem;flex:1}
 .nav-item{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 1rem;border-radius:12px;cursor:pointer;transition:all 0.2s;font-size:0.9rem;color:var(--muted);border:none;background:transparent;width:100%;text-align:left;font-family:var(--font-body);text-decoration:none}
@@ -20,379 +20,397 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .nav-item .icon{width:18px;text-align:center;font-size:1rem}
 .sidebar-bottom{padding-top:1rem;border-top:1px solid #ffffff0f}
 .user-info{display:flex;align-items:center;gap:0.75rem;padding:0.5rem}
-.avatar-sm{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--lime),#4af);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.85rem;color:var(--black);flex-shrink:0}
-.user-name{font-size:0.85rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.signout-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0.25rem;transition:color 0.2s}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--lime),#4af);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.85rem;color:var(--black);flex-shrink:0}
+.user-name{font-size:0.85rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-decoration:none;color:inherit}
+.signout-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0.25rem}
 .signout-btn:hover{color:#ff6b6b}
 .main{margin-left:240px;padding:2rem;min-height:100vh}
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}
-.page-title{font-family:var(--font-head);font-size:1.5rem;font-weight:800}
-.page-sub{color:var(--muted);font-size:0.9rem;margin-top:0.2rem}
-.badge-live{display:inline-flex;align-items:center;gap:0.4rem;background:#c8f54215;border:1px solid #c8f54230;color:var(--lime);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.75rem;font-family:var(--font-head);font-weight:700}
-.badge-dot{width:6px;height:6px;background:var(--lime);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
-.stat-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:16px;padding:1.2rem 1.5rem}
-.stat-label{font-size:0.72rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:0.4rem}
-.stat-value{font-family:var(--font-head);font-size:1.8rem;font-weight:800;line-height:1}
-.stat-value.lime{color:var(--lime)}
-.stat-sub{font-size:0.75rem;color:var(--muted);margin-top:0.2rem}
-.community-grid{display:grid;grid-template-columns:1fr 360px;gap:1.5rem}
-.card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem}
-.card-title{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem}
-.card-title .dot{width:8px;height:8px;background:var(--lime);border-radius:50%;animation:pulse 2s infinite}
-.challenge-hero{background:linear-gradient(135deg,#0f1a06,#131f07);border:1px solid #c8f54230;border-radius:16px;padding:1.5rem;margin-bottom:1rem;position:relative;overflow:hidden}
-.challenge-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:150px;height:150px;background:var(--lime);opacity:0.06;border-radius:50%}
-.challenge-week{font-size:0.72rem;color:var(--lime);font-family:var(--font-head);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem}
-.challenge-name{font-family:var(--font-head);font-size:1.4rem;font-weight:800;margin-bottom:0.4rem}
-.challenge-desc{font-size:0.85rem;color:#ffffffaa;line-height:1.5;margin-bottom:1rem}
-.challenge-meta{display:flex;gap:1rem;flex-wrap:wrap}
-.meta-item{display:flex;align-items:center;gap:0.4rem;font-size:0.78rem;color:var(--muted)}
-.meta-item strong{color:var(--white)}
-.challenge-progress{margin:1rem 0}
-.prog-header{display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.4rem;color:var(--muted)}
-.prog-bar{height:8px;background:#ffffff10;border-radius:100px;overflow:hidden}
-.prog-fill{height:100%;background:linear-gradient(90deg,var(--lime),var(--lime2));border-radius:100px;transition:width 1s ease}
-.join-btn{width:100%;padding:0.85rem;background:var(--lime);color:var(--black);border:none;border-radius:100px;font-family:var(--font-head);font-weight:700;font-size:0.95rem;cursor:pointer;transition:all 0.2s;margin-top:0.5rem}
-.join-btn:hover{background:var(--lime2);transform:translateY(-1px)}
-.join-btn.joined{background:#ffffff15;color:var(--white)}
-.mini-challenges{display:flex;flex-direction:column;gap:0.75rem;margin-top:1rem}
-.mini-card{background:#ffffff05;border:1px solid #ffffff08;border-radius:14px;padding:1rem;display:flex;align-items:center;gap:1rem;cursor:pointer;transition:all 0.2s}
-.mini-card:hover{border-color:#c8f54225;background:#ffffff08}
-.mini-icon{font-size:1.5rem;flex-shrink:0}
-.mini-info{flex:1}
-.mini-name{font-size:0.88rem;font-weight:600;margin-bottom:0.15rem}
-.mini-meta{font-size:0.75rem;color:var(--muted)}
-.mini-badge{font-size:0.72rem;font-family:var(--font-head);font-weight:700;padding:0.2rem 0.6rem;border-radius:100px;white-space:nowrap}
-.mini-badge.easy{background:#4ade8020;color:#4ade80}
-.mini-badge.medium{background:#fbbf2420;color:#fbbf24}
-.mini-badge.hard{background:#f8717120;color:#f87171}
-.leaderboard{display:flex;flex-direction:column;gap:0.5rem;margin-top:0.5rem}
-.lb-item{display:flex;align-items:center;gap:0.75rem;padding:0.75rem;border-radius:12px;transition:background 0.2s}
+.mobile-menu-btn{display:none}
+.overlay{display:none;position:fixed;inset:0;background:#00000080;z-index:99}
+.overlay.open{display:block}
+
+/* HERO CHALLENGE KARTI */
+.challenge-hero{background:linear-gradient(135deg,#0d1a05,#0a0a0a);border:1px solid #c8f54225;border-radius:24px;padding:2rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.challenge-hero::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:var(--lime);opacity:0.05;border-radius:50%}
+.challenge-week{font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--lime);font-weight:700;font-family:var(--font-head);margin-bottom:0.5rem}
+.challenge-title{font-family:var(--font-head);font-size:1.8rem;font-weight:800;line-height:1.1;margin-bottom:0.5rem}
+.challenge-desc{font-size:0.9rem;color:#ffffffaa;line-height:1.6;max-width:500px;margin-bottom:1.5rem}
+.challenge-meta{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.challenge-pill{display:inline-flex;align-items:center;gap:0.4rem;background:#ffffff08;border:1px solid #ffffff12;border-radius:100px;padding:0.3rem 0.85rem;font-size:0.78rem;font-family:var(--font-head);font-weight:700}
+.challenge-pill.lime{background:#c8f54215;border-color:#c8f54230;color:var(--lime)}
+
+/* KİŞİSEL İLERLEME */
+.my-progress{background:#ffffff06;border:1px solid #ffffff10;border-radius:16px;padding:1.25rem;position:relative;z-index:1}
+.mp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem}
+.mp-title{font-family:var(--font-head);font-size:0.88rem;font-weight:700}
+.mp-count{font-family:var(--font-head);font-size:0.88rem;font-weight:800;color:var(--lime)}
+.days-row{display:flex;gap:0.5rem;margin-bottom:0.75rem}
+.day-circle{width:38px;height:38px;border-radius:50%;border:2px solid #ffffff15;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:700;font-size:0.7rem;color:var(--muted);cursor:pointer;transition:all 0.2s;flex-shrink:0}
+.day-circle:hover{border-color:#ffffff35}
+.day-circle.done{background:var(--lime);border-color:var(--lime);color:#000}
+.day-circle.today{border-color:var(--lime);color:var(--lime)}
+.prog-bar-wrap{height:6px;background:#ffffff10;border-radius:100px;overflow:hidden}
+.prog-bar-fill{height:100%;background:linear-gradient(90deg,var(--lime),#4af);border-radius:100px;transition:width 0.6s ease}
+.complete-btn{margin-top:0.85rem;background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.65rem 1.4rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s}
+.complete-btn:hover{background:var(--lime2)}
+.complete-btn:disabled{opacity:0.4;cursor:not-allowed}
+.complete-btn.done-state{background:#4ade8020;color:#4ade80;border:1px solid #4ade8030}
+
+/* ANA GRID */
+.main-grid{display:grid;grid-template-columns:1fr 340px;gap:1.5rem}
+
+/* LIDERBOARD */
+.panel{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
+.panel-title{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1.2rem;display:flex;align-items:center;gap:0.5rem}
+.lb-item{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 0.85rem;border-radius:12px;margin-bottom:0.4rem;transition:background 0.2s}
 .lb-item:hover{background:#ffffff05}
 .lb-item.me{background:#c8f54210;border:1px solid #c8f54220}
-.lb-rank{font-family:var(--font-head);font-weight:800;font-size:0.9rem;width:24px;text-align:center;flex-shrink:0}
-.lb-rank.gold{color:#fbbf24}
-.lb-rank.silver{color:#94a3b8}
-.lb-rank.bronze{color:#cd7c3f}
-.lb-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.8rem;color:var(--black);flex-shrink:0}
-.lb-info{flex:1}
-.lb-name{font-size:0.85rem;font-weight:500}
-.lb-meta{font-size:0.72rem;color:var(--muted);margin-top:0.1rem}
-.lb-score{font-family:var(--font-head);font-weight:800;font-size:0.9rem;color:var(--lime)}
-.feed{display:flex;flex-direction:column;gap:0.75rem;margin-top:0.5rem}
-.feed-item{background:#ffffff05;border-radius:14px;padding:1rem;border:1px solid #ffffff08}
-.feed-top{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem}
-.feed-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.72rem;color:var(--black);flex-shrink:0}
-.feed-name{font-size:0.82rem;font-weight:600}
-.feed-time{font-size:0.72rem;color:var(--muted);margin-left:auto}
-.feed-text{font-size:0.83rem;color:#ffffffbb;line-height:1.5}
-.feed-emoji{font-size:1rem;margin-right:0.3rem}
-.right-col{display:flex;flex-direction:column;gap:1rem}
-.mobile-menu-btn{display:none;position:fixed;top:1rem;left:1rem;z-index:200;background:var(--lime);border:none;border-radius:10px;width:40px;height:40px;cursor:pointer;font-size:1.2rem;align-items:center;justify-content:center}
-.overlay{display:none;position:fixed;inset:0;background:#00000080;z-index:9}
-.overlay.open{display:block}
-@media(max-width:900px){
-  .stats-row{grid-template-columns:repeat(2,1fr)}
-  .community-grid{grid-template-columns:1fr}
-  .right-col{display:contents}
-}
+.lb-rank{font-family:var(--font-head);font-size:0.8rem;font-weight:800;width:24px;text-align:center;flex-shrink:0}
+.lb-rank.gold{color:#f5a623}
+.lb-rank.silver{color:#aaa}
+.lb-rank.bronze{color:#cd7f32}
+.lb-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.78rem;color:#000;flex-shrink:0}
+.lb-name{flex:1;font-size:0.88rem;font-weight:500}
+.lb-score{font-family:var(--font-head);font-size:0.82rem;font-weight:700;color:var(--lime)}
+.lb-days{font-size:0.7rem;color:var(--muted)}
+
+/* KURALLAR */
+.rule-item{display:flex;gap:0.85rem;padding:0.85rem 0;border-bottom:1px solid #ffffff07}
+.rule-item:last-child{border:none}
+.rule-icon{width:36px;height:36px;border-radius:10px;background:#c8f54215;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.rule-title{font-family:var(--font-head);font-size:0.85rem;font-weight:700;margin-bottom:0.15rem}
+.rule-desc{font-size:0.78rem;color:var(--muted);line-height:1.5}
+
+/* ODUL KARTI */
+.reward-card{background:linear-gradient(135deg,#1a1200,#0a0a0a);border:1px solid #f5a62325;border-radius:16px;padding:1.2rem;display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem}
+.reward-icon{font-size:2rem;flex-shrink:0}
+.reward-title{font-family:var(--font-head);font-size:0.88rem;font-weight:700;color:#f5a623;margin-bottom:0.15rem}
+.reward-desc{font-size:0.78rem;color:var(--muted)}
+
 @media(max-width:768px){
   .sidebar{position:fixed;left:-240px;top:0;bottom:0;width:240px;transition:left 0.3s ease;z-index:100}
   .sidebar.open{left:0}
-  .mobile-menu-btn{display:flex}
-  .main{margin-left:0;padding:1rem;padding-top:4rem}
-  .stats-row{grid-template-columns:repeat(2,1fr);gap:0.75rem}
-  .topbar{flex-direction:column;align-items:flex-start;gap:0.5rem}
+  .main{margin-left:0;padding:1rem}
+  .mobile-menu-btn{display:flex;position:fixed;top:1rem;left:1rem;z-index:200;background:var(--lime);color:var(--black);border:none;border-radius:10px;width:40px;height:40px;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer}
+  .main-grid{grid-template-columns:1fr}
+  .challenge-title{font-size:1.4rem}
+  .days-row{gap:0.35rem}
+  .day-circle{width:34px;height:34px;font-size:0.65rem}
+  .main>.main-grid{margin-top:3.5rem}
+  .challenge-hero{margin-top:3.5rem}
 }
 </style>
 </head>
 <body>
-
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
-<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
-<div class="sidebar" id="sidebar">
-  <a class="logo" href="dashboard.html" style="text-decoration:none;color:inherit;">Fit<span>Mind</span> AI</a>
+<div class="sidebar">
+  <a class="logo" href="dashboard.html">Fit<span>Mind</span> AI</a>
   <nav class="nav">
-    <a class="nav-item" href="dashboard.html"><span class="icon">🏠</span> Ana Sayfa</a>
-<a class="nav-item" href="dashboard.html"><span class="icon">🤖</span> AI Koç</a>
-<a class="nav-item" href="dashboard.html"><span class="icon">🏋️</span> Antrenmanlar</a>
-<a class="nav-item" href="myplan.html"><span class="icon">📋</span> Benim Planım</a>
-<a class="nav-item" href="nutrition.html"><span class="icon">🥗</span> Beslenme</a>
-<a class="nav-item" href="progress.html"><span class="icon">📈</span> İlerleme</a>
-<a class="nav-item active" href="community.html"><span class="icon">👥</span> Topluluk</a>
+    <a href="dashboard.html" class="nav-item"><span class="icon">🏠</span> Ana Sayfa</a>
+    <a href="dashboard.html" class="nav-item"><span class="icon">🤖</span> AI Koç</a>
+    <a href="dashboard.html" class="nav-item"><span class="icon">🏋️</span> Antrenmanlar</a>
+    <a href="myplan.html" class="nav-item"><span class="icon">📋</span> Benim Planım</a>
+    <a href="nutrition.html" class="nav-item"><span class="icon">🥗</span> Beslenme</a>
+    <a href="progress.html" class="nav-item"><span class="icon">📈</span> İlerleme</a>
+    <a href="community.html" class="nav-item active"><span class="icon">👥</span> Topluluk</a>
   </nav>
   <div class="sidebar-bottom">
     <div class="user-info">
-      <div class="avatar-sm" id="avatarInitial">?</div>
-      <a class="user-name" id="userName" href="profile.html" style="text-decoration:none;color:inherit;cursor:pointer">Yükleniyor...</a>
-      <button class="signout-btn" onclick="signOut()" title="Çıkış Yap">⏻</button>
+      <div class="avatar" id="avatarInitial">?</div>
+      <a class="user-name" id="userName" href="profile.html">Yükleniyor...</a>
+      <button class="signout-btn" onclick="signOut()">⏻</button>
     </div>
   </div>
 </div>
 
 <div class="main">
-  <div class="topbar">
+
+  <!-- CHALLENGE HERO -->
+  <div class="challenge-hero">
+    <div class="challenge-week" id="challengeWeek">Bu Hafta · Hafta 1</div>
+    <div class="challenge-title" id="challengeTitle">5 Günlük Güç Haftası 💪</div>
+    <div class="challenge-desc" id="challengeDesc">Bu hafta 5 gün antrenman yaparak vücudunu sınırlarını zorla. Her tamamlanan gün seni zirveye bir adım daha yaklaştırıyor.</div>
+    <div class="challenge-meta">
+      <span class="challenge-pill lime" id="challengeTarget">🎯 Hedef: 5 gün</span>
+      <span class="challenge-pill" id="challengeParticipants">👥 2.847 katılımcı</span>
+      <span class="challenge-pill" id="challengeTimeLeft">⏳ 4 gün kaldı</span>
+    </div>
+
+    <!-- KİŞİSEL İLERLEME -->
+    <div class="my-progress">
+      <div class="mp-head">
+        <span class="mp-title">Senin İlerlemen</span>
+        <span class="mp-count" id="myDayCount">0 / 5 gün</span>
+      </div>
+      <div class="days-row" id="daysRow"></div>
+      <div class="prog-bar-wrap">
+        <div class="prog-bar-fill" id="progBarFill" style="width:0%"></div>
+      </div>
+      <button class="complete-btn" id="completeBtn" onclick="markToday()">✓ Bugünü Tamamla</button>
+    </div>
+  </div>
+
+  <div class="main-grid">
     <div>
-      <div class="page-title">👥 Topluluk</div>
-      <div class="page-sub">Birlikte yarışın, bağlanın ve başarıları kutlayın</div>
-    </div>
-    <div class="badge-live"><span class="badge-dot"></span> 1.247 üye aktif</div>
-  </div>
-
-  <div class="stats-row">
-    <div class="stat-card">
-      <div class="stat-label">Sıralamanız</div>
-      <div class="stat-value lime" id="userRank">#—</div>
-      <div class="stat-sub">Bu hafta</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Puanlar</div>
-      <div class="stat-value" id="userPoints">0</div>
-      <div class="stat-sub">Toplam kazanılan</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Mücadeleler</div>
-      <div class="stat-value lime" id="challengeCount">3</div>
-      <div class="stat-sub">Bu hafta aktif</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Topluluk</div>
-      <div class="stat-value">50K+</div>
-      <div class="stat-sub">Global üye</div>
-    </div>
-  </div>
-
-  <div class="community-grid">
-    <div style="display:flex;flex-direction:column;gap:1.5rem">
-
-      <div class="card">
-        <div class="card-title"><span class="dot"></span> Haftalık Mücadele</div>
-        <div class="challenge-hero">
-          <div class="challenge-week">Hafta 15 · Nisan 2026</div>
-          <div class="challenge-name">🔥 7 Günlük Tutarlılık Serisi</div>
-          <div class="challenge-desc">7 gün boyunca her gün en az bir antrenman tamamlayın. Serinizi saymak için aktivitenizi günlük olarak kaydedin. İlk 3 kazanan FitMind Pro'yu ücretsiz kazanır!</div>
-          <div class="challenge-meta">
-            <div class="meta-item">👥 <strong>2.341</strong> katıldı</div>
-            <div class="meta-item">⏱️ <strong id="daysLeft">—</strong> gün kaldı</div>
-            <div class="meta-item">🏆 <strong>İlk 3 Pro kazanır</strong></div>
-          </div>
-          <div class="challenge-progress">
-            <div class="prog-header"><span>Topluluk ilerlemesi</span><span id="commPct">%68</span></div>
-            <div class="prog-bar"><div class="prog-fill" id="commFill" style="width:68%"></div></div>
-          </div>
-          <button class="join-btn" id="joinBtn" onclick="toggleJoin()">Mücadeleye Katıl 🚀</button>
-        </div>
-
-        <div style="font-family:var(--font-head);font-size:0.8rem;font-weight:700;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.5rem">Daha Fazla Mücadele</div>
-        <div class="mini-challenges">
-          <div class="mini-card">
-            <div class="mini-icon">💧</div>
-            <div class="mini-info">
-              <div class="mini-name">Sıvı Kahramanı</div>
-              <div class="mini-meta">Günde 8 bardak su · 3 gün kaldı · 891 katıldı</div>
-            </div>
-            <div class="mini-badge easy">Kolay</div>
-          </div>
-          <div class="mini-card">
-            <div class="mini-icon">🧘</div>
-            <div class="mini-info">
-              <div class="mini-name">Sabah Hareketliliği</div>
-              <div class="mini-meta">Her sabah 10 dk germe · 5 gün kaldı · 1.204 katıldı</div>
-            </div>
-            <div class="mini-badge medium">Orta</div>
-          </div>
-          <div class="mini-card">
-            <div class="mini-icon">💪</div>
-            <div class="mini-info">
-              <div class="mini-name">100 Şınav Günü</div>
-              <div class="mini-meta">Bir günde 100 şınav tamamla · 2 gün kaldı · 567 katıldı</div>
-            </div>
-            <div class="mini-badge hard">Zor</div>
-          </div>
-        </div>
+      <!-- LIDERBOARD -->
+      <div class="panel">
+        <div class="panel-title">🏆 Bu Haftanın Liderleri</div>
+        <div id="leaderboard"></div>
       </div>
 
-      <div class="card">
-        <div class="card-title"><span class="dot"></span> Aktivite Akışı</div>
-        <div class="feed" id="feed">
-          <div class="feed-item">
-            <div class="feed-top">
-              <div class="feed-avatar" style="background:linear-gradient(135deg,#c8f542,#4af)">SL</div>
-              <div class="feed-name">Sarah L.</div>
-              <div class="feed-time">2 dk önce</div>
-            </div>
-            <div class="feed-text"><span class="feed-emoji">🏆</span>Tutarlılık mücadelesinin 7. gününü tamamladım! Seri kilitlendı 🔥</div>
-          </div>
-          <div class="feed-item">
-            <div class="feed-top">
-              <div class="feed-avatar" style="background:linear-gradient(135deg,#f87171,#fbbf24)">MK</div>
-              <div class="feed-name">Marcus K.</div>
-              <div class="feed-time">15 dk önce</div>
-            </div>
-            <div class="feed-text"><span class="feed-emoji">💪</span>Bugün bench press'te yeni rekor — 100kg! FitMind AI'nın progresif aşırı yüklenme planı için teşekkürler.</div>
-          </div>
-          <div class="feed-item">
-            <div class="feed-top">
-              <div class="feed-avatar" style="background:linear-gradient(135deg,#a78bfa,#60a5fa)">JR</div>
-              <div class="feed-name">Jamie R.</div>
-              <div class="feed-time">32 dk önce</div>
-            </div>
-            <div class="feed-text"><span class="feed-emoji">🥗</span>Bu hafta 5 gün temiz beslenme kaydettim. AI beslenme takibi çok kolay yapıyor!</div>
-          </div>
-          <div class="feed-item">
-            <div class="feed-top">
-              <div class="feed-avatar" style="background:linear-gradient(135deg,#34d399,#06b6d4)">AK</div>
-              <div class="feed-name">Ayşe K.</div>
-              <div class="feed-time">1 saat önce</div>
-            </div>
-            <div class="feed-text"><span class="feed-emoji">⚖️</span>Bu ay 3kg verdim! Kişiselleştirilmiş plan işe yarıyor. Herkese devam edin! 💚</div>
-          </div>
-          <div class="feed-item">
-            <div class="feed-top">
-              <div class="feed-avatar" style="background:linear-gradient(135deg,#fbbf24,#f87171)">TR</div>
-              <div class="feed-name">Tom R.</div>
-              <div class="feed-time">2 saat önce</div>
-            </div>
-            <div class="feed-text"><span class="feed-emoji">🧘</span>Sabah Hareketliliği mücadelesini 3 gün üst üste tamamladım. Sırtım inanılmaz hissettiriyor.</div>
-          </div>
-        </div>
+      <!-- GECMIS CHALLENGELAR -->
+      <div class="panel">
+        <div class="panel-title">📅 Geçmiş Meydan Okumalar</div>
+        <div id="pastChallenges"></div>
       </div>
     </div>
 
-    <div class="right-col">
-      <div class="card">
-        <div class="card-title">🏆 Haftalık Sıralama</div>
-        <div class="leaderboard" id="leaderboard">
-          <div class="lb-item">
-            <div class="lb-rank gold">1</div>
-            <div class="lb-avatar" style="background:linear-gradient(135deg,#fbbf24,#f59e0b)">SL</div>
-            <div class="lb-info"><div class="lb-name">Sarah L.</div><div class="lb-meta">7 antrenman · 5 günlük seri</div></div>
-            <div class="lb-score">2.840</div>
-          </div>
-          <div class="lb-item">
-            <div class="lb-rank silver">2</div>
-            <div class="lb-avatar" style="background:linear-gradient(135deg,#94a3b8,#64748b)">MK</div>
-            <div class="lb-info"><div class="lb-name">Marcus K.</div><div class="lb-meta">6 antrenman · 4 günlük seri</div></div>
-            <div class="lb-score">2.510</div>
-          </div>
-          <div class="lb-item">
-            <div class="lb-rank bronze">3</div>
-            <div class="lb-avatar" style="background:linear-gradient(135deg,#cd7c3f,#a16207)">JR</div>
-            <div class="lb-info"><div class="lb-name">Jamie R.</div><div class="lb-meta">6 antrenman · 3 günlük seri</div></div>
-            <div class="lb-score">2.290</div>
-          </div>
-          <div class="lb-item">
-            <div class="lb-rank">4</div>
-            <div class="lb-avatar" style="background:linear-gradient(135deg,#34d399,#06b6d4)">AK</div>
-            <div class="lb-info"><div class="lb-name">Ayşe K.</div><div class="lb-meta">5 antrenman · 3 günlük seri</div></div>
-            <div class="lb-score">1.980</div>
-          </div>
-          <div class="lb-item">
-            <div class="lb-rank">5</div>
-            <div class="lb-avatar" style="background:linear-gradient(135deg,#a78bfa,#60a5fa)">TR</div>
-            <div class="lb-info"><div class="lb-name">Tom R.</div><div class="lb-meta">5 antrenman · 2 günlük seri</div></div>
-            <div class="lb-score">1.750</div>
-          </div>
-          <div style="border-top:1px solid #ffffff0f;margin:0.5rem 0"></div>
-          <div class="lb-item me" id="myLbRow">
-            <div class="lb-rank lime" id="myRankNum">—</div>
-            <div class="lb-avatar" id="myLbAvatar" style="background:linear-gradient(135deg,var(--lime),#4af)">?</div>
-            <div class="lb-info"><div class="lb-name" id="myLbName">Siz</div><div class="lb-meta">Puan kazanmak için mücadelelere katılın</div></div>
-            <div class="lb-score" id="myLbScore">0</div>
-          </div>
+    <div>
+      <!-- ODULLER -->
+      <div class="panel">
+        <div class="panel-title">🎁 Bu Haftanın Ödülleri</div>
+        <div class="reward-card">
+          <div class="reward-icon">🥇</div>
+          <div><div class="reward-title">1. Olan Kazanır</div><div class="reward-desc">1 aylık Pro üyelik hediyesi</div></div>
+        </div>
+        <div class="reward-card" style="border-color:#ffffff15;background:#ffffff05">
+          <div class="reward-icon">🏅</div>
+          <div><div class="reward-title" style="color:var(--white)">İlk 10</div><div class="reward-desc">Özel profil rozeti</div></div>
+        </div>
+        <div class="reward-card" style="border-color:#ffffff15;background:#ffffff05">
+          <div class="reward-icon">⚡</div>
+          <div><div class="reward-title" style="color:var(--white)">Hedefe Ulaşan Herkes</div><div class="reward-desc">Tamamlama rozeti + unvan</div></div>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-title">🎖️ Rozetleriniz</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;margin-top:0.5rem" id="badgeGrid">
-          <div style="text-align:center;padding:0.75rem;background:#ffffff05;border-radius:12px;border:1px solid #ffffff08">
-            <div style="font-size:1.8rem;margin-bottom:0.3rem">🔥</div>
-            <div style="font-size:0.7rem;color:var(--muted)">İlk Antrenman</div>
-          </div>
-          <div style="text-align:center;padding:0.75rem;background:#ffffff05;border-radius:12px;border:1px solid #ffffff08">
-            <div style="font-size:1.8rem;margin-bottom:0.3rem">⚡</div>
-            <div style="font-size:0.7rem;color:var(--muted)">Erken Kuş</div>
-          </div>
-          <div style="text-align:center;padding:0.75rem;background:#c8f54210;border-radius:12px;border:1px solid #c8f54230">
-            <div style="font-size:1.8rem;margin-bottom:0.3rem">🤖</div>
-            <div style="font-size:0.7rem;color:var(--lime)">AI Kullanıcısı</div>
-          </div>
-          <div style="text-align:center;padding:0.75rem;background:#ffffff03;border-radius:12px;border:1px dashed #ffffff10;opacity:0.4">
-            <div style="font-size:1.8rem;margin-bottom:0.3rem">🏆</div>
-            <div style="font-size:0.7rem;color:var(--muted)">İlk 10</div>
-          </div>
-          <div style="text-align:center;padding:0.75rem;background:#ffffff03;border-radius:12px;border:1px dashed #ffffff10;opacity:0.4">
-            <div style="font-size:1.8rem;margin-bottom:0.3rem">💧</div>
-            <div style="font-size:0.7rem;color:var(--muted)">Sıvı Dostu</div>
-          </div>
-          <div style="text-align:center;padding:0.75rem;background:#ffffff03;border-radius:12px;border:1px dashed #ffffff10;opacity:0.4">
-            <div style="font-size:1.8rem;margin-bottom:0.3rem">💪</div>
-            <div style="font-size:0.7rem;color:var(--muted)">7 Günlük Seri</div>
-          </div>
+      <!-- KURALLAR -->
+      <div class="panel">
+        <div class="panel-title">📋 Nasıl Çalışır?</div>
+        <div class="rule-item">
+          <div class="rule-icon">1️⃣</div>
+          <div><div class="rule-title">Her gün antrenmana git</div><div class="rule-desc">En az 20 dakika aktif antrenman yapman yeterli.</div></div>
         </div>
-        <div style="font-size:0.78rem;color:var(--muted);text-align:center;margin-top:1rem">Daha fazla rozet açmak için mücadeleleri tamamlayın</div>
+        <div class="rule-item">
+          <div class="rule-icon">✅</div>
+          <div><div class="rule-title">Günü işaretle</div><div class="rule-desc">"Bugünü Tamamla" butonuna basarak günü kaydet.</div></div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-icon">🏆</div>
+          <div><div class="rule-title">Liderboard'a çık</div><div class="rule-desc">En çok gün tamamlayan üstlere çıkar, ödülleri kazan.</div></div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-icon">🔄</div>
+          <div><div class="rule-title">Her hafta yeni challenge</div><div class="rule-desc">Pazartesi sıfırlanır, yeni hedef gelir.</div></div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-const SUPABASE_URL = 'https://cypmmayxwbkarvheqoxu.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
-const {createClient} = supabase;
-const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL='https://cypmmayxwbkarvheqoxu.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
+const {createClient}=supabase;
+const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
 
-let joined = false;
+// Her hafta farklı challenge
+const CHALLENGES=[
+  {title:'5 Günlük Güç Haftası 💪',desc:'Bu hafta 5 gün antrenman yaparak vücudunu sınırlarını zorla. Her tamamlanan gün seni zirveye bir adım daha yaklaştırıyor.',target:5,participants:2847},
+  {title:'Dayanıklılık Haftası 🔥',desc:'Haftanın 6 günü en az 30 dakika kardiyovasküler antrenman yap. Kalbini güçlendir, ciğerlerini aç.',target:6,participants:3124},
+  {title:'Tam Hafta Meydan Okuma 🏆',desc:'7 günün 7\'sinde de hareket et. Dinlenme günlerinde bile 15 dakika esneme veya yürüyüş yeterli.',target:7,participants:1893},
+  {title:'Yeni Başlangıç Haftası 🌱',desc:'Haftada 3 gün antrenman yaparak alışkanlık oluştur. Küçük adımlar büyük dönüşümler yaratır.',target:3,participants:4201},
+];
 
-async function init() {
-  const {data:{session}} = await sb.auth.getSession();
-  if (!session) {window.location.href='auth.html';return;}
-  const user = session.user;
-  const name = user.user_metadata?.full_name||user.email.split('@')[0];
-  const initial = name.charAt(0).toUpperCase();
-  document.getElementById('avatarInitial').textContent = initial;
-  document.getElementById('userName').textContent = name;
-  document.getElementById('myLbAvatar').textContent = initial;
-  document.getElementById('myLbName').textContent = name.split(' ')[0]+' (Siz)';
-  const now = new Date();
-  const dayOfWeek = now.getDay();
-  const daysLeft = dayOfWeek===0?0:7-dayOfWeek;
-  document.getElementById('daysLeft').textContent = daysLeft;
-  const pts = Math.floor(Math.random()*800)+100;
-  document.getElementById('userPoints').textContent = pts;
-  document.getElementById('myLbScore').textContent = pts;
-  const rank = Math.floor(Math.random()*200)+20;
-  document.getElementById('userRank').textContent = '#'+rank;
-  document.getElementById('myRankNum').textContent = '#'+rank;
+const PAST_CHALLENGES=[
+  {title:'Omuz ve Sırt Haftası',target:5,winner:'Ahmet K.',winnerDays:5},
+  {title:'Kardiyо Blitz',target:6,winner:'Zeynep A.',winnerDays:6},
+  {title:'Core Güçlendirme',target:5,winner:'Murat S.',winnerDays:5},
+];
+
+// Haftalık liderboard (sabit + kullanıcı)
+const FAKE_LEADERS=[
+  {name:'Ahmet K.',days:5,avatar:'AK',color:'#c8f542'},
+  {name:'Zeynep A.',days:5,avatar:'ZA',color:'#4af'},
+  {name:'Murat S.',days:4,avatar:'MS',color:'#f5a623'},
+  {name:'Elif D.',days:4,avatar:'ED',color:'#a78bfa'},
+  {name:'Can T.',days:3,avatar:'CT',color:'#4ade80'},
+  {name:'Selin B.',days:3,avatar:'SB',color:'#f472b6'},
+  {name:'Emre Y.',days:2,avatar:'EY',color:'#fb923c'},
+  {name:'Ayşe M.',days:2,avatar:'AM',color:'#38bdf8'},
+];
+
+let userName='Sen';
+let userInitial='S';
+let myDays=[];
+
+function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open')}
+function closeSidebar(){document.querySelector('.sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open')}
+
+function getWeekKey(){
+  const d=new Date();
+  const mon=new Date(d);
+  const day=d.getDay();
+  mon.setDate(d.getDate()-(day===0?6:day-1));
+  return 'challenge_'+mon.toISOString().split('T')[0];
 }
 
-function toggleJoin() {
-  joined = !joined;
-  const btn = document.getElementById('joinBtn');
-  if (joined) {
-    btn.textContent = '✅ Katıldınız! Devam edin!';
-    btn.classList.add('joined');
-    const pts = parseInt(document.getElementById('userPoints').textContent)+50;
-    document.getElementById('userPoints').textContent = pts;
-    document.getElementById('myLbScore').textContent = pts;
+function getWeekNumber(){
+  const d=new Date();
+  const start=new Date(d.getFullYear(),0,1);
+  return Math.ceil(((d-start)/86400000+start.getDay()+1)/7);
+}
+
+function getDaysLeft(){
+  const d=new Date();
+  const day=d.getDay();
+  return day===0?0:7-day;
+}
+
+function loadMyDays(){
+  const key=getWeekKey();
+  myDays=JSON.parse(localStorage.getItem(key)||'[]');
+}
+
+function saveMyDays(){
+  localStorage.setItem(getWeekKey(),JSON.stringify(myDays));
+}
+
+function getTodayStr(){
+  return new Date().toISOString().split('T')[0];
+}
+
+function markToday(){
+  const today=getTodayStr();
+  const challenge=getCurrentChallenge();
+  if(myDays.includes(today)){
+    // zaten tamamlanmış
+    return;
+  }
+  myDays.push(today);
+  saveMyDays();
+  renderMyProgress(challenge);
+  renderLeaderboard(challenge);
+}
+
+function getCurrentChallenge(){
+  const week=getWeekNumber();
+  return CHALLENGES[week%CHALLENGES.length];
+}
+
+function renderChallenge(){
+  const ch=getCurrentChallenge();
+  const week=getWeekNumber();
+  document.getElementById('challengeWeek').textContent='Bu Hafta · Hafta '+week;
+  document.getElementById('challengeTitle').textContent=ch.title;
+  document.getElementById('challengeDesc').textContent=ch.desc;
+  document.getElementById('challengeTarget').textContent='🎯 Hedef: '+ch.target+' gün';
+  document.getElementById('challengeParticipants').textContent='👥 '+ch.participants.toLocaleString()+' katılımcı';
+  document.getElementById('challengeTimeLeft').textContent='⏳ '+getDaysLeft()+' gün kaldı';
+}
+
+function renderMyProgress(challenge){
+  const target=challenge.target;
+  const daysRow=document.getElementById('daysRow');
+  const today=getTodayStr();
+
+  // Haftanın günlerini oluştur (Pazartesi'den başla)
+  const weekDays=[];
+  const now=new Date();
+  const dayOfWeek=now.getDay();
+  const monday=new Date(now);
+  monday.setDate(now.getDate()-(dayOfWeek===0?6:dayOfWeek-1));
+  for(let i=0;i<7;i++){
+    const d=new Date(monday);
+    d.setDate(monday.getDate()+i);
+    weekDays.push(d.toISOString().split('T')[0]);
+  }
+
+  const shortNames=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
+  daysRow.innerHTML=weekDays.slice(0,target).map((dateStr,i)=>{
+    const isDone=myDays.includes(dateStr);
+    const isToday=dateStr===today;
+    return `<div class="day-circle ${isDone?'done':isToday?'today':''}" title="${dateStr}">
+      ${isDone?'✓':shortNames[i]}
+    </div>`;
+  }).join('');
+
+  const done=myDays.filter(d=>weekDays.slice(0,target).includes(d)).length;
+  const pct=Math.min(done/target*100,100);
+  document.getElementById('myDayCount').textContent=done+' / '+target+' gün';
+  document.getElementById('progBarFill').style.width=pct+'%';
+
+  const btn=document.getElementById('completeBtn');
+  const todayDone=myDays.includes(today);
+  if(todayDone){
+    btn.textContent='✅ Bugün Tamamlandı!';
+    btn.disabled=true;
+    btn.classList.add('done-state');
   } else {
-    btn.textContent = 'Mücadeleye Katıl 🚀';
-    btn.classList.remove('joined');
+    btn.textContent='✓ Bugünü Tamamla';
+    btn.disabled=false;
+    btn.classList.remove('done-state');
   }
 }
 
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('overlay').classList.toggle('open');
+function renderLeaderboard(challenge){
+  const target=challenge.target;
+  const myDone=myDays.length;
+
+  // Kullanıcıyı listeye ekle
+  let allLeaders=[...FAKE_LEADERS,{name:userName+' (Sen)',days:myDone,avatar:userInitial,color:'#c8f542',isMe:true}];
+  // Sırala
+  allLeaders.sort((a,b)=>b.days-a.days);
+  // İlk 10
+  allLeaders=allLeaders.slice(0,10);
+
+  const rankEmoji=['🥇','🥈','🥉'];
+  const rankClass=['gold','silver','bronze'];
+
+  document.getElementById('leaderboard').innerHTML=allLeaders.map((u,i)=>`
+    <div class="lb-item ${u.isMe?'me':''}">
+      <div class="lb-rank ${rankClass[i]||''}">${rankEmoji[i]||('#'+(i+1))}</div>
+      <div class="lb-avatar" style="background:${u.avatar?u.color:'#ffffff20'}">${u.avatar}</div>
+      <div style="flex:1">
+        <div class="lb-name">${u.name}</div>
+        <div class="lb-days">${u.days} gün tamamladı</div>
+      </div>
+      <div class="lb-score">${Math.round(u.days/target*100)}%</div>
+    </div>`).join('');
 }
 
-async function signOut() {
-  await sb.auth.signOut();
-  window.location.href='index.html';
+function renderPastChallenges(){
+  document.getElementById('pastChallenges').innerHTML=PAST_CHALLENGES.map(ch=>`
+    <div style="display:flex;align-items:center;gap:0.85rem;padding:0.75rem 0;border-bottom:1px solid #ffffff07">
+      <div style="width:36px;height:36px;border-radius:10px;background:#ffffff06;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0">🏁</div>
+      <div style="flex:1">
+        <div style="font-size:0.85rem;font-weight:500">${ch.title}</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:0.1rem">Kazanan: ${ch.winner} · ${ch.winnerDays}/${ch.target} gün</div>
+      </div>
+      <div style="font-size:0.72rem;background:#ffffff08;border-radius:8px;padding:0.2rem 0.5rem;color:var(--muted);font-family:var(--font-head);font-weight:700">Bitti</div>
+    </div>`).join('');
 }
+
+async function init(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){window.location.href='auth.html';return;}
+  const user=session.user;
+  const name=user.user_metadata?.full_name||user.email.split('@')[0];
+  userName=name.split(' ')[0];
+  userInitial=name.charAt(0).toUpperCase();
+  document.getElementById('avatarInitial').textContent=userInitial;
+  document.getElementById('userName').textContent=name;
+
+  loadMyDays();
+  const challenge=getCurrentChallenge();
+  renderChallenge();
+  renderMyProgress(challenge);
+  renderLeaderboard(challenge);
+  renderPastChallenges();
+}
+
+async function signOut(){await sb.auth.signOut();window.location.href='index.html';}
 
 init();
 </script>
