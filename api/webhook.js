@@ -19,17 +19,21 @@ async function getRawBody(req) {
   });
 }
 
-function extractEmail(event) {
-  const d = event.data;
-  return (
-    d?.customer?.email ||
-    d?.billing_details?.email ||
-    d?.address?.email ||
-    d?.items?.[0]?.price?.custom_data?.email ||
-    d?.custom_data?.email ||
-    event.customer_email ||
-    null
-  );
+async function getEmailFromCustomerId(customerId) {
+  if (!customerId) return null;
+  try {
+    const res = await fetch(`https://api.paddle.com/customers/${customerId}`, {
+      headers: {
+        'Authorization': `Bearer ${process.env.PADDLE_API_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    const data = await res.json();
+    return data?.data?.email || null;
+  } catch (e) {
+    console.error('Paddle customer fetch error:', e);
+    return null;
+  }
 }
 
 async function updateProStatus(email, isPro) {
@@ -86,18 +90,13 @@ export default async function handler(req, res) {
   const status = event.data?.status;
   const customerId = event.data?.customer_id || event.data?.customer?.id;
 
-  // Email bul - once direkt, bulamazsa customer_id ile Paddle'dan cek
-  let email = extractEmail(event);
-
-  // Email hala yoksa customer_id'den bul - subscription event'lerinde email olmayabilir
-  // Bu durumda Supabase'de customer_id ile eslestirme yapabiliriz
-  // Ya da subscription'daki billing email'i kullan
-  if (!email && event.data?.billing_details) {
-    email = event.data.billing_details.email;
+  // Email bul - once direkt, bulamazsa Paddle API'den cek
+  let email = event.data?.customer?.email || event.customer_email || null;
+  if (!email && customerId) {
+    email = await getEmailFromCustomerId(customerId);
   }
 
-  console.log('Webhook:', eventType, '| email:', email, '| status:', status, '| customer_id:', customerId);
-  console.log('Full data keys:', Object.keys(event.data || {}));
+  console.log('Webhook:', eventType, '| email:', email, '| status:', status);
 
   try {
     if (eventType === 'subscription.activated' || eventType === 'subscription.created') {
