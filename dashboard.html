@@ -624,6 +624,8 @@ async function init(){
 
   loadWeekProgress();
   renderChatMessages();
+  const _openTab=localStorage.getItem('fm_openTab');
+if(_openTab){localStorage.removeItem('fm_openTab');switchTab(_openTab,document.querySelectorAll('.nav-item')[_openTab==='aicoach'?1:0]);}
   if(localStorage.getItem('fm_newUser')==='1'&&!localStorage.getItem('fm_tourDone')){
     localStorage.removeItem('fm_newUser');
     setTimeout(startTour, 800);
