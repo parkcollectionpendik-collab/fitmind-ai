@@ -19,8 +19,21 @@ async function getRawBody(req) {
   });
 }
 
+function extractEmail(event) {
+  const d = event.data;
+  return (
+    d?.customer?.email ||
+    d?.billing_details?.email ||
+    d?.address?.email ||
+    d?.items?.[0]?.price?.custom_data?.email ||
+    d?.custom_data?.email ||
+    event.customer_email ||
+    null
+  );
+}
+
 async function updateProStatus(email, isPro) {
-  if (!email) return;
+  if (!email) { console.log('Email yok, islem yapilmadi'); return; }
   const { data: profile } = await sb
     .from('profiles').select('id').eq('email', email).maybeSingle();
   if (profile?.id) {
@@ -28,7 +41,7 @@ async function updateProStatus(email, isPro) {
       is_pro: isPro,
       ...(isPro ? { pro_since: new Date().toISOString() } : {})
     }).eq('id', profile.id);
-    console.log(`${email} -> is_pro: ${isPro}`);
+    console.log(`Guncellendi: ${email} -> is_pro: ${isPro}`);
   } else {
     const { data: authData } = await sb.auth.admin.listUsers({ page: 1, perPage: 1000 });
     const user = authData?.users?.find(u => u.email === email);
@@ -38,7 +51,9 @@ async function updateProStatus(email, isPro) {
         is_pro: isPro,
         ...(isPro ? { pro_since: new Date().toISOString() } : {})
       }, { onConflict: 'id' });
-      console.log(`${email} upsert -> is_pro: ${isPro}`);
+      console.log(`Upsert: ${email} -> is_pro: ${isPro}`);
+    } else {
+      console.log(`Kullanici bulunamadi: ${email}`);
     }
   }
 }
@@ -68,17 +83,27 @@ export default async function handler(req, res) {
   }
 
   const eventType = event.event_type || event.notification_type;
-  const email = event.data?.customer?.email || event.customer_email;
   const status = event.data?.status;
+  const customerId = event.data?.customer_id || event.data?.customer?.id;
 
-  console.log('Webhook:', eventType, 'email:', email, 'status:', status);
+  // Email bul - once direkt, bulamazsa customer_id ile Paddle'dan cek
+  let email = extractEmail(event);
+
+  // Email hala yoksa customer_id'den bul - subscription event'lerinde email olmayabilir
+  // Bu durumda Supabase'de customer_id ile eslestirme yapabiliriz
+  // Ya da subscription'daki billing email'i kullan
+  if (!email && event.data?.billing_details) {
+    email = event.data.billing_details.email;
+  }
+
+  console.log('Webhook:', eventType, '| email:', email, '| status:', status, '| customer_id:', customerId);
+  console.log('Full data keys:', Object.keys(event.data || {}));
 
   try {
     if (eventType === 'subscription.activated' || eventType === 'subscription.created') {
       await updateProStatus(email, true);
     }
     else if (eventType === 'subscription.updated') {
-      // status: active/trialing = pro, canceled/paused = not pro
       if (status === 'active' || status === 'trialing') {
         await updateProStatus(email, true);
       } else if (status === 'canceled' || status === 'paused') {
