@@ -284,7 +284,7 @@ async function signUp(){
 }
 
 async function signInGoogle(){
-  await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:'https://fitmindai.ai/dashboard.html'}});
+  await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:'https://fitmindai.ai/auth-callback.html'}});
 }
 
 async function resetPassword(){
