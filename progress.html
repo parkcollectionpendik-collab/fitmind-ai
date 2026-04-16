@@ -13,7 +13,7 @@
 :root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--lime2:#a8d92e;--gray:#111;--muted:#888;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
 body{background:var(--black);color:var(--white);font-family:var(--font-body);min-height:100vh}
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:#0d0d0d;border-right:1px solid #ffffff0f;padding:1.5rem;display:flex;flex-direction:column;z-index:10}
-.logo{font-family:var(--font-head);font-weight:800;font-size:1.1rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid #ffffff0f}
+.logo{font-family:var(--font-head);font-weight:800;font-size:1.1rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid #ffffff0f;text-decoration:none;color:inherit;display:block}
 .logo span{color:var(--lime)}
 .nav{display:flex;flex-direction:column;gap:0.3rem;flex:1}
 .nav-item{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 1rem;border-radius:12px;cursor:pointer;transition:all 0.2s;font-size:0.9rem;color:var(--muted);border:none;background:transparent;width:100%;text-align:left;font-family:var(--font-body);text-decoration:none}
@@ -23,77 +23,178 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .sidebar-bottom{padding-top:1rem;border-top:1px solid #ffffff0f}
 .user-info{display:flex;align-items:center;gap:0.75rem;padding:0.5rem}
 .avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--lime),#4af);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.85rem;color:var(--black);flex-shrink:0}
-.user-name{font-size:0.85rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.signout-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0.25rem;transition:color 0.2s}
+.user-name{font-size:0.85rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-decoration:none;color:inherit}
+.signout-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0.25rem}
 .signout-btn:hover{color:#ff6b6b}
 .main{margin-left:240px;padding:2rem;min-height:100vh}
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
-.page-title{font-family:var(--font-head);font-size:1.5rem;font-weight:800}
-.page-sub{color:var(--muted);font-size:0.9rem;margin-top:0.2rem}
-.pro-banner{display:none;background:linear-gradient(135deg,#0f1a06,#111);border:1px solid #c8f54225;border-radius:16px;padding:1rem 1.5rem;margin-bottom:1.5rem;align-items:center;gap:1rem;flex-wrap:wrap}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
-.stat-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:16px;padding:1.5rem;transition:border-color 0.3s}
-.stat-card:hover{border-color:#c8f54225}
-.stat-label{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;font-weight:700;margin-bottom:0.5rem}
-.stat-value{font-family:var(--font-head);font-size:2rem;font-weight:800;line-height:1}
-.stat-value.lime{color:var(--lime)}
-.stat-change{font-size:0.78rem;margin-top:0.3rem}
-.stat-change.up{color:#4ade80}
-.stat-change.down{color:#ff6b6b}
-.stat-change.neutral{color:var(--muted)}
-.content-grid{display:grid;grid-template-columns:1fr 320px;gap:1.5rem}
-.panel-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
-.card-title{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1rem}
-.log-form{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem}
-.input-group{display:flex;flex-direction:column;gap:0.4rem}
-label{font-size:0.75rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;font-weight:700}
-input[type=number],input[type=date],textarea{background:#ffffff08;border:1.5px solid #ffffff12;border-radius:12px;padding:0.75rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.95rem;outline:none;transition:border-color 0.2s;width:100%}
-input:focus,textarea:focus{border-color:#c8f54250}
-textarea{resize:none;height:70px}
-.log-btn{background:var(--lime);color:var(--black);border:none;border-radius:12px;padding:0.8rem 1.5rem;font-family:var(--font-head);font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.2s;width:100%}
-.log-btn:hover{background:var(--lime2)}
-.chart-wrap{position:relative;height:220px;margin-top:0.5rem}
-.history-list{display:flex;flex-direction:column;gap:0.5rem;margin-top:0.5rem;max-height:300px;overflow-y:auto}
-.history-list::-webkit-scrollbar{width:3px}
-.history-list::-webkit-scrollbar-thumb{background:#ffffff15;border-radius:10px}
-.history-item{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem;background:#ffffff05;border-radius:12px}
-.history-date{font-size:0.82rem;color:var(--muted)}
-.history-weight{font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--lime)}
-.history-measures{font-size:0.75rem;color:var(--muted);margin-top:0.1rem}
-.delete-log{background:transparent;border:none;color:#ffffff15;cursor:pointer;font-size:0.85rem;transition:color 0.2s}
-.delete-log:hover{color:#ff6b6b}
-.empty-state{text-align:center;padding:2rem;color:var(--muted);font-size:0.875rem}
-.empty-state .big{font-size:2.5rem;margin-bottom:0.5rem}
-.badges-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-top:0.5rem}
-.badge-item{background:#ffffff06;border:1px solid #ffffff0a;border-radius:14px;padding:0.8rem;display:flex;align-items:center;gap:0.6rem;transition:all 0.3s}
-.badge-item.earned{background:#c8f54210;border-color:#c8f54225}
-.badge-item.locked{opacity:0.4}
-.badge-emoji{font-size:1.4rem}
-.badge-name{font-family:var(--font-head);font-size:0.78rem;font-weight:700}
-.badge-desc{font-size:0.7rem;color:var(--muted);margin-top:0.1rem}
-.ai-insight{background:#c8f54208;border:1px solid #c8f54218;border-radius:14px;padding:1rem;font-size:0.85rem;color:#ffffffcc;line-height:1.6;display:flex;gap:0.75rem;margin-top:1rem}
-.spin{display:inline-block;width:14px;height:14px;border:2px solid #ffffff15;border-top-color:var(--lime);border-radius:50%;animation:spin 0.8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
 .mobile-menu-btn{display:none}
 .overlay{display:none;position:fixed;inset:0;background:#00000080;z-index:99}
 .overlay.open{display:block}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid #ffffff15;border-top-color:var(--lime);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{from{transform:scale(0.8);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+
+/* HERO DONUSUM */
+.hero-card{background:linear-gradient(135deg,#0d1a05,#0a0a0a);border:1px solid #c8f54225;border-radius:24px;padding:2rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.hero-card::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:var(--lime);opacity:0.05;border-radius:50%;pointer-events:none}
+.transformation{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;margin-bottom:1.25rem}
+.weight-display{text-align:center}
+.weight-label{font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:700;font-family:var(--font-head);margin-bottom:0.2rem}
+.weight-num{font-family:var(--font-head);font-size:2.8rem;font-weight:800;line-height:1}
+.weight-num.start{color:var(--muted)}
+.weight-num.current{color:var(--lime)}
+.weight-num.goal-num{color:#4af}
+.arrow-between{font-size:1.5rem;color:#ffffff30;flex-shrink:0}
+.change-badge{display:inline-flex;align-items:center;gap:0.4rem;padding:0.4rem 1rem;border-radius:100px;font-family:var(--font-head);font-weight:800;font-size:0.9rem}
+.change-badge.down{background:#4ade8020;color:#4ade80;border:1px solid #4ade8030}
+.change-badge.up{background:#ff6b6b20;color:#ff6b6b;border:1px solid #ff6b6b30}
+.change-badge.neutral{background:#ffffff10;color:var(--muted);border:1px solid #ffffff15}
+.goal-progress{margin-top:1rem}
+.goal-bar-wrap{height:8px;background:#ffffff10;border-radius:100px;overflow:hidden;margin:0.5rem 0}
+.goal-bar-fill{height:100%;background:linear-gradient(90deg,var(--lime),#4af);border-radius:100px;transition:width 0.8s ease}
+.goal-labels{display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted)}
+
+/* HAFTALIK OZET */
+.week-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+.week-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:16px;padding:1.25rem;transition:border-color 0.3s}
+.week-card:hover{border-color:#c8f54220}
+.wc-label{font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:700;font-family:var(--font-head);margin-bottom:0.4rem}
+.wc-value{font-family:var(--font-head);font-size:1.6rem;font-weight:800;line-height:1;color:var(--lime)}
+.wc-sub{font-size:0.75rem;color:var(--muted);margin-top:0.25rem}
+
+/* HIZLI KAYIT */
+.quick-log{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
+.ql-main{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap}
+.ql-input-wrap{flex:1;min-width:200px}
+.ql-label{font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:700;font-family:var(--font-head);margin-bottom:0.4rem}
+.ql-input{background:#ffffff08;border:1.5px solid #ffffff12;border-radius:14px;padding:0.85rem 1.1rem;color:var(--white);font-family:var(--font-head);font-size:1.8rem;font-weight:800;outline:none;transition:border-color 0.2s;width:100%;text-align:center}
+.ql-input:focus{border-color:#c8f54250}
+.ql-input::placeholder{color:#ffffff20;font-size:1.4rem}
+.save-btn{background:var(--lime);color:#000;border:none;border-radius:14px;padding:0.85rem 1.8rem;font-family:var(--font-head);font-weight:800;font-size:0.95rem;cursor:pointer;transition:all 0.25s;white-space:nowrap}
+.save-btn:hover{background:var(--lime2);transform:translateY(-1px)}
+.save-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+.detail-toggle{background:transparent;border:1px solid #ffffff15;color:var(--muted);border-radius:100px;padding:0.4rem 1rem;font-family:var(--font-head);font-weight:700;font-size:0.78rem;cursor:pointer;transition:all 0.2s}
+.detail-toggle:hover{border-color:#ffffff30;color:var(--white)}
+.detail-fields{display:none;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-top:0.75rem;animation:fadeUp 0.3s ease}
+.detail-fields.open{display:grid}
+.detail-input{background:#ffffff06;border:1.5px solid #ffffff10;border-radius:12px;padding:0.7rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.9rem;outline:none;transition:border-color 0.2s;width:100%}
+.detail-input:focus{border-color:#c8f54240}
+.detail-input::placeholder{color:#ffffff25}
+.notes-input{background:#ffffff06;border:1.5px solid #ffffff10;border-radius:12px;padding:0.7rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.88rem;outline:none;transition:border-color 0.2s;width:100%;resize:none;height:60px;margin-top:0.5rem;grid-column:span 3}
+.notes-input:focus{border-color:#c8f54240}
+.date-input{background:#ffffff06;border:1.5px solid #ffffff10;border-radius:12px;padding:0.7rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.9rem;outline:none;transition:border-color 0.2s;width:100%}
+
+/* AI YORUM */
+.ai-comment{display:none;background:#c8f54208;border:1px solid #c8f54220;border-radius:14px;padding:1rem 1.2rem;margin-top:0.75rem;display:flex;gap:0.75rem;align-items:flex-start;animation:fadeUp 0.4s ease}
+.ai-comment-text{font-size:0.88rem;color:#ffffffcc;line-height:1.6}
+
+/* ANA GRID */
+.main-grid{display:grid;grid-template-columns:1fr 320px;gap:1.5rem}
+
+/* GRAFIK */
+.chart-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
+.chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem}
+.chart-title{font-family:var(--font-head);font-size:1rem;font-weight:700}
+.chart-trend{display:inline-flex;align-items:center;gap:0.4rem;padding:0.3rem 0.8rem;border-radius:100px;font-family:var(--font-head);font-weight:700;font-size:0.78rem}
+.chart-trend.down{background:#4ade8015;color:#4ade80;border:1px solid #4ade8025}
+.chart-trend.up{background:#ff6b6b15;color:#ff6b6b;border:1px solid #ff6b6b25}
+.chart-trend.neutral{background:#ffffff10;color:var(--muted)}
+.chart-wrap{position:relative;height:200px}
+.chart-filter{display:flex;gap:0.4rem}
+.cf-btn{background:#ffffff08;border:1px solid #ffffff10;color:var(--muted);border-radius:100px;padding:0.25rem 0.7rem;font-family:var(--font-head);font-weight:700;font-size:0.72rem;cursor:pointer;transition:all 0.2s}
+.cf-btn.active{background:#c8f54220;border-color:#c8f54240;color:var(--lime)}
+
+/* VUCUT KOMPOZISYONU */
+.composition-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
+.comp-title{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1rem}
+.comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem}
+.comp-item{background:#ffffff06;border:1px solid #ffffff08;border-radius:14px;padding:1rem;text-align:center}
+.comp-icon{font-size:1.5rem;margin-bottom:0.4rem}
+.comp-value{font-family:var(--font-head);font-size:1.4rem;font-weight:800;color:var(--lime);line-height:1}
+.comp-label{font-size:0.72rem;color:var(--muted);margin-top:0.2rem}
+.comp-note{font-size:0.72rem;color:#ffffff40;text-align:center;margin-top:0.75rem;line-height:1.5}
+
+/* HEDEF */
+.goal-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
+.goal-title{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1rem}
+.goal-input-wrap{display:flex;gap:0.75rem;align-items:center;margin-bottom:1rem}
+.goal-kg-input{flex:1;background:#ffffff08;border:1.5px solid #ffffff12;border-radius:12px;padding:0.75rem 1rem;color:var(--white);font-family:var(--font-head);font-size:1.1rem;font-weight:700;outline:none;transition:border-color 0.2s}
+.goal-kg-input:focus{border-color:#c8f54250}
+.goal-save-btn{background:#ffffff10;color:var(--white);border:1px solid #ffffff20;border-radius:12px;padding:0.75rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s}
+.goal-save-btn:hover{background:#ffffff18}
+.goal-info{font-size:0.82rem;color:var(--muted);line-height:1.6}
+
+/* FOTOĞRAF HATIRLATICI */
+.photo-card{background:linear-gradient(135deg,#0a0f1a,#0d0d0d);border:1px solid #4af25;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
+.photo-title{font-family:var(--font-head);font-size:0.95rem;font-weight:700;margin-bottom:0.4rem;color:#4af}
+.photo-desc{font-size:0.82rem;color:var(--muted);line-height:1.6;margin-bottom:1rem}
+.photo-btn{background:#4af15;color:#4af;border:1px solid #4af25;border-radius:100px;padding:0.55rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer;transition:all 0.2s}
+.photo-btn:hover{background:#4af25}
+.photo-tip{font-size:0.72rem;color:#ffffff30;margin-top:0.75rem;line-height:1.5;font-style:italic}
+
+/* ROZETLER */
+.badges-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
+.badges-title{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:0.4rem}
+.badges-sub{font-size:0.78rem;color:var(--muted);margin-bottom:1rem}
+.badge-item{background:#ffffff05;border:1px solid #ffffff08;border-radius:16px;padding:1rem;display:flex;align-items:center;gap:0.85rem;margin-bottom:0.5rem;transition:all 0.3s}
+.badge-item.earned{background:#c8f54210;border-color:#c8f54230;animation:pop 0.4s ease}
+.badge-item.locked{opacity:0.4}
+.badge-emoji{font-size:1.8rem;flex-shrink:0}
+.badge-info{flex:1}
+.badge-name{font-family:var(--font-head);font-size:0.85rem;font-weight:700;margin-bottom:0.15rem}
+.badge-desc{font-size:0.72rem;color:var(--muted)}
+.badge-check{font-size:1rem;color:var(--lime)}
+.badge-progress-text{font-size:0.68rem;color:var(--lime);font-family:var(--font-head);font-weight:700}
+
+/* OLCUMLER */
+.measures-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
+.measures-title{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1rem}
+.measure-row{display:flex;justify-content:space-between;align-items:center;padding:0.6rem 0;border-bottom:1px solid #ffffff07}
+.measure-row:last-child{border:none}
+.measure-label{font-size:0.85rem;color:var(--muted)}
+.measure-val{font-family:var(--font-head);font-weight:700;font-size:0.95rem}
+.measure-change{font-size:0.72rem;margin-left:0.4rem}
+.measure-change.good{color:#4ade80}
+.measure-change.bad{color:#ff6b6b}
+
+/* GECMIS */
+.history-card{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
+.history-title{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1rem}
+.history-item{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem;background:#ffffff04;border-radius:12px;margin-bottom:0.4rem;border:1px solid #ffffff07;transition:background 0.2s}
+.history-item:hover{background:#ffffff07}
+.history-date{font-size:0.8rem;color:var(--muted)}
+.history-weight{font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--lime)}
+.history-measures{font-size:0.72rem;color:var(--muted);margin-top:0.1rem}
+.history-note{font-size:0.72rem;color:#ffffff40;font-style:italic;margin-top:0.1rem}
+.delete-btn{background:transparent;border:none;color:#ffffff15;cursor:pointer;font-size:0.82rem;transition:color 0.2s;padding:0.2rem 0.4rem}
+.delete-btn:hover{color:#ff6b6b}
+.empty-state{text-align:center;padding:2rem;color:var(--muted)}
+.empty-icon{font-size:2.5rem;margin-bottom:0.5rem}
+
 @media(max-width:768px){
   .sidebar{position:fixed;left:-240px;top:0;bottom:0;width:240px;transition:left 0.3s ease;z-index:100}
   .sidebar.open{left:0}
   .main{margin-left:0;padding:1rem}
   .mobile-menu-btn{display:flex;position:fixed;top:1rem;left:1rem;z-index:200;background:var(--lime);color:var(--black);border:none;border-radius:10px;width:40px;height:40px;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer}
-  .stats-grid{grid-template-columns:1fr 1fr}
-  .content-grid{grid-template-columns:1fr}
+  .week-summary{grid-template-columns:1fr 1fr}
+  .main-grid{grid-template-columns:1fr}
+  .transformation{gap:0.75rem}
+  .weight-num{font-size:2rem}
+  .detail-fields.open{grid-template-columns:1fr 1fr}
+  .notes-input{grid-column:span 2}
   .topbar{margin-top:3.5rem}
-  .log-form{grid-template-columns:1fr}
+  .comp-grid{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
 <body>
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+
 <div class="sidebar">
-  <a class="logo" href="dashboard.html" style="text-decoration:none;color:inherit;">Fit<span>Mind</span> AI</a>
+  <a class="logo" href="dashboard.html">Fit<span>Mind</span> AI</a>
   <nav class="nav">
     <a href="dashboard.html" class="nav-item"><span class="icon">🏠</span> Ana Sayfa</a>
     <a href="dashboard.html" class="nav-item"><span class="icon">🤖</span> AI Koç</a>
@@ -106,97 +207,212 @@ textarea{resize:none;height:70px}
   <div class="sidebar-bottom">
     <div class="user-info">
       <div class="avatar" id="avatarInitial">?</div>
-      <a class="user-name" id="userName" href="profile.html" style="text-decoration:none;color:inherit;cursor:pointer">Yükleniyor...</a>
+      <a class="user-name" id="userName" href="profile.html">Yükleniyor...</a>
       <button class="signout-btn" onclick="signOut()">⏻</button>
     </div>
   </div>
 </div>
+
 <div class="main">
-  <div class="topbar">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem">
     <div>
-      <div class="page-title">📈 İlerleme Takibi</div>
-      <div class="page-sub">Dönüşümünüzü zaman içinde takip edin</div>
+      <div style="font-family:var(--font-head);font-size:1.5rem;font-weight:800">📈 İlerleme Takibi</div>
+      <div style="color:var(--muted);font-size:0.88rem;margin-top:0.2rem">Dönüşümünü zaman içinde takip et</div>
     </div>
+    <div id="streakBadge" style="display:none;background:#c8f54215;border:1px solid #c8f54230;border-radius:100px;padding:0.4rem 1rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;color:var(--lime)"></div>
   </div>
 
-  <!-- PRO BANNER -->
-  <div class="pro-banner" id="proBanner">
-    <div style="font-size:1.5rem">⚡</div>
-    <div style="flex:1">
-      <div style="font-family:var(--font-head);font-size:0.9rem;font-weight:700;margin-bottom:0.2rem">Pro ile Daha Fazlası</div>
-      <div style="font-size:0.8rem;color:var(--muted)">Sınırsız ilerleme kaydı, vücut ölçüm grafikleri ve AI analizi Pro üyelere özel.</div>
-    </div>
-    <button onclick="openCheckout()" style="background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.55rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer;white-space:nowrap">Pro'ya Geç → $19/ay</button>
-  </div>
-
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-label">Mevcut Kilo</div>
-      <div class="stat-value lime" id="currentWeight">—</div>
-      <div class="stat-change neutral" id="weightChange">Henüz veri yok</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Toplam Değişim</div>
-      <div class="stat-value" id="totalChange">—</div>
-      <div class="stat-change neutral" id="totalChangeLabel">Başlangıçtan bu yana</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Kayıt Sayısı</div>
-      <div class="stat-value lime" id="logCount">0</div>
-      <div class="stat-change neutral">Toplam giriş</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Trend</div>
-      <div class="stat-value" id="trendVal">—</div>
-      <div class="stat-change neutral" id="trendLabel">Haftalık ortalama</div>
-    </div>
-  </div>
-
-  <div class="content-grid">
-    <div>
-      <div class="panel-card">
-        <div class="card-title">📝 Bugünkü Ölçümleri Kaydet</div>
-        <div class="log-form">
-          <div class="input-group"><label>Tarih</label><input type="date" id="logDate"></div>
-          <div class="input-group"><label>Kilo (kg)</label><input type="number" id="logWeight" placeholder="75.5" step="0.1"></div>
-          <div class="input-group"><label>Göğüs (cm)</label><input type="number" id="logChest" placeholder="95" step="0.5"></div>
-          <div class="input-group"><label>Bel (cm)</label><input type="number" id="logWaist" placeholder="80" step="0.5"></div>
-          <div class="input-group"><label>Kalça (cm)</label><input type="number" id="logHips" placeholder="95" step="0.5"></div>
-          <div class="input-group"><label>Notlar</label><textarea id="logNotesText" placeholder="Nasıl hissediyorsunuz? Gözlemleriniz..."></textarea></div>
-        </div>
-        <button class="log-btn" onclick="saveLog()" id="saveBtn">İlerlemeyi Kaydet</button>
-        <div class="ai-insight" id="aiInsight" style="display:none">
-          <span>🤖</span><span id="aiInsightText"></span>
-        </div>
+  <!-- HERO DONUSUM -->
+  <div class="hero-card">
+    <div class="transformation">
+      <div class="weight-display">
+        <div class="weight-label">Başlangıç</div>
+        <div class="weight-num start" id="startWeight">—</div>
+        <div style="font-size:0.7rem;color:var(--muted);margin-top:0.15rem">kg</div>
       </div>
-      <div class="panel-card">
-        <div class="card-title">⚖️ Kilo Grafiği</div>
+      <div class="arrow-between">→</div>
+      <div class="weight-display">
+        <div class="weight-label">Şu An</div>
+        <div class="weight-num current" id="currentWeight">—</div>
+        <div style="font-size:0.7rem;color:var(--muted);margin-top:0.15rem">kg</div>
+      </div>
+      <div class="arrow-between">→</div>
+      <div class="weight-display">
+        <div class="weight-label">Hedef</div>
+        <div class="weight-num goal-num" id="goalWeightDisplay">—</div>
+        <div style="font-size:0.7rem;color:var(--muted);margin-top:0.15rem">kg</div>
+      </div>
+      <div style="flex:1;min-width:200px">
+        <div id="changeBadge" class="change-badge neutral">Henüz veri yok</div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:0.5rem" id="changeDesc"></div>
+      </div>
+    </div>
+    <div class="goal-progress" id="goalProgressWrap" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.3rem">
+        <span style="font-size:0.78rem;color:var(--muted)" id="goalProgressLabel">Hedefe ilerleme</span>
+        <span style="font-family:var(--font-head);font-weight:700;font-size:0.82rem;color:var(--lime)" id="goalProgressPct">0%</span>
+      </div>
+      <div class="goal-bar-wrap">
+        <div class="goal-bar-fill" id="goalBarFill" style="width:0%"></div>
+      </div>
+      <div class="goal-labels">
+        <span id="goalLabelStart">—</span>
+        <span id="goalLabelEnd">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HAFTALIK OZET -->
+  <div class="week-summary">
+    <div class="week-card">
+      <div class="wc-label">Bu Hafta</div>
+      <div class="wc-value" id="weekLogs">0</div>
+      <div class="wc-sub">kayıt yapıldı</div>
+    </div>
+    <div class="week-card">
+      <div class="wc-label">Haftalık Değişim</div>
+      <div class="wc-value" id="weekChange" style="color:var(--white)">—</div>
+      <div class="wc-sub">geçen haftaya göre</div>
+    </div>
+    <div class="week-card">
+      <div class="wc-label">Toplam Kayıt</div>
+      <div class="wc-value" id="totalLogs">0</div>
+      <div class="wc-sub">gün takip edildi</div>
+    </div>
+    <div class="week-card">
+      <div class="wc-label">Aylık Trend</div>
+      <div class="wc-value" id="monthTrend" style="color:var(--white)">—</div>
+      <div class="wc-sub">kg/ay ortalama</div>
+    </div>
+  </div>
+
+  <!-- HIZLI KAYIT -->
+  <div class="quick-log">
+    <div style="font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem">
+      <span>⚡ Hızlı Kayıt</span>
+      <button class="detail-toggle" onclick="toggleDetails()">+ Detay Ekle</button>
+    </div>
+    <div class="ql-main">
+      <div style="flex-shrink:0">
+        <input type="date" class="date-input" id="logDate" style="font-size:0.85rem;padding:0.6rem 0.85rem">
+      </div>
+      <div class="ql-input-wrap">
+        <div class="ql-label">Bugünkü Kilonuz (kg)</div>
+        <input type="number" class="ql-input" id="logWeight" placeholder="75.5" step="0.1">
+      </div>
+      <button class="save-btn" onclick="saveLog()" id="saveBtn">Kaydet ✓</button>
+    </div>
+    <div class="detail-fields" id="detailFields">
+      <div>
+        <div style="font-size:0.68rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.4rem;font-family:var(--font-head)">Göğüs (cm)</div>
+        <input type="number" class="detail-input" id="logChest" placeholder="95" step="0.5">
+      </div>
+      <div>
+        <div style="font-size:0.68rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.4rem;font-family:var(--font-head)">Bel (cm)</div>
+        <input type="number" class="detail-input" id="logWaist" placeholder="80" step="0.5">
+      </div>
+      <div>
+        <div style="font-size:0.68rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.4rem;font-family:var(--font-head)">Kalça (cm)</div>
+        <input type="number" class="detail-input" id="logHips" placeholder="95" step="0.5">
+      </div>
+      <textarea class="notes-input" id="logNotes" placeholder="Notlar — nasıl hissediyorsunuz?"></textarea>
+    </div>
+    <div class="ai-comment" id="aiComment" style="display:none">
+      <span style="font-size:1.2rem;flex-shrink:0">🤖</span>
+      <span class="ai-comment-text" id="aiCommentText"></span>
+    </div>
+  </div>
+
+  <div class="main-grid">
+    <div>
+      <!-- GRAFIK -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <div class="chart-title">⚖️ Kilo Grafiği</div>
+          <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap">
+            <span class="chart-trend neutral" id="chartTrend">—</span>
+            <div class="chart-filter">
+              <button class="cf-btn active" onclick="filterChart(7,this)">7G</button>
+              <button class="cf-btn" onclick="filterChart(30,this)">30G</button>
+              <button class="cf-btn" onclick="filterChart(90,this)">3A</button>
+              <button class="cf-btn" onclick="filterChart(999,this)">Tümü</button>
+            </div>
+          </div>
+        </div>
         <div class="chart-wrap"><canvas id="weightChart"></canvas></div>
       </div>
-      <div class="panel-card">
-        <div class="card-title">🗓️ Kayıt Geçmişi</div>
-        <div class="history-list" id="historyList">
-          <div class="empty-state"><div class="big">📊</div><div>Henüz kayıt yok. Bugün takibe başlayın!</div></div>
+
+      <!-- VUCUT KOMPOZISYONU -->
+      <div class="composition-card">
+        <div class="comp-title">🧬 Vücut Kompozisyonu Tahmini</div>
+        <div class="comp-grid" id="compGrid">
+          <div class="comp-item">
+            <div class="comp-icon">🔥</div>
+            <div class="comp-value" id="bmiVal">—</div>
+            <div class="comp-label">BMI</div>
+          </div>
+          <div class="comp-item">
+            <div class="comp-icon">💪</div>
+            <div class="comp-value" id="fatVal">—</div>
+            <div class="comp-label">Tahmini Yağ %</div>
+          </div>
+          <div class="comp-item">
+            <div class="comp-icon">⚡</div>
+            <div class="comp-value" id="bmrVal">—</div>
+            <div class="comp-label">Günlük Kalori</div>
+          </div>
+          <div class="comp-item">
+            <div class="comp-icon">🎯</div>
+            <div class="comp-value" id="idealVal">—</div>
+            <div class="comp-label">İdeal Kilo Aralığı</div>
+          </div>
+        </div>
+        <div class="comp-note" id="compNote">Kilo ve boy bilgisi gereklidir. Profil sayfasından güncelleyebilirsiniz.</div>
+      </div>
+
+      <!-- GECMIS -->
+      <div class="history-card">
+        <div class="history-title">🗓️ Kayıt Geçmişi</div>
+        <div id="historyList">
+          <div class="empty-state"><div class="empty-icon">📊</div><div>Henüz kayıt yok. Yukarıdan başlayın!</div></div>
         </div>
       </div>
     </div>
+
     <div>
-      <div class="panel-card">
-        <div class="card-title">🏆 Başarılar</div>
-        <div class="badges-grid" id="badgesGrid">
-          <div class="badge-item locked" id="badge-first"><div class="badge-emoji">🌱</div><div><div class="badge-name">İlk Kayıt</div><div class="badge-desc">İlk girişini yap</div></div></div>
-          <div class="badge-item locked" id="badge-week"><div class="badge-emoji">📅</div><div><div class="badge-name">Hafta Savaşçısı</div><div class="badge-desc">7 gün kayıt</div></div></div>
-          <div class="badge-item locked" id="badge-loss"><div class="badge-emoji">🔥</div><div><div class="badge-name">Yağ Yakıcı</div><div class="badge-desc">2kg+ verdi</div></div></div>
-          <div class="badge-item locked" id="badge-streak"><div class="badge-emoji">⚡</div><div><div class="badge-name">Tutarlı</div><div class="badge-desc">5 ardışık kayıt</div></div></div>
-          <div class="badge-item locked" id="badge-month"><div class="badge-emoji">🌟</div><div><div class="badge-name">Ay Ustası</div><div class="badge-desc">30 gün kayıt</div></div></div>
-          <div class="badge-item locked" id="badge-goal"><div class="badge-emoji">🎯</div><div><div class="badge-name">Hedef Avcısı</div><div class="badge-desc">Hedef kiloya ulaştı</div></div></div>
+      <!-- HEDEF -->
+      <div class="goal-card">
+        <div class="goal-title">🎯 Hedef Kilo Belirle</div>
+        <div class="goal-input-wrap">
+          <input type="number" class="goal-kg-input" id="goalWeightInput" placeholder="85" step="0.5">
+          <button class="goal-save-btn" onclick="saveGoal()">Kaydet</button>
+        </div>
+        <div class="goal-info" id="goalInfo">Hedef kilonuzu girerek ilerlemenizi takip edin.</div>
+      </div>
+
+      <!-- FOTOĞRAF HATIRLATICI -->
+      <div class="photo-card">
+        <div class="photo-title">📸 Haftalık İlerleme Fotoğrafı</div>
+        <div class="photo-desc">Görsel dönüşümünü kaydet. Haftada bir ön, yan ve arka fotoğraf çek — motivasyonun en güçlü kaynağı.</div>
+        <button class="photo-btn" onclick="showPhotoTip()">📷 Nasıl Çekilir?</button>
+        <div class="photo-tip" id="photoTip" style="display:none">
+          💡 Sabah aç karnına, aynı ışıkta, aynı pozisyonda çek. Telefonu sabit tut. Haftalar geçince farkı net görürsün.
         </div>
       </div>
-      <div class="panel-card">
-        <div class="card-title">📏 Vücut Ölçüleri</div>
-        <div style="margin-top:0.5rem" id="measuresList">
-          <div style="color:var(--muted);font-size:0.875rem;text-align:center;padding:1rem">Ölçümleri görmek için kayıt ekleyin</div>
+
+      <!-- VÜCUT ÖLÇÜLERI -->
+      <div class="measures-card">
+        <div class="measures-title">📏 Vücut Ölçüleri</div>
+        <div id="measuresList">
+          <div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:1rem">Ölçüm eklemek için "Detay Ekle" butonuna bas</div>
         </div>
+      </div>
+
+      <!-- ROZETLER -->
+      <div class="badges-card">
+        <div class="badges-title">🏆 Başarılar</div>
+        <div class="badges-sub" id="badgesSub">0/6 rozet kazanıldı</div>
+        <div id="badgesList"></div>
       </div>
     </div>
   </div>
@@ -209,85 +425,178 @@ const {createClient}=supabase;
 const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
 Paddle.Initialize({token:'live_eefc76e39bd2263417b9b9ff52b'});
 
-let logs=[],chart=null,userProfile=null,currentUserId=null;
+let logs=[],chart=null,userProfile=null,currentUserId=null,chartDays=7;
 
 function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open')}
 function closeSidebar(){document.querySelector('.sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open')}
+function openCheckout(){Paddle.Checkout.open({items:[{priceId:'pri_01knxscbw8bwh1rrg8byx2cgf0',quantity:1}],successUrl:'https://fitmindai.ai/dashboard.html'});}
 
-function openCheckout(){
-  Paddle.Checkout.open({items:[{priceId:'pri_01knxscbw8bwh1rrg8byx2cgf0',quantity:1}],successUrl:'https://fitmindai.ai/dashboard.html'});
+function toggleDetails(){
+  const f=document.getElementById('detailFields');
+  const btn=document.querySelector('.detail-toggle');
+  f.classList.toggle('open');
+  btn.textContent=f.classList.contains('open')?'− Detayı Gizle':'+ Detay Ekle';
+}
+
+function showPhotoTip(){
+  const tip=document.getElementById('photoTip');
+  tip.style.display=tip.style.display==='none'?'block':'none';
+}
+
+function filterChart(days,btn){
+  chartDays=days;
+  document.querySelectorAll('.cf-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  updateChart();
 }
 
 async function init(){
   const {data:{session}}=await sb.auth.getSession();
   if(!session){window.location.href='auth.html';return;}
-  const user=session.user;
-  currentUserId=user.id;
-  const name=user.user_metadata?.full_name||user.email.split('@')[0];
+  currentUserId=session.user.id;
+  const name=session.user.user_metadata?.full_name||session.user.email.split('@')[0];
   document.getElementById('avatarInitial').textContent=name.charAt(0).toUpperCase();
   document.getElementById('userName').textContent=name;
   document.getElementById('logDate').value=new Date().toISOString().split('T')[0];
 
-  const {data:profile}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
+  const {data:profile}=await sb.from('profiles').select('*').eq('id',currentUserId).maybeSingle();
   userProfile=profile;
 
-  // Pro değilse banner göster
-  if(!profile?.is_pro){
-    document.getElementById('proBanner').style.display='flex';
+  // Hedef kiloyu yukle
+  const savedGoal=localStorage.getItem('fm_goalWeight_'+currentUserId);
+  if(savedGoal){
+    document.getElementById('goalWeightInput').value=savedGoal;
+    document.getElementById('goalWeightDisplay').textContent=savedGoal;
   }
 
   await loadLogs();
   initChart();
+  calcComposition();
 }
 
 async function loadLogs(){
   const {data}=await sb.from('progress_logs').select('*').eq('user_id',currentUserId).order('log_date',{ascending:true});
   logs=data||[];
-  renderStats();
+  renderHero();
+  renderWeekSummary();
   renderHistory();
   updateChart();
   updateBadges();
-  updateMeasurements();
+  updateMeasures();
+  updateStreak();
 }
 
-function renderStats(){
+function renderHero(){
   if(logs.length===0)return;
   const weightLogs=logs.filter(l=>l.weight);
   if(weightLogs.length===0)return;
-  const latest=weightLogs[weightLogs.length-1];
+
   const first=weightLogs[0];
-  document.getElementById('currentWeight').textContent=latest.weight+' kg';
-  document.getElementById('logCount').textContent=logs.length;
+  const latest=weightLogs[weightLogs.length-1];
   const diff=(latest.weight-first.weight).toFixed(1);
-  const diffEl=document.getElementById('totalChange');
-  diffEl.textContent=(diff>0?'+':'')+diff+' kg';
-  diffEl.className='stat-value '+(diff<0?'lime':diff>0?'':'');
-  document.getElementById('totalChangeLabel').textContent=new Date(first.log_date+'T12:00:00').toLocaleDateString('tr-TR',{month:'short',day:'numeric'})+' tarihinden beri';
-  if(weightLogs.length>=2){
-    const days=(new Date(latest.log_date)-new Date(first.log_date))/(1000*60*60*24);
-    const weeks=days/7||1;
-    const perWeek=((latest.weight-first.weight)/weeks).toFixed(2);
-    document.getElementById('trendVal').textContent=(perWeek>0?'+':'')+perWeek+' kg';
-    const prev=weightLogs[weightLogs.length-2];
-    const chg=(latest.weight-prev.weight).toFixed(1);
-    document.getElementById('weightChange').textContent=(chg>0?'↑ +':'↓ ')+chg+' kg öncekinden';
-    document.getElementById('weightChange').className='stat-change '+(chg<0?'down':chg>0?'up':'neutral');
+  const goalW=localStorage.getItem('fm_goalWeight_'+currentUserId);
+
+  document.getElementById('startWeight').textContent=first.weight;
+  document.getElementById('currentWeight').textContent=latest.weight;
+
+  const badge=document.getElementById('changeBadge');
+  const desc=document.getElementById('changeDesc');
+  if(Math.abs(diff)>0){
+    const isLoss=diff<0;
+    badge.className='change-badge '+(isLoss?'down':'up');
+    badge.textContent=(isLoss?'↓ ':' ↑ ')+Math.abs(diff)+' kg '+(isLoss?'verildi':'alındı');
+    desc.textContent=first.log_date+' tarihinden bu yana';
+  } else {
+    badge.className='change-badge neutral';
+    badge.textContent='Değişim yok';
   }
+
+  // Hedef ilerleme
+  if(goalW){
+    const g=parseFloat(goalW);
+    document.getElementById('goalWeightDisplay').textContent=g;
+    const totalNeeded=Math.abs(first.weight-g);
+    const done=Math.abs(first.weight-latest.weight);
+    const pct=totalNeeded>0?Math.min(Math.round(done/totalNeeded*100),100):100;
+    document.getElementById('goalProgressWrap').style.display='block';
+    document.getElementById('goalBarFill').style.width=pct+'%';
+    document.getElementById('goalProgressPct').textContent=pct+'%';
+    document.getElementById('goalProgressLabel').textContent='Hedefe ilerleme — '+pct+'% tamamlandı';
+    document.getElementById('goalLabelStart').textContent=first.weight+' kg';
+    document.getElementById('goalLabelEnd').textContent=g+' kg hedef';
+    document.getElementById('goalInfo').textContent=pct>=100?'🎉 Hedefine ulaştın! Yeni bir hedef belirle.':'Hedefe '+(Math.abs(latest.weight-g)).toFixed(1)+' kg kaldı. Devam et!';
+  }
+}
+
+function renderWeekSummary(){
+  const now=new Date();
+  const monday=new Date(now);
+  const day=now.getDay();
+  monday.setDate(now.getDate()-(day===0?6:day-1));
+  monday.setHours(0,0,0,0);
+
+  const thisWeekLogs=logs.filter(l=>new Date(l.log_date+'T12:00:00')>=monday);
+  const lastMonday=new Date(monday);lastMonday.setDate(monday.getDate()-7);
+  const lastWeekLogs=logs.filter(l=>{const d=new Date(l.log_date+'T12:00:00');return d>=lastMonday&&d<monday;});
+
+  document.getElementById('weekLogs').textContent=thisWeekLogs.length;
+  document.getElementById('totalLogs').textContent=logs.length;
+
+  // Haftalik degisim
+  const twWeights=thisWeekLogs.filter(l=>l.weight);
+  const lwWeights=lastWeekLogs.filter(l=>l.weight);
+  if(twWeights.length>0&&lwWeights.length>0){
+    const twAvg=twWeights.reduce((s,l)=>s+l.weight,0)/twWeights.length;
+    const lwAvg=lwWeights.reduce((s,l)=>s+l.weight,0)/lwWeights.length;
+    const diff=(twAvg-lwAvg).toFixed(1);
+    const el=document.getElementById('weekChange');
+    el.textContent=(diff>0?'+':'')+diff+' kg';
+    el.style.color=diff<0?'#4ade80':diff>0?'#ff6b6b':'var(--muted)';
+  }
+
+  // Aylik trend
+  const weightLogs=logs.filter(l=>l.weight);
+  if(weightLogs.length>=2){
+    const first=weightLogs[0];
+    const latest=weightLogs[weightLogs.length-1];
+    const days=Math.max((new Date(latest.log_date)-new Date(first.log_date))/(1000*60*60*24),1);
+    const perMonth=((latest.weight-first.weight)/days*30).toFixed(1);
+    const el=document.getElementById('monthTrend');
+    el.textContent=(perMonth>0?'+':'')+perMonth+' kg';
+    el.style.color=perMonth<0?'#4ade80':perMonth>0?'#ff6b6b':'var(--muted)';
+  }
+}
+
+function updateStreak(){
+  const sortedLogs=[...logs].sort((a,b)=>new Date(b.log_date)-new Date(a.log_date));
+  let streak=0;
+  const today=new Date();today.setHours(0,0,0,0);
+  for(let i=0;i<sortedLogs.length;i++){
+    const logDate=new Date(sortedLogs[i].log_date+'T12:00:00');logDate.setHours(0,0,0,0);
+    const expected=new Date(today);expected.setDate(today.getDate()-i);
+    if(logDate.getTime()===expected.getTime()) streak++;
+    else break;
+  }
+  const badge=document.getElementById('streakBadge');
+  if(streak>=2){badge.style.display='block';badge.textContent='🔥 '+streak+' günlük seri!';}
 }
 
 function renderHistory(){
   const list=document.getElementById('historyList');
-  if(logs.length===0){list.innerHTML='<div class="empty-state"><div class="big">📊</div><div>Henüz kayıt yok. Bugün takibe başlayın!</div></div>';return;}
-  list.innerHTML=[...logs].reverse().map(log=>`
+  if(logs.length===0){
+    list.innerHTML='<div class="empty-state"><div class="empty-icon">📊</div><div>Henüz kayıt yok. Yukarıdan başlayın!</div></div>';
+    return;
+  }
+  list.innerHTML=[...logs].reverse().slice(0,20).map(log=>`
     <div class="history-item">
-      <div>
-        <div class="history-date">${new Date(log.log_date+'T12:00:00').toLocaleDateString('tr-TR',{weekday:'short',month:'short',day:'numeric',year:'numeric'})}</div>
-        ${log.waist||log.chest?`<div class="history-measures">${log.chest?'Göğüs: '+log.chest+'cm ':' '}${log.waist?'Bel: '+log.waist+'cm ':' '}${log.hips?'Kalça: '+log.hips+'cm':''}</div>`:''}
-        ${log.notes?`<div class="history-measures" style="font-style:italic">"${log.notes}"</div>`:''}
+      <div style="flex:1">
+        <div class="history-date">${new Date(log.log_date+'T12:00:00').toLocaleDateString('tr-TR',{weekday:'short',month:'short',day:'numeric'})}</div>
+        ${log.waist||log.chest||log.hips?`<div class="history-measures">${log.chest?'Göğüs '+log.chest+'cm · ':''}${log.waist?'Bel '+log.waist+'cm · ':''}${log.hips?'Kalça '+log.hips+'cm':''}</div>`:''}
+        ${log.notes?`<div class="history-note">"${log.notes}"</div>`:''}
       </div>
       <div style="display:flex;align-items:center;gap:0.5rem">
-        <div class="history-weight">${log.weight?log.weight+' kg':'—'}</div>
-        <button class="delete-log" onclick="deleteLog('${log.id}')">✕</button>
+        ${log.weight?`<div class="history-weight">${log.weight} kg</div>`:'<div style="color:var(--muted);font-size:0.82rem">—</div>'}
+        <button class="delete-btn" onclick="deleteLog('${log.id}')">✕</button>
       </div>
     </div>`).join('');
 }
@@ -296,47 +605,171 @@ function initChart(){
   const ctx=document.getElementById('weightChart').getContext('2d');
   chart=new Chart(ctx,{
     type:'line',
-    data:{labels:[],datasets:[{label:'Kilo (kg)',data:[],borderColor:'#c8f542',backgroundColor:'#c8f54215',borderWidth:2.5,pointBackgroundColor:'#c8f542',pointRadius:5,tension:0.4,fill:true}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'#ffffff08'},ticks:{color:'#888',font:{family:'DM Sans',size:11}}},y:{grid:{color:'#ffffff08'},ticks:{color:'#888',font:{family:'DM Sans',size:11},callback:v=>v+' kg'}}}}
+    data:{labels:[],datasets:[{
+      label:'Kilo',data:[],
+      borderColor:'#c8f542',backgroundColor:'#c8f54212',
+      borderWidth:2.5,pointBackgroundColor:'#c8f542',pointRadius:4,
+      tension:0.4,fill:true
+    },{
+      label:'Hedef',data:[],
+      borderColor:'#4af',backgroundColor:'transparent',
+      borderWidth:1.5,pointRadius:0,
+      borderDash:[6,4],tension:0
+    }]},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw+' kg'}}},
+      scales:{
+        x:{grid:{color:'#ffffff08'},ticks:{color:'#888',font:{size:11}}},
+        y:{grid:{color:'#ffffff08'},ticks:{color:'#888',font:{size:11},callback:v=>v+' kg'}}
+      }
+    }
   });
 }
 
 function updateChart(){
   if(!chart)return;
   const weightLogs=logs.filter(l=>l.weight);
-  chart.data.labels=weightLogs.map(l=>new Date(l.log_date+'T12:00:00').toLocaleDateString('tr-TR',{month:'short',day:'numeric'}));
-  chart.data.datasets[0].data=weightLogs.map(l=>l.weight);
+  const cutoff=new Date();cutoff.setDate(cutoff.getDate()-chartDays);
+  const filtered=chartDays>=999?weightLogs:weightLogs.filter(l=>new Date(l.log_date+'T12:00:00')>=cutoff);
+
+  chart.data.labels=filtered.map(l=>new Date(l.log_date+'T12:00:00').toLocaleDateString('tr-TR',{month:'short',day:'numeric'}));
+  chart.data.datasets[0].data=filtered.map(l=>l.weight);
+
+  // Hedef çizgisi
+  const goalW=localStorage.getItem('fm_goalWeight_'+currentUserId);
+  if(goalW&&filtered.length>0){
+    chart.data.datasets[1].data=filtered.map(()=>parseFloat(goalW));
+  } else {
+    chart.data.datasets[1].data=[];
+  }
+
+  // Trend ok
+  const trendEl=document.getElementById('chartTrend');
+  if(filtered.length>=2){
+    const diff=filtered[filtered.length-1].weight-filtered[0].weight;
+    trendEl.className='chart-trend '+(diff<0?'down':diff>0?'up':'neutral');
+    trendEl.textContent=diff<0?('↓ '+Math.abs(diff.toFixed(1))+' kg'):diff>0?('↑ '+diff.toFixed(1)+' kg'):'Sabit';
+  }
   chart.update();
 }
 
-function updateBadges(){
-  if(logs.length>=1)document.getElementById('badge-first').classList.replace('locked','earned');
-  if(logs.length>=7)document.getElementById('badge-week').classList.replace('locked','earned');
-  if(logs.length>=30)document.getElementById('badge-month').classList.replace('locked','earned');
-  if(logs.length>=5)document.getElementById('badge-streak').classList.replace('locked','earned');
-  const weightLogs=logs.filter(l=>l.weight);
-  if(weightLogs.length>=2){
-    const diff=weightLogs[0].weight-weightLogs[weightLogs.length-1].weight;
-    if(diff>=2)document.getElementById('badge-loss').classList.replace('locked','earned');
+function calcComposition(){
+  const w=userProfile?.weight||logs.filter(l=>l.weight).slice(-1)[0]?.weight;
+  const h=userProfile?.height;
+  const age=userProfile?.age;
+  const gender=userProfile?.gender;
+
+  if(!w||!h){
+    document.getElementById('compNote').textContent='Kilo ve boy bilgisi gereklidir. Profil sayfasından güncelleyebilirsiniz.';
+    return;
   }
+
+  const hm=h/100;
+  const bmi=(w/(hm*hm)).toFixed(1);
+  document.getElementById('bmiVal').textContent=bmi;
+
+  // Tahmini yag orani (US Navy benzeri basit formul)
+  let fat='—';
+  if(age&&gender){
+    if(gender==='male') fat=Math.round(1.2*bmi+0.23*age-16.2)+'%';
+    else fat=Math.round(1.2*bmi+0.23*age-5.4)+'%';
+  }
+  document.getElementById('fatVal').textContent=fat;
+
+  // BMR (Mifflin-St Jeor)
+  let bmr=0;
+  if(age&&gender){
+    if(gender==='male') bmr=Math.round(10*w+6.25*h-5*age+5);
+    else bmr=Math.round(10*w+6.25*h-5*age-161);
+    document.getElementById('bmrVal').textContent=bmr;
+  }
+
+  // Ideal kilo (Devine formulu)
+  const idealMin=gender==='female'?Math.round(45.5+0.91*(h-152.4)):Math.round(50+0.91*(h-152.4));
+  const idealMax=idealMin+5;
+  document.getElementById('idealVal').textContent=idealMin+'-'+idealMax;
+
+  // BMI yorumu
+  const bmiNote=bmi<18.5?'Zayıf':bmi<25?'Normal — harika!':bmi<30?'Fazla kilolu':' Obez';
+  document.getElementById('compNote').textContent='BMI: '+bmi+' ('+bmiNote+'). Tahminler referans amaçlıdır, doktor görüşü alınız.';
 }
 
-function updateMeasurements(){
+function updateMeasures(){
   const latest=[...logs].reverse().find(l=>l.chest||l.waist||l.hips);
-  if(!latest)return;
+  const prev=[...logs].reverse().slice(1).find(l=>l.chest||l.waist||l.hips);
+  if(!latest){return;}
   const el=document.getElementById('measuresList');
-  el.innerHTML=`
-    ${latest.chest?`<div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #ffffff08;font-size:0.875rem"><span style="color:var(--muted)">Göğüs</span><span>${latest.chest} cm</span></div>`:''}
-    ${latest.waist?`<div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #ffffff08;font-size:0.875rem"><span style="color:var(--muted)">Bel</span><span>${latest.waist} cm</span></div>`:''}
-    ${latest.hips?`<div style="display:flex;justify-content:space-between;padding:0.5rem 0;font-size:0.875rem"><span style="color:var(--muted)">Kalça</span><span>${latest.hips} cm</span></div>`:''}
-    <div style="font-size:0.75rem;color:var(--muted);margin-top:0.75rem">Son güncelleme: ${new Date(latest.log_date+'T12:00:00').toLocaleDateString('tr-TR',{month:'short',day:'numeric'})}</div>`;
+  const rows=[
+    {label:'Göğüs',key:'chest',unit:'cm'},
+    {label:'Bel',key:'waist',unit:'cm'},
+    {label:'Kalça',key:'hips',unit:'cm'},
+  ];
+  el.innerHTML=rows.filter(r=>latest[r.key]).map(r=>{
+    const change=prev&&prev[r.key]?(latest[r.key]-prev[r.key]).toFixed(1):null;
+    const changeHtml=change?`<span class="measure-change ${change<0?'good':'bad'}">${change>0?'+':''}${change} cm</span>`:'';
+    return `<div class="measure-row">
+      <span class="measure-label">${r.label}</span>
+      <span><span class="measure-val">${latest[r.key]} cm</span>${changeHtml}</span>
+    </div>`;
+  }).join('')+`<div style="font-size:0.72rem;color:var(--muted);margin-top:0.75rem">Son güncelleme: ${new Date(latest.log_date+'T12:00:00').toLocaleDateString('tr-TR',{month:'short',day:'numeric'})}</div>`;
+}
+
+function updateBadges(){
+  const BADGES=[
+    {id:'first',emoji:'🌱',name:'İlk Adım',desc:'İlk kaydını yaptın',check:()=>logs.length>=1,progress:()=>logs.length+'/1'},
+    {id:'week',emoji:'📅',name:'Hafta Savaşçısı',desc:'7 gün kayıt yap',check:()=>logs.length>=7,progress:()=>logs.length+'/7'},
+    {id:'streak',emoji:'⚡',name:'Tutarlı',desc:'5 ardışık kayıt',check:()=>logs.length>=5,progress:()=>Math.min(logs.length,5)+'/5'},
+    {id:'loss',emoji:'🔥',name:'Yağ Yakıcı',desc:'2 kg+ ver',check:()=>{const w=logs.filter(l=>l.weight);return w.length>=2&&(w[0].weight-w[w.length-1].weight)>=2;},progress:()=>{const w=logs.filter(l=>l.weight);if(w.length<2)return '0/2 kg';return Math.max(0,(w[0].weight-w[w.length-1].weight)).toFixed(1)+'/2 kg';}},
+    {id:'month',emoji:'🌟',name:'Ay Ustası',desc:'30 gün kayıt yap',check:()=>logs.length>=30,progress:()=>logs.length+'/30'},
+    {id:'goal',emoji:'🎯',name:'Hedef Avcısı',desc:'Hedef kiloya ulaş',check:()=>{const g=localStorage.getItem('fm_goalWeight_'+currentUserId);const w=logs.filter(l=>l.weight);if(!g||w.length===0)return false;return Math.abs(w[w.length-1].weight-parseFloat(g))<=0.5;},progress:()=>'Hedef belirle'},
+  ];
+
+  let earned=0;
+  const list=document.getElementById('badgesList');
+  list.innerHTML=BADGES.map(b=>{
+    const isEarned=b.check();
+    if(isEarned)earned++;
+    return `<div class="badge-item ${isEarned?'earned':'locked'}">
+      <div class="badge-emoji">${b.emoji}</div>
+      <div class="badge-info">
+        <div class="badge-name">${b.name}</div>
+        <div class="badge-desc">${b.desc}</div>
+        ${!isEarned?`<div class="badge-progress-text">${b.progress()}</div>`:''}
+      </div>
+      ${isEarned?'<div class="badge-check">✓</div>':''}
+    </div>`;
+  }).join('');
+  document.getElementById('badgesSub').textContent=earned+'/'+BADGES.length+' rozet kazanıldı';
+}
+
+function saveGoal(){
+  const val=document.getElementById('goalWeightInput').value;
+  if(!val)return;
+  localStorage.setItem('fm_goalWeight_'+currentUserId,val);
+  document.getElementById('goalWeightDisplay').textContent=val;
+  renderHero();
+  updateChart();
+  updateBadges();
 }
 
 async function saveLog(){
   const btn=document.getElementById('saveBtn');
   btn.disabled=true;btn.textContent='Kaydediliyor...';
-  const logData={user_id:currentUserId,log_date:document.getElementById('logDate').value,weight:parseFloat(document.getElementById('logWeight').value)||null,chest:parseFloat(document.getElementById('logChest').value)||null,waist:parseFloat(document.getElementById('logWaist').value)||null,hips:parseFloat(document.getElementById('logHips').value)||null,notes:document.getElementById('logNotesText').value||null};
-  if(!logData.log_date){alert('Lütfen bir tarih seçin');btn.disabled=false;btn.textContent='İlerlemeyi Kaydet';return;}
+
+  const logData={
+    user_id:currentUserId,
+    log_date:document.getElementById('logDate').value,
+    weight:parseFloat(document.getElementById('logWeight').value)||null,
+    chest:parseFloat(document.getElementById('logChest').value)||null,
+    waist:parseFloat(document.getElementById('logWaist').value)||null,
+    hips:parseFloat(document.getElementById('logHips').value)||null,
+    notes:document.getElementById('logNotes').value||null
+  };
+
+  if(!logData.log_date){alert('Tarih seçin');btn.disabled=false;btn.textContent='Kaydet ✓';return;}
+  if(!logData.weight&&!logData.chest&&!logData.waist&&!logData.hips){alert('En az bir ölçüm girin');btn.disabled=false;btn.textContent='Kaydet ✓';return;}
+
   const {error}=await sb.from('progress_logs').insert(logData);
   if(error){alert('Hata: '+error.message);}
   else{
@@ -344,33 +777,36 @@ async function saveLog(){
     document.getElementById('logChest').value='';
     document.getElementById('logWaist').value='';
     document.getElementById('logHips').value='';
-    document.getElementById('logNotesText').value='';
+    document.getElementById('logNotes').value='';
     await loadLogs();
-    if(logData.weight&&logs.length>=2)generateAiInsight(logData.weight);
+    calcComposition();
+    if(logData.weight) generateAiComment(logData.weight);
   }
-  btn.disabled=false;btn.textContent='İlerlemeyi Kaydet';
+  btn.disabled=false;btn.textContent='Kaydet ✓';
 }
 
-async function generateAiInsight(newWeight){
+async function generateAiComment(newWeight){
   const weightLogs=logs.filter(l=>l.weight);
   if(weightLogs.length<2)return;
   const first=weightLogs[0];
   const diff=(newWeight-first.weight).toFixed(1);
-  const insightEl=document.getElementById('aiInsight');
-  const insightText=document.getElementById('aiInsightText');
-  insightEl.style.display='flex';
-  insightText.innerHTML='<span class="spin"></span> AI ilerlemenizi analiz ediyor...';
+  const aiEl=document.getElementById('aiComment');
+  const aiText=document.getElementById('aiCommentText');
+  aiEl.style.display='flex';
+  aiText.innerHTML='<span style="display:inline-block;width:14px;height:14px;border:2px solid #ffffff20;border-top-color:var(--lime);border-radius:50%;animation:spin 0.8s linear infinite"></span> AI analiz ediyor...';
   try{
-    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`Kullanıcının hedefi: ${userProfile?.goal==='lose_weight'?'kilo vermek':userProfile?.goal==='build_muscle'?'kas yapmak':'forma girmek'}. ${first.weight}kg ile başladı, şimdi ${newWeight}kg (${diff>0?'+':''}${diff}kg değişim). Türkçe olarak 2 cümlelik motive edici değerlendirme yaz.`}],max_tokens:150})});
+    const goal=userProfile?.goal==='lose_weight'?'kilo vermek':userProfile?.goal==='build_muscle'?'kas yapmak':'forma girmek';
+    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`Hedef: ${goal}. Baslangic: ${first.weight}kg, simdi: ${newWeight}kg (${diff>0?'+':''}${diff}kg). Turkce 1 cumle motive edici yorum yaz.`}],max_tokens:100})});
     const data=await res.json();
-    insightText.textContent=data.content?.[0]?.text||'Harika iş! Tutarlılık uzun vadeli sonuçların anahtarıdır.';
-  }catch(e){insightText.textContent='İlerlemenizi kaydettiğiniz için harikasınız! Tutarlılık her şeydir.';}
+    aiText.textContent=data.content?.[0]?.text||'Harika iş! Tutarlılık başarının anahtarı. 💪';
+  }catch(e){aiText.textContent='Harika iş! Her kayıt seni hedefe bir adım daha yaklaştırıyor. 💪';}
 }
 
 async function deleteLog(id){
   if(!confirm('Bu kaydı silmek istiyor musunuz?'))return;
   await sb.from('progress_logs').delete().eq('id',id);
   await loadLogs();
+  calcComposition();
 }
 
 async function signOut(){await sb.auth.signOut();window.location.href='index.html';}
