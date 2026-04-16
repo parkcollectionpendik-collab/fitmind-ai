@@ -8,7 +8,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--lime2:#a8d92e;--muted:#888;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
+:root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--lime2:#a8d92e;--blue:#44aaff;--muted:#888;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
 body{background:var(--black);color:var(--white);font-family:var(--font-body);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;overflow:hidden}
 .bg{position:fixed;inset:0;z-index:0}
 .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.15}
@@ -35,8 +35,7 @@ select option{background:#1a1a1a}
 .btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
 .divider{text-align:center;color:var(--muted);font-size:0.8rem;margin:1.2rem 0;position:relative}
 .divider::before,.divider::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:#ffffff15}
-.divider::before{left:0}
-.divider::after{right:0}
+.divider::before{left:0}.divider::after{right:0}
 .btn-google{width:100%;background:#ffffff10;color:var(--white);border:1px solid #ffffff15;border-radius:100px;padding:0.9rem;font-family:var(--font-head);font-weight:700;font-size:0.95rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.6rem}
 .btn-google:hover{background:#ffffff18;border-color:#ffffff30}
 .msg{padding:0.8rem 1rem;border-radius:12px;font-size:0.9rem;margin-top:1rem;display:none}
@@ -45,20 +44,27 @@ select option{background:#1a1a1a}
 .back{text-align:center;margin-top:1.5rem}
 .back a{color:var(--muted);font-size:0.85rem;text-decoration:none;transition:color 0.2s}
 .back a:hover{color:var(--white)}
-
-/* FİZYOTERAPİST CHECKBOX */
-.physio-toggle{display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1rem;background:#ffffff06;border:1.5px solid #ffffff10;border-radius:12px;cursor:pointer;margin-bottom:1rem;transition:all 0.2s;user-select:none}
-.physio-toggle:hover{border-color:#ffffff25;background:#ffffff0a}
-.physio-toggle.active{border-color:#4af;background:#44aaff10}
-.physio-toggle input[type=checkbox]{width:18px;height:18px;accent-color:#44aaff;cursor:pointer;flex-shrink:0}
-.physio-toggle-text{flex:1}
-.physio-toggle-title{font-family:var(--font-head);font-size:0.88rem;font-weight:700;color:var(--white)}
-.physio-toggle-sub{font-size:0.72rem;color:var(--muted);margin-top:0.1rem}
-.physio-badge{background:#44aaff20;color:#44aaff;border:1px solid #44aaff30;border-radius:100px;padding:0.15rem 0.55rem;font-size:0.68rem;font-family:var(--font-head);font-weight:700;flex-shrink:0}
-
-/* FİZYOTERAPİST EK ALANLAR */
-.physio-fields{display:none;animation:fadeUp 0.3s ease both}
-.physio-fields.show{display:block}
+.role-toggle{display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1rem;background:#ffffff06;border:1.5px solid #ffffff10;border-radius:12px;cursor:pointer;margin-bottom:0.6rem;transition:all 0.2s;user-select:none}
+.role-toggle:hover{border-color:#ffffff25;background:#ffffff0a}
+.role-toggle.physio-active{border-color:var(--blue);background:#44aaff10}
+.role-toggle.patient-active{border-color:#a78bfa;background:#a78bfa10}
+.role-toggle input[type=checkbox]{width:18px;height:18px;cursor:pointer;flex-shrink:0;accent-color:#a78bfa}
+.role-toggle-text{flex:1}
+.role-toggle-title{font-family:var(--font-head);font-size:0.88rem;font-weight:700;color:var(--white)}
+.role-toggle-sub{font-size:0.72rem;color:var(--muted);margin-top:0.1rem}
+.role-badge{border-radius:100px;padding:0.15rem 0.55rem;font-size:0.68rem;font-family:var(--font-head);font-weight:700;flex-shrink:0}
+.badge-physio{background:#44aaff20;color:var(--blue);border:1px solid #44aaff30}
+.badge-patient{background:#a78bfa20;color:#a78bfa;border:1px solid #a78bfa30}
+.extra-fields{display:none;animation:fadeUp 0.3s ease both;margin-bottom:0.75rem}
+.extra-fields.show{display:block}
+.code-input{width:100%;background:#a78bfa10;border:1.5px solid #a78bfa30;border-radius:12px;padding:0.85rem 1rem;color:var(--white);font-family:var(--font-head);font-size:1.1rem;font-weight:700;outline:none;text-align:center;letter-spacing:0.15em;text-transform:uppercase;transition:border-color 0.2s;margin-bottom:0.5rem}
+.code-input:focus{border-color:#a78bfa60}
+.code-input::placeholder{color:#ffffff25;letter-spacing:0;font-size:0.88rem;font-weight:400}
+.code-verify-btn{width:100%;background:#a78bfa;color:#000;border:none;border-radius:100px;padding:0.7rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s}
+.code-verify-btn:hover{background:#9061f9}
+.code-result{margin-top:0.6rem;padding:0.65rem 0.9rem;border-radius:10px;font-size:0.82rem;display:none}
+.code-result.success{background:#4ade8015;border:1px solid #4ade8025;color:#4ade80;display:block}
+.code-result.error{background:#ff6b6b15;border:1px solid #ff6b6b25;color:#ff6b6b;display:block}
 </style>
 </head>
 <body>
@@ -71,7 +77,7 @@ select option{background:#1a1a1a}
       <button class="tab" onclick="switchTab('signup')">Kayıt Ol / Sign Up</button>
     </div>
 
-    <!-- GİRİŞ FORMU -->
+    <!-- GİRİŞ -->
     <div id="signinForm">
       <div class="form-group">
         <label>E-posta / Email</label>
@@ -87,7 +93,7 @@ select option{background:#1a1a1a}
       </div>
     </div>
 
-    <!-- KAYIT FORMU -->
+    <!-- KAYIT -->
     <div id="signupForm" style="display:none">
       <div class="form-group">
         <label>Ad Soyad / Full Name</label>
@@ -102,18 +108,16 @@ select option{background:#1a1a1a}
         <input type="password" id="signupPassword" placeholder="En az 8 karakter / Min 8 chars">
       </div>
 
-      <!-- FİZYOTERAPİST TOGGLE -->
-      <label class="physio-toggle" id="physioToggle" onclick="togglePhysio()">
-        <input type="checkbox" id="isPhysio" onclick="event.stopPropagation();togglePhysio()">
-        <div class="physio-toggle-text">
-          <div class="physio-toggle-title">🏥 Ben bir fizyoterapistim</div>
-          <div class="physio-toggle-sub">I am a physiotherapist / healthcare professional</div>
+      <!-- FİZYOTERAPİST -->
+      <label class="role-toggle" id="physioToggle" onclick="toggleRole('physio')">
+        <input type="checkbox" id="isPhysio" onclick="event.stopPropagation();toggleRole('physio')" style="accent-color:#44aaff">
+        <div class="role-toggle-text">
+          <div class="role-toggle-title">🏥 Ben bir fizyoterapistim</div>
+          <div class="role-toggle-sub">I am a physiotherapist / healthcare professional</div>
         </div>
-        <span class="physio-badge">PRO</span>
+        <span class="role-badge badge-physio">PRO</span>
       </label>
-
-      <!-- FİZYOTERAPİST EK ALANLAR -->
-      <div class="physio-fields" id="physioFields">
+      <div class="extra-fields" id="physioFields">
         <div class="form-group">
           <label>Klinik / Hastane Adı · Clinic Name</label>
           <input type="text" id="physioClinic" placeholder="örn. Özel Rehabilitasyon Merkezi">
@@ -132,6 +136,22 @@ select option{background:#1a1a1a}
         </div>
       </div>
 
+      <!-- HASTA -->
+      <label class="role-toggle" id="patientToggle" onclick="toggleRole('patient')">
+        <input type="checkbox" id="isPatient" onclick="event.stopPropagation();toggleRole('patient')">
+        <div class="role-toggle-text">
+          <div class="role-toggle-title">🩺 Fizyoterapistimin hastasıyım</div>
+          <div class="role-toggle-sub">I am a patient — I have a doctor invite code</div>
+        </div>
+        <span class="role-badge badge-patient">Hasta</span>
+      </label>
+      <div class="extra-fields" id="patientFields">
+        <label style="color:#a78bfa;margin-bottom:0.5rem;display:block">Doktor Davet Kodu / Doctor Invite Code</label>
+        <input class="code-input" type="text" id="patientCode" placeholder="PHY-XXXXXX" maxlength="10" oninput="this.value=this.value.toUpperCase();resetCodeResult()">
+        <button class="code-verify-btn" onclick="verifyPatientCode()">Kodu Doğrula / Verify Code</button>
+        <div class="code-result" id="patientCodeResult"></div>
+      </div>
+
       <button class="btn" id="signupBtn" onclick="signUp()">Hesap Oluştur / Create Account →</button>
     </div>
 
@@ -146,129 +166,125 @@ select option{background:#1a1a1a}
 </div>
 
 <script>
-const SUPABASE_URL = 'https://cypmmayxwbkarvheqoxu.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
-const {createClient} = supabase;
-const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL='https://cypmmayxwbkarvheqoxu.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
+const {createClient}=supabase;
+const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
+let verifiedPhysioId=null;
 
-function togglePhysio(){
-  const cb=document.getElementById('isPhysio');
-  cb.checked=!cb.checked;
-  const fields=document.getElementById('physioFields');
-  const toggle=document.getElementById('physioToggle');
-  fields.classList.toggle('show', cb.checked);
-  toggle.classList.toggle('active', cb.checked);
-}
-
-function switchTab(tab) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  event.target.classList.add('active');
-  document.getElementById('signinForm').style.display = tab === 'signin' ? 'block' : 'none';
-  document.getElementById('signupForm').style.display = tab === 'signup' ? 'block' : 'none';
-  hideMsg();
-}
-
-function showMsg(text, type) {
-  const el = document.getElementById('authMsg');
-  el.textContent = text;
-  el.className = 'msg ' + type;
-  el.style.display = 'block';
-}
-
-function hideMsg() {
-  document.getElementById('authMsg').style.display = 'none';
-}
-
-// Benzersiz fizyoterapist kodu oluştur
-function generatePhysioCode(){
-  return 'PHY-' + Math.random().toString(36).substr(2,6).toUpperCase();
-}
-
-async function signIn() {
-  const email = document.getElementById('signinEmail').value.trim();
-  const password = document.getElementById('signinPassword').value;
-  if (!email || !password) { showMsg('Lütfen tüm alanları doldurun.', 'error'); return; }
-  const btn = document.getElementById('signinBtn');
-  btn.disabled = true;
-  btn.textContent = 'Giriş yapılıyor...';
-  const {data, error} = await sb.auth.signInWithPassword({email, password});
-  if (error) {
-    showMsg('E-posta veya şifre hatalı. / Invalid email or password.', 'error');
-    btn.disabled = false;
-    btn.textContent = 'Giriş Yap / Sign In →';
+function toggleRole(role){
+  if(role==='physio'){
+    const cb=document.getElementById('isPhysio');
+    cb.checked=!cb.checked;
+    document.getElementById('physioFields').classList.toggle('show',cb.checked);
+    document.getElementById('physioToggle').classList.toggle('physio-active',cb.checked);
+    if(cb.checked){
+      document.getElementById('isPatient').checked=false;
+      document.getElementById('patientFields').classList.remove('show');
+      document.getElementById('patientToggle').classList.remove('patient-active');
+      verifiedPhysioId=null;
+    }
   } else {
-    // Fizyoterapist mi kontrol et
-    const {data:profile} = await sb.from('profiles').select('user_role').eq('id', data.user.id).maybeSingle();
-    if(profile?.user_role === 'physio'){
-      window.location.replace('physio-dashboard.html');
-    } else {
-      window.location.replace('dashboard.html');
+    const cb=document.getElementById('isPatient');
+    cb.checked=!cb.checked;
+    document.getElementById('patientFields').classList.toggle('show',cb.checked);
+    document.getElementById('patientToggle').classList.toggle('patient-active',cb.checked);
+    if(cb.checked){
+      document.getElementById('isPhysio').checked=false;
+      document.getElementById('physioFields').classList.remove('show');
+      document.getElementById('physioToggle').classList.remove('physio-active');
     }
   }
 }
 
-async function signUp() {
-  const name = document.getElementById('signupName').value.trim();
-  const email = document.getElementById('signupEmail').value.trim();
-  const password = document.getElementById('signupPassword').value;
-  const isPhysio = document.getElementById('isPhysio').checked;
-  const clinic = document.getElementById('physioClinic')?.value.trim() || '';
-  const spec = document.getElementById('physioSpec')?.value || '';
+function resetCodeResult(){
+  document.getElementById('patientCodeResult').className='code-result';
+  verifiedPhysioId=null;
+}
 
-  if (!name || !email || !password) { showMsg('Lütfen tüm alanları doldurun. / Please fill all fields.', 'error'); return; }
-  if (password.length < 8) { showMsg('Şifre en az 8 karakter olmalıdır. / Password min 8 chars.', 'error'); return; }
-  if (isPhysio && !clinic) { showMsg('Lütfen klinik adını girin. / Please enter clinic name.', 'error'); return; }
+async function verifyPatientCode(){
+  const code=document.getElementById('patientCode').value.trim().toUpperCase();
+  const result=document.getElementById('patientCodeResult');
+  if(!code){result.textContent='Lütfen kod girin.';result.className='code-result error';return;}
+  result.textContent='Doğrulanıyor...';result.className='code-result';result.style.display='block';
+  const {data}=await sb.from('profiles').select('id,physio_clinic,physio_spec').eq('physio_code',code).eq('user_role','physio').maybeSingle();
+  if(data){
+    verifiedPhysioId=data.id;
+    result.textContent='✓ Doktor bulundu! '+(data.physio_clinic||'')+(data.physio_spec?' · '+data.physio_spec:'');
+    result.className='code-result success';
+  } else {
+    verifiedPhysioId=null;
+    result.textContent='Geçersiz kod. Doktorunuzdan tekrar isteyin.';
+    result.className='code-result error';
+  }
+}
 
-  const btn = document.getElementById('signupBtn');
-  btn.disabled = true;
-  btn.textContent = 'Hesap oluşturuluyor...';
+function switchTab(tab){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('signinForm').style.display=tab==='signin'?'block':'none';
+  document.getElementById('signupForm').style.display=tab==='signup'?'block':'none';
+  hideMsg();
+}
+function showMsg(text,type){const el=document.getElementById('authMsg');el.textContent=text;el.className='msg '+type;el.style.display='block';}
+function hideMsg(){document.getElementById('authMsg').style.display='none';}
+function generatePhysioCode(){return 'PHY-'+Math.random().toString(36).substr(2,6).toUpperCase();}
 
-  const {data, error} = await sb.auth.signUp({
-    email, password,
-    options: {data: {full_name: name}}
-  });
+async function signIn(){
+  const email=document.getElementById('signinEmail').value.trim();
+  const password=document.getElementById('signinPassword').value;
+  if(!email||!password){showMsg('Lütfen tüm alanları doldurun.','error');return;}
+  const btn=document.getElementById('signinBtn');
+  btn.disabled=true;btn.textContent='Giriş yapılıyor...';
+  const {data,error}=await sb.auth.signInWithPassword({email,password});
+  if(error){
+    showMsg('E-posta veya şifre hatalı.','error');
+    btn.disabled=false;btn.textContent='Giriş Yap / Sign In →';
+  } else {
+    const {data:profile}=await sb.from('profiles').select('user_role').eq('id',data.user.id).maybeSingle();
+    if(profile?.user_role==='physio') window.location.replace('physio-dashboard.html');
+    else window.location.replace('dashboard.html');
+  }
+}
 
-  if (error) {
-    showMsg('Bir hata oluştu: ' + error.message, 'error');
-    btn.disabled = false;
-    btn.textContent = 'Hesap Oluştur / Create Account →';
+async function signUp(){
+  const name=document.getElementById('signupName').value.trim();
+  const email=document.getElementById('signupEmail').value.trim();
+  const password=document.getElementById('signupPassword').value;
+  const isPhysio=document.getElementById('isPhysio').checked;
+  const isPatient=document.getElementById('isPatient').checked;
+  const clinic=document.getElementById('physioClinic')?.value.trim()||'';
+  const spec=document.getElementById('physioSpec')?.value||'';
+  if(!name||!email||!password){showMsg('Lütfen tüm alanları doldurun.','error');return;}
+  if(password.length<8){showMsg('Şifre en az 8 karakter olmalıdır.','error');return;}
+  if(isPhysio&&!clinic){showMsg('Lütfen klinik adını girin.','error');return;}
+  if(isPatient&&!verifiedPhysioId){showMsg('Lütfen doktor kodunu doğrulayın.','error');return;}
+  const btn=document.getElementById('signupBtn');
+  btn.disabled=true;btn.textContent='Hesap oluşturuluyor...';
+  const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name:name}}});
+  if(error){
+    showMsg('Hata: '+error.message,'error');
+    btn.disabled=false;btn.textContent='Hesap Oluştur / Create Account →';
     return;
   }
-
-  // Fizyoterapist ise profil güncelle
-  if(isPhysio && data.user){
-    const physioCode = generatePhysioCode();
-    await sb.from('profiles').upsert({
-      id: data.user.id,
-      user_role: 'physio',
-      physio_code: physioCode,
-      physio_clinic: clinic,
-      physio_spec: spec,
-      updated_at: new Date().toISOString()
-    });
-    // Hoş geldin emaili
-    fetch('/api/send-welcome', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({email, name, isPhysio: true})
-    }).catch(()=>{});
+  if(isPhysio&&data.user){
+    const physioCode=generatePhysioCode();
+    await sb.from('profiles').upsert({id:data.user.id,user_role:'physio',physio_code:physioCode,physio_clinic:clinic,physio_spec:spec,updated_at:new Date().toISOString()});
+    fetch('/api/send-welcome',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,name,isPhysio:true})}).catch(()=>{});
     window.location.replace('physio-dashboard.html');
+  } else if(isPatient&&data.user&&verifiedPhysioId){
+    // Hasta — onboarding atla, direkt dashboard
+    await sb.from('profiles').upsert({id:data.user.id,user_role:'patient',physio_id:verifiedPhysioId,onboarding_done:true,updated_at:new Date().toISOString()});
+    fetch('/api/send-welcome',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,name})}).catch(()=>{});
+    window.location.replace('dashboard.html');
   } else {
-    // Normal kullanıcı
-    fetch('/api/send-welcome', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({email, name})
-    }).catch(()=>{});
+    fetch('/api/send-welcome',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,name})}).catch(()=>{});
     window.location.replace('onboarding.html');
   }
 }
 
-async function signInGoogle() {
-  await sb.auth.signInWithOAuth({
-    provider: 'google',
-    options: {redirectTo: 'https://fitmindai.ai/dashboard.html'}
-  });
+async function signInGoogle(){
+  await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:'https://fitmindai.ai/dashboard.html'}});
 }
 
 async function resetPassword(){
@@ -276,7 +292,7 @@ async function resetPassword(){
   if(!email){showMsg('Lütfen e-posta adresinizi girin.','error');return;}
   const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:'https://fitmindai.ai/auth.html'});
   if(error)showMsg('Hata: '+error.message,'error');
-  else showMsg('Şifre sıfırlama linki e-postanıza gönderildi! / Reset link sent!','success');
+  else showMsg('Şifre sıfırlama linki gönderildi!','success');
 }
 </script>
 </body>
