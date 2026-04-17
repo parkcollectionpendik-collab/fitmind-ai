@@ -241,9 +241,7 @@ async function signIn(){
     showMsg('E-posta veya şifre hatalı.','error');
     btn.disabled=false;btn.textContent='Giriş Yap / Sign In →';
   } else {
-    const {data:profile}=await sb.from('profiles').select('user_role').eq('id',data.user.id).maybeSingle();
-    if(profile?.user_role==='physio') window.location.replace('physio-dashboard.html');
-    else window.location.replace('dashboard.html');
+    window.location.replace('auth-callback.html');
   }
 }
 
