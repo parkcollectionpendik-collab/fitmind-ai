@@ -11,7 +11,7 @@ async function check(){
   if(!session){window.location.replace('auth.html');return;}
   const {data:profile}=await sb.from('profiles').select('onboarding_done,user_role').eq('id',session.user.id).maybeSingle();
   if(profile?.user_role==='physio') window.location.replace('physio-dashboard.html');
-  else if(!profile?.onboarding_done) window.location.replace('onboarding.html');
+  else if(!profile?.onboarding_done && profile?.user_role !== 'physio') window.location.replace('onboarding.html');
   else window.location.replace('dashboard.html');
 }
 check();
