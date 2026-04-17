@@ -406,7 +406,7 @@ async function init(){
   document.getElementById('welcomeMsg').textContent='Merhaba, '+name.split(' ')[0]+'! 👋';
 
   const {data:profile}=await sb.from('profiles').select('*').eq('id',u.id).maybeSingle();
-  console.log('Profile:', profile);
+  
   physioProfile=profile;
 
   if(profile?.physio_code){
