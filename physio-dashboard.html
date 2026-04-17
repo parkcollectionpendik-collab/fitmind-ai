@@ -603,9 +603,12 @@ function switchPmTab(tabName, btn){
 // --- ÖZET TAB ---
 async function loadPmOverview(id, p){
   const {data:plan}=await sb.from('user_plans').select('*').eq('user_id',id).order('created_at',{ascending:false}).limit(1).maybeSingle();
-  const {data:logs}=await sb.from('progress_logs').select('*').eq('user_id',id).order('log_date',{ascending:false}).limit(5);
   const {data:sess}=await sb.from('patient_sessions').select('*').eq('patient_id',id).order('session_date',{ascending:false});
   const {data:meas}=await sb.from('patient_measurements').select('*').eq('patient_id',id);
+
+  // En güncel profil bilgisini çek (tıbbi alanlar için)
+  const {data:freshProfile}=await sb.from('profiles').select('*').eq('id',id).maybeSingle();
+  if(freshProfile){_currentPatient=freshProfile;p=freshProfile;}
 
   // Quick stats header
   const totalSess=sess?.length||0;
@@ -623,12 +626,48 @@ async function loadPmOverview(id, p){
   document.getElementById('pmCountSessions').textContent=totalSess;
   document.getElementById('pmCountMeasurements').textContent=meas?.length||0;
 
-  // Panel içeriği
   const goalMap={lose_weight:'Kilo Vermek',build_muscle:'Kas Yapmak',get_fit:'Forma Girmek',improve_health:'Sağlık'};
   const levelMap={beginner:'Başlangıç',intermediate:'Orta Seviye',advanced:'İleri Seviye'};
   const equipMap={home_no:'Ev (Ekipmansız)',home_basic:'Ev (Temel)',gym:'Spor Salonu',outdoor:'Açık Hava'};
 
+  const injuryDateFmt=p.injury_date?new Date(p.injury_date).toLocaleDateString('tr-TR'):'—';
+  const daysSince=p.injury_date?Math.floor((new Date()-new Date(p.injury_date))/(1000*60*60*24)):null;
+
   document.getElementById('pmPanel-overview').innerHTML=`
+    <!-- TIBBİ BİLGİLER KARTI -->
+    <div class="pm-card" style="background:linear-gradient(135deg,#1a0a0a,#0d0d0d);border-color:#ff6b6b25;margin-bottom:1rem">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
+        <div class="pm-section-title" style="color:#ff6b6b;margin:0">🩺 Tıbbi Bilgiler</div>
+        <button class="pm-btn pm-btn-sm" style="background:#ff6b6b15;color:#ff6b6b;border:1px solid #ff6b6b30" onclick="togglePmMedicalEdit()">✏️ Düzenle</button>
+      </div>
+
+      <!-- GÖRÜNTÜLEME MODU -->
+      <div id="pmMedicalView" style="font-size:0.88rem;line-height:1.9;color:#ffffffcc">
+        <div><strong style="color:#ff9e9e">🔍 Tanı:</strong> ${p.diagnosis||'<span style="color:var(--muted)">Belirtilmemiş</span>'}</div>
+        <div><strong style="color:#ff9e9e">📅 Yaralanma Tarihi:</strong> ${injuryDateFmt}${daysSince!==null?' <span style="color:var(--muted);font-size:0.8rem">('+daysSince+' gün önce)</span>':''}</div>
+        <div><strong style="color:#ff9e9e">🎯 Tedavi Hedefi:</strong> ${p.treatment_goal||'<span style="color:var(--muted)">Belirtilmemiş</span>'}</div>
+        <div style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid #ffffff10">
+          <strong style="color:#ff9e9e">📝 Tıbbi Notlar:</strong>
+          <div style="margin-top:0.3rem;color:#ffffffaa;white-space:pre-wrap">${p.medical_notes||'<span style="color:var(--muted)">Not eklenmemiş</span>'}</div>
+        </div>
+      </div>
+
+      <!-- DÜZENLEME MODU (gizli) -->
+      <div id="pmMedicalEdit" style="display:none">
+        <div class="pm-form-grid pm-form-grid-2">
+          <div><div class="pm-label">Tanı</div><input class="pm-input" id="pmMedDiagnosis" placeholder="Örn: Ön çapraz bağ rüptürü" value="${(p.diagnosis||'').replace(/"/g,'&quot;')}"></div>
+          <div><div class="pm-label">Yaralanma Tarihi</div><input type="date" class="pm-input" id="pmMedInjuryDate" value="${p.injury_date||''}"></div>
+        </div>
+        <div class="pm-form-grid"><div><div class="pm-label">Tedavi Hedefi</div><input class="pm-input" id="pmMedGoal" placeholder="Örn: 6 haftada tam diz fleksiyonu" value="${(p.treatment_goal||'').replace(/"/g,'&quot;')}"></div></div>
+        <div class="pm-form-grid"><div><div class="pm-label">Tıbbi Notlar (allerji, geçmiş, önemli uyarılar)</div><textarea class="pm-textarea" id="pmMedNotes" placeholder="Allerji, kronik hastalıklar, önemli notlar...">${p.medical_notes||''}</textarea></div></div>
+        <div style="display:flex;gap:0.5rem;margin-top:0.5rem">
+          <button class="pm-btn" onclick="savePmMedical('${id}')">💾 Kaydet</button>
+          <button class="pm-btn pm-btn-ghost" onclick="togglePmMedicalEdit()">İptal</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- HASTA BİLGİLERİ + SON AKTİVİTE -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
       <div class="pm-card">
         <div class="pm-section-title" style="margin-bottom:0.5rem">👤 Hasta Bilgileri</div>
@@ -661,6 +700,34 @@ async function loadPmOverview(id, p){
       </div>
     </div>
   `;
+}
+
+function togglePmMedicalEdit(){
+  const view=document.getElementById('pmMedicalView');
+  const edit=document.getElementById('pmMedicalEdit');
+  if(!view||!edit)return;
+  if(view.style.display==='none'){
+    view.style.display='block';edit.style.display='none';
+  } else {
+    view.style.display='none';edit.style.display='block';
+  }
+}
+
+async function savePmMedical(id){
+  const diagnosis=document.getElementById('pmMedDiagnosis').value.trim();
+  const injuryDate=document.getElementById('pmMedInjuryDate').value;
+  const goal=document.getElementById('pmMedGoal').value.trim();
+  const notes=document.getElementById('pmMedNotes').value.trim();
+
+  const {error}=await sb.from('profiles').update({
+    diagnosis:diagnosis||null,
+    injury_date:injuryDate||null,
+    treatment_goal:goal||null,
+    medical_notes:notes||null
+  }).eq('id',id);
+
+  if(error){alert('Hata: '+error.message);return;}
+  await loadPmOverview(id,_currentPatient);
 }
 
 // --- SEANSLAR TAB ---
