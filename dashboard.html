@@ -644,7 +644,7 @@ if(profile?.user_role === 'physio'){
       document.querySelector('.main').insertBefore(banner,document.querySelector('.topbar'));
     }
   }
-}
+
   if(profile?.goal){
     let tags='';
     if(profile.goal)tags+=`<span class="profile-tag">🎯 ${goalLabels[profile.goal]||profile.goal}</span>`;
