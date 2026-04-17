@@ -194,14 +194,36 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
 
-<!-- HASTA DETAY MODAL -->
+<!-- HASTA DETAY MODAL - MODERN -->
 <div class="modal-overlay" id="patientModal">
   <div class="modal">
-    <div class="modal-head">
-      <div class="modal-title" id="modalPatientName">Hasta Detayı</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="pm-header">
+      <button class="pm-close" onclick="closeModal()">✕</button>
+      <div class="pm-header-main">
+        <div class="pm-avatar-big" id="pmAvatar">?</div>
+        <div style="flex:1;min-width:200px">
+          <div class="pm-name" id="pmName">—</div>
+          <div class="pm-meta" id="pmMeta"></div>
+        </div>
+      </div>
+      <div class="pm-quick-stats" id="pmQuickStats"></div>
     </div>
-    <div id="modalContent"></div>
+    <div class="pm-tabs" id="pmTabs">
+      <button class="pm-tab active" onclick="switchPmTab('overview',this)">📊 Özet</button>
+      <button class="pm-tab" onclick="switchPmTab('sessions',this)">📅 Seanslar <span class="pm-tab-count" id="pmCountSessions">0</span></button>
+      <button class="pm-tab" onclick="switchPmTab('measurements',this)">📏 Ölçümler <span class="pm-tab-count" id="pmCountMeasurements">0</span></button>
+      <button class="pm-tab" onclick="switchPmTab('medications',this)">💊 İlaçlar <span class="pm-tab-count" id="pmCountMedications">0</span></button>
+      <button class="pm-tab" onclick="switchPmTab('reports',this)">📄 Raporlar <span class="pm-tab-count" id="pmCountReports">0</span></button>
+      <button class="pm-tab" onclick="switchPmTab('notes',this)">📝 Notlar</button>
+    </div>
+    <div class="pm-body">
+      <div class="pm-tab-panel active" id="pmPanel-overview"></div>
+      <div class="pm-tab-panel" id="pmPanel-sessions"></div>
+      <div class="pm-tab-panel" id="pmPanel-measurements"></div>
+      <div class="pm-tab-panel" id="pmPanel-medications"></div>
+      <div class="pm-tab-panel" id="pmPanel-reports"></div>
+      <div class="pm-tab-panel" id="pmPanel-notes"></div>
+    </div>
   </div>
 </div>
 
