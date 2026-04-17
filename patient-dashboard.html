@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitMind AI – Hasta Paneli</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--black:#0a0a0a;--white:#f5f2eb;--blue:#44aaff;--blue2:#2288dd;--gray:#111;--muted:#888;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
+body{background:var(--black);color:var(--white);font-family:var(--font-body);min-height:100vh}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:#0d0d0d;border-right:1px solid #ffffff0f;padding:1.5rem;display:flex;flex-direction:column;z-index:10}
+.logo{font-family:var(--font-head);font-weight:800;font-size:1.1rem;margin-bottom:0.3rem;text-decoration:none;color:inherit;display:block}
+.logo span{color:var(--blue)}
+.logo-badge{display:inline-block;background:#44aaff20;color:var(--blue);border:1px solid #44aaff30;border-radius:100px;font-size:0.62rem;font-family:var(--font-head);font-weight:700;padding:0.15rem 0.6rem;margin-bottom:1.5rem;letter-spacing:0.06em}
+.nav{display:flex;flex-direction:column;gap:0.3rem;flex:1}
+.nav-item{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 1rem;border-radius:12px;cursor:pointer;transition:all 0.2s;font-size:0.9rem;color:var(--muted);border:none;background:transparent;width:100%;text-align:left;font-family:var(--font-body)}
+.nav-item:hover{background:#ffffff08;color:var(--white)}
+.nav-item.active{background:#44aaff15;color:var(--blue)}
+.sidebar-bottom{padding-top:1rem;border-top:1px solid #ffffff0f}
+.user-info{display:flex;align-items:center;gap:0.75rem;padding:0.5rem}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#a78bfa);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:0.85rem;color:#000;flex-shrink:0}
+.user-name{font-size:0.85rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.signout-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:1rem}
+.signout-btn:hover{color:#ff6b6b}
+.main{margin-left:240px;padding:2rem;min-height:100vh}
+.panel{background:var(--gray);border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;margin-bottom:1.5rem}
+.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:0.75rem}
+.panel-title{font-family:var(--font-head);font-size:1rem;font-weight:700;display:flex;align-items:center;gap:0.5rem}
+.doctor-banner{background:linear-gradient(135deg,#0a0f1a,#0d0d0d);border:1px solid #44aaff25;border-radius:16px;padding:1rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem}
+.doctor-banner-icon{font-size:1.5rem}
+.doctor-banner-text{flex:1}
+.doctor-name{font-family:var(--font-head);font-size:0.95rem;font-weight:700;color:var(--blue)}
+.doctor-clinic{font-size:0.8rem;color:var(--muted);margin-top:0.1rem}
+
+/* EGZERSİZ LİSTESİ */
+.ex-item{display:flex;align-items:center;gap:0.85rem;padding:0.9rem 1rem;background:#ffffff05;border-radius:14px;margin-bottom:0.5rem;border:1.5px solid #ffffff08;cursor:pointer;transition:all 0.2s}
+.ex-item:hover{background:#ffffff08;border-color:#44aaff25}
+.ex-item.done{background:#4ade8008;border-color:#4ade8025}
+.ex-check{width:26px;height:26px;border-radius:8px;border:2px solid #ffffff20;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.85rem;transition:all 0.2s}
+.ex-check.done{background:var(--blue);border-color:var(--blue);color:#000}
+.ex-name{font-size:0.9rem;font-weight:500;flex:1}
+.ex-item.done .ex-name{text-decoration:line-through;opacity:0.5}
+.ex-meta{font-size:0.72rem;color:var(--muted);display:flex;gap:0.5rem;margin-top:0.2rem;flex-wrap:wrap}
+.ex-tag{background:#44aaff15;color:var(--blue);border-radius:6px;padding:0.15rem 0.5rem;font-family:var(--font-head);font-weight:700;font-size:0.68rem}
+
+/* AĞRI SKORU */
+.pain-scale{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:1rem}
+.pain-btn{width:42px;height:42px;border-radius:10px;border:1.5px solid #ffffff15;background:transparent;color:var(--muted);font-family:var(--font-head);font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.2s}
+.pain-btn:hover{border-color:#44aaff40}
+.pain-btn.selected{border-color:var(--blue);background:#44aaff20;color:var(--blue)}
+.pain-btn.pain-low{border-color:#4ade8040}
+.pain-btn.pain-low.selected{background:#4ade8020;color:#4ade80;border-color:#4ade80}
+.pain-btn.pain-mid{border-color:#f5a62340}
+.pain-btn.pain-mid.selected{background:#f5a62320;color:#f5a623;border-color:#f5a623}
+.pain-btn.pain-high{border-color:#ff6b6b40}
+.pain-btn.pain-high.selected{background:#ff6b6b20;color:#ff6b6b;border-color:#ff6b6b}
+
+/* NOT ALANI */
+.note-input{width:100%;background:#ffffff08;border:1px solid #ffffff12;border-radius:12px;padding:0.75rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.88rem;outline:none;resize:none;height:80px;transition:border-color 0.2s;margin-bottom:0.75rem}
+.note-input:focus{border-color:#44aaff40}
+.btn-blue{background:var(--blue);color:#000;border:none;border-radius:100px;padding:0.6rem 1.4rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s}
+.btn-blue:hover{background:var(--blue2)}
+
+/* SEANS TAKVİMİ */
+.session-item{display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:#ffffff05;border-radius:12px;margin-bottom:0.4rem;border:1px solid #ffffff08}
+.session-dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex-shrink:0}
+
+/* İLERLEME */
+.progress-stat{background:#ffffff06;border-radius:14px;padding:1rem;text-align:center}
+.progress-val{font-family:var(--font-head);font-size:1.6rem;font-weight:800;color:var(--blue)}
+.progress-lbl{font-size:0.72rem;color:var(--muted);margin-top:0.2rem;text-transform:uppercase;letter-spacing:0.06em}
+
+.tab-section{display:none}
+.tab-section.active{display:block}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid #ffffff15;border-top-color:var(--blue);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty-state{text-align:center;padding:2rem;color:var(--muted)}
+
+.mobile-menu-btn{display:none}
+.overlay{display:none;position:fixed;inset:0;background:#00000080;z-index:99}
+.overlay.open{display:block}
+@media(max-width:768px){
+  .sidebar{position:fixed;left:-240px;transition:left 0.3s ease;z-index:100}
+  .sidebar.open{left:0}
+  .main{margin-left:0;padding:1rem}
+  .mobile-menu-btn{display:flex;position:fixed;top:1rem;left:1rem;z-index:200;background:var(--blue);color:#000;border:none;border-radius:10px;width:40px;height:40px;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer}
+  .main{padding-top:4rem}
+}
+</style>
+</head>
+<body>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+<button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+
+<div class="sidebar">
+  <a class="logo" href="patient-dashboard.html">Fit<span>Mind</span> AI</a>
+  <div class="logo-badge">🏥 Hasta Paneli</div>
+  <nav class="nav">
+    <button class="nav-item active" onclick="switchTab('home',this)"><span>🏠</span> Ana Sayfa</button>
+    <button class="nav-item" onclick="switchTab('exercises',this)"><span>🏋️</span> Egzersizlerim</button>
+    <button class="nav-item" onclick="switchTab('progress',this)"><span>📊</span> İlerleme</button>
+    <button class="nav-item" onclick="switchTab('notes',this)"><span>📝</span> Günlük & Notlar</button>
+    <button class="nav-item" onclick="switchTab('sessions',this)"><span>📅</span> Seanslarım</button>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="user-info">
+      <div class="avatar" id="avatarInitial">?</div>
+      <div class="user-name" id="userName">Yükleniyor...</div>
+      <button class="signout-btn" onclick="signOut()">⏻</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- DOKTOR BANNER -->
+  <div class="doctor-banner" id="doctorBanner" style="display:none">
+    <div class="doctor-banner-icon">🏥</div>
+    <div class="doctor-banner-text">
+      <div class="doctor-name" id="doctorName">Doktorunuz</div>
+      <div class="doctor-clinic" id="doctorClinic">sizi takip ediyor</div>
+    </div>
+    <div style="font-size:0.75rem;color:var(--blue);font-family:var(--font-head);font-weight:700">Aktif Takip ✓</div>
+  </div>
+
+  <!-- ANA SAYFA -->
+  <div class="tab-section active" id="tab-home">
+    <div style="margin-bottom:1.5rem">
+      <div style="font-family:var(--font-head);font-size:1.6rem;font-weight:800" id="welcomeMsg">Merhaba! 👋</div>
+      <div style="font-size:0.85rem;color:var(--muted);margin-top:0.2rem" id="todayDate"></div>
+    </div>
+
+    <!-- STAT KARTLARI -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem">
+      <div class="progress-stat">
+        <div class="progress-val" id="statDone">0</div>
+        <div class="progress-lbl">Tamamlanan Egzersiz</div>
+      </div>
+      <div class="progress-stat">
+        <div class="progress-val" id="statStreak">0🔥</div>
+        <div class="progress-lbl">Gün Serisi</div>
+      </div>
+      <div class="progress-stat">
+        <div class="progress-val" id="statPain">—</div>
+        <div class="progress-lbl">Son Ağrı Skoru</div>
+      </div>
+    </div>
+
+    <!-- BUGÜNÜN EGZERSİZLERİ -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">💪 Bugünün Egzersizleri</div>
+        <button onclick="switchTab('exercises',document.querySelectorAll('.nav-item')[1])" style="background:transparent;border:none;color:var(--blue);font-family:var(--font-head);font-weight:700;font-size:0.8rem;cursor:pointer">Tümü →</button>
+      </div>
+      <div id="homeExList">
+        <div class="empty-state"><div class="spin" style="margin:0 auto 0.5rem;display:block"></div><div>Yükleniyor...</div></div>
+      </div>
+    </div>
+
+    <!-- AĞRI SKORU HIZLI GİRİŞ -->
+    <div class="panel">
+      <div class="panel-title" style="margin-bottom:1rem">😣 Bugünkü Ağrı Skoru</div>
+      <div class="pain-scale" id="painScale">
+        <button class="pain-btn pain-low" onclick="selectPain(this,1)">1</button>
+        <button class="pain-btn pain-low" onclick="selectPain(this,2)">2</button>
+        <button class="pain-btn pain-low" onclick="selectPain(this,3)">3</button>
+        <button class="pain-btn pain-mid" onclick="selectPain(this,4)">4</button>
+        <button class="pain-btn pain-mid" onclick="selectPain(this,5)">5</button>
+        <button class="pain-btn pain-mid" onclick="selectPain(this,6)">6</button>
+        <button class="pain-btn pain-high" onclick="selectPain(this,7)">7</button>
+        <button class="pain-btn pain-high" onclick="selectPain(this,8)">8</button>
+        <button class="pain-btn pain-high" onclick="selectPain(this,9)">9</button>
+        <button class="pain-btn pain-high" onclick="selectPain(this,10)">10</button>
+      </div>
+      <div style="font-size:0.78rem;color:var(--muted);margin-bottom:0.75rem">1 = Ağrı yok, 10 = Dayanılmaz ağrı</div>
+      <button class="btn-blue" onclick="savePainScore()">Kaydet</button>
+      <div id="painMsg" style="font-size:0.82rem;margin-top:0.5rem;color:#4ade80;display:none">✓ Kaydedildi!</div>
+    </div>
+  </div>
+
+  <!-- EGZERSİZLERİM -->
+  <div class="tab-section" id="tab-exercises">
+    <div style="font-family:var(--font-head);font-size:1.4rem;font-weight:800;margin-bottom:1.5rem">🏋️ Egzersizlerim</div>
+    <div class="panel">
+      <div id="fullExList">
+        <div class="empty-state"><div class="spin" style="margin:0 auto 0.5rem;display:block"></div><div>Yükleniyor...</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- İLERLEME -->
+  <div class="tab-section" id="tab-progress">
+    <div style="font-family:var(--font-head);font-size:1.4rem;font-weight:800;margin-bottom:1.5rem">📊 İlerleme</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem">
+      <div class="progress-stat"><div class="progress-val" id="progTotal">0</div><div class="progress-lbl">Toplam Egzersiz</div></div>
+      <div class="progress-stat"><div class="progress-val" id="progDays">0</div><div class="progress-lbl">Aktif Gün</div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title" style="margin-bottom:1rem">📉 Ağrı Geçmişi</div>
+      <div id="painHistory">
+        <div class="empty-state">Henüz ağrı kaydı yok.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GÜNLÜK & NOTLAR -->
+  <div class="tab-section" id="tab-notes">
+    <div style="font-family:var(--font-head);font-size:1.4rem;font-weight:800;margin-bottom:1.5rem">📝 Günlük & Notlar</div>
+    <div class="panel">
+      <div class="panel-title" style="margin-bottom:1rem">Bugün nasıl hissediyorsunuz?</div>
+      <textarea class="note-input" id="noteInput" placeholder="Bugünkü durumunuzu, hissettiklerinizi veya doktorunuza iletmek istediklerinizi yazın..."></textarea>
+      <button class="btn-blue" onclick="saveNote()">💾 Kaydet</button>
+    </div>
+    <div class="panel">
+      <div class="panel-title" style="margin-bottom:1rem">Geçmiş Notlar</div>
+      <div id="notesList">
+        <div class="empty-state">Henüz not yok.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEANSLARIM -->
+  <div class="tab-section" id="tab-sessions">
+    <div style="font-family:var(--font-head);font-size:1.4rem;font-weight:800;margin-bottom:1.5rem">📅 Seanslarım</div>
+    <div class="panel">
+      <div id="sessionsList">
+        <div class="empty-state">Henüz planlanmış seans yok.<br>Doktorunuz seans ekleyecek.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const SB_URL='https://cypmmayxwbkarvheqoxu.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
+const {createClient}=supabase;
+const sb=createClient(SB_URL,SB_KEY);
+
+let patientProfile=null;
+let selectedPain=null;
+const TODAY=new Date().toISOString().split('T')[0];
+const DAYS=['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
+const jsDay=new Date().getDay();
+const TODAY_IDX=jsDay===0?6:jsDay-1;
+const TODAY_NAME=DAYS[TODAY_IDX];
+
+function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open')}
+function closeSidebar(){document.querySelector('.sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open')}
+
+function switchTab(tab,el){
+  document.querySelectorAll('.tab-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  if(el)el.classList.add('active');
+  closeSidebar();
+}
+
+function selectPain(btn,val){
+  document.querySelectorAll('.pain-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedPain=val;
+}
+
+async function init(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){window.location.replace('auth.html');return;}
+  const u=session.user;
+  const name=u.user_metadata?.full_name||u.email.split('@')[0];
+  document.getElementById('avatarInitial').textContent=name.charAt(0).toUpperCase();
+  document.getElementById('userName').textContent=name;
+  const h=new Date().getHours();
+  const gr=h<12?'Günaydın':'İyi günler';
+  document.getElementById('welcomeMsg').innerHTML=gr+', <span style="color:var(--blue)">'+name.split(' ')[0]+'!</span> 👋';
+  document.getElementById('todayDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+  const {data:profile}=await sb.from('profiles').select('*').eq('id',u.id).maybeSingle();
+  patientProfile=profile;
+
+  // Rol kontrolü
+  if(profile?.user_role!=='patient'){
+    window.location.replace('dashboard.html');
+    return;
+  }
+
+  // Doktor bilgisi
+  if(profile?.physio_id){
+    const {data:doctor}=await sb.from('profiles').select('physio_clinic,physio_spec').eq('id',profile.physio_id).maybeSingle();
+    if(doctor){
+      document.getElementById('doctorBanner').style.display='flex';
+      document.getElementById('doctorName').textContent='🏥 '+(doctor.physio_clinic||'Doktorunuz');
+      document.getElementById('doctorClinic').textContent=(doctor.physio_spec||'')+'  · sizi takip ediyor';
+    }
+  }
+
+  loadExercises();
+  loadNotes();
+  loadPainHistory();
+  loadSessions();
+  updateStats();
+}
+
+async function loadExercises(){
+  const {data:{session}}=await sb.auth.getSession();
+  const {data}=await sb.from('user_plans').select('*').eq('user_id',session.user.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+
+  const homeEl=document.getElementById('homeExList');
+  const fullEl=document.getElementById('fullExList');
+
+  if(!data?.plan_data){
+    homeEl.innerHTML='<div class="empty-state">Doktorunuz henüz egzersiz planı atamamış.<br>Seansınızda plan atamasını isteyin.</div>';
+    fullEl.innerHTML='<div class="empty-state">Henüz egzersiz planı yok.</div>';
+    return;
+  }
+
+  const plan=data.plan_data;
+  // Tüm egzersizleri topla
+  let allExercises=[];
+  if(plan.days){
+    const todayPlan=plan.days.find(d=>d.day===TODAY_NAME||d.day==='Her Gün');
+    const exercises=todayPlan?.exercises||plan.days[0]?.exercises||[];
+    allExercises=exercises;
+  } else if(plan.exercises){
+    allExercises=plan.exercises;
+  } else if(plan.workout){
+    // Metin formatındaki plan
+    homeEl.innerHTML=`<div style="font-size:0.88rem;line-height:1.7;color:#ffffffcc">${plan.workout}</div>`;
+    fullEl.innerHTML=`<div style="font-size:0.88rem;line-height:1.7;color:#ffffffcc">${plan.workout}</div>`;
+    return;
+  }
+
+  if(allExercises.length===0){
+    homeEl.innerHTML='<div class="empty-state">Bugün için egzersiz yok.</div>';
+    fullEl.innerHTML='<div class="empty-state">Egzersiz bulunamadı.</div>';
+    return;
+  }
+
+  const doneList=JSON.parse(localStorage.getItem('patient_done_'+TODAY)||'[]');
+  let html='';
+  allExercises.forEach((ex,i)=>{
+    const done=doneList.includes(i);
+    html+=`<div class="ex-item ${done?'done':''}" onclick="toggleEx(${i},${allExercises.length})">
+      <div class="ex-check ${done?'done':''}">${done?'✓':''}</div>
+      <div style="flex:1">
+        <div class="ex-name">${ex.name}</div>
+        <div class="ex-meta">
+          <span class="ex-tag">🔄 ${ex.sets||'3 set'}</span>
+          <span class="ex-tag">💪 ${ex.reps||'10 tekrar'}</span>
+          ${ex.rest?`<span style="color:var(--muted);font-size:0.68rem">⏱ ${ex.rest}</span>`:''}
+        </div>
+      </div>
+      <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(ex.name+' rehabilitasyon egzersizi')}" target="_blank" onclick="event.stopPropagation()" style="font-size:0.72rem;color:var(--blue);font-family:var(--font-head);font-weight:700;text-decoration:none;white-space:nowrap">▶ Video</a>
+    </div>`;
+  });
+
+  const pct=Math.round(doneList.length/allExercises.length*100);
+  html+=`<div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid #ffffff08">
+    <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--muted);margin-bottom:0.3rem"><span>${doneList.length}/${allExercises.length} tamamlandı</span><span style="color:var(--blue)">${pct}%</span></div>
+    <div style="height:5px;background:#ffffff10;border-radius:100px;overflow:hidden"><div style="height:100%;width:${pct}%;background:var(--blue);border-radius:100px;transition:width 0.5s"></div></div>
+  </div>`;
+
+  homeEl.innerHTML=html;
+  fullEl.innerHTML=html;
+}
+
+function toggleEx(idx,total){
+  const doneList=JSON.parse(localStorage.getItem('patient_done_'+TODAY)||'[]');
+  const pos=doneList.indexOf(idx);
+  if(pos>-1) doneList.splice(pos,1);
+  else doneList.push(idx);
+  localStorage.setItem('patient_done_'+TODAY,JSON.stringify(doneList));
+  // Gün tamamlandıysa kaydet
+  if(doneList.length>=total){
+    const activeDays=JSON.parse(localStorage.getItem('patient_active_days')||'[]');
+    if(!activeDays.includes(TODAY)){activeDays.push(TODAY);localStorage.setItem('patient_active_days',JSON.stringify(activeDays));}
+  }
+  loadExercises();
+  updateStats();
+}
+
+function updateStats(){
+  const doneList=JSON.parse(localStorage.getItem('patient_done_'+TODAY)||'[]');
+  const activeDays=JSON.parse(localStorage.getItem('patient_active_days')||'[]');
+  const painHistory=JSON.parse(localStorage.getItem('patient_pain')||'[]');
+  const lastPain=painHistory.length>0?painHistory[painHistory.length-1].score:'—';
+  document.getElementById('statDone').textContent=doneList.length;
+  document.getElementById('statStreak').textContent=activeDays.length+'🔥';
+  document.getElementById('statPain').textContent=lastPain;
+  document.getElementById('progTotal').textContent=doneList.length;
+  document.getElementById('progDays').textContent=activeDays.length;
+}
+
+function savePainScore(){
+  if(!selectedPain){alert('Lütfen bir ağrı skoru seçin.');return;}
+  const history=JSON.parse(localStorage.getItem('patient_pain')||'[]');
+  history.push({date:TODAY,score:selectedPain,time:new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'})});
+  localStorage.setItem('patient_pain',JSON.stringify(history));
+  document.getElementById('painMsg').style.display='block';
+  setTimeout(()=>document.getElementById('painMsg').style.display='none',2000);
+  updateStats();
+  loadPainHistory();
+}
+
+function loadPainHistory(){
+  const history=JSON.parse(localStorage.getItem('patient_pain')||'[]');
+  const el=document.getElementById('painHistory');
+  if(history.length===0){el.innerHTML='<div class="empty-state">Henüz ağrı kaydı yok.</div>';return;}
+  el.innerHTML=history.slice().reverse().slice(0,10).map(h=>{
+    const color=h.score<=3?'#4ade80':h.score<=6?'#f5a623':'#ff6b6b';
+    return `<div style="display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0;border-bottom:1px solid #ffffff07">
+      <div style="width:36px;height:36px;border-radius:10px;background:${color}20;border:1px solid ${color}40;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:1rem;color:${color}">${h.score}</div>
+      <div style="flex:1"><div style="font-size:0.85rem">${h.date}</div><div style="font-size:0.72rem;color:var(--muted)">${h.time||''}</div></div>
+      <div style="font-size:0.75rem;color:${color}">${h.score<=3?'Düşük':h.score<=6?'Orta':'Yüksek'} ağrı</div>
+    </div>`;
+  }).join('');
+}
+
+function saveNote(){
+  const text=document.getElementById('noteInput').value.trim();
+  if(!text){alert('Lütfen not girin.');return;}
+  const notes=JSON.parse(localStorage.getItem('patient_notes')||'[]');
+  notes.unshift({text,date:new Date().toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'})});
+  localStorage.setItem('patient_notes',JSON.stringify(notes));
+  document.getElementById('noteInput').value='';
+  loadNotes();
+}
+
+function loadNotes(){
+  const notes=JSON.parse(localStorage.getItem('patient_notes')||'[]');
+  const el=document.getElementById('notesList');
+  if(notes.length===0){el.innerHTML='<div class="empty-state">Henüz not yok.</div>';return;}
+  el.innerHTML=notes.map(n=>`
+    <div style="background:#ffffff06;border-radius:12px;padding:0.85rem 1rem;margin-bottom:0.5rem;border-left:3px solid var(--blue)">
+      <div style="font-size:0.88rem;color:#ffffffcc;line-height:1.6;margin-bottom:0.3rem">${n.text}</div>
+      <div style="font-size:0.7rem;color:var(--muted)">${n.date}</div>
+    </div>`).join('');
+}
+
+function loadSessions(){
+  // Fizyoterapist panelinden gelen seanslar localStorage'da
+  const physioSessions=JSON.parse(localStorage.getItem('physio_sessions')||'[]');
+  const el=document.getElementById('sessionsList');
+  if(physioSessions.length===0){el.innerHTML='<div class="empty-state">Henüz planlanmış seans yok.</div>';return;}
+  el.innerHTML=physioSessions.slice(0,10).map(s=>`
+    <div class="session-item">
+      <div class="session-dot"></div>
+      <div style="flex:1"><div style="font-size:0.85rem;font-weight:500">${s.date}${s.time?' · '+s.time:''}</div>${s.note?`<div style="font-size:0.75rem;color:var(--muted)">${s.note}</div>`:''}</div>
+      <div style="font-size:0.72rem;font-family:var(--font-head);font-weight:700;color:${s.status==='done'?'#4ade80':'var(--blue)'}">${s.status==='done'?'Tamamlandı':'Planlandı'}</div>
+    </div>`).join('');
+}
+
+async function signOut(){await sb.auth.signOut();window.location.replace('auth.html');}
+
+init();
+</script>
+</body>
+</html>
