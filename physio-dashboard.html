@@ -554,56 +554,425 @@ function filterPatients(){
   renderPatientList(filtered);
 }
 
+let _currentPatientId=null;
+let _currentPatient=null;
+
 async function openPatient(id){
   const p=patients.find(x=>x.id===id);
   if(!p)return;
+  _currentPatientId=id;
+  _currentPatient=p;
   const name=p.full_name||p.email||'Hasta';
-  document.getElementById('modalPatientName').textContent=name;
-
-  // Hasta planını çek
-  const {data:plan}=await sb.from('user_plans').select('*').eq('user_id',id).order('created_at',{ascending:false}).limit(1).maybeSingle();
-  // İlerleme loglarını çek
-  const {data:logs}=await sb.from('progress_logs').select('*').eq('user_id',id).order('log_date',{ascending:false}).limit(5);
-
+  const initial=name.charAt(0).toUpperCase();
   const goalMap={lose_weight:'Kilo Vermek',build_muscle:'Kas Yapmak',get_fit:'Forma Girmek',improve_health:'Sağlık'};
-  const notes=JSON.parse(localStorage.getItem('physio_notes_'+id)||'[]');
+  const levelMap={beginner:'Başlangıç',intermediate:'Orta Seviye',advanced:'İleri Seviye'};
 
-  document.getElementById('modalContent').innerHTML=`
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem">
-      <div style="background:#ffffff06;border-radius:12px;padding:1rem">
-        <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:700;font-family:var(--font-head);margin-bottom:0.5rem">Hasta Bilgileri</div>
-        <div style="font-size:0.85rem;margin-bottom:0.2rem">🎯 ${goalMap[p.goal]||'—'}</div>
-        <div style="font-size:0.85rem;margin-bottom:0.2rem">⚡ ${p.fitness_level||'—'}</div>
-        <div style="font-size:0.85rem;margin-bottom:0.2rem">⚖️ ${p.weight?p.weight+' kg':'—'}</div>
-        <div style="font-size:0.85rem">🏋️ ${p.equipment||'—'}</div>
-      </div>
-      <div style="background:#ffffff06;border-radius:12px;padding:1rem">
-        <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:700;font-family:var(--font-head);margin-bottom:0.5rem">Son İlerleme</div>
-        ${logs&&logs.length>0?logs.slice(0,3).map(l=>`<div style="font-size:0.82rem;margin-bottom:0.2rem">${l.log_date}: ${l.weight?l.weight+' kg':'ölçüm yok'}</div>`).join(''):'<div style="font-size:0.82rem;color:var(--muted)">Henüz kayıt yok</div>'}
-      </div>
-    </div>
+  // Header doldur
+  document.getElementById('pmAvatar').textContent=initial;
+  document.getElementById('pmName').textContent=name;
+  document.getElementById('pmMeta').innerHTML=`
+    <span class="pm-meta-item">📧 ${p.email||'—'}</span>
+    <span class="pm-meta-item">🎯 ${goalMap[p.goal]||'Hedef yok'}</span>
+    <span class="pm-meta-item">⚡ ${levelMap[p.fitness_level]||'Seviye yok'}</span>
+  `;
 
-    <div style="background:#44aaff10;border:1px solid #44aaff20;border-radius:12px;padding:1rem;margin-bottom:1.25rem">
-      <div style="font-size:0.68rem;color:var(--blue);text-transform:uppercase;letter-spacing:0.08em;font-weight:700;font-family:var(--font-head);margin-bottom:0.4rem">Mevcut Plan</div>
-      <div style="font-size:0.85rem;color:var(--muted)">${plan?'Plan mevcut — '+new Date(plan.created_at).toLocaleDateString('tr-TR'):'Henüz plan yok'}</div>
-      <button onclick="assignPlan('${id}')" style="margin-top:0.65rem;background:var(--blue);color:#000;border:none;border-radius:100px;padding:0.45rem 1rem;font-family:var(--font-head);font-weight:700;font-size:0.78rem;cursor:pointer">🏋️ Plan Ata / Assign Plan</button>
-    </div>
-
-    <div style="margin-bottom:1.25rem">
-      <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:700;font-family:var(--font-head);margin-bottom:0.5rem">Doktor Notları / Doctor Notes</div>
-      <textarea class="note-input" id="newNote" placeholder="Hasta için not ekle... / Add note for patient..."></textarea>
-      <button onclick="saveNote('${id}')" class="btn-blue" style="font-size:0.8rem;padding:0.5rem 1rem">💾 Not Kaydet / Save Note</button>
-      <div style="margin-top:0.75rem" id="notesList">
-        ${notes.length>0?notes.map(n=>`<div class="note-item">${n.text}<div class="note-date">${n.date}</div></div>`).join(''):'<div style="color:var(--muted);font-size:0.82rem">Henüz not yok.</div>'}
-      </div>
-    </div>
-
-    <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
-      <button onclick="closeModal()" class="btn-outline">Kapat / Close</button>
-      <button onclick="assignPlan('${id}')" class="btn-blue">Plan Ata / Assign Plan</button>
-    </div>`;
-
+  // Modal aç ve Özet tab'a dön
+  document.querySelectorAll('.pm-tab').forEach((t,i)=>t.classList.toggle('active',i===0));
+  document.querySelectorAll('.pm-tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pmPanel-overview').classList.add('active');
   document.getElementById('patientModal').classList.add('open');
+
+  // Tüm verileri paralel çek
+  await Promise.all([
+    loadPmOverview(id,p),
+    loadPmSessions(id),
+    loadPmMeasurements(id),
+    loadPmMedications(id),
+    loadPmReports(id),
+    loadPmNotes(id)
+  ]);
+}
+
+function switchPmTab(tabName, btn){
+  document.querySelectorAll('.pm-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.pm-tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pmPanel-'+tabName).classList.add('active');
+}
+
+// --- ÖZET TAB ---
+async function loadPmOverview(id, p){
+  const {data:plan}=await sb.from('user_plans').select('*').eq('user_id',id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+  const {data:logs}=await sb.from('progress_logs').select('*').eq('user_id',id).order('log_date',{ascending:false}).limit(5);
+  const {data:sess}=await sb.from('patient_sessions').select('*').eq('patient_id',id).order('session_date',{ascending:false});
+  const {data:meas}=await sb.from('patient_measurements').select('*').eq('patient_id',id);
+
+  // Quick stats header
+  const totalSess=sess?.length||0;
+  const lastPain=sess&&sess.length>0?sess[0].pain_score:null;
+  const weight=p.weight||'—';
+  const planStatus=plan?'Aktif':'Yok';
+  document.getElementById('pmQuickStats').innerHTML=`
+    <div class="pm-qs"><div class="pm-qs-val">${totalSess}</div><div class="pm-qs-lbl">Seans</div></div>
+    <div class="pm-qs"><div class="pm-qs-val" style="color:${lastPain===null?'var(--muted)':lastPain<=3?'#4ade80':lastPain<=6?'#f5a623':'#ff6b6b'}">${lastPain!==null?lastPain+'/10':'—'}</div><div class="pm-qs-lbl">Son Ağrı</div></div>
+    <div class="pm-qs"><div class="pm-qs-val">${weight}${p.weight?' kg':''}</div><div class="pm-qs-lbl">Kilo</div></div>
+    <div class="pm-qs"><div class="pm-qs-val" style="color:${plan?'#4ade80':'var(--muted)'};font-size:0.95rem">${planStatus}</div><div class="pm-qs-lbl">Plan</div></div>
+  `;
+
+  // Tab count badges
+  document.getElementById('pmCountSessions').textContent=totalSess;
+  document.getElementById('pmCountMeasurements').textContent=meas?.length||0;
+
+  // Panel içeriği
+  const goalMap={lose_weight:'Kilo Vermek',build_muscle:'Kas Yapmak',get_fit:'Forma Girmek',improve_health:'Sağlık'};
+  const levelMap={beginner:'Başlangıç',intermediate:'Orta Seviye',advanced:'İleri Seviye'};
+  const equipMap={home_no:'Ev (Ekipmansız)',home_basic:'Ev (Temel)',gym:'Spor Salonu',outdoor:'Açık Hava'};
+
+  document.getElementById('pmPanel-overview').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+      <div class="pm-card">
+        <div class="pm-section-title" style="margin-bottom:0.5rem">👤 Hasta Bilgileri</div>
+        <div style="font-size:0.85rem;line-height:1.9;color:#ffffffcc">
+          <div>🎯 <strong>Hedef:</strong> ${goalMap[p.goal]||'—'}</div>
+          <div>⚡ <strong>Seviye:</strong> ${levelMap[p.fitness_level]||'—'}</div>
+          <div>🏋️ <strong>Ekipman:</strong> ${equipMap[p.equipment]||'—'}</div>
+          <div>📏 <strong>Boy:</strong> ${p.height?p.height+' cm':'—'}</div>
+          <div>⚖️ <strong>Kilo:</strong> ${p.weight?p.weight+' kg':'—'}</div>
+          <div>🎂 <strong>Yaş:</strong> ${p.age||'—'}</div>
+        </div>
+      </div>
+      <div class="pm-card">
+        <div class="pm-section-title" style="margin-bottom:0.5rem">📈 Son Aktivite</div>
+        ${sess&&sess.length>0?sess.slice(0,3).map(s=>`
+          <div style="padding:0.4rem 0;border-bottom:1px solid #ffffff08;font-size:0.8rem">
+            <div style="color:var(--white)">${new Date(s.session_date).toLocaleDateString('tr-TR')}</div>
+            <div style="color:var(--muted);font-size:0.72rem">${s.notes?s.notes.slice(0,50):'Seans kaydı'}${s.pain_score!==null?' · Ağrı: '+s.pain_score+'/10':''}</div>
+          </div>`).join(''):'<div style="color:var(--muted);font-size:0.82rem">Henüz seans yok</div>'}
+      </div>
+    </div>
+
+    <div class="pm-card" style="background:linear-gradient(135deg,#0a1628,#0d0d0d);border-color:#44aaff25">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem">
+        <div>
+          <div style="font-family:var(--font-head);font-size:0.95rem;font-weight:700;color:var(--blue);margin-bottom:0.2rem">🏋️ Antrenman Planı</div>
+          <div style="font-size:0.82rem;color:var(--muted)">${plan?'Atanmış · '+new Date(plan.created_at).toLocaleDateString('tr-TR'):'Henüz plan atanmamış'}</div>
+        </div>
+        <button class="pm-btn" onclick="assignPlan('${id}')">${plan?'Planı Güncelle':'Plan Ata'}</button>
+      </div>
+    </div>
+  `;
+}
+
+// --- SEANSLAR TAB ---
+async function loadPmSessions(id){
+  const {data:sess}=await sb.from('patient_sessions').select('*').eq('patient_id',id).order('session_date',{ascending:false});
+  const list=sess||[];
+  document.getElementById('pmCountSessions').textContent=list.length;
+
+  let html=`
+    <div class="pm-add-bar">
+      <div class="pm-section-title" style="margin-bottom:0.6rem">➕ Yeni Seans Ekle</div>
+      <div class="pm-form-grid pm-form-grid-3">
+        <div><div class="pm-label">Tarih</div><input type="date" class="pm-input" id="pmNewSessDate" value="${new Date().toISOString().split('T')[0]}"></div>
+        <div><div class="pm-label">Süre (dk)</div><input type="number" class="pm-input" id="pmNewSessDuration" placeholder="45"></div>
+        <div><div class="pm-label">Ağrı (0-10)</div><input type="number" min="0" max="10" class="pm-input" id="pmNewSessPain" placeholder="3"></div>
+      </div>
+      <div class="pm-form-grid"><div><div class="pm-label">Notlar</div><textarea class="pm-textarea" id="pmNewSessNotes" placeholder="Seans notları..."></textarea></div></div>
+      <button class="pm-btn" onclick="addPmSession()">💾 Seans Kaydet</button>
+    </div>
+  `;
+
+  if(list.length===0){
+    html+=`<div class="pm-empty"><div class="pm-empty-icon">📅</div><div class="pm-empty-text">Henüz seans kaydı yok</div></div>`;
+  } else {
+    html+=`<div class="pm-section-title">Geçmiş Seanslar (${list.length})</div>`;
+    html+=list.map(s=>{
+      const painCls=s.pain_score===null?'':s.pain_score<=3?'pm-pain-low':s.pain_score<=6?'pm-pain-mid':'pm-pain-high';
+      return `<div class="pm-card">
+        <div class="pm-card-top">
+          <div style="flex:1">
+            <div class="pm-card-title">Seans — ${new Date(s.session_date).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'})}</div>
+            <div style="margin-top:0.3rem;display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center">
+              ${s.duration_minutes?`<span class="pm-card-tag">⏱ ${s.duration_minutes} dk</span>`:''}
+              ${s.pain_score!==null?`<span class="pm-pain ${painCls}">🩺 Ağrı: ${s.pain_score}/10</span>`:''}
+            </div>
+          </div>
+          <button class="pm-btn pm-btn-ghost pm-btn-sm" onclick="deletePmSession('${s.id}')">🗑</button>
+        </div>
+        ${s.notes?`<div class="pm-card-body" style="margin-top:0.4rem">${s.notes}</div>`:''}
+      </div>`;
+    }).join('');
+  }
+
+  document.getElementById('pmPanel-sessions').innerHTML=html;
+}
+
+async function addPmSession(){
+  const date=document.getElementById('pmNewSessDate').value;
+  const duration=parseInt(document.getElementById('pmNewSessDuration').value)||null;
+  const pain=document.getElementById('pmNewSessPain').value;
+  const painScore=pain===''?null:parseInt(pain);
+  const notes=document.getElementById('pmNewSessNotes').value.trim();
+  if(!date){alert('Tarih seçin');return;}
+  const {error}=await sb.from('patient_sessions').insert({
+    patient_id:_currentPatientId,
+    physio_id:physioProfile.id,
+    session_date:date,
+    duration_minutes:duration,
+    pain_score:painScore,
+    notes:notes||null
+  });
+  if(error){alert('Hata: '+error.message);return;}
+  await loadPmSessions(_currentPatientId);
+  await loadPmOverview(_currentPatientId,_currentPatient);
+}
+
+async function deletePmSession(sid){
+  if(!confirm('Seansı silmek istediğinize emin misiniz?'))return;
+  await sb.from('patient_sessions').delete().eq('id',sid);
+  await loadPmSessions(_currentPatientId);
+  await loadPmOverview(_currentPatientId,_currentPatient);
+}
+
+// --- ÖLÇÜMLER TAB ---
+async function loadPmMeasurements(id){
+  const {data:meas}=await sb.from('patient_measurements').select('*').eq('patient_id',id).order('measurement_date',{ascending:false});
+  const list=meas||[];
+  document.getElementById('pmCountMeasurements').textContent=list.length;
+
+  let html=`
+    <div class="pm-add-bar">
+      <div class="pm-section-title" style="margin-bottom:0.6rem">➕ Yeni Ölçüm Ekle</div>
+      <div class="pm-form-grid pm-form-grid-3">
+        <div><div class="pm-label">Tür</div><input class="pm-input" id="pmNewMeasType" placeholder="Örn: Diz Açısı"></div>
+        <div><div class="pm-label">Değer</div><input type="number" step="0.1" class="pm-input" id="pmNewMeasValue" placeholder="90"></div>
+        <div><div class="pm-label">Birim</div><input class="pm-input" id="pmNewMeasUnit" placeholder="derece / cm / kg"></div>
+      </div>
+      <div class="pm-form-grid"><div><div class="pm-label">Notlar</div><input class="pm-input" id="pmNewMeasNotes" placeholder="Açıklama..."></div></div>
+      <button class="pm-btn" onclick="addPmMeasurement()">💾 Ölçüm Kaydet</button>
+    </div>
+  `;
+
+  if(list.length===0){
+    html+=`<div class="pm-empty"><div class="pm-empty-icon">📏</div><div class="pm-empty-text">Henüz ölçüm kaydı yok</div></div>`;
+  } else {
+    html+=`<div class="pm-section-title">Ölçüm Geçmişi (${list.length})</div>`;
+    html+=list.map(m=>`
+      <div class="pm-card">
+        <div class="pm-card-top">
+          <div style="flex:1">
+            <div class="pm-card-title">${m.measurement_type||'Ölçüm'}</div>
+            <div style="margin-top:0.3rem;display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center">
+              <span class="pm-card-tag" style="background:#4ade8020;color:#4ade80">📊 ${m.value}${m.unit?' '+m.unit:''}</span>
+              <span class="pm-card-date">${new Date(m.measurement_date).toLocaleDateString('tr-TR')}</span>
+            </div>
+          </div>
+          <button class="pm-btn pm-btn-ghost pm-btn-sm" onclick="deletePmMeasurement('${m.id}')">🗑</button>
+        </div>
+        ${m.notes?`<div class="pm-card-body" style="margin-top:0.4rem">${m.notes}</div>`:''}
+      </div>`).join('');
+  }
+
+  document.getElementById('pmPanel-measurements').innerHTML=html;
+}
+
+async function addPmMeasurement(){
+  const type=document.getElementById('pmNewMeasType').value.trim();
+  const value=parseFloat(document.getElementById('pmNewMeasValue').value);
+  const unit=document.getElementById('pmNewMeasUnit').value.trim();
+  const notes=document.getElementById('pmNewMeasNotes').value.trim();
+  if(!type||isNaN(value)){alert('Tür ve değer girin');return;}
+  const {error}=await sb.from('patient_measurements').insert({
+    patient_id:_currentPatientId,
+    physio_id:physioProfile.id,
+    measurement_type:type,
+    value:value,
+    unit:unit||null,
+    notes:notes||null
+  });
+  if(error){alert('Hata: '+error.message);return;}
+  await loadPmMeasurements(_currentPatientId);
+}
+
+async function deletePmMeasurement(mid){
+  if(!confirm('Ölçümü silmek istediğinize emin misiniz?'))return;
+  await sb.from('patient_measurements').delete().eq('id',mid);
+  await loadPmMeasurements(_currentPatientId);
+}
+
+// --- İLAÇLAR TAB ---
+async function loadPmMedications(id){
+  const {data:meds}=await sb.from('patient_medications').select('*').eq('patient_id',id).order('created_at',{ascending:false});
+  const list=meds||[];
+  document.getElementById('pmCountMedications').textContent=list.length;
+
+  let html=`
+    <div class="pm-add-bar">
+      <div class="pm-section-title" style="margin-bottom:0.6rem">➕ Yeni İlaç Ekle</div>
+      <div class="pm-form-grid pm-form-grid-2">
+        <div><div class="pm-label">İlaç Adı *</div><input class="pm-input" id="pmNewMedName" placeholder="Örn: Parol"></div>
+        <div><div class="pm-label">Doz</div><input class="pm-input" id="pmNewMedDose" placeholder="500 mg"></div>
+      </div>
+      <div class="pm-form-grid pm-form-grid-2">
+        <div><div class="pm-label">Sıklık</div><input class="pm-input" id="pmNewMedFreq" placeholder="Günde 2 kez"></div>
+        <div><div class="pm-label">Başlangıç Tarihi</div><input type="date" class="pm-input" id="pmNewMedStart" value="${new Date().toISOString().split('T')[0]}"></div>
+      </div>
+      <div class="pm-form-grid"><div><div class="pm-label">Notlar</div><input class="pm-input" id="pmNewMedNotes" placeholder="Açıklama..."></div></div>
+      <button class="pm-btn" onclick="addPmMedication()">💾 İlaç Kaydet</button>
+    </div>
+  `;
+
+  if(list.length===0){
+    html+=`<div class="pm-empty"><div class="pm-empty-icon">💊</div><div class="pm-empty-text">Henüz ilaç kaydı yok</div></div>`;
+  } else {
+    html+=`<div class="pm-section-title">İlaç Listesi (${list.length})</div>`;
+    html+=list.map(m=>`
+      <div class="pm-card">
+        <div class="pm-card-top">
+          <div style="flex:1">
+            <div class="pm-card-title">💊 ${m.medication_name}</div>
+            <div style="margin-top:0.3rem;display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center">
+              ${m.dosage?`<span class="pm-card-tag">${m.dosage}</span>`:''}
+              ${m.frequency?`<span class="pm-card-tag" style="background:#a78bfa20;color:#a78bfa">🕐 ${m.frequency}</span>`:''}
+              ${m.start_date?`<span class="pm-card-date">Başlangıç: ${new Date(m.start_date).toLocaleDateString('tr-TR')}</span>`:''}
+            </div>
+          </div>
+          <button class="pm-btn pm-btn-ghost pm-btn-sm" onclick="deletePmMedication('${m.id}')">🗑</button>
+        </div>
+        ${m.notes?`<div class="pm-card-body" style="margin-top:0.4rem">${m.notes}</div>`:''}
+      </div>`).join('');
+  }
+
+  document.getElementById('pmPanel-medications').innerHTML=html;
+}
+
+async function addPmMedication(){
+  const name=document.getElementById('pmNewMedName').value.trim();
+  const dose=document.getElementById('pmNewMedDose').value.trim();
+  const freq=document.getElementById('pmNewMedFreq').value.trim();
+  const start=document.getElementById('pmNewMedStart').value;
+  const notes=document.getElementById('pmNewMedNotes').value.trim();
+  if(!name){alert('İlaç adı girin');return;}
+  const {error}=await sb.from('patient_medications').insert({
+    patient_id:_currentPatientId,
+    physio_id:physioProfile.id,
+    medication_name:name,
+    dosage:dose||null,
+    frequency:freq||null,
+    start_date:start||null,
+    notes:notes||null
+  });
+  if(error){alert('Hata: '+error.message);return;}
+  await loadPmMedications(_currentPatientId);
+}
+
+async function deletePmMedication(mid){
+  if(!confirm('İlacı silmek istediğinize emin misiniz?'))return;
+  await sb.from('patient_medications').delete().eq('id',mid);
+  await loadPmMedications(_currentPatientId);
+}
+
+// --- RAPORLAR TAB ---
+async function loadPmReports(id){
+  const {data:reps}=await sb.from('patient_reports').select('*').eq('patient_id',id).order('report_date',{ascending:false});
+  const list=reps||[];
+  document.getElementById('pmCountReports').textContent=list.length;
+
+  let html=`
+    <div class="pm-add-bar">
+      <div class="pm-section-title" style="margin-bottom:0.6rem">➕ Yeni Rapor Ekle</div>
+      <div class="pm-form-grid"><div><div class="pm-label">Rapor Başlığı *</div><input class="pm-input" id="pmNewRepTitle" placeholder="Örn: MR Sonucu"></div></div>
+      <div class="pm-form-grid"><div><div class="pm-label">İçerik</div><textarea class="pm-textarea" id="pmNewRepContent" placeholder="Rapor detayları, bulgular..."></textarea></div></div>
+      <div class="pm-form-grid"><div><div class="pm-label">Dosya Linki (isteğe bağlı)</div><input class="pm-input" id="pmNewRepUrl" placeholder="https://..."></div></div>
+      <button class="pm-btn" onclick="addPmReport()">💾 Rapor Kaydet</button>
+    </div>
+  `;
+
+  if(list.length===0){
+    html+=`<div class="pm-empty"><div class="pm-empty-icon">📄</div><div class="pm-empty-text">Henüz rapor yok</div></div>`;
+  } else {
+    html+=`<div class="pm-section-title">Raporlar (${list.length})</div>`;
+    html+=list.map(r=>`
+      <div class="pm-card">
+        <div class="pm-card-top">
+          <div style="flex:1">
+            <div class="pm-card-title">📄 ${r.report_title}</div>
+            <div style="margin-top:0.3rem"><span class="pm-card-date">${new Date(r.report_date).toLocaleDateString('tr-TR')}</span></div>
+          </div>
+          <div style="display:flex;gap:0.3rem">
+            ${r.file_url?`<a href="${r.file_url}" target="_blank" class="pm-btn pm-btn-sm" style="text-decoration:none">📥 Aç</a>`:''}
+            <button class="pm-btn pm-btn-ghost pm-btn-sm" onclick="deletePmReport('${r.id}')">🗑</button>
+          </div>
+        </div>
+        ${r.report_content?`<div class="pm-card-body" style="margin-top:0.4rem;white-space:pre-wrap">${r.report_content}</div>`:''}
+      </div>`).join('');
+  }
+
+  document.getElementById('pmPanel-reports').innerHTML=html;
+}
+
+async function addPmReport(){
+  const title=document.getElementById('pmNewRepTitle').value.trim();
+  const content=document.getElementById('pmNewRepContent').value.trim();
+  const url=document.getElementById('pmNewRepUrl').value.trim();
+  if(!title){alert('Rapor başlığı girin');return;}
+  const {error}=await sb.from('patient_reports').insert({
+    patient_id:_currentPatientId,
+    physio_id:physioProfile.id,
+    report_title:title,
+    report_content:content||null,
+    file_url:url||null
+  });
+  if(error){alert('Hata: '+error.message);return;}
+  await loadPmReports(_currentPatientId);
+}
+
+async function deletePmReport(rid){
+  if(!confirm('Raporu silmek istediğinize emin misiniz?'))return;
+  await sb.from('patient_reports').delete().eq('id',rid);
+  await loadPmReports(_currentPatientId);
+}
+
+// --- NOTLAR TAB (localStorage'da kalıyor) ---
+function loadPmNotes(id){
+  const notes=JSON.parse(localStorage.getItem('physio_notes_'+id)||'[]');
+  let html=`
+    <div class="pm-add-bar">
+      <div class="pm-section-title" style="margin-bottom:0.6rem">➕ Not Ekle</div>
+      <textarea class="pm-textarea" id="pmNewNote" placeholder="Hasta için not ekle..."></textarea>
+      <button class="pm-btn" style="margin-top:0.5rem" onclick="savePmNote()">💾 Not Kaydet</button>
+    </div>
+  `;
+  if(notes.length===0){
+    html+=`<div class="pm-empty"><div class="pm-empty-icon">📝</div><div class="pm-empty-text">Henüz not yok</div></div>`;
+  } else {
+    html+=`<div class="pm-section-title">Notlar (${notes.length})</div>`;
+    html+=notes.map((n,i)=>`
+      <div class="pm-card" style="border-left:3px solid var(--blue)">
+        <div class="pm-card-top">
+          <div style="flex:1"><div class="pm-card-body">${n.text}</div></div>
+          <button class="pm-btn pm-btn-ghost pm-btn-sm" onclick="deletePmNote(${i})">🗑</button>
+        </div>
+        <div class="pm-card-date" style="margin-top:0.3rem">${n.date}</div>
+      </div>`).join('');
+  }
+  document.getElementById('pmPanel-notes').innerHTML=html;
+}
+
+function savePmNote(){
+  const text=document.getElementById('pmNewNote').value.trim();
+  if(!text)return;
+  const notes=JSON.parse(localStorage.getItem('physio_notes_'+_currentPatientId)||'[]');
+  notes.unshift({text,date:new Date().toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})});
+  localStorage.setItem('physio_notes_'+_currentPatientId,JSON.stringify(notes));
+  loadPmNotes(_currentPatientId);
+}
+
+function deletePmNote(idx){
+  const notes=JSON.parse(localStorage.getItem('physio_notes_'+_currentPatientId)||'[]');
+  notes.splice(idx,1);
+  localStorage.setItem('physio_notes_'+_currentPatientId,JSON.stringify(notes));
+  loadPmNotes(_currentPatientId);
 }
 
 function saveNote(patientId){
