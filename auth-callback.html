@@ -13,7 +13,7 @@ async function check(){
   await new Promise(r=>setTimeout(r,1000));
   const {data:profile}=await sb.from('profiles').select('onboarding_done,user_role').eq('id',session.user.id).maybeSingle();
   if(profile?.user_role==='physio') window.location.replace('physio-dashboard.html');
-  else if(profile?.user_role==='patient') window.location.replace('dashboard.html');
+  else if(profile?.user_role==='patient') window.location.replace('patient-dashboard.html');
   else if(!profile?.onboarding_done) window.location.replace('onboarding.html');
   else window.location.replace('dashboard.html');
 }
