@@ -985,12 +985,61 @@ function saveNote(patientId){
   document.getElementById('notesList').innerHTML=notes.map(n=>`<div class="note-item">${n.text}<div class="note-date">${n.date}</div></div>`).join('');
 }
 
-async function assignPlan(patientId){
+function assignPlan(patientId){
+  // Plan atama tab'ına benzer bir modal içi panel açalım
   const patient=patients.find(p=>p.id===patientId);
-  const name=patient?.full_name||patient?.email||'Hasta';
-  const exercises=prompt(`${name} için egzersiz planı girin.\n\nÖrnek format:\nSquat: 3 set x 12 tekrar\nLunge: 3 set x 10 tekrar\nPlank: 3 set x 30sn`);
-  if(!exercises)return;
-  const notes=prompt('Özel notlar (isteğe bağlı):\nÖrnek: Diz egzersizlerinde dikkatli ol, squat derinliğini sınırla');
+  if(!patient)return;
+  const name=patient.full_name||patient.email||'Hasta';
+
+  // Overview paneli değiştir — plan atama formu göster
+  const panel=document.getElementById('pmPanel-overview');
+  panel.innerHTML=`
+    <div class="pm-card" style="background:linear-gradient(135deg,#0a1628,#0d0d0d);border-color:#44aaff25;margin-bottom:1rem">
+      <div class="pm-section-title" style="margin-bottom:0.5rem;color:var(--blue)">🏋️ ${name} için Plan Oluştur</div>
+      <div style="font-size:0.82rem;color:var(--muted);line-height:1.5">Her satıra bir egzersiz yazın. Format: <strong style="color:var(--white)">Egzersiz Adı: 3 set x 12 tekrar</strong></div>
+    </div>
+
+    <div class="pm-add-bar" style="background:#ffffff06">
+      <div class="pm-label">Egzersizler *</div>
+      <textarea class="pm-textarea" id="pmPlanExercises" style="min-height:180px;font-family:monospace;font-size:0.85rem" placeholder="Squat: 3 set x 12 tekrar
+Lunge: 3 set x 10 tekrar
+Plank: 3 set x 30sn
+Köprü: 3 set x 15 tekrar
+Dead Bug: 3 set x 10 tekrar"></textarea>
+
+      <div class="pm-label" style="margin-top:0.85rem">Özel Notlar (İsteğe Bağlı)</div>
+      <textarea class="pm-textarea" id="pmPlanNotes" placeholder="Örn: Diz egzersizlerinde dikkatli ol, squat derinliğini sınırla"></textarea>
+
+      <div style="display:flex;gap:0.5rem;margin-top:0.85rem;flex-wrap:wrap">
+        <button class="pm-btn" onclick="savePmPlan('${patientId}')">💾 Planı Kaydet</button>
+        <button class="pm-btn pm-btn-ghost" onclick="loadPmOverview('${patientId}',_currentPatient)">↩️ İptal</button>
+        <button class="pm-btn pm-btn-ghost" onclick="insertPmExerciseTemplate()">📋 Şablon Ekle</button>
+      </div>
+    </div>
+  `;
+
+  // Özet tab'ına geç
+  document.querySelectorAll('.pm-tab').forEach((t,i)=>t.classList.toggle('active',i===0));
+  document.querySelectorAll('.pm-tab-panel').forEach(p=>p.classList.remove('active'));
+  panel.classList.add('active');
+}
+
+function insertPmExerciseTemplate(){
+  const ta=document.getElementById('pmPlanExercises');
+  if(!ta)return;
+  if(ta.value.trim()&&!confirm('Mevcut içerik silinecek. Devam?'))return;
+  ta.value=`Squat: 3 set x 12 tekrar
+Lunge: 3 set x 10 tekrar
+Plank: 3 set x 30sn
+Köprü: 3 set x 15 tekrar
+Pelvik Tilt: 3 set x 15 tekrar`;
+}
+
+async function savePmPlan(patientId){
+  const exercises=document.getElementById('pmPlanExercises').value.trim();
+  const notes=document.getElementById('pmPlanNotes').value.trim();
+  if(!exercises){alert('En az bir egzersiz girin');return;}
+
   const planData={
     workout: exercises,
     tips: notes||'',
@@ -1013,14 +1062,18 @@ async function assignPlan(patientId){
       })
     }]
   };
+
   try{
-    await sb.from('user_plans').upsert({
+    const {error}=await sb.from('user_plans').upsert({
       user_id:patientId,
       plan_data:planData,
       updated_at:new Date().toISOString()
     },{onConflict:'user_id'});
-    alert(`✅ ${name} için plan kaydedildi!`);
-    closeModal();
+    if(error)throw error;
+
+    // Başarılı — overview'a dön
+    alert('✅ Plan kaydedildi!');
+    await loadPmOverview(patientId,_currentPatient);
   }catch(e){
     alert('Hata: '+e.message);
   }
