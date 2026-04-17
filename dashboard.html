@@ -628,6 +628,15 @@ if(profile?.user_role === 'physio'){
 }
   userProfile=profile; isPro=profile?.is_pro===true;
   if(isPro)applyProUI(); else applyFreeUI();
+  // Hasta modu
+if(profile?.user_role==='patient'){
+  document.getElementById('upgradeCard').style.display='none';
+  document.getElementById('welcomeMsg').innerHTML='Hoş geldin, <span>'+name.split(' ')[0]+'!</span> 🏥';
+  const heroMot=document.getElementById('heroMotivation');
+  if(heroMot) heroMot.textContent='Doktorunuz sizin için bir rehabilitasyon programı hazırladı. Egzersizlerinizi düzenli yapın ve iyileşme sürecinizi takip edin.';
+  const profileTags=document.getElementById('profileTags');
+  if(profileTags) profileTags.innerHTML='<span class="profile-tag">🏥 Rehabilitasyon Hastası</span>';
+}
 // Doktor takibi banner
 if(profile?.physio_id){
   const {data:physio}=await sb.from('profiles').select('physio_clinic,physio_spec').eq('id',profile.physio_id).maybeSingle();
