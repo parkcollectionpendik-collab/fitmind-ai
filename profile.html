@@ -292,6 +292,40 @@ async function init(){
   if(!session){window.location.replace('auth.html');return;}
   const u=session.user;
   const name=u.user_metadata?.full_name||u.email.split('@')[0];
+  // Role'e göre sidebar menüsünü çiz — profile yüklenmeden önce user_role'ü çek
+  const {data:roleProfile}=await sb.from('profiles').select('user_role').eq('id',u.id).maybeSingle();
+  const role=roleProfile?.user_role||'user';
+  const nav=document.getElementById('navMenu');
+  let menu='';
+  if(role==='physio'){
+    menu=`
+      <a class="nav-item" href="physio-dashboard.html"><span class="icon">🏠</span> Genel Bakış</a>
+      <a class="nav-item" href="physio-dashboard.html#patients"><span class="icon">👥</span> Hastalarım</a>
+      <a class="nav-item" href="physio-dashboard.html#exercises"><span class="icon">🏋️</span> Egzersiz Kütüphanesi</a>
+      <a class="nav-item" href="physio-dashboard.html#sessions"><span class="icon">📅</span> Seans Takibi</a>
+      <a class="nav-item" href="physio-dashboard.html#reports"><span class="icon">📊</span> Raporlar</a>
+      <a class="nav-item" href="physio-dashboard.html#invite"><span class="icon">🔗</span> Hasta Davet Et</a>
+      <a class="nav-item active" href="profile.html"><span class="icon">👤</span> Profilim</a>`;
+  } else if(role==='patient'){
+    menu=`
+      <a class="nav-item" href="patient-dashboard.html"><span class="icon">🏠</span> Ana Sayfa</a>
+      <a class="nav-item" href="patient-dashboard.html#exercises"><span class="icon">🏋️</span> Egzersizlerim</a>
+      <a class="nav-item" href="patient-dashboard.html#progress"><span class="icon">📈</span> İlerleme</a>
+      <a class="nav-item" href="patient-dashboard.html#notes"><span class="icon">📝</span> Günlük & Notlar</a>
+      <a class="nav-item" href="patient-dashboard.html#sessions"><span class="icon">📅</span> Seanslarım</a>
+      <a class="nav-item active" href="profile.html"><span class="icon">👤</span> Profilim</a>`;
+  } else {
+    menu=`
+      <a class="nav-item" href="dashboard.html"><span class="icon">🏠</span> Ana Sayfa</a>
+      <a class="nav-item" href="dashboard.html#aicoach"><span class="icon">🤖</span> AI Koç</a>
+      <a class="nav-item" href="dashboard.html#workouts"><span class="icon">🏋️</span> Antrenmanlar</a>
+      <a class="nav-item" href="myplan.html"><span class="icon">📋</span> Benim Planım</a>
+      <a class="nav-item" href="nutrition.html"><span class="icon">🥗</span> Beslenme</a>
+      <a class="nav-item" href="progress.html"><span class="icon">📈</span> İlerleme</a>
+      <a class="nav-item" href="community.html"><span class="icon">👥</span> Topluluk</a>
+      <a class="nav-item active" href="profile.html"><span class="icon">👤</span> Profilim</a>`;
+  }
+  nav.innerHTML=menu;
 
   document.getElementById('avatarInitial').textContent=name.charAt(0).toUpperCase();
   document.getElementById('avatarBig').textContent=name.charAt(0).toUpperCase();
