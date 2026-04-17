@@ -633,13 +633,13 @@ if(profile?.user_role==='patient'){
   window.location.replace('patient-dashboard.html');
   return;
 }
-  document.getElementById('upgradeCard').style.display='none';
-  document.getElementById('welcomeMsg').innerHTML='Hoş geldin, <span>'+name.split(' ')[0]+'!</span> 🏥';
-  const heroMot=document.getElementById('heroMotivation');
-  if(heroMot) heroMot.textContent='Doktorunuz sizin için bir rehabilitasyon programı hazırladı. Egzersizlerinizi düzenli yapın ve iyileşme sürecinizi takip edin.';
-  const profileTags=document.getElementById('profileTags');
-  if(profileTags) profileTags.innerHTML='<span class="profile-tag">🏥 Rehabilitasyon Hastası</span>';
-}
+  if(profile?.user_role==='patient'){
+    window.location.replace('patient-dashboard.html');
+    return;
+  }
+
+  // Doktor takibi banner
+  if(profile?.physio_id){
 // Doktor takibi banner
 if(profile?.physio_id){
   const {data:physio}=await sb.from('profiles').select('physio_clinic,physio_spec').eq('id',profile.physio_id).maybeSingle();
