@@ -408,7 +408,7 @@ async function init(){
   const {data:profile}=await sb.from('profiles').select('*').eq('id',u.id).maybeSingle();
   physioProfile=profile;
 
-  if(profile?.user_role!=='physio'){
+  if(profile?.user_role==='physio'){
     window.location.replace('dashboard.html');
     return;
   }
