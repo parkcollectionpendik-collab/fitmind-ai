@@ -9,9 +9,12 @@ const sb=supabase.createClient('https://cypmmayxwbkarvheqoxu.supabase.co','eyJhb
 async function check(){
   const {data:{session}}=await sb.auth.getSession();
   if(!session){window.location.replace('auth.html');return;}
+  // 1 saniye bekle — profil kaydının tamamlanması için
+  await new Promise(r=>setTimeout(r,1000));
   const {data:profile}=await sb.from('profiles').select('onboarding_done,user_role').eq('id',session.user.id).maybeSingle();
   if(profile?.user_role==='physio') window.location.replace('physio-dashboard.html');
-  else if(!profile?.onboarding_done && profile?.user_role !== 'physio') window.location.replace('onboarding.html');
+  else if(profile?.user_role==='patient') window.location.replace('dashboard.html');
+  else if(!profile?.onboarding_done) window.location.replace('onboarding.html');
   else window.location.replace('dashboard.html');
 }
 check();
