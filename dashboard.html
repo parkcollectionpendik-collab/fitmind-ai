@@ -630,6 +630,9 @@ if(profile?.user_role === 'physio'){
   if(isPro)applyProUI(); else applyFreeUI();
   // Hasta modu
 if(profile?.user_role==='patient'){
+  window.location.replace('patient-dashboard.html');
+  return;
+}
   document.getElementById('upgradeCard').style.display='none';
   document.getElementById('welcomeMsg').innerHTML='Hoş geldin, <span>'+name.split(' ')[0]+'!</span> 🏥';
   const heroMot=document.getElementById('heroMotivation');
