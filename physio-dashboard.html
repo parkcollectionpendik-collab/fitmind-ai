@@ -406,12 +406,8 @@ async function init(){
   document.getElementById('welcomeMsg').textContent='Merhaba, '+name.split(' ')[0]+'! 👋';
 
   const {data:profile}=await sb.from('profiles').select('*').eq('id',u.id).maybeSingle();
+  console.log('Profile:', profile);
   physioProfile=profile;
-
-  if(profile?.user_role==='physio'){
-    window.location.replace('dashboard.html');
-    return;
-  }
 
   if(profile?.physio_code){
     document.getElementById('inviteCode').textContent=profile.physio_code;
