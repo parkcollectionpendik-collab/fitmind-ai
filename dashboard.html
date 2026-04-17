@@ -620,7 +620,7 @@ localStorage.setItem('fm_lastVisit',today);
   if(document.getElementById('heroGreeting')) document.getElementById('heroGreeting').innerHTML=gr+', <span style="color:var(--lime)">'+name.split(' ')[0]+'!</span> 👋';
   if(document.getElementById('heroDate')) document.getElementById('heroDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
-  const {data:profile}=await sb.from('profiles').select('*').eq('id',u.id).maybeSingle();
+  const {data:profile}=await sb.from('profiles').select('*').eq('id',session.user.id).maybeSingle();
   // Fizyoterapist ise panele yönlendir
 if(profile?.user_role === 'physio'){
   window.location.replace('physio-dashboard.html');
