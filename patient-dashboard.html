@@ -131,7 +131,19 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
       <div style="font-family:var(--font-head);font-size:1.6rem;font-weight:800" id="welcomeMsg">Merhaba! 👋</div>
       <div style="font-size:0.85rem;color:var(--muted);margin-top:0.2rem" id="todayDate"></div>
     </div>
-
+<!-- TIBBİ BİLGİLER -->
+    <div class="panel" id="medicalPanel" style="display:none;background:linear-gradient(135deg,#1a0a0a,#0d0d0d);border-color:#ff6b6b25">
+      <div class="panel-title" style="margin-bottom:1rem;color:#ff6b6b">🩺 Tedavi Bilgilerim</div>
+      <div style="font-size:0.88rem;line-height:1.9;color:#ffffffcc">
+        <div id="medDiagnosisRow" style="display:none"><strong style="color:#ff9e9e">🔍 Tanım:</strong> <span id="medDiagnosis"></span></div>
+        <div id="medInjuryRow" style="display:none"><strong style="color:#ff9e9e">📅 Yaralanma Tarihi:</strong> <span id="medInjuryDate"></span></div>
+        <div id="medGoalRow" style="display:none;margin-top:0.5rem;padding:0.75rem;background:#4ade8010;border-left:3px solid #4ade80;border-radius:8px"><strong style="color:#4ade80">🎯 Tedavi Hedefin:</strong> <div style="margin-top:0.3rem;color:#ffffffdd" id="medGoal"></div></div>
+        <div id="medNotesRow" style="display:none;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid #ffffff10">
+          <strong style="color:#ff9e9e">📝 Doktor Notu:</strong>
+          <div style="margin-top:0.3rem;color:#ffffffaa;white-space:pre-wrap;font-size:0.85rem" id="medNotes"></div>
+        </div>
+      </div>
+    </div>
     <!-- STAT KARTLARI -->
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem">
       <div class="progress-stat">
@@ -287,11 +299,37 @@ async function init(){
 
   // Doktor bilgisi
   if(profile?.physio_id){
-    const {data:doctor}=await sb.from('profiles').select('physio_clinic,physio_spec').eq('id',profile.physio_id).maybeSingle();
+    const {data:doctor}=await sb.from('profiles').select('physio_clinic,physio_spec,full_name,email').eq('id',profile.physio_id).maybeSingle();
     if(doctor){
       document.getElementById('doctorBanner').style.display='flex';
-      document.getElementById('doctorName').textContent='🏥 '+(doctor.physio_clinic||'Doktorunuz');
-      document.getElementById('doctorClinic').textContent=(doctor.physio_spec||'')+'  · sizi takip ediyor';
+      const clinicName=doctor.physio_clinic||'Klinik';
+      const spec=doctor.physio_spec?' · '+doctor.physio_spec:'';
+      document.getElementById('doctorName').textContent='🏥 '+clinicName;
+      document.getElementById('doctorClinic').textContent='Sizi takip ediyor'+spec;
+    }
+  }
+
+  // Tıbbi bilgileri göster (doktor girdiyse)
+  const hasMedical = profile?.diagnosis || profile?.injury_date || profile?.treatment_goal || profile?.medical_notes;
+  if(hasMedical){
+    document.getElementById('medicalPanel').style.display='block';
+    if(profile.diagnosis){
+      document.getElementById('medDiagnosisRow').style.display='block';
+      document.getElementById('medDiagnosis').textContent=profile.diagnosis;
+    }
+    if(profile.injury_date){
+      document.getElementById('medInjuryRow').style.display='block';
+      const d=new Date(profile.injury_date);
+      const daysSince=Math.floor((new Date()-d)/(1000*60*60*24));
+      document.getElementById('medInjuryDate').innerHTML=d.toLocaleDateString('tr-TR')+' <span style="color:var(--muted);font-size:0.8rem">('+daysSince+' gün önce)</span>';
+    }
+    if(profile.treatment_goal){
+      document.getElementById('medGoalRow').style.display='block';
+      document.getElementById('medGoal').textContent=profile.treatment_goal;
+    }
+    if(profile.medical_notes){
+      document.getElementById('medNotesRow').style.display='block';
+      document.getElementById('medNotes').textContent=profile.medical_notes;
     }
   }
 
