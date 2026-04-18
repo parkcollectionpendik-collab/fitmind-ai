@@ -456,6 +456,7 @@ async function init(){
   loadSessions();
   updateStats();
   loadMessages();
+  loadSmartAlert();
 
   // Browser notification izni iste
   if('Notification' in window && Notification.permission==='default'){
