@@ -92,6 +92,87 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 </head>
 <body>
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+  <!-- KRİZ BUTONU (sağ alt sabit) -->
+<button onclick="openCrisisModal()" id="crisisBtn" style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:90;background:#ff6b6b;color:#fff;border:none;border-radius:100px;padding:0.85rem 1.3rem;font-family:var(--font-head);font-weight:800;font-size:0.9rem;cursor:pointer;box-shadow:0 6px 24px #ff6b6b40;display:flex;align-items:center;gap:0.5rem;animation:crisisPulse 2.5s infinite">
+  <span style="font-size:1.15rem">🚨</span> Acil Yardım
+</button>
+
+<!-- KRİZ MODAL -->
+<div id="crisisOverlay" style="display:none;position:fixed;inset:0;background:#000000b0;z-index:300;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto;backdrop-filter:blur(4px)">
+  <div style="background:linear-gradient(180deg,#1a0a0a,#140808);border:1px solid #ff6b6b40;border-radius:24px;width:100%;max-width:640px;overflow:hidden;box-shadow:0 20px 80px #00000090">
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#2a0808,#1a0a0a);padding:1.5rem 2rem;border-bottom:1px solid #ff6b6b20;position:relative">
+      <button onclick="closeCrisisModal()" style="position:absolute;top:1.25rem;right:1.25rem;background:#ffffff08;border:1px solid #ffffff15;color:var(--white);cursor:pointer;font-size:1rem;width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center">✕</button>
+      <div style="display:flex;align-items:center;gap:0.85rem">
+        <div style="width:52px;height:52px;border-radius:14px;background:#ff6b6b20;border:1px solid #ff6b6b40;display:flex;align-items:center;justify-content:center;font-size:1.6rem">🚨</div>
+        <div>
+          <div style="font-family:var(--font-head);font-weight:800;font-size:1.25rem;color:#ff6b6b">Acil Durum Rehberi</div>
+          <div style="font-size:0.8rem;color:var(--muted);margin-top:0.15rem">Sakin ol, nefes al. Doğru adımları birlikte atalım.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div style="padding:1.5rem 2rem;max-height:70vh;overflow-y:auto">
+
+      <!-- 112 BUTONU -->
+      <div style="background:#ff6b6b15;border:2px solid #ff6b6b50;border-radius:16px;padding:1rem 1.25rem;margin-bottom:1.25rem">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap">
+          <div style="flex:1;min-width:180px">
+            <div style="font-family:var(--font-head);font-weight:800;font-size:0.95rem;color:#ff6b6b;margin-bottom:0.15rem">Hayati tehlike varsa</div>
+            <div style="font-size:0.82rem;color:#ffffffcc">Göğüs ağrısı, bilinç kaybı, ciddi kanama, nefes darlığı</div>
+          </div>
+          <a href="tel:112" style="background:#ff6b6b;color:#fff;padding:0.7rem 1.5rem;border-radius:100px;font-family:var(--font-head);font-weight:800;font-size:0.95rem;text-decoration:none;white-space:nowrap">📞 112'yi Ara</a>
+        </div>
+      </div>
+
+      <!-- KIRMIZI BAYRAKLAR -->
+      <div style="margin-bottom:1.25rem">
+        <div style="font-family:var(--font-head);font-weight:700;font-size:0.92rem;margin-bottom:0.6rem;color:#ff9e9e">⚠️ Hemen 112 ara, eğer:</div>
+        <div style="background:#ffffff05;border-radius:12px;padding:0.85rem 1rem;font-size:0.85rem;line-height:1.8;color:#ffffffcc">
+          • Şiddetli göğüs ağrısı veya nefes darlığın varsa<br>
+          • Bilincin bulanıksa, konuşmada zorlanıyorsan<br>
+          • Uzvunda his kaybı veya felç hissediyorsan<br>
+          • Düşme/çarpma sonrası kemikte şekil bozukluğu varsa<br>
+          • Durdurulmayan kanaman varsa<br>
+          • Yaralanan bölgede mor/soğuk/beyaz renk değişimi varsa
+        </div>
+      </div>
+
+      <!-- ŞİDDETLİ AĞRI AMA ACİL DEĞİL -->
+      <div style="margin-bottom:1.25rem">
+        <div style="font-family:var(--font-head);font-weight:700;font-size:0.92rem;margin-bottom:0.6rem;color:#f5a623">💊 Ağrın çok arttı ama yukarıdakilerden biri değilse:</div>
+        <div style="background:#ffffff05;border-radius:12px;padding:0.85rem 1rem;font-size:0.85rem;line-height:1.8;color:#ffffffcc">
+          <strong style="color:#4ade80">✓ YAP:</strong><br>
+          • Hareket etmeyi bırak, rahat bir pozisyonda dinlen<br>
+          • Yaralanan bölgeye <strong>15-20 dakika buz</strong> uygula (havluya sararak, cilde direkt değil)<br>
+          • Mümkünse bölgeyi kalp hizasının üzerine kaldır<br>
+          • Ağrıyı 1-10 arası puanla, hangi saatte başladığını not et<br>
+          • Doktoruna mesaj at (aşağıdaki buton)<br>
+          <br>
+          <strong style="color:#ff6b6b">✗ YAPMA:</strong><br>
+          • Sıcak uygulama (ilk 48 saat)<br>
+          • Masaj, esneme, egzersiz (doktor onayı olmadan)<br>
+          • Kendi başına ilaç ekleme/doz arttırma<br>
+          • "Geçer" diye bekleme — 24 saati aşarsa doktora haber ver
+        </div>
+      </div>
+
+      <!-- DOKTORA MESAJ -->
+      <div style="background:#44aaff10;border:1px solid #44aaff25;border-radius:12px;padding:1rem 1.15rem;margin-bottom:1rem">
+        <div style="font-family:var(--font-head);font-weight:700;font-size:0.88rem;margin-bottom:0.35rem;color:var(--blue)">💬 Doktorunla iletişime geç</div>
+        <div style="font-size:0.82rem;color:#ffffffcc;margin-bottom:0.75rem;line-height:1.5">Durumunu detaylı yazarak hızlı yanıt alabilirsin. Ne zaman başladı, hangi hareketle arttı, ağrı skorun kaç?</div>
+        <button onclick="closeCrisisModal();switchTab('messages',document.querySelectorAll('.nav-item')[4])" style="background:var(--blue);color:#000;border:none;border-radius:100px;padding:0.6rem 1.3rem;font-family:var(--font-head);font-weight:800;font-size:0.85rem;cursor:pointer">💬 Doktoruna Mesaj At</button>
+      </div>
+
+      <!-- DISCLAIMER -->
+      <div style="background:#ffffff04;border-radius:10px;padding:0.75rem 0.95rem;font-size:0.72rem;color:var(--muted);line-height:1.5;text-align:center">
+        ⚠️ Bu rehber genel bilgilendirme amaçlıdır, tıbbi tavsiye yerine geçmez.<br>Şüphe durumunda daima doktoruna veya 112'ye başvur.
+      </div>
+
+    </div>
+  </div>
+</div>
 <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
 
 <div class="sidebar">
