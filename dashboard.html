@@ -563,12 +563,7 @@ function renderChatMessages(){
   msgs.scrollTop=msgs.scrollHeight;
 }
 function goBack(){
-  // Tarayıcı geçmişinde geri gidilecek yer varsa
-  if(window.history.length>1){
-    window.history.back();
-  } else {
-    window.location.href='index.html';
-  }
+  toggleSidebar();
 }
 function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open')}
 function closeSidebar(){document.querySelector('.sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open')}
