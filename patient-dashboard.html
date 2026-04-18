@@ -170,7 +170,14 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
         <div class="empty-state"><div class="spin" style="margin:0 auto 0.5rem;display:block"></div><div>Yükleniyor...</div></div>
       </div>
     </div>
-
+<!-- SON SEANS ÖZETİ -->
+    <div class="panel" id="lastSessionPanel" style="display:none;background:linear-gradient(135deg,#0a1a0a,#0d0d0d);border-color:#4ade8025">
+      <div class="panel-head">
+        <div class="panel-title" style="color:#4ade80">🏥 Son Seansın</div>
+        <button onclick="switchTab('sessions',document.querySelectorAll('.nav-item')[4])" style="background:transparent;border:none;color:#4ade80;font-family:var(--font-head);font-weight:700;font-size:0.8rem;cursor:pointer">Tüm seanslar →</button>
+      </div>
+      <div id="lastSessionContent"></div>
+    </div>
     <!-- AĞRI SKORU HIZLI GİRİŞ -->
     <div class="panel">
       <div class="panel-title" style="margin-bottom:1rem">😣 Bugünkü Ağrı Skoru</div>
@@ -550,19 +557,61 @@ function loadNotes(){
     </div>`).join('');
 }
 
-function loadSessions(){
-  // Fizyoterapist panelinden gelen seanslar localStorage'da
-  const physioSessions=JSON.parse(localStorage.getItem('physio_sessions')||'[]');
-  const el=document.getElementById('sessionsList');
-  if(physioSessions.length===0){el.innerHTML='<div class="empty-state">Henüz planlanmış seans yok.</div>';return;}
-  el.innerHTML=physioSessions.slice(0,10).map(s=>`
-    <div class="session-item">
-      <div class="session-dot"></div>
-      <div style="flex:1"><div style="font-size:0.85rem;font-weight:500">${s.date}${s.time?' · '+s.time:''}</div>${s.note?`<div style="font-size:0.75rem;color:var(--muted)">${s.note}</div>`:''}</div>
-      <div style="font-size:0.72rem;font-family:var(--font-head);font-weight:700;color:${s.status==='done'?'#4ade80':'var(--blue)'}">${s.status==='done'?'Tamamlandı':'Planlandı'}</div>
-    </div>`).join('');
-}
+async function loadSessions(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session)return;
+  const {data:sessions}=await sb.from('patient_sessions')
+    .select('*')
+    .eq('patient_id',session.user.id)
+    .order('session_date',{ascending:false});
 
+  // Ana sayfadaki "Son Seans" kartı
+  const lastPanel=document.getElementById('lastSessionPanel');
+  const lastContent=document.getElementById('lastSessionContent');
+  if(sessions&&sessions.length>0){
+    const last=sessions[0];
+    const d=new Date(last.session_date);
+    const daysAgo=Math.floor((new Date()-d)/(1000*60*60*24));
+    const painColor=last.pain_score===null?'var(--muted)':last.pain_score<=3?'#4ade80':last.pain_score<=6?'#f5a623':'#ff6b6b';
+    lastPanel.style.display='block';
+    lastContent.innerHTML=`
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.85rem;flex-wrap:wrap">
+        <div style="background:#4ade8015;border:1px solid #4ade8030;border-radius:10px;padding:0.6rem 0.9rem">
+          <div style="font-family:var(--font-head);font-weight:800;font-size:0.95rem;color:#4ade80">${d.toLocaleDateString('tr-TR',{day:'numeric',month:'long'})}</div>
+          <div style="font-size:0.68rem;color:var(--muted);margin-top:0.1rem">${daysAgo===0?'Bugün':daysAgo===1?'Dün':daysAgo+' gün önce'}</div>
+        </div>
+        ${last.duration_minutes?`<div><div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.06em">Süre</div><div style="font-family:var(--font-head);font-weight:700;font-size:0.9rem;margin-top:0.1rem">⏱ ${last.duration_minutes} dk</div></div>`:''}
+        ${last.pain_score!==null?`<div><div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.06em">Ağrı</div><div style="font-family:var(--font-head);font-weight:700;font-size:0.9rem;margin-top:0.1rem;color:${painColor}">🩺 ${last.pain_score}/10</div></div>`:''}
+      </div>
+      ${last.notes?`<div style="background:#ffffff06;border-left:3px solid #4ade80;border-radius:10px;padding:0.85rem 1rem"><div style="font-size:0.68rem;color:#4ade80;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.35rem;font-family:var(--font-head)">📝 Doktor Notu</div><div style="font-size:0.88rem;line-height:1.6;color:#ffffffdd;white-space:pre-wrap">${last.notes}</div></div>`:'<div style="color:var(--muted);font-size:0.82rem">Bu seans için not bulunmuyor.</div>'}
+    `;
+  } else {
+    lastPanel.style.display='none';
+  }
+
+  // Seanslarım tab'ındaki liste
+  const el=document.getElementById('sessionsList');
+  if(!sessions||sessions.length===0){
+    el.innerHTML='<div class="empty-state">Henüz seans kaydı yok.<br>Doktorun seans ekledikten sonra burada görünecek.</div>';
+    return;
+  }
+
+  el.innerHTML=sessions.map(s=>{
+    const d=new Date(s.session_date);
+    const painColor=s.pain_score===null?'var(--muted)':s.pain_score<=3?'#4ade80':s.pain_score<=6?'#f5a623':'#ff6b6b';
+    return `
+    <div style="background:#ffffff06;border:1px solid #ffffff0a;border-radius:14px;padding:1rem 1.1rem;margin-bottom:0.5rem">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;margin-bottom:${s.notes?'0.6rem':'0'}">
+        <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap">
+          <div style="font-family:var(--font-head);font-weight:700;font-size:0.92rem">${d.toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'})}</div>
+          ${s.duration_minutes?`<span style="background:#ffffff10;border-radius:6px;padding:0.15rem 0.5rem;font-size:0.7rem;font-family:var(--font-head);font-weight:700;color:var(--muted)">⏱ ${s.duration_minutes} dk</span>`:''}
+          ${s.pain_score!==null?`<span style="background:${painColor}15;border:1px solid ${painColor}30;border-radius:6px;padding:0.15rem 0.5rem;font-size:0.7rem;font-family:var(--font-head);font-weight:700;color:${painColor}">🩺 Ağrı: ${s.pain_score}/10</span>`:''}
+        </div>
+      </div>
+      ${s.notes?`<div style="background:#ffffff04;border-left:3px solid var(--blue);border-radius:8px;padding:0.65rem 0.85rem;font-size:0.85rem;line-height:1.6;color:#ffffffcc;white-space:pre-wrap">${s.notes}</div>`:''}
+    </div>`;
+  }).join('');
+}
 async function signOut(){await sb.auth.signOut();window.location.replace('auth.html');}
 
 init();
