@@ -83,6 +83,11 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
   #crisisBtn{bottom:1rem;right:1rem;padding:0.7rem 1rem;font-size:0.82rem}
 }
 .mobile-menu-btn{display:none}
+.mobile-back-btn{display:none}
+@media(max-width:768px){
+  .mobile-back-btn{display:flex;position:fixed;top:1rem;right:1rem;z-index:200;background:#ffffff10;backdrop-filter:blur(8px);color:var(--white);border:1px solid #ffffff15;border-radius:10px;width:40px;height:40px;align-items:center;justify-content:center;font-size:1.3rem;cursor:pointer}
+  .mobile-back-btn:hover{background:#ffffff20}
+}
 .overlay{display:none;position:fixed;inset:0;background:#00000080;z-index:99}
 .overlay.open{display:block}
 @media(max-width:768px){
@@ -178,7 +183,7 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
   </div>
 </div>
 <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
-
+<button class="mobile-back-btn" onclick="goBack()">←</button>
 <div class="sidebar">
   <a class="logo" href="patient-dashboard.html">Fit<span>Mind</span> AI</a>
   <div class="logo-badge">🏥 Hasta Paneli</div>
@@ -373,6 +378,28 @@ const TODAY_IDX=jsDay===0?6:jsDay-1;
 const TODAY_NAME=DAYS[TODAY_IDX];
 
 function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open')}
+
+function goBack(){
+  // Önce kriz modal açıksa onu kapat
+  const crisisOverlay=document.getElementById('crisisOverlay');
+  if(crisisOverlay&&crisisOverlay.style.display==='flex'){
+    closeCrisisModal();
+    return;
+  }
+  // Aktif tab ana sayfa değilse ana sayfaya dön
+  const homeTab=document.getElementById('tab-home');
+  if(homeTab&&!homeTab.classList.contains('active')){
+    switchTab('home',document.querySelectorAll('.nav-item')[0]);
+    return;
+  }
+  // Tarayıcı geçmişinde geri gidilecek yer varsa
+  if(window.history.length>1){
+    window.history.back();
+  } else {
+    // Son çare: dashboard'a git
+    window.location.href='patient-dashboard.html';
+  }
+}
 function closeSidebar(){document.querySelector('.sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open')}
 
 function switchTab(tab,el){
