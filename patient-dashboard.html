@@ -418,16 +418,31 @@ function toggleEx(idx,total){
   updateStats();
 }
 
-function updateStats(){
+async function updateStats(){
   const doneList=JSON.parse(localStorage.getItem('patient_done_'+TODAY)||'[]');
   const activeDays=JSON.parse(localStorage.getItem('patient_active_days')||'[]');
-  const painHistory=JSON.parse(localStorage.getItem('patient_pain')||'[]');
-  const lastPain=painHistory.length>0?painHistory[painHistory.length-1].score:'—';
   document.getElementById('statDone').textContent=doneList.length;
   document.getElementById('statStreak').textContent=activeDays.length+'🔥';
-  document.getElementById('statPain').textContent=lastPain;
   document.getElementById('progTotal').textContent=doneList.length;
   document.getElementById('progDays').textContent=activeDays.length;
+
+  // Ağrı skoru DB'den
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session)return;
+  const {data:lastPain}=await sb.from('patient_pain_logs')
+    .select('pain_score')
+    .eq('patient_id',session.user.id)
+    .order('created_at',{ascending:false})
+    .limit(1)
+    .maybeSingle();
+  const painEl=document.getElementById('statPain');
+  if(lastPain){
+    const color=lastPain.pain_score<=3?'#4ade80':lastPain.pain_score<=6?'#f5a623':'#ff6b6b';
+    painEl.textContent=lastPain.pain_score;
+    painEl.style.color=color;
+  } else {
+    painEl.textContent='—';
+  }
 }
 
 async function savePainScore(){
