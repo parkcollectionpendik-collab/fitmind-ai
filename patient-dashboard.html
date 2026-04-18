@@ -452,18 +452,66 @@ async function savePainScore(){
   await updateStats();
 }
 
-function loadPainHistory(){
-  const history=JSON.parse(localStorage.getItem('patient_pain')||'[]');
+async function loadPainHistory(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session)return;
+  const {data:history}=await sb.from('patient_pain_logs')
+    .select('*')
+    .eq('patient_id',session.user.id)
+    .order('created_at',{ascending:false})
+    .limit(30);
   const el=document.getElementById('painHistory');
-  if(history.length===0){el.innerHTML='<div class="empty-state">Henüz ağrı kaydı yok.</div>';return;}
-  el.innerHTML=history.slice().reverse().slice(0,10).map(h=>{
-    const color=h.score<=3?'#4ade80':h.score<=6?'#f5a623':'#ff6b6b';
+  if(!history||history.length===0){
+    el.innerHTML='<div class="empty-state">Henüz ağrı kaydı yok.</div>';
+    return;
+  }
+
+  // Son 7 gün için grafik
+  const last7=history.slice(0,7).reverse();
+  const maxScore=10;
+  let chartHtml=`
+    <div style="background:#ffffff06;border-radius:14px;padding:1.25rem;margin-bottom:1.25rem">
+      <div style="font-size:0.78rem;color:var(--muted);margin-bottom:0.75rem;font-weight:600">Son ${last7.length} giriş — Trend</div>
+      <div style="display:flex;gap:0.5rem;align-items:flex-end;height:120px">`;
+  last7.forEach(h=>{
+    const color=h.pain_score<=3?'#4ade80':h.pain_score<=6?'#f5a623':'#ff6b6b';
+    const pct=(h.pain_score/maxScore)*100;
+    const shortDate=new Date(h.log_date).toLocaleDateString('tr-TR',{day:'numeric',month:'short'});
+    chartHtml+=`
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem;min-width:0">
+        <div style="font-family:var(--font-head);font-weight:800;font-size:0.72rem;color:${color}">${h.pain_score}</div>
+        <div style="width:100%;height:${pct}%;min-height:4px;background:${color};border-radius:5px 5px 0 0;transition:height 0.5s"></div>
+        <div style="font-size:0.6rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%">${shortDate}</div>
+      </div>`;
+  });
+  chartHtml+=`</div>`;
+
+  // Trend göstergesi
+  if(last7.length>=2){
+    const first=last7[0].pain_score;
+    const last=last7[last7.length-1].pain_score;
+    const diff=last-first;
+    let trendText, trendColor, trendIcon;
+    if(diff<0){trendText='İyileşiyor';trendColor='#4ade80';trendIcon='📉';}
+    else if(diff>0){trendText='Artıyor';trendColor='#ff6b6b';trendIcon='📈';}
+    else{trendText='Sabit';trendColor='#f5a623';trendIcon='➡️';}
+    chartHtml+=`<div style="margin-top:0.75rem;padding:0.6rem 0.85rem;background:${trendColor}10;border:1px solid ${trendColor}30;border-radius:10px;font-size:0.82rem;color:${trendColor};font-weight:600">${trendIcon} Trend: ${trendText}${diff!==0?' ('+(diff>0?'+':'')+diff+' puan)':''}</div>`;
+  }
+  chartHtml+=`</div>`;
+
+  // Geçmiş liste
+  let listHtml=`<div style="font-size:0.78rem;color:var(--muted);margin-bottom:0.5rem;font-weight:600">Tüm Kayıtlar (${history.length})</div>`;
+  listHtml+=history.map(h=>{
+    const color=h.pain_score<=3?'#4ade80':h.pain_score<=6?'#f5a623':'#ff6b6b';
+    const d=new Date(h.created_at);
     return `<div style="display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0;border-bottom:1px solid #ffffff07">
-      <div style="width:36px;height:36px;border-radius:10px;background:${color}20;border:1px solid ${color}40;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:1rem;color:${color}">${h.score}</div>
-      <div style="flex:1"><div style="font-size:0.85rem">${h.date}</div><div style="font-size:0.72rem;color:var(--muted)">${h.time||''}</div></div>
-      <div style="font-size:0.75rem;color:${color}">${h.score<=3?'Düşük':h.score<=6?'Orta':'Yüksek'} ağrı</div>
+      <div style="width:36px;height:36px;border-radius:10px;background:${color}20;border:1px solid ${color}40;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:1rem;color:${color}">${h.pain_score}</div>
+      <div style="flex:1"><div style="font-size:0.85rem">${d.toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'})}</div><div style="font-size:0.72rem;color:var(--muted)">${d.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'})}</div></div>
+      <div style="font-size:0.75rem;color:${color};font-weight:600">${h.pain_score<=3?'Düşük':h.pain_score<=6?'Orta':'Yüksek'}</div>
     </div>`;
   }).join('');
+
+  el.innerHTML=chartHtml+listHtml;
 }
 
 function saveNote(){
