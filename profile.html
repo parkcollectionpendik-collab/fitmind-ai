@@ -76,6 +76,11 @@ select option{background:#1a1a1a}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 .mobile-menu-btn{display:none}
+.mobile-back-btn{display:none}
+@media(max-width:768px){
+  .mobile-back-btn{display:flex;position:fixed;top:1rem;right:1rem;z-index:200;background:#ffffff10;backdrop-filter:blur(8px);color:var(--white);border:1px solid #ffffff15;border-radius:10px;width:40px;height:40px;align-items:center;justify-content:center;font-size:1.3rem;cursor:pointer}
+  .mobile-back-btn:hover{background:#ffffff20}
+}
 .overlay{display:none;position:fixed;inset:0;background:#00000080;z-index:99}
 .overlay.open{display:block}
 @media(max-width:768px){
@@ -92,6 +97,7 @@ select option{background:#1a1a1a}
 <body>
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+<button class="mobile-back-btn" onclick="goBack()">←</button>
 
 <div class="sidebar">
   <a class="logo" href="dashboard.html">Fit<span>Mind</span> AI</a>
@@ -270,7 +276,21 @@ const sb=createClient(SB_URL,SB_KEY);
 Paddle.Initialize({token:'live_eefc76e39bd2263417b9b9ff52b'});
 
 let selectedGoal='';
-
+function goBack(){
+  if(window.history.length>1){
+    window.history.back();
+  } else {
+    // Role'e göre uygun dashboard'a dön
+    (async()=>{
+      const {data:{session}}=await sb.auth.getSession();
+      if(!session){window.location.href='auth.html';return;}
+      const {data:p}=await sb.from('profiles').select('user_role').eq('id',session.user.id).maybeSingle();
+      if(p?.user_role==='physio')window.location.href='physio-dashboard.html';
+      else if(p?.user_role==='patient')window.location.href='patient-dashboard.html';
+      else window.location.href='dashboard.html';
+    })();
+  }
+}
 function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open')}
 function closeSidebar(){document.querySelector('.sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open')}
 
