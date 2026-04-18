@@ -589,8 +589,7 @@ async function loadPatients(){
   if(!physioProfile)return;
   const {data}=await sb.from('profiles').select('*').eq('physio_id',physioProfile.id);
   patients=data||[];
-  document.getElementById('statTotal').textContent=patients.length;
-  document.getElementById('statActive').textContent=patients.length;
+  
   renderPatientList(patients);
   updateSessionDropdowns();
   updateStats();
