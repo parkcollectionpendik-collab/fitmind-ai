@@ -596,10 +596,64 @@ async function loadPatients(){
   updateStats();
 }
 
-function updateStats(){
-  document.getElementById('statSessions').textContent=sessions.filter(s=>s.date===new Date().toISOString().split('T')[0]).length;
+async function updateStats(){
+  const todayStr=new Date().toISOString().split('T')[0];
+  const tomorrow=new Date();tomorrow.setDate(tomorrow.getDate()+1);
+  const tomorrowStr=tomorrow.toISOString().split('T')[0];
+  const weekEnd=new Date();weekEnd.setDate(weekEnd.getDate()+7);
+  const weekEndStr=weekEnd.toISOString().split('T')[0];
+
+  if(!physioProfile)return;
+
+  // Tüm seansları çek
+  const {data:allSessions}=await sb.from('patient_sessions')
+    .select('*')
+    .eq('physio_id',physioProfile.id);
+  const sess=allSessions||[];
+
+  // Bugünkü seans
+  const todayCount=sess.filter(s=>s.session_date===todayStr).length;
+  document.getElementById('statSessions').textContent=todayCount;
+  document.getElementById('statSessionsSub').textContent=todayCount===0?'Bugün yok':todayCount+' seans';
+
+  // Yarınki seans
+  const tomorrowCount=sess.filter(s=>s.session_date===tomorrowStr).length;
+  document.getElementById('statTomorrow').textContent=tomorrowCount;
+
+  // Toplam hasta + bu hafta aktif
+  const totalPatients=patients.length;
+  document.getElementById('statTotal').textContent=totalPatients;
+
+  // Bu haftaki aktif hastalar (seans aldı veya mesaj yolladı)
+  const weekStart=new Date();weekStart.setDate(weekStart.getDate()-7);
+  const weekStartStr=weekStart.toISOString().split('T')[0];
+  const activePatientIds=new Set();
+  sess.filter(s=>s.session_date>=weekStartStr).forEach(s=>activePatientIds.add(s.patient_id));
+  document.getElementById('statTotalSub').textContent=activePatientIds.size+' bu hafta aktif';
+
+  // Okunmamış mesaj
+  const {count:unreadCount}=await sb.from('patient_messages')
+    .select('*',{count:'exact',head:true})
+    .eq('physio_id',physioProfile.id)
+    .eq('sender_role','patient')
+    .eq('is_read',false);
+  const unreadEl=document.getElementById('statUnread');
+  const unreadSubEl=document.getElementById('statUnreadSub');
+  if(unreadCount&&unreadCount>0){
+    unreadEl.textContent=unreadCount;
+    unreadEl.style.color='#ff6b6b';
+    unreadSubEl.textContent='okunmamış mesaj';
+  } else {
+    unreadEl.textContent='0';
+    unreadEl.style.color='var(--muted)';
+    unreadSubEl.textContent='Hepsi okundu';
+  }
+
+  // Ana fonksiyonları tetikle
   renderTodaySessions();
   renderRecentActivity();
+  renderWeekSummary();
+  renderActionCenter();
   loadAgenda();
 }
 
