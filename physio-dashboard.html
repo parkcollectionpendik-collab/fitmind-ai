@@ -1369,19 +1369,39 @@ function updateSessionDropdowns(){
   document.getElementById('reportPatient').innerHTML='<option value="">Hasta seçin...</option>'+patients.map(p=>`<option value="${p.id}">${p.full_name||p.email}</option>`).join('');
 }
 
-function addSession(){
+async function addSession(){
   const patientId=document.getElementById('sessionPatient').value;
   const date=document.getElementById('sessionDate').value;
   const time=document.getElementById('sessionTime').value;
-  const note=document.getElementById('sessionNote').value;
-  if(!patientId||!date){alert('Hasta ve tarih seçin!');return;}
-  const patient=patients.find(p=>p.id===patientId);
-  sessions.unshift({id:Date.now(),patientId,patientName:patient?.full_name||patient?.email||'Hasta',date,time,note,status:'planned'});
-  localStorage.setItem('physio_sessions',JSON.stringify(sessions));
+  const duration=parseInt(document.getElementById('sessionDuration').value)||null;
+  const pain=document.getElementById('sessionPain').value;
+  const painScore=pain===''?null:parseInt(pain);
+  const note=document.getElementById('sessionNote').value.trim();
+
+  if(!patientId||!date){alert('Hasta ve tarih seçin');return;}
+
+  const {error}=await sb.from('patient_sessions').insert({
+    patient_id:patientId,
+    physio_id:physioProfile.id,
+    session_date:date,
+    session_time:time||null,
+    duration_minutes:duration,
+    pain_score:painScore,
+    notes:note||null
+  });
+
+  if(error){alert('Hata: '+error.message);return;}
+
+  // Formu temizle ve kapat
   document.getElementById('sessionNote').value='';
-  renderSessions();
+  document.getElementById('sessionDuration').value='';
+  document.getElementById('sessionPain').value='';
+  document.getElementById('sessionTime').value='';
+  closeNewSessionForm();
+
+  await loadAgenda();
   updateStats();
-  alert('Seans kaydedildi! ✅');
+  alert('Seans kaydedildi! ✓');
 }
 
 function renderSessions(){
