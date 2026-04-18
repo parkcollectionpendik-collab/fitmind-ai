@@ -77,7 +77,11 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .spin{display:inline-block;width:16px;height:16px;border:2px solid #ffffff15;border-top-color:var(--blue);border-radius:50%;animation:spin 0.8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .empty-state{text-align:center;padding:2rem;color:var(--muted)}
-
+@keyframes crisisPulse{0%,100%{box-shadow:0 6px 24px #ff6b6b40}50%{box-shadow:0 6px 32px #ff6b6b70}}
+#crisisBtn:hover{background:#ff5555;transform:translateY(-2px);transition:all 0.2s}
+@media(max-width:768px){
+  #crisisBtn{bottom:1rem;right:1rem;padding:0.7rem 1rem;font-size:0.82rem}
+}
 .mobile-menu-btn{display:none}
 .overlay{display:none;position:fixed;inset:0;background:#00000080;z-index:99}
 .overlay.open{display:block}
