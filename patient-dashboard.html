@@ -430,15 +430,26 @@ function updateStats(){
   document.getElementById('progDays').textContent=activeDays.length;
 }
 
-function savePainScore(){
+async function savePainScore(){
   if(!selectedPain){alert('Lütfen bir ağrı skoru seçin.');return;}
-  const history=JSON.parse(localStorage.getItem('patient_pain')||'[]');
-  history.push({date:TODAY,score:selectedPain,time:new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'})});
-  localStorage.setItem('patient_pain',JSON.stringify(history));
-  document.getElementById('painMsg').style.display='block';
-  setTimeout(()=>document.getElementById('painMsg').style.display='none',2000);
-  updateStats();
-  loadPainHistory();
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session)return;
+  const {error}=await sb.from('patient_pain_logs').insert({
+    patient_id:session.user.id,
+    log_date:TODAY,
+    pain_score:selectedPain
+  });
+  if(error){alert('Hata: '+error.message);return;}
+  const msg=document.getElementById('painMsg');
+  msg.textContent='✓ Kaydedildi! Doktorun görecek.';
+  msg.style.display='block';
+  setTimeout(()=>msg.style.display='none',2500);
+  // Seçimi temizle
+  document.querySelectorAll('.pain-btn').forEach(b=>b.classList.remove('selected'));
+  selectedPain=null;
+  // Yeniden yükle
+  await loadPainHistory();
+  await updateStats();
 }
 
 function loadPainHistory(){
