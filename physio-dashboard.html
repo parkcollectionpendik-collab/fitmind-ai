@@ -1432,7 +1432,116 @@ async function renderTodaySessions(){
     </div>`;
   }).join('');
 }
+// ---- AJANDA ----
+let _currentAgendaFilter='today';
 
+function openNewSessionForm(){
+  document.getElementById('newSessionForm').style.display='block';
+  document.getElementById('newSessionForm').scrollIntoView({behavior:'smooth',block:'center'});
+  document.getElementById('sessionDate').value=new Date().toISOString().split('T')[0];
+}
+
+function closeNewSessionForm(){
+  document.getElementById('newSessionForm').style.display='none';
+}
+
+function switchAgendaTab(filter, btn){
+  document.querySelectorAll('.agenda-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  _currentAgendaFilter=filter;
+  loadAgenda();
+}
+
+async function loadAgenda(){
+  if(!physioProfile)return;
+
+  const {data:allSessions}=await sb.from('patient_sessions')
+    .select('*')
+    .eq('physio_id',physioProfile.id)
+    .order('session_date',{ascending:true})
+    .order('session_time',{ascending:true,nullsFirst:false});
+
+  const sessions=allSessions||[];
+  const todayStr=new Date().toISOString().split('T')[0];
+  const tomorrow=new Date();tomorrow.setDate(tomorrow.getDate()+1);
+  const tomorrowStr=tomorrow.toISOString().split('T')[0];
+  const weekEnd=new Date();weekEnd.setDate(weekEnd.getDate()+7);
+  const weekEndStr=weekEnd.toISOString().split('T')[0];
+
+  // Sayıları güncelle
+  const todayCount=sessions.filter(s=>s.session_date===todayStr).length;
+  const tomorrowCount=sessions.filter(s=>s.session_date===tomorrowStr).length;
+  const weekCount=sessions.filter(s=>s.session_date>=todayStr&&s.session_date<=weekEndStr).length;
+  const pastCount=sessions.filter(s=>s.session_date<todayStr).length;
+  document.getElementById('countToday').textContent=todayCount;
+  document.getElementById('countTomorrow').textContent=tomorrowCount;
+  document.getElementById('countWeek').textContent=weekCount;
+  document.getElementById('countPast').textContent=pastCount;
+
+  // Filtreye göre seans listele
+  let filtered=[];
+  if(_currentAgendaFilter==='today'){
+    filtered=sessions.filter(s=>s.session_date===todayStr);
+  } else if(_currentAgendaFilter==='tomorrow'){
+    filtered=sessions.filter(s=>s.session_date===tomorrowStr);
+  } else if(_currentAgendaFilter==='week'){
+    filtered=sessions.filter(s=>s.session_date>=todayStr&&s.session_date<=weekEndStr);
+  } else if(_currentAgendaFilter==='past'){
+    filtered=sessions.filter(s=>s.session_date<todayStr).reverse(); // En yeniler üstte
+  }
+
+  const el=document.getElementById('agendaList');
+  if(filtered.length===0){
+    const emptyMsg={
+      today:'Bugün için planlanmış seans yok. Üstteki ➕ Yeni Seans butonuyla ekleyebilirsin.',
+      tomorrow:'Yarın için planlanmış seans yok.',
+      week:'Bu hafta için planlanmış seans yok.',
+      past:'Geçmiş seans kaydı yok.'
+    };
+    el.innerHTML=`<div class="empty-state"><div class="empty-icon">📅</div><div>${emptyMsg[_currentAgendaFilter]}</div></div>`;
+    return;
+  }
+
+  // Tarihe göre grupla
+  const byDate={};
+  filtered.forEach(s=>{
+    if(!byDate[s.session_date])byDate[s.session_date]=[];
+    byDate[s.session_date].push(s);
+  });
+
+  let html='';
+  Object.keys(byDate).forEach(date=>{
+    const d=new Date(date);
+    const dayStr=d.toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    html+=`<div class="agenda-day-group">
+      <div class="agenda-day-header">${dayStr}${date===todayStr?' · Bugün':date===tomorrowStr?' · Yarın':''}</div>`;
+
+    byDate[date].forEach(s=>{
+      const patient=patients.find(p=>p.id===s.patient_id);
+      const name=patient?.full_name||patient?.email||'Hasta';
+      const initial=name.charAt(0).toUpperCase();
+      const painColor=s.pain_score===null?'var(--muted)':s.pain_score<=3?'#4ade80':s.pain_score<=6?'#f5a623':'#ff6b6b';
+      const painBg=s.pain_score===null?'#ffffff08':s.pain_score<=3?'#4ade8015':s.pain_score<=6?'#f5a62315':'#ff6b6b15';
+
+      html+=`<div class="agenda-card" onclick="openPatient('${s.patient_id}')">
+        ${s.session_time?`<div class="agenda-time">${s.session_time.slice(0,5)}</div>`:`<div class="agenda-no-time">Saat<br>yok</div>`}
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#44aaff,#a78bfa);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;color:#000;font-size:0.9rem;flex-shrink:0">${initial}</div>
+        <div class="agenda-patient">
+          <div class="agenda-patient-name">${name}</div>
+          <div class="agenda-patient-meta">
+            ${s.duration_minutes?`<span>⏱ ${s.duration_minutes} dk</span>`:''}
+            ${s.pain_score!==null?`<span class="agenda-pain-badge" style="background:${painBg};color:${painColor}">🩺 ${s.pain_score}/10</span>`:''}
+            ${s.notes?`<span style="color:var(--muted);font-size:0.7rem">📝 ${s.notes.slice(0,40)}${s.notes.length>40?'...':''}</span>`:''}
+          </div>
+        </div>
+      </div>`;
+    });
+
+    html+=`</div>`;
+  });
+
+  el.innerHTML=html;
+}
 function renderRecentActivity(){
   const el=document.getElementById('recentActivity');
   if(sessions.length===0&&patients.length===0){el.innerHTML='<div class="empty-state"><div class="empty-icon">📊</div><div>Henüz aktivite yok.</div></div>';return;}
