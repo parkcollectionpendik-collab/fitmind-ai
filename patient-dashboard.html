@@ -286,6 +286,10 @@ function switchTab(tab,el){
   document.getElementById('tab-'+tab).classList.add('active');
   if(el)el.classList.add('active');
   closeSidebar();
+  // Mesajlar tab'ı açıldığında okunmamışları okundu işaretle
+  if(tab==='messages'){
+    loadMessages();
+  }
 }
 
 function selectPain(btn,val){
