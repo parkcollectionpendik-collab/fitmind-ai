@@ -905,6 +905,13 @@ function showBrowserNotification(title, body){
     });
   }
 }
+  // ---- KRİZ MODAL ----
+function openCrisisModal(){
+  document.getElementById('crisisOverlay').style.display='flex';
+}
+function closeCrisisModal(){
+  document.getElementById('crisisOverlay').style.display='none';
+}
   async function signOut(){await sb.auth.signOut();window.location.replace('auth.html');}
 
 init();
