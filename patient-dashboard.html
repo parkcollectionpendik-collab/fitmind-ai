@@ -545,8 +545,18 @@ function toggleEx(idx,total){
 async function updateStats(){
   const doneList=JSON.parse(localStorage.getItem('patient_done_'+TODAY)||'[]');
   const activeDays=JSON.parse(localStorage.getItem('patient_active_days')||'[]');
-  document.getElementById('statDone').textContent=doneList.length;
-  document.getElementById('statStreak').textContent=activeDays.length+'🔥';
+
+  // Tamamlanan egzersiz
+  const doneEl=document.getElementById('statDone');
+  doneEl.textContent=doneList.length;
+  doneEl.style.color=doneList.length>0?'#4ade80':'var(--muted)';
+
+  // Streak
+  const streakEl=document.getElementById('statStreak');
+  streakEl.textContent=activeDays.length>0?activeDays.length+'🔥':'0';
+  streakEl.style.color=activeDays.length>=3?'#f5a623':activeDays.length>0?'var(--blue)':'var(--muted)';
+
+  // İlerleme sayfası
   document.getElementById('progTotal').textContent=doneList.length;
   document.getElementById('progDays').textContent=activeDays.length;
 
@@ -562,10 +572,11 @@ async function updateStats(){
   const painEl=document.getElementById('statPain');
   if(lastPain){
     const color=lastPain.pain_score<=3?'#4ade80':lastPain.pain_score<=6?'#f5a623':'#ff6b6b';
-    painEl.textContent=lastPain.pain_score;
+    painEl.textContent=lastPain.pain_score+'/10';
     painEl.style.color=color;
   } else {
     painEl.textContent='—';
+    painEl.style.color='var(--muted)';
   }
 }
 
