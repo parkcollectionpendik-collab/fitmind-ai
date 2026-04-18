@@ -656,7 +656,161 @@ async function updateStats(){
   renderActionCenter();
   loadAgenda();
 }
+// ---- AKSİYON MERKEZİ ----
+async function renderActionCenter(){
+  const el=document.getElementById('actionCenter');
+  if(!el||!physioProfile)return;
+  const todayStr=new Date().toISOString().split('T')[0];
+  const actions=[];
 
+  // 1. Okunmamış mesajlar
+  const {count:unread}=await sb.from('patient_messages')
+    .select('*',{count:'exact',head:true})
+    .eq('physio_id',physioProfile.id)
+    .eq('sender_role','patient')
+    .eq('is_read',false);
+  if(unread&&unread>0){
+    actions.push({
+      priority:1,icon:'💬',color:'#ff6b6b',
+      title:unread+' okunmamış mesajın var',
+      sub:'Hastan cevap bekliyor',
+      btnText:'Hastalara Git',
+      action:"switchTab('patients',document.querySelectorAll('.nav-item')[1])"
+    });
+  }
+
+  // 2. Bugünkü seansların notu girilmemiş
+  const {data:todayWithoutNotes}=await sb.from('patient_sessions')
+    .select('patient_id,notes')
+    .eq('physio_id',physioProfile.id)
+    .eq('session_date',todayStr);
+  const missingNotes=(todayWithoutNotes||[]).filter(s=>!s.notes||s.notes.trim()==='').length;
+  if(missingNotes>0){
+    actions.push({
+      priority:2,icon:'📝',color:'#f5a623',
+      title:missingNotes+' seansın notu girilmemiş',
+      sub:'Bugünkü seanslar için not eklemeyi unutma',
+      btnText:'Ajandaya Git',
+      action:"switchTab('sessions',document.querySelectorAll('.nav-item')[3])"
+    });
+  }
+
+  // 3. Plansız hastalar
+  const plansLessPatients=[];
+  for(const p of patients.slice(0,20)){
+    const {count}=await sb.from('user_plans').select('*',{count:'exact',head:true}).eq('user_id',p.id);
+    if(!count||count===0)plansLessPatients.push(p);
+  }
+  if(plansLessPatients.length>0){
+    actions.push({
+      priority:3,icon:'📋',color:'#44aaff',
+      title:plansLessPatients.length+' hastan plan bekliyor',
+      sub:'Henüz antrenman planı atanmamış',
+      btnText:'Hastalara Git',
+      action:"switchTab('patients',document.querySelectorAll('.nav-item')[1])"
+    });
+  }
+
+  actions.sort((a,b)=>a.priority-b.priority);
+  if(actions.length===0){
+    el.innerHTML=`
+      <div style="background:linear-gradient(135deg,#0a1a0a,#0d0d0d);border:1px solid #4ade8025;border-radius:16px;padding:1.15rem 1.4rem;display:flex;align-items:center;gap:1rem">
+        <div style="font-size:1.8rem">✨</div>
+        <div style="flex:1">
+          <div style="font-family:var(--font-head);font-weight:800;font-size:0.95rem;color:#4ade80">Her şey yolunda!</div>
+          <div style="font-size:0.82rem;color:var(--muted);margin-top:0.1rem">Bekleyen bir iş yok. Güzel bir gün seni bekliyor.</div>
+        </div>
+      </div>`;
+    return;
+  }
+
+  const top=actions.slice(0,3);
+  el.innerHTML=top.map(a=>`
+    <div style="background:${a.color}10;border:1px solid ${a.color}30;border-radius:16px;padding:1rem 1.2rem;display:flex;align-items:center;gap:1rem;margin-bottom:0.6rem;flex-wrap:wrap">
+      <div style="font-size:1.6rem;flex-shrink:0">${a.icon}</div>
+      <div style="flex:1;min-width:180px">
+        <div style="font-family:var(--font-head);font-weight:800;font-size:0.95rem;color:${a.color}">${a.title}</div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:0.1rem">${a.sub}</div>
+      </div>
+      <button onclick="${a.action}" style="background:${a.color};color:#fff;border:none;border-radius:100px;padding:0.5rem 1.1rem;font-family:var(--font-head);font-weight:700;font-size:0.8rem;cursor:pointer;white-space:nowrap">${a.btnText} →</button>
+    </div>`).join('');
+}
+
+// ---- HAFTALIK ÖZET ----
+async function renderWeekSummary(){
+  const el=document.getElementById('weekSummary');
+  if(!el||!physioProfile)return;
+
+  const now=new Date();
+  const weekAgo=new Date();weekAgo.setDate(weekAgo.getDate()-7);
+  const weekAgoStr=weekAgo.toISOString().split('T')[0];
+  const todayStr=now.toISOString().split('T')[0];
+
+  const {count:weekSessions}=await sb.from('patient_sessions')
+    .select('*',{count:'exact',head:true})
+    .eq('physio_id',physioProfile.id)
+    .gte('session_date',weekAgoStr)
+    .lte('session_date',todayStr);
+
+  const {count:weekMeas}=await sb.from('patient_measurements')
+    .select('*',{count:'exact',head:true})
+    .eq('physio_id',physioProfile.id)
+    .gte('created_at',weekAgo.toISOString());
+
+  const {count:weekMsgs}=await sb.from('patient_messages')
+    .select('*',{count:'exact',head:true})
+    .eq('physio_id',physioProfile.id)
+    .eq('sender_role','patient')
+    .gte('created_at',weekAgo.toISOString());
+
+  const {data:allWeek}=await sb.from('patient_sessions')
+    .select('session_date')
+    .eq('physio_id',physioProfile.id)
+    .gte('session_date',weekAgoStr)
+    .lte('session_date',todayStr);
+
+  const dayNames=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
+  const counts=new Array(7).fill(0);
+  (allWeek||[]).forEach(s=>{
+    const d=new Date(s.session_date);
+    const jsDay=d.getDay();
+    const idx=jsDay===0?6:jsDay-1;
+    counts[idx]++;
+  });
+  const maxCount=Math.max(...counts,1);
+  const jsDay=now.getDay();
+  const todayIdx=jsDay===0?6:jsDay-1;
+
+  el.innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;margin-bottom:1.25rem">
+      <div style="background:#44aaff10;border:1px solid #44aaff25;border-radius:12px;padding:0.85rem">
+        <div style="font-size:0.7rem;color:var(--blue);font-family:var(--font-head);font-weight:700;text-transform:uppercase;letter-spacing:0.05em">Seans</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.5rem;color:var(--blue);margin-top:0.15rem">${weekSessions||0}</div>
+      </div>
+      <div style="background:#4ade8010;border:1px solid #4ade8025;border-radius:12px;padding:0.85rem">
+        <div style="font-size:0.7rem;color:#4ade80;font-family:var(--font-head);font-weight:700;text-transform:uppercase;letter-spacing:0.05em">Ölçüm</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.5rem;color:#4ade80;margin-top:0.15rem">${weekMeas||0}</div>
+      </div>
+      <div style="background:#a78bfa10;border:1px solid #a78bfa25;border-radius:12px;padding:0.85rem">
+        <div style="font-size:0.7rem;color:#a78bfa;font-family:var(--font-head);font-weight:700;text-transform:uppercase;letter-spacing:0.05em">Mesaj</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.5rem;color:#a78bfa;margin-top:0.15rem">${weekMsgs||0}</div>
+      </div>
+    </div>
+
+    <div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.5rem">Son 7 gün seans dağılımı</div>
+    <div style="display:flex;gap:0.4rem;align-items:flex-end;height:90px">
+      ${counts.map((c,i)=>{
+        const pct=(c/maxCount)*100;
+        const isToday=i===todayIdx;
+        return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem">
+          <div style="font-family:var(--font-head);font-weight:800;font-size:0.72rem;color:${isToday?'var(--blue)':c>0?'var(--white)':'var(--muted)'}">${c}</div>
+          <div style="width:100%;height:${pct}%;min-height:4px;background:${isToday?'var(--blue)':c>0?'#44aaff60':'#ffffff15'};border-radius:5px 5px 0 0;transition:height 0.5s"></div>
+          <div style="font-size:0.65rem;color:${isToday?'var(--blue)':'var(--muted)'};font-family:var(--font-head);font-weight:${isToday?'800':'600'}">${dayNames[i]}</div>
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+}
 function renderPatientList(list){
   const el=document.getElementById('patientList');
   if(list.length===0){
