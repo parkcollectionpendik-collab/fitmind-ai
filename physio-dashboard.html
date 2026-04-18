@@ -487,12 +487,8 @@ function goBack(){
     if(firstNav)firstNav.click();
     return;
   }
-  // Tarayıcı geçmişinde geri git
-  if(window.history.length>1){
-    window.history.back();
-  } else {
-    window.location.href='dashboard.html';
-  }
+  // Ana sayfadaysa sidebar'ı aç
+  toggleSidebar();
 }
 function toggleSidebar(){document.querySelector('.sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open')}
 function closeSidebar(){document.querySelector('.sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open')}
