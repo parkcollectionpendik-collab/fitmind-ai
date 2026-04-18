@@ -393,13 +393,8 @@ function goBack(){
     switchTab('home',document.querySelectorAll('.nav-item')[0]);
     return;
   }
-  // Tarayıcı geçmişinde geri gidilecek yer varsa
-  if(window.history.length>1){
-    window.history.back();
-  } else {
-    // Son çare: dashboard'a git
-    window.location.href='patient-dashboard.html';
-  }
+  // Ana sayfadaysa sidebar'ı aç
+  toggleSidebar();
 }
 function closeSidebar(){document.querySelector('.sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open')}
 
