@@ -1001,7 +1001,137 @@ async function deletePmReport(rid){
   await sb.from('patient_reports').delete().eq('id',rid);
   await loadPmReports(_currentPatientId);
 }
+// --- MESAJLAR TAB ---
+let _pmMessageChannel=null;
 
+async function loadPmMessages(id){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session)return;
+
+  // Hasta tarafından gelen okunmamış mesajları okundu olarak işaretle (çünkü doktor şu an bakıyor)
+  await sb.from('patient_messages')
+    .update({is_read:true})
+    .eq('patient_id',id)
+    .eq('physio_id',session.user.id)
+    .eq('sender_role','patient')
+    .eq('is_read',false);
+
+  await renderPmMessages(id);
+
+  // Realtime subscription
+  if(_pmMessageChannel){
+    sb.removeChannel(_pmMessageChannel);
+  }
+  _pmMessageChannel=sb.channel('pm-messages-'+id)
+    .on('postgres_changes',{event:'*',schema:'public',table:'patient_messages',filter:'patient_id=eq.'+id},async(payload)=>{
+      // Gelen mesajı okundu işaretle
+      if(payload.new&&payload.new.sender_role==='patient'&&!payload.new.is_read){
+        await sb.from('patient_messages').update({is_read:true}).eq('id',payload.new.id);
+      }
+      await renderPmMessages(id);
+    })
+    .subscribe();
+}
+
+async function renderPmMessages(id){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session)return;
+  const {data:msgs}=await sb.from('patient_messages')
+    .select('*')
+    .eq('patient_id',id)
+    .eq('physio_id',session.user.id)
+    .order('created_at',{ascending:true});
+
+  const list=msgs||[];
+  const patientName=_currentPatient?.full_name||_currentPatient?.email||'Hasta';
+
+  let html=`
+    <div style="display:flex;flex-direction:column;height:480px;background:#0a0a0a;border:1px solid #ffffff08;border-radius:14px;overflow:hidden">
+      <div id="pmMsgScroll" style="flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:0.5rem">`;
+
+  if(list.length===0){
+    html+=`<div style="margin:auto;text-align:center;color:var(--muted);padding:1rem">
+      <div style="font-size:2.2rem;margin-bottom:0.5rem;opacity:0.5">💬</div>
+      <div style="font-size:0.85rem">Henüz mesaj yok.<br>İlk mesajı sen at.</div>
+    </div>`;
+  } else {
+    list.forEach(m=>{
+      const isMine=m.sender_role==='physio';
+      const d=new Date(m.created_at);
+      const time=d.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+      const dateStr=d.toLocaleDateString('tr-TR',{day:'numeric',month:'short'});
+      const readTick=isMine?(m.is_read?'<span style="color:#44aaff;margin-left:0.3rem">✓✓</span>':'<span style="color:var(--muted);margin-left:0.3rem">✓</span>'):'';
+      html+=`
+        <div style="display:flex;${isMine?'justify-content:flex-end':'justify-content:flex-start'}">
+          <div style="max-width:72%;padding:0.6rem 0.85rem;border-radius:14px;${isMine?'background:var(--blue);color:#000;border-bottom-right-radius:4px':'background:#ffffff10;color:var(--white);border-bottom-left-radius:4px'}">
+            <div style="font-size:0.88rem;line-height:1.5;white-space:pre-wrap;word-break:break-word">${escapeHtml(m.message)}</div>
+            <div style="font-size:0.65rem;margin-top:0.25rem;opacity:0.7;display:flex;align-items:center;${isMine?'justify-content:flex-end':''}">${dateStr} ${time}${readTick}</div>
+          </div>
+        </div>`;
+    });
+  }
+
+  html+=`
+      </div>
+      <div style="border-top:1px solid #ffffff10;padding:0.75rem;background:#0d0d0d">
+        <div style="display:flex;gap:0.5rem;align-items:flex-end">
+          <textarea id="pmMsgInput" placeholder="${patientName} için mesaj yaz..." style="flex:1;background:#ffffff08;border:1px solid #ffffff12;border-radius:12px;padding:0.6rem 0.85rem;color:var(--white);font-family:var(--font-body);font-size:0.88rem;outline:none;resize:none;min-height:42px;max-height:120px" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendPmMessage('${id}')}"></textarea>
+          <button onclick="sendPmMessage('${id}')" style="background:var(--blue);color:#000;border:none;border-radius:50%;width:42px;height:42px;cursor:pointer;font-size:1rem;flex-shrink:0;font-weight:800">➤</button>
+        </div>
+        <div style="font-size:0.68rem;color:var(--muted);margin-top:0.3rem;text-align:center">Enter = Gönder · Shift+Enter = Yeni satır</div>
+      </div>
+    </div>`;
+
+  document.getElementById('pmPanel-messages').innerHTML=html;
+
+  // Aşağı kaydır
+  setTimeout(()=>{
+    const scroll=document.getElementById('pmMsgScroll');
+    if(scroll)scroll.scrollTop=scroll.scrollHeight;
+  },50);
+
+  // Okunmamış rozeti güncelle (hasta tarafından gelen)
+  const {count}=await sb.from('patient_messages')
+    .select('*',{count:'exact',head:true})
+    .eq('patient_id',id)
+    .eq('physio_id',session.user.id)
+    .eq('sender_role','patient')
+    .eq('is_read',false);
+  const badge=document.getElementById('pmCountMessages');
+  if(badge){
+    if(count&&count>0){
+      badge.textContent=count;
+      badge.style.display='inline-block';
+      badge.style.background='#ff6b6b20';
+      badge.style.color='#ff6b6b';
+    } else {
+      badge.style.display='none';
+    }
+  }
+}
+
+async function sendPmMessage(patientId){
+  const input=document.getElementById('pmMsgInput');
+  if(!input)return;
+  const text=input.value.trim();
+  if(!text)return;
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session)return;
+  input.value='';
+  const {error}=await sb.from('patient_messages').insert({
+    patient_id:patientId,
+    physio_id:session.user.id,
+    sender_role:'physio',
+    message:text
+  });
+  if(error){alert('Hata: '+error.message);input.value=text;return;}
+  await renderPmMessages(patientId);
+}
+
+function escapeHtml(s){
+  if(!s)return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
 // --- NOTLAR TAB (localStorage'da kalıyor) ---
 function loadPmNotes(id){
   const notes=JSON.parse(localStorage.getItem('physio_notes_'+id)||'[]');
