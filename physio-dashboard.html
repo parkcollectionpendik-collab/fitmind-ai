@@ -569,7 +569,7 @@ if(profile?.user_role!=='physio'){
 
   await loadPatients();
   renderExercises('all');
-  renderSessions();
+  
   document.getElementById('sessionDate').value=new Date().toISOString().split('T')[0];
 }
 
@@ -588,6 +588,7 @@ function updateStats(){
   document.getElementById('statSessions').textContent=sessions.filter(s=>s.date===new Date().toISOString().split('T')[0]).length;
   renderTodaySessions();
   renderRecentActivity();
+  loadAgenda();
 }
 
 function renderPatientList(list){
