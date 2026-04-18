@@ -146,7 +146,22 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .session-name{font-size:0.85rem;flex:1}
 .session-time{font-size:0.75rem;color:var(--muted)}
 .session-status{font-size:0.72rem;font-family:var(--font-head);font-weight:700}
-
+/* AJANDA TABS */
+.agenda-tab{background:#ffffff08;border:1px solid #ffffff10;color:var(--muted);border-radius:100px;padding:0.5rem 1rem;font-family:var(--font-head);font-weight:700;font-size:0.82rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem}
+.agenda-tab:hover{background:#ffffff12;color:var(--white)}
+.agenda-tab.active{background:#44aaff20;border-color:#44aaff40;color:var(--blue)}
+.agenda-count{background:#ffffff15;border-radius:100px;padding:0.05rem 0.45rem;font-size:0.7rem;min-width:20px;text-align:center}
+.agenda-tab.active .agenda-count{background:#44aaff30;color:var(--blue)}
+.agenda-day-group{margin-bottom:1.5rem}
+.agenda-day-header{font-family:var(--font-head);font-weight:800;font-size:0.9rem;color:var(--blue);margin-bottom:0.6rem;padding-bottom:0.4rem;border-bottom:1px solid #ffffff0a}
+.agenda-card{background:#ffffff06;border:1px solid #ffffff0a;border-radius:14px;padding:1rem 1.15rem;margin-bottom:0.5rem;cursor:pointer;transition:all 0.2s;display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
+.agenda-card:hover{background:#ffffff10;border-color:#44aaff30}
+.agenda-time{font-family:var(--font-head);font-weight:800;font-size:1.05rem;color:var(--blue);min-width:60px;text-align:center;padding:0.5rem 0.75rem;background:#44aaff10;border:1px solid #44aaff25;border-radius:10px}
+.agenda-no-time{font-family:var(--font-head);font-weight:700;font-size:0.72rem;color:var(--muted);min-width:60px;text-align:center;padding:0.5rem;background:#ffffff05;border:1px dashed #ffffff10;border-radius:10px}
+.agenda-patient{flex:1;min-width:140px}
+.agenda-patient-name{font-family:var(--font-head);font-weight:700;font-size:0.95rem;margin-bottom:0.15rem}
+.agenda-patient-meta{font-size:0.75rem;color:var(--muted);display:flex;gap:0.5rem;flex-wrap:wrap}
+.agenda-pain-badge{display:inline-block;padding:0.1rem 0.45rem;border-radius:6px;font-family:var(--font-head);font-weight:700;font-size:0.7rem}
 /* EGZERSİZ KÜTÜPHANESI */
 .exercise-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem}
 .exercise-card{background:#ffffff06;border:1px solid #ffffff0a;border-radius:14px;padding:1rem;cursor:pointer;transition:all 0.2s}
