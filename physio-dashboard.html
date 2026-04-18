@@ -1408,17 +1408,29 @@ async function addSession(){
 
 
 
-function renderTodaySessions(){
+async function renderTodaySessions(){
   const today=new Date().toISOString().split('T')[0];
-  const todayS=sessions.filter(s=>s.date===today);
+  const {data:todayS}=await sb.from('patient_sessions')
+    .select('*,profiles!patient_sessions_patient_id_fkey(email)')
+    .eq('physio_id',physioProfile.id)
+    .eq('session_date',today)
+    .order('session_time',{ascending:true,nullsFirst:false});
+
   const el=document.getElementById('todaySessions');
-  if(todayS.length===0){el.innerHTML='<div class="empty-state"><div class="empty-icon">📅</div><div>Bugün seans planlanmamış.</div></div>';return;}
-  el.innerHTML=todayS.map(s=>`
+  if(!todayS||todayS.length===0){
+    el.innerHTML='<div class="empty-state"><div class="empty-icon">📅</div><div>Bugün seans planlanmamış.</div></div>';
+    return;
+  }
+  el.innerHTML=todayS.map(s=>{
+    const patient=patients.find(p=>p.id===s.patient_id);
+    const name=patient?.full_name||patient?.email||s.profiles?.email||'Hasta';
+    return `
     <div class="session-item">
       <div class="session-dot" style="background:#44aaff"></div>
-      <div style="flex:1"><div class="session-name">${s.patientName}</div></div>
-      <div class="session-time">${s.time||'Saat belirtilmemiş'}</div>
-    </div>`).join('');
+      <div style="flex:1"><div class="session-name">${name}</div></div>
+      <div class="session-time">${s.session_time?s.session_time.slice(0,5):'Saat belirtilmemiş'}</div>
+    </div>`;
+  }).join('');
 }
 
 function renderRecentActivity(){
