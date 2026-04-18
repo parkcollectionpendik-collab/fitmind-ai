@@ -299,7 +299,7 @@ async function init(){
 
   // Doktor bilgisi
   if(profile?.physio_id){
-    const {data:doctor}=await sb.from('profiles').select('physio_clinic,physio_spec,full_name,email').eq('id',profile.physio_id).maybeSingle();
+    const {data:doctor}=await sb.from('profiles').select('physio_clinic,physio_spec,email').eq('id',profile.physio_id).maybeSingle();
     if(doctor){
       document.getElementById('doctorBanner').style.display='flex';
       const clinicName=doctor.physio_clinic||'Klinik';
