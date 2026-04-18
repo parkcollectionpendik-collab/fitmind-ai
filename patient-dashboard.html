@@ -217,6 +217,16 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
       <div style="font-family:var(--font-head);font-size:1.6rem;font-weight:800" id="welcomeMsg">Merhaba! 👋</div>
       <div style="font-size:0.85rem;color:var(--muted);margin-top:0.2rem" id="todayDate"></div>
     </div>
+
+    <!-- AKILLI UYARI KARTI -->
+    <div id="smartAlert" style="display:none;margin-bottom:1.5rem;border-radius:16px;padding:1rem 1.25rem;border:1px solid;display:none;align-items:center;gap:0.85rem;flex-wrap:wrap">
+      <div id="smartAlertIcon" style="font-size:1.8rem;flex-shrink:0"></div>
+      <div style="flex:1;min-width:180px">
+        <div id="smartAlertTitle" style="font-family:var(--font-head);font-weight:800;font-size:0.95rem;margin-bottom:0.15rem"></div>
+        <div id="smartAlertMsg" style="font-size:0.83rem;color:#ffffffcc;line-height:1.5"></div>
+      </div>
+      <button id="smartAlertBtn" onclick="smartAlertAction()" style="background:transparent;color:inherit;border:1.5px solid currentColor;border-radius:100px;padding:0.5rem 1.1rem;font-family:var(--font-head);font-weight:700;font-size:0.8rem;cursor:pointer;white-space:nowrap"></button>
+    </div>
 <!-- TIBBİ BİLGİLER -->
     <div class="panel" id="medicalPanel" style="display:none;background:linear-gradient(135deg,#1a0a0a,#0d0d0d);border-color:#ff6b6b25">
       <div class="panel-title" style="margin-bottom:1rem;color:#ff6b6b">🩺 Tedavi Bilgilerim</div>
