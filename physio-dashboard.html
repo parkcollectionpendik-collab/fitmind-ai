@@ -283,51 +283,63 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
       <button class="btn-blue" onclick="switchTab('invite',document.querySelectorAll('.nav-item')[5])">+ Hasta Davet Et</button>
     </div>
 
-    <div class="stat-grid">
-      <div class="stat-card">
-        <div class="stat-label">Toplam Hasta</div>
-        <div class="stat-value" id="statTotal">0</div>
-        <div class="stat-sub">kayıtlı hasta</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Aktif Hasta</div>
-        <div class="stat-value" id="statActive">0</div>
-        <div class="stat-sub">bu hafta aktif</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Bugünkü Seans</div>
-        <div class="stat-value" id="statSessions">0</div>
-        <div class="stat-sub">planlanmış</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Ortalama İlerleme</div>
-        <div class="stat-value" id="statProgress">—</div>
-        <div class="stat-sub">bu ay</div>
-      </div>
-    </div>
+    <!-- AKSİYON MERKEZİ -->
+<div id="actionCenter" style="margin-bottom:1.5rem"></div>
 
-    <!-- SON AKTİVİTELER -->
-    <div class="panel">
-      <div class="panel-head">
-        <div class="panel-title">📋 Son Aktiviteler</div>
-      </div>
-      <div id="recentActivity">
-        <div class="empty-state"><div class="empty-icon">📊</div><div>Henüz aktivite yok. Hasta ekleyerek başlayın!</div></div>
-      </div>
-    </div>
-
-    <!-- BUGÜNÜN SEANSLARI -->
-    <div class="panel">
-      <div class="panel-head">
-        <div class="panel-title">📅 Bugünün Seanları</div>
-        <button class="btn-outline" onclick="switchTab('sessions',document.querySelectorAll('.nav-item')[3])">Tümü →</button>
-      </div>
-      <div id="todaySessions">
-        <div class="empty-state"><div class="empty-icon">📅</div><div>Bugün seans planlanmamış.</div></div>
-      </div>
-    </div>
+<!-- STAT GRID -->
+<div class="stat-grid">
+  <div class="stat-card" onclick="switchTab('patients',document.querySelectorAll('.nav-item')[1])" style="cursor:pointer">
+    <div class="stat-label">👥 Toplam Hasta</div>
+    <div class="stat-value" id="statTotal">0</div>
+    <div class="stat-sub" id="statTotalSub">kayıtlı hasta</div>
   </div>
+  <div class="stat-card" onclick="switchTab('sessions',document.querySelectorAll('.nav-item')[3])" style="cursor:pointer">
+    <div class="stat-label">📅 Bugünkü Seans</div>
+    <div class="stat-value" id="statSessions">0</div>
+    <div class="stat-sub" id="statSessionsSub">planlanmış</div>
+  </div>
+  <div class="stat-card" onclick="switchTab('sessions',document.querySelectorAll('.nav-item')[3])" style="cursor:pointer">
+    <div class="stat-label">🌅 Yarın</div>
+    <div class="stat-value" id="statTomorrow">0</div>
+    <div class="stat-sub">seans bekliyor</div>
+  </div>
+  <div class="stat-card" style="cursor:default">
+    <div class="stat-label">💬 Okunmamış</div>
+    <div class="stat-value" id="statUnread" style="color:var(--muted)">0</div>
+    <div class="stat-sub" id="statUnreadSub">mesaj</div>
+  </div>
+</div>
 
+<!-- BUGÜNÜN SEANSLARI -->
+<div class="panel">
+  <div class="panel-head">
+    <div class="panel-title">📅 Bugünün Seansları</div>
+    <button class="btn-outline" onclick="switchTab('sessions',document.querySelectorAll('.nav-item')[3])">Tümü →</button>
+  </div>
+  <div id="todaySessions">
+    <div class="empty-state"><div class="empty-icon">📅</div><div>Bugün seans planlanmamış.</div></div>
+  </div>
+</div>
+
+<!-- HAFTALIK ÖZET -->
+<div class="panel">
+  <div class="panel-head">
+    <div class="panel-title">📊 Bu Hafta</div>
+  </div>
+  <div id="weekSummary">
+    <div class="empty-state"><div class="spin" style="margin:0 auto 0.5rem;display:block"></div><div>Yükleniyor...</div></div>
+  </div>
+</div>
+
+<!-- SON AKTİVİTELER -->
+<div class="panel">
+  <div class="panel-head">
+    <div class="panel-title">📝 Son Aktiviteler</div>
+  </div>
+  <div id="recentActivity">
+    <div class="empty-state"><div class="empty-icon">📝</div><div>Henüz aktivite yok.</div></div>
+  </div>
+</div>
   <!-- HASTALARIM -->
   <div class="tab-section" id="tab-patients">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem">
