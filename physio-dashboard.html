@@ -345,45 +345,65 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
     <div class="exercise-grid" id="exerciseGrid"></div>
   </div>
 
-  <!-- SEANS TAKİBİ -->
-  <div class="tab-section" id="tab-sessions">
-    <div style="font-family:var(--font-head);font-size:1.4rem;font-weight:800;margin-bottom:1.5rem">📅 Seans Takibi / Session Tracking</div>
-
-    <div class="panel">
-      <div class="panel-head">
-        <div class="panel-title">Yeni Seans Ekle / Add Session</div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-bottom:0.75rem">
-        <div>
-          <div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.4rem;font-family:var(--font-head)">Hasta / Patient</div>
-          <select id="sessionPatient" style="width:100%;background:#ffffff08;border:1px solid #ffffff12;border-radius:12px;padding:0.7rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.9rem;outline:none">
-            <option value="">Seçin / Select...</option>
-          </select>
-        </div>
-        <div>
-          <div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.4rem;font-family:var(--font-head)">Tarih / Date</div>
-          <input type="date" id="sessionDate" style="width:100%;background:#ffffff08;border:1px solid #ffffff12;border-radius:12px;padding:0.7rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.9rem;outline:none">
-        </div>
-        <div>
-          <div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.4rem;font-family:var(--font-head)">Saat / Time</div>
-          <input type="time" id="sessionTime" style="width:100%;background:#ffffff08;border:1px solid #ffffff12;border-radius:12px;padding:0.7rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.9rem;outline:none">
-        </div>
-      </div>
-      <div style="margin-bottom:0.75rem">
-        <div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.4rem;font-family:var(--font-head)">Notlar / Notes</div>
-        <input type="text" id="sessionNote" placeholder="Seans notu ekle... / Add session note..." style="width:100%;background:#ffffff08;border:1px solid #ffffff12;border-radius:12px;padding:0.7rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.9rem;outline:none">
-      </div>
-      <button class="btn-blue" onclick="addSession()">Seans Kaydet / Save Session</button>
-    </div>
-
-    <div class="panel">
-      <div class="panel-title" style="margin-bottom:1rem">Geçmiş Seanslar / Session History</div>
-      <div id="sessionList">
-        <div class="empty-state"><div class="empty-icon">📅</div><div>Henüz seans kaydı yok.</div></div>
-      </div>
-    </div>
+ <!-- SEANS TAKİBİ - AJANDA -->
+<div class="tab-section" id="tab-sessions">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:0.75rem">
+    <div style="font-family:var(--font-head);font-size:1.4rem;font-weight:800">📅 Ajanda / Schedule</div>
+    <button class="btn-blue" onclick="openNewSessionForm()">➕ Yeni Seans</button>
   </div>
 
+  <!-- FİLTRE BUTONLARI -->
+  <div style="display:flex;gap:0.5rem;margin-bottom:1.25rem;flex-wrap:wrap">
+    <button class="agenda-tab active" data-filter="today" onclick="switchAgendaTab('today',this)">📌 Bugün <span class="agenda-count" id="countToday">0</span></button>
+    <button class="agenda-tab" data-filter="tomorrow" onclick="switchAgendaTab('tomorrow',this)">🌅 Yarın <span class="agenda-count" id="countTomorrow">0</span></button>
+    <button class="agenda-tab" data-filter="week" onclick="switchAgendaTab('week',this)">📆 Bu Hafta <span class="agenda-count" id="countWeek">0</span></button>
+    <button class="agenda-tab" data-filter="past" onclick="switchAgendaTab('past',this)">📜 Geçmiş <span class="agenda-count" id="countPast">0</span></button>
+  </div>
+
+  <!-- YENİ SEANS FORMU (gizli başlar) -->
+  <div class="panel" id="newSessionForm" style="display:none;border-color:#44aaff30">
+    <div class="panel-head">
+      <div class="panel-title">➕ Yeni Seans Ekle</div>
+      <button onclick="closeNewSessionForm()" style="background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:1.2rem">✕</button>
+    </div>
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:0.75rem;margin-bottom:0.75rem">
+      <div>
+        <div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.4rem;font-family:var(--font-head)">Hasta</div>
+        <select id="sessionPatient" style="width:100%;background:#ffffff08;border:1px solid #ffffff12;border-radius:12px;padding:0.7rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.9rem;outline:none">
+          <option value="">Seçin / Select...</option>
+        </select>
+      </div>
+      <div>
+        <div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.4rem;font-family:var(--font-head)">Tarih</div>
+        <input type="date" id="sessionDate" style="width:100%;background:#ffffff08;border:1px solid #ffffff12;border-radius:12px;padding:0.7rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.9rem;outline:none">
+      </div>
+      <div>
+        <div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.4rem;font-family:var(--font-head)">Saat</div>
+        <input type="time" id="sessionTime" style="width:100%;background:#ffffff08;border:1px solid #ffffff12;border-radius:12px;padding:0.7rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.9rem;outline:none">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem">
+      <div>
+        <div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.4rem;font-family:var(--font-head)">Süre (dk)</div>
+        <input type="number" id="sessionDuration" placeholder="45" style="width:100%;background:#ffffff08;border:1px solid #ffffff12;border-radius:12px;padding:0.7rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.9rem;outline:none">
+      </div>
+      <div>
+        <div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.4rem;font-family:var(--font-head)">Ağrı (0-10)</div>
+        <input type="number" min="0" max="10" id="sessionPain" placeholder="İsteğe bağlı" style="width:100%;background:#ffffff08;border:1px solid #ffffff12;border-radius:12px;padding:0.7rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.9rem;outline:none">
+      </div>
+    </div>
+    <div style="margin-bottom:0.75rem">
+      <div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.4rem;font-family:var(--font-head)">Seans Notu</div>
+      <textarea id="sessionNote" placeholder="Seans içeriği, uygulanan protokol, hastaya verilen öneriler..." style="width:100%;background:#ffffff08;border:1px solid #ffffff12;border-radius:12px;padding:0.7rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.9rem;outline:none;resize:none;min-height:80px"></textarea>
+    </div>
+    <button class="btn-blue" onclick="addSession()">💾 Seans Kaydet</button>
+  </div>
+
+  <!-- AJANDA LİSTESİ -->
+  <div id="agendaList">
+    <div class="empty-state"><div class="empty-icon">📅</div><div>Yükleniyor...</div></div>
+  </div>
+</div>
   <!-- RAPORLAR -->
   <div class="tab-section" id="tab-reports">
     <div style="font-family:var(--font-head);font-size:1.4rem;font-weight:800;margin-bottom:1.5rem">📊 Raporlar / Reports</div>
