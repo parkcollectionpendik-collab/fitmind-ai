@@ -484,7 +484,8 @@ const sb=createClient(SB_URL,SB_KEY);
 Paddle.Initialize({token:'live_eefc76e39bd2263417b9b9ff52b'});
 
 let userProfile=null, isPro=false, freeCount=0;
-let chatHistory=JSON.parse(localStorage.getItem('fm_chatHistory')||'[]');
+let chatHistory=[];
+let CHAT_KEY='fm_chatHistory';
 const FREE_LIMIT=3;
 const TODAY_STR=new Date().toDateString();
 const jsDay=new Date().getDay();
@@ -498,7 +499,7 @@ const equipLabels={home_no:'Ev',home_basic:'Ev+Ekipman',gym:'Spor Salonu',outdoo
 
 function saveChatHistory(){
   // Son 50 mesajı sakla
-  localStorage.setItem('fm_chatHistory',JSON.stringify(chatHistory.slice(-50)));
+  localStorage.setItem(CHAT_KEY,JSON.stringify(chatHistory.slice(-50)));
 }
 
 function clearChat(){
@@ -608,6 +609,8 @@ async function callAI(messages,system,max_tokens){
 async function init(){
   const {data:{session}}=await sb.auth.getSession();
   if(!session){window.location.replace('auth.html');return;}
+  CHAT_KEY='fm_chatHistory_'+session.user.id;
+  chatHistory=JSON.parse(localStorage.getItem(CHAT_KEY)||'[]');
   // Son giris tarihini kaydet ve hatirlatma kontrolu yap
 const lastVisit=localStorage.getItem('fm_lastVisit');
 const today=new Date().toDateString();
