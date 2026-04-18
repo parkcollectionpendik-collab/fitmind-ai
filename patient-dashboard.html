@@ -356,6 +356,12 @@ async function init(){
   loadPainHistory();
   loadSessions();
   updateStats();
+  loadMessages();
+
+  // Browser notification izni iste
+  if('Notification' in window && Notification.permission==='default'){
+    Notification.requestPermission();
+  }
 }
 
 async function loadExercises(){
