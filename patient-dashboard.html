@@ -623,7 +623,194 @@ async function loadSessions(){
     </div>`;
   }).join('');
 }
-async function signOut(){await sb.auth.signOut();window.location.replace('auth.html');}
+// ---- MESAJLAŞMA ----
+let _messageChannel=null;
+let _physioId=null;
+
+async function loadMessages(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session||!patientProfile?.physio_id){
+    document.getElementById('messagesContainer').innerHTML=`
+      <div class="empty-state" style="padding:3rem">
+        <div style="font-size:2.5rem;margin-bottom:0.5rem">🏥</div>
+        <div style="font-size:0.9rem">Henüz bir doktora bağlı değilsin.<br>Doktorun davet kodunu kullanarak bağlan.</div>
+      </div>`;
+    return;
+  }
+
+  _physioId=patientProfile.physio_id;
+
+  // Gelen okunmamış mesajları okundu işaretle
+  await sb.from('patient_messages')
+    .update({is_read:true})
+    .eq('patient_id',session.user.id)
+    .eq('physio_id',_physioId)
+    .eq('sender_role','physio')
+    .eq('is_read',false);
+
+  await renderMessages();
+  await updateUnreadBadge();
+
+  // Realtime subscription — doktor mesaj atınca canlı gelsin
+  if(_messageChannel){
+    sb.removeChannel(_messageChannel);
+  }
+  _messageChannel=sb.channel('patient-messages-'+session.user.id)
+    .on('postgres_changes',{event:'*',schema:'public',table:'patient_messages',filter:'patient_id=eq.'+session.user.id},async(payload)=>{
+      // Yeni doktor mesajı geldiyse ve Mesajlar tab'ı açıksa okundu işaretle
+      if(payload.new&&payload.new.sender_role==='physio'&&!payload.new.is_read){
+        const isMsgTabOpen=document.getElementById('tab-messages').classList.contains('active');
+        if(isMsgTabOpen){
+          await sb.from('patient_messages').update({is_read:true}).eq('id',payload.new.id);
+          // Bildirim sesi çal + browser notification
+          playMessageSound();
+          showBrowserNotification('Doktorundan yeni mesaj', payload.new.message);
+        } else {
+          // Tab kapalıysa sadece bildirim ver, okundu işaretleme
+          playMessageSound();
+          showBrowserNotification('Doktorundan yeni mesaj', payload.new.message);
+        }
+      }
+      await renderMessages();
+      await updateUnreadBadge();
+    })
+    .subscribe();
+}
+
+async function renderMessages(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session||!_physioId)return;
+
+  const {data:msgs}=await sb.from('patient_messages')
+    .select('*')
+    .eq('patient_id',session.user.id)
+    .eq('physio_id',_physioId)
+    .order('created_at',{ascending:true});
+
+  const list=msgs||[];
+  const container=document.getElementById('messagesContainer');
+
+  let html=`
+    <div style="display:flex;flex-direction:column;height:calc(100vh - 260px);min-height:400px">
+      <div id="msgScroll" style="flex:1;overflow-y:auto;padding:1.25rem;display:flex;flex-direction:column;gap:0.5rem">`;
+
+  if(list.length===0){
+    html+=`<div style="margin:auto;text-align:center;color:var(--muted);padding:2rem">
+      <div style="font-size:2.5rem;margin-bottom:0.5rem;opacity:0.5">💬</div>
+      <div style="font-size:0.9rem">Henüz mesaj yok.<br>Doktoruna ilk mesajını at!</div>
+    </div>`;
+  } else {
+    let lastDate='';
+    list.forEach(m=>{
+      const d=new Date(m.created_at);
+      const dateStr=d.toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
+      if(dateStr!==lastDate){
+        html+=`<div style="text-align:center;margin:0.75rem 0"><span style="background:#ffffff08;color:var(--muted);font-size:0.72rem;padding:0.25rem 0.75rem;border-radius:100px;font-family:var(--font-head);font-weight:700">${dateStr}</span></div>`;
+        lastDate=dateStr;
+      }
+      const isMine=m.sender_role==='patient';
+      const time=d.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+      const readTick=isMine?(m.is_read?'<span style="color:#44aaff;margin-left:0.3rem">✓✓</span>':'<span style="color:var(--muted);margin-left:0.3rem">✓</span>'):'';
+      html+=`
+        <div style="display:flex;${isMine?'justify-content:flex-end':'justify-content:flex-start'}">
+          <div style="max-width:72%;padding:0.65rem 0.95rem;border-radius:16px;${isMine?'background:var(--blue);color:#000;border-bottom-right-radius:4px':'background:#ffffff10;color:var(--white);border-bottom-left-radius:4px'}">
+            <div style="font-size:0.9rem;line-height:1.5;white-space:pre-wrap;word-break:break-word">${escapeHtml(m.message)}</div>
+            <div style="font-size:0.65rem;margin-top:0.25rem;opacity:0.7;display:flex;align-items:center;${isMine?'justify-content:flex-end':''}">${time}${readTick}</div>
+          </div>
+        </div>`;
+    });
+  }
+
+  html+=`
+      </div>
+      <div style="border-top:1px solid #ffffff10;padding:0.85rem;background:#0d0d0d">
+        <div style="display:flex;gap:0.5rem;align-items:flex-end">
+          <textarea id="msgInput" placeholder="Doktoruna mesaj yaz..." style="flex:1;background:#ffffff08;border:1px solid #ffffff12;border-radius:14px;padding:0.7rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.9rem;outline:none;resize:none;min-height:44px;max-height:140px" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage()}"></textarea>
+          <button onclick="sendMessage()" style="background:var(--blue);color:#000;border:none;border-radius:50%;width:44px;height:44px;cursor:pointer;font-size:1.05rem;flex-shrink:0;font-weight:800">➤</button>
+        </div>
+        <div style="font-size:0.68rem;color:var(--muted);margin-top:0.35rem;text-align:center">Enter = Gönder · Shift+Enter = Yeni satır</div>
+      </div>
+    </div>`;
+
+  container.innerHTML=html;
+
+  // En alta kaydır
+  setTimeout(()=>{
+    const scroll=document.getElementById('msgScroll');
+    if(scroll)scroll.scrollTop=scroll.scrollHeight;
+  },50);
+}
+
+async function sendMessage(){
+  const input=document.getElementById('msgInput');
+  if(!input)return;
+  const text=input.value.trim();
+  if(!text)return;
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session||!_physioId)return;
+  input.value='';
+  const {error}=await sb.from('patient_messages').insert({
+    patient_id:session.user.id,
+    physio_id:_physioId,
+    sender_role:'patient',
+    message:text
+  });
+  if(error){alert('Hata: '+error.message);input.value=text;return;}
+  await renderMessages();
+}
+
+async function updateUnreadBadge(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session||!_physioId)return;
+  const {count}=await sb.from('patient_messages')
+    .select('*',{count:'exact',head:true})
+    .eq('patient_id',session.user.id)
+    .eq('physio_id',_physioId)
+    .eq('sender_role','physio')
+    .eq('is_read',false);
+  const badge=document.getElementById('unreadBadge');
+  if(!badge)return;
+  if(count&&count>0){
+    badge.textContent=count;
+    badge.style.display='inline-flex';
+  } else {
+    badge.style.display='none';
+  }
+}
+
+function escapeHtml(s){
+  if(!s)return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// Bildirim sesi (basit beep)
+function playMessageSound(){
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const osc=ctx.createOscillator();
+    const gain=ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.frequency.value=800;
+    gain.gain.setValueAtTime(0.15,ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.3);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime+0.3);
+  }catch(e){}
+}
+
+// Browser notification
+function showBrowserNotification(title, body){
+  if(!('Notification' in window))return;
+  if(Notification.permission==='granted'){
+    new Notification(title,{body:body.slice(0,120),icon:'/favicon.ico'});
+  } else if(Notification.permission!=='denied'){
+    Notification.requestPermission().then(p=>{
+      if(p==='granted')new Notification(title,{body:body.slice(0,120),icon:'/favicon.ico'});
+    });
+  }
+}
+  async function signOut(){await sb.auth.signOut();window.location.replace('auth.html');}
 
 init();
 </script>
