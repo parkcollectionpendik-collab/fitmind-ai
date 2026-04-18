@@ -915,6 +915,156 @@ function showBrowserNotification(title, body){
     });
   }
 }
+ // ---- AKILLI UYARI SİSTEMİ ----
+let _smartAlertAction=null;
+
+async function computeSmartAlert(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session)return null;
+
+  // 1. Son ağrı yüksek mi? (bugün ağrı ≥7)
+  const {data:recentPain}=await sb.from('patient_pain_logs')
+    .select('pain_score,created_at')
+    .eq('patient_id',session.user.id)
+    .order('created_at',{ascending:false})
+    .limit(1)
+    .maybeSingle();
+  if(recentPain&&recentPain.pain_score>=7){
+    const hoursAgo=(new Date()-new Date(recentPain.created_at))/(1000*60*60);
+    if(hoursAgo<24){
+      return {
+        priority:1,
+        bg:'#ff6b6b15',border:'#ff6b6b40',color:'#ff6b6b',
+        icon:'🔴',
+        title:'Ağrın yüksek',
+        msg:'Son girdiğin ağrı skoru '+recentPain.pain_score+'/10. Doktorunla paylaşmalısın.',
+        btnText:'Doktoruna Yaz',
+        action:()=>switchTab('messages',document.querySelectorAll('.nav-item')[4])
+      };
+    }
+  }
+
+  // 2. Yarın seans var mı?
+  const tomorrow=new Date();tomorrow.setDate(tomorrow.getDate()+1);
+  const tomorrowStr=tomorrow.toISOString().split('T')[0];
+  const {data:upcoming}=await sb.from('patient_sessions')
+    .select('*')
+    .eq('patient_id',session.user.id)
+    .eq('session_date',tomorrowStr)
+    .limit(1)
+    .maybeSingle();
+  if(upcoming){
+    return {
+      priority:2,
+      bg:'#44aaff15',border:'#44aaff40',color:'#44aaff',
+      icon:'📅',
+      title:'Yarın seansın var',
+      msg:upcoming.notes?('Doktor notu: '+upcoming.notes.slice(0,80)):'Hazırlıklı ol, iyi dinlen.',
+      btnText:'Detaya Bak',
+      action:()=>switchTab('sessions',document.querySelectorAll('.nav-item')[5])
+    };
+  }
+
+  // 3. Okunmamış mesaj var mı? (son 24 saat içinde)
+  if(patientProfile?.physio_id){
+    const {count:unreadCount}=await sb.from('patient_messages')
+      .select('*',{count:'exact',head:true})
+      .eq('patient_id',session.user.id)
+      .eq('physio_id',patientProfile.physio_id)
+      .eq('sender_role','physio')
+      .eq('is_read',false);
+    if(unreadCount&&unreadCount>0){
+      return {
+        priority:3,
+        bg:'#c8f54215',border:'#c8f54240',color:'#c8f542',
+        icon:'💬',
+        title:'Doktorundan '+unreadCount+' yeni mesaj',
+        msg:'Henüz okumadığın mesajlar var.',
+        btnText:'Mesajları Aç',
+        action:()=>switchTab('messages',document.querySelectorAll('.nav-item')[4])
+      };
+    }
+  }
+
+  // 4. 3+ gündür egzersiz yok mu?
+  const activeDays=JSON.parse(localStorage.getItem('patient_active_days')||'[]');
+  if(activeDays.length>0){
+    const lastActive=activeDays.sort().reverse()[0];
+    const daysSince=Math.floor((new Date()-new Date(lastActive))/(1000*60*60*24));
+    if(daysSince>=3){
+      return {
+        priority:4,
+        bg:'#f5a62315',border:'#f5a62340',color:'#f5a623',
+        icon:'⚠️',
+        title:daysSince+' gündür egzersiz yapmadın',
+        msg:'Rehabilitasyon sürekliliği önemli. Bugün kısa bir başlangıç yap.',
+        btnText:'Egzersizleri Aç',
+        action:()=>switchTab('exercises',document.querySelectorAll('.nav-item')[1])
+      };
+    }
+  }
+
+  // 5. Streak var mı? (3+ aktif gün)
+  if(activeDays.length>=3){
+    // Son 7 günde kaç aktif gün var
+    const last7=[];
+    for(let i=0;i<7;i++){
+      const d=new Date();d.setDate(d.getDate()-i);
+      last7.push(d.toISOString().split('T')[0]);
+    }
+    const recentActive=activeDays.filter(d=>last7.includes(d)).length;
+    if(recentActive>=3){
+      return {
+        priority:5,
+        bg:'#4ade8015',border:'#4ade8040',color:'#4ade80',
+        icon:'🎉',
+        title:'Harika gidiyorsun!',
+        msg:'Son 7 günde '+recentActive+' gün egzersiz yaptın. Devam et!',
+        btnText:'İlerlemeye Bak',
+        action:()=>switchTab('progress',document.querySelectorAll('.nav-item')[2])
+      };
+    }
+  }
+
+  // 6. Hiç ağrı kaydı yok mu? (bugün)
+  if(!recentPain||((new Date()-new Date(recentPain.created_at))/(1000*60*60)>24)){
+    return {
+      priority:6,
+      bg:'#44aaff15',border:'#44aaff40',color:'#44aaff',
+      icon:'📝',
+      title:'Bugünkü ağrı skorunu kaydet',
+      msg:'Günlük takip, doktorunun sana daha iyi yardım etmesini sağlar.',
+      btnText:'Kaydet',
+      action:()=>{
+        document.querySelector('#painScale')?.scrollIntoView({behavior:'smooth',block:'center'});
+      }
+    };
+  }
+
+  return null;
+}
+
+async function loadSmartAlert(){
+  const alert=await computeSmartAlert();
+  const el=document.getElementById('smartAlert');
+  if(!alert){
+    el.style.display='none';
+    return;
+  }
+  el.style.background=alert.bg;
+  el.style.borderColor=alert.border;
+  el.style.color=alert.color;
+  el.style.display='flex';
+  document.getElementById('smartAlertIcon').textContent=alert.icon;
+  document.getElementById('smartAlertTitle').textContent=alert.title;
+  document.getElementById('smartAlertMsg').textContent=alert.msg;
+  document.getElementById('smartAlertBtn').textContent=alert.btnText;
+  _smartAlertAction=alert.action;
+}
+
+function smartAlertAction(){
+  if(_smartAlertAction)_smartAlertAction();
+}
   // ---- KRİZ MODAL ----
 function openCrisisModal(){
   document.getElementById('crisisOverlay').style.display='flex';
