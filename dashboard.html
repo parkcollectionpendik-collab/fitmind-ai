@@ -17,7 +17,7 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);min
 .nav{display:flex;flex-direction:column;gap:0.3rem;flex:1}
 .nav-item{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 1rem;border-radius:12px;cursor:pointer;transition:all 0.2s;font-size:0.9rem;color:var(--muted);border:none;background:transparent;width:100%;text-align:left;font-family:var(--font-body);text-decoration:none}
 .nav-item:hover{background:#ffffff08;color:var(--white)}
-.nav-item.active{background:#c8f54215;color:var(--lime)}
+.nav-item.active{background:#ffffff10;color:var(--white)}
 .nav-item.locked{opacity:0.5;cursor:not-allowed;pointer-events:none}
 .nav-item .icon{width:18px;text-align:center;font-size:1rem}
 .nav-item .lock{font-size:0.7rem;margin-left:auto;color:var(--muted)}
@@ -719,7 +719,7 @@ async function loadTodayWorkout(profile,name){
   // Hero kart güncelle
   const h=new Date().getHours();
   const greet=h<6?'Gece geç saatlerde bile':h<12?'Günaydın':h<18?'İyi günler':'İyi akşamlar';
-  if(document.getElementById('heroGreeting')) document.getElementById('heroGreeting').innerHTML=greet+', <span style="color:var(--lime)">'+name.split(' ')[0]+'!</span> 👋';
+  if(document.getElementById('heroGreeting')) document.getElementById('heroGreeting').innerHTML=greet+', '+name.split(' ')[0]+'.';
   if(document.getElementById('heroDate')) document.getElementById('heroDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
   const quotes=[
