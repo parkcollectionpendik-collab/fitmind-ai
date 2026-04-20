@@ -685,7 +685,12 @@ function loadWeekProgress(){
   // Haftanın başını kontrol et
   if(!window.getMonday) window.getMonday=getMonday;
   const weekKey=getMonday(new Date()).toDateString();
-  if(localStorage.getItem('fp_week')!==weekKey)return; // Yeni hafta, sıfır
+  if(localStorage.getItem('fp_week')!==weekKey){
+  document.getElementById('workoutCount').textContent='—';
+  document.getElementById('streakVal').textContent='—';
+  document.getElementById('planProgress').textContent='Başlangıç';
+  return;
+}
   const done=JSON.parse(localStorage.getItem('fp_done')||'{}');
   const d=Object.keys(done).length;
   const pct=Math.round(d/7*100);
