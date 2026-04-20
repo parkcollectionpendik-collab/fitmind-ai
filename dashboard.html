@@ -723,13 +723,13 @@ async function loadTodayWorkout(profile,name){
   if(document.getElementById('heroDate')) document.getElementById('heroDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
   const quotes=[
-    '💪 Her büyük yolculuk küçük bir adımla başlar. Bugün o adımı at!',
-    '🔥 Dün başlamak istiyordun, bugün başlayabilirsin!',
-    '⚡ Vücudun yapabilir, sadece aklını ikna et!',
-    '🌟 Küçük ilerlemeler, büyük dönüşümler yaratır.',
-    '🎯 Hedeflerin seni bekliyor — bugün ne yapacaksın?',
-    '💡 Sağlıklı yaşam bir alışkanlık, bir istisna değil.',
-    '🏆 Bugün acı çek, yarın gurur duy!'
+    'Bugün kendine iyi bak. Küçük bir adım bile yeterli.',
+    'Nasıl hissediyorsan öyle başla. Mükemmel olmak zorunda değilsin.',
+    'Her gün yeni bir fırsat. Bugün ne yapmak senin için iyi olur?',
+    'Vücudunu dinle. Bazen dinlenmek de ilerlemektir.',
+    'Devam etmek her gün yeniden başlamaktır. Burada olman yeterli.',
+    'Bugün sadece bir gün. Uzun yolun küçük bir parçası.',
+    'Küçük şeyler zamanla büyük fark yaratır. Sabırlı ol.'
   ];
   const q=quotes[new Date().getDay()%quotes.length];
   if(document.getElementById('heroMotivation')) document.getElementById('heroMotivation').textContent=q;
