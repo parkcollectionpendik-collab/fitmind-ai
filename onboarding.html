@@ -212,7 +212,7 @@ select option{background:#1a1a1a}
     <div class="code-input-wrap" id="codeInputWrap">
       <label style="color:var(--blue);margin-top:0.5rem;display:block">Doktor Davet Kodu / Invite Code</label>
       <input class="code-input" type="text" id="doctorCode" placeholder="PHY-XXXXXX" maxlength="10" oninput="this.value=this.value.toUpperCase()">
-      <button class="code-verify" onclick="verifyCode()">Kodu Dogrula / Verify</button>
+      <button class="code-verify" onclick="verifyCode()">Kodu Doğrula / Verify</button>
       <div class="code-result" id="codeResult"></div>
     </div>
 
@@ -316,8 +316,8 @@ function selectDoctorOpt(opt){
 async function verifyCode(){
   const code=document.getElementById('doctorCode').value.trim().toUpperCase();
   const result=document.getElementById('codeResult');
-  if(!code){result.textContent='Lutfen kod girin.';result.className='code-result error';result.style.display='block';return;}
-  result.textContent='Dogrulanıyor...';result.className='code-result';result.style.display='block';
+  if(!code){result.textContent='Lütfen kod girin.';result.className='code-result error';result.style.display='block';return;}
+  result.textContent='Doğrulanıyor...';result.className='code-result';result.style.display='block';
   const {data}=await sb.from('profiles').select('id,physio_clinic,physio_spec').eq('physio_code',code).eq('user_role','physio').maybeSingle();
   if(data){
     verifiedPhysioId=data.id;
@@ -326,7 +326,7 @@ async function verifyCode(){
     document.getElementById('btn6').disabled=false;
   } else {
     verifiedPhysioId=null;
-    result.textContent='Gecersiz kod. Doktorunuzdan tekrar isteyin.';
+    result.textContent='Geçersiz kod. Doktorunuzdan tekrar isteyin.';
     result.className='code-result error';
     document.getElementById('btn6').disabled=true;
   }
@@ -417,7 +417,7 @@ KRITIK: Her gun icin nutrition objesi OLMALIDIR.
     document.getElementById('finalScreen').style.display='block';
     if(userData.physioId){
       document.getElementById('doctorFeature').style.display='flex';
-      document.getElementById('finalSub').textContent='Planiniz hazir ve doktorunuz sizi takip edecek!';
+      document.getElementById('finalSub').textContent='Planınız hazır ve doktorunuz sizi takip edecek!';
     }
   },600);
 }
