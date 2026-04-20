@@ -1421,7 +1421,7 @@ async function loadTodayMeals(profile){
       if(document.getElementById('heroTarget')) document.getElementById('heroTarget').textContent=todayPlan?.type==='Dinlenme'?'🧘 Dinlenme Günü':'💪 '+(todayPlan?.focus||'Antrenman Günü');
       updateQuickTrack();
       if(nut&&typeof nut==='object'){
-        const meals=[{key:'breakfast',icon:'🌅',label:'Kahvaltı',color:'#f5a623'},{key:'lunch',icon:'☀️',label:'Öğle',color:'#44aaff'},{key:'dinner',icon:'🌙',label:'Akşam',color:'#c8f542'},{key:'snack',icon:'🍎',label:'Ara Öğün',color:'#a78bfa'}];
+        const meals=[{key:'breakfast',icon:'🌅',label:'Kahvaltı',color:'#ffffff'},{key:'lunch',icon:'☀️',label:'Öğle',color:'#ffffff'},{key:'dinner',icon:'🌙',label:'Akşam',color:'#ffffff'},{key:'snack',icon:'🍎',label:'Ara Öğün',color:'#ffffff'}];
         let html='';
         meals.forEach(m=>{
           const meal=nut[m.key];if(!meal)return;
