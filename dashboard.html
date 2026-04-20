@@ -628,7 +628,7 @@ localStorage.setItem('fm_lastVisit',today);
   document.getElementById('userName').textContent=name;
   const h=new Date().getHours();
   const gr=h<6?'İyi geceler':h<12?'Günaydın':h<18?'İyi günler':'İyi akşamlar';
-  document.getElementById('welcomeMsg').innerHTML=gr+', <span>'+name.split(' ')[0]+'!</span> 👋';
+  document.getElementById('welcomeMsg').innerHTML=gr+', '+name.split(' ')[0]+'.';
   if(document.getElementById('heroGreeting')) document.getElementById('heroGreeting').innerHTML=gr+', '+name.split(' ')[0]+'.';
   if(document.getElementById('heroDate')) document.getElementById('heroDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
