@@ -126,8 +126,8 @@ select option{background:#1a1a1a}
     <div class="step-title">Vücudunuz hakkında bilgi verin</div>
     <div class="step-sub">İdeal planınızı hesaplamamıza yardımcı olur.</div>
     <div class="input-row">
-      <div class="input-group"><label>Yas</label><input type="number" id="age" placeholder="25" min="16" max="80"></div>
-      <div class="input-group"><label>Cinsiyet</label><select id="gender"><option value="">Secin...</option><option value="male">Erkek</option><option value="female">Kadin</option><option value="other">Belirtmek istemiyorum</option></select></div>
+      <div class="input-group"><label>Yaş</label><input type="number" id="age" placeholder="25" min="16" max="80"></div>
+      <div class="input-group"><label>Cinsiyet</label><select id="gender"><option value="">Seçin...</option><option value="male">Erkek</option><option value="female">Kadin</option><option value="other">Belirtmek istemiyorum</option></select></div>
     </div>
     <div class="input-row">
       <div class="input-group"><label>Boy (cm)</label><input type="number" id="height" placeholder="175" min="140" max="220"></div>
@@ -139,11 +139,11 @@ select option{background:#1a1a1a}
   <div class="step" id="step3">
     <div class="step-tag">Adım 3 / 6</div>
     <div class="step-title">Fitness seviyeniz nedir?</div>
-    <div class="step-sub">Donust olun — planinizi buna gore ayarlayacagiz.</div>
+    <div class="step-sub">Dürüst olun — planınızı buna göre ayarlayacağız.</div>
     <div class="options">
-      <div class="option" onclick="selectOption(this,'level','beginner')"><div class="option-icon">🌱</div><div><div class="option-label">Baslangic</div><div class="option-desc">Az ya da hic deneyim yok</div></div></div>
+      <div class="option" onclick="selectOption(this,'level','beginner')"><div class="option-icon">🌱</div><div><div class="option-label">Başlangıç</div><div class="option-desc">Az ya da hiç deneyim yok</div></div></div>
       <div class="option" onclick="selectOption(this,'level','intermediate')"><div class="option-icon">🏃</div><div><div class="option-label">Orta Seviye</div><div class="option-desc">Haftada 1-3 kez egzersiz</div></div></div>
-      <div class="option" onclick="selectOption(this,'level','advanced')"><div class="option-icon">🏆</div><div><div class="option-label">Ileri Seviye</div><div class="option-desc">Duzenli antrenman, haftada 4+</div></div></div>
+      <div class="option" onclick="selectOption(this,'level','advanced')"><div class="option-icon">🏆</div><div><div class="option-label">İleri Seviye</div><div class="option-desc">Düzenli antrenman, haftada 4+</div></div></div>
     </div>
     <div class="btn-row"><button class="btn-back" onclick="prevStep(2)">← Geri</button><button class="btn-next" onclick="nextStep(4)" id="btn3" disabled>Devam Et →</button></div>
   </div>
