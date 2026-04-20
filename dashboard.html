@@ -745,7 +745,7 @@ async function loadTodayWorkout(profile,name){
       // Hero'ya bugünkü odak
       if(todayPlan&&document.getElementById('heroToday')){
         const isRest=todayPlan.type==='Dinlenme'||todayPlan.type==='Rest';
-        document.getElementById('heroToday').textContent=isRest?'🧘 Dinlenme':('💪 '+(todayPlan.focus||'Antrenman'));
+        document.getElementById('heroToday').textContent=isRest?'Dinlenme':(todayPlan.focus||'Antrenman');
       }
 
       // Beslenme planını yükle
