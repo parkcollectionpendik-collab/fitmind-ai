@@ -481,7 +481,7 @@ function checkMealReminder(){
     badge.style.display='block';
     badge.textContent='⏰ Kahvaltı eklemedin!';
     warn.style.display='flex';
-    warnText.textContent='Saat '+h+':00 — kahvaltını henüz eklemeding!';
+    warnText.textContent='Saat '+h+':00 — kahvaltını henüz eklemedin!';
   } else if(h>=14&&!entries.some(e=>e.time&&parseInt(e.time.split(':')[0])>=12)){
     badge.style.display='block';
     badge.textContent='⏰ Öğle yemeği ekle!';
