@@ -697,7 +697,7 @@ function loadWeekProgress(){
   if(document.getElementById('homeRingDesc')) document.getElementById('homeRingDesc').textContent=d>0?d+' gün tamamlandı 🔥':'Antrenmanlarını tamamlamaya başla!';
   if(document.getElementById('wFill')) document.getElementById('wFill').style.width=pct+'%';
   if(document.getElementById('wProgress')) document.getElementById('wProgress').textContent=d+'/7';
-  document.getElementById('workoutCount').textContent=d;
+  document.getElementById('workoutCount').textContent=d===0?'—':d;
   // Yeni özellikler
   if(document.getElementById('weekProgressLabel')) document.getElementById('weekProgressLabel').textContent=d+'/7 gün';
   if(document.getElementById('weekDoneCount')) document.getElementById('weekDoneCount').textContent=d+' gün tamamlandı';
