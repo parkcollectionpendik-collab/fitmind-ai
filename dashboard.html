@@ -1147,10 +1147,12 @@ function showPlanCard(plan){
   if(plan.nutrition){
     let nutHtml='';
     if(typeof plan.nutrition==='object'){
-      {key:'breakfast',icon:'🌅',label:'Kahvaltı',color:'#ffffff'},
+      const mealDefs=[
+    {key:'breakfast',icon:'🌅',label:'Kahvaltı',color:'#ffffff'},
     {key:'lunch',icon:'☀️',label:'Öğle',color:'#ffffff'},
     {key:'dinner',icon:'🌙',label:'Akşam',color:'#ffffff'},
     {key:'snack',icon:'🍎',label:'Ara Öğün',color:'#ffffff'}
+];
       meals.forEach(m=>{
         const meal=plan.nutrition[m.key];
         if(!meal)return;
