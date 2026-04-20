@@ -629,7 +629,7 @@ localStorage.setItem('fm_lastVisit',today);
   const h=new Date().getHours();
   const gr=h<6?'İyi geceler':h<12?'Günaydın':h<18?'İyi günler':'İyi akşamlar';
   document.getElementById('welcomeMsg').innerHTML=gr+', <span>'+name.split(' ')[0]+'!</span> 👋';
-  if(document.getElementById('heroGreeting')) document.getElementById('heroGreeting').innerHTML=gr+', <span style="color:var(--lime)">'+name.split(' ')[0]+'!</span> 👋';
+  if(document.getElementById('heroGreeting')) document.getElementById('heroGreeting').innerHTML=gr+', '+name.split(' ')[0]+'.';
   if(document.getElementById('heroDate')) document.getElementById('heroDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
   const {data:profile}=await sb.from('profiles').select('*').eq('id',session.user.id).maybeSingle();
