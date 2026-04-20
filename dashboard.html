@@ -541,7 +541,7 @@ function renderChatMessages(){
         if(m.plan.nutrition){
           let nutHtml='';
           if(typeof m.plan.nutrition==='object'){
-            const meals=[{key:'breakfast',icon:'🌅',label:'Kahvaltı',color:'#f5a623'},{key:'lunch',icon:'☀️',label:'Öğle',color:'#44aaff'},{key:'dinner',icon:'🌙',label:'Akşam',color:'#c8f542'},{key:'snack',icon:'🍎',label:'Ara Öğün',color:'#a78bfa'}];
+            const meals=[{key:'breakfast',icon:'🌅',label:'Kahvaltı',color:'#ffffff'},{key:'lunch',icon:'☀️',label:'Öğle',color:'#ffffff'},{key:'dinner',icon:'🌙',label:'Akşam',color:'#ffffff'},{key:'snack',icon:'🍎',label:'Ara Öğün',color:'#ffffff'}];
             meals.forEach(meal=>{const md=m.plan.nutrition[meal.key];if(!md)return;const foods=Array.isArray(md.foods)?md.foods.join(', '):(md.foods||'');nutHtml+=`<div style="margin-bottom:0.5rem"><span style="color:${meal.color};font-weight:700">${meal.icon} ${md.title||meal.label}:</span> <span style="color:#ffffffcc">${foods}</span> <span style="color:var(--muted);font-size:0.8rem">(${md.calories||0} kcal)</span></div>`;});
           } else { nutHtml=`<div style="font-size:0.85rem;line-height:1.7;color:#ffffffdd">${fmt(String(m.plan.nutrition))}</div>`; }
           sectionsHtml+=`<div class="plan-section" style="border-color:#44aaff"><div style="font-size:0.7rem;color:#44aaff;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">🥗 Beslenme Planı</div>${nutHtml}</div>`;
@@ -842,12 +842,10 @@ function loadHomeMealPlan(planData, todayPlan){
       </div>`;
     return;
   }
-  const mealDefs=[
-    {key:'breakfast',icon:'🌅',label:'Kahvaltı',color:'#f5a623'},
-    {key:'lunch',icon:'☀️',label:'Öğle',color:'#44aaff'},
-    {key:'dinner',icon:'🌙',label:'Akşam',color:'#c8f542'},
-    {key:'snack',icon:'🍎',label:'Ara Öğün',color:'#a78bfa'}
-  ];
+  {key:'breakfast',icon:'🌅',label:'Kahvaltı',color:'#ffffff'},
+    {key:'lunch',icon:'☀️',label:'Öğle',color:'#ffffff'},
+    {key:'dinner',icon:'🌙',label:'Akşam',color:'#ffffff'},
+    {key:'snack',icon:'🍎',label:'Ara Öğün',color:'#ffffff'}
   let html='<div style="display:flex;flex-direction:column;gap:0.5rem">';
   let totalCal=0;
   mealDefs.forEach(m=>{
@@ -1147,12 +1145,10 @@ function showPlanCard(plan){
   if(plan.nutrition){
     let nutHtml='';
     if(typeof plan.nutrition==='object'){
-      const meals=[
-        {key:'breakfast',icon:'🌅',label:'Kahvaltı',color:'#f5a623'},
-        {key:'lunch',icon:'☀️',label:'Öğle',color:'#44aaff'},
-        {key:'dinner',icon:'🌙',label:'Akşam',color:'#c8f542'},
-        {key:'snack',icon:'🍎',label:'Ara Öğün',color:'#a78bfa'}
-      ];
+      {key:'breakfast',icon:'🌅',label:'Kahvaltı',color:'#ffffff'},
+    {key:'lunch',icon:'☀️',label:'Öğle',color:'#ffffff'},
+    {key:'dinner',icon:'🌙',label:'Akşam',color:'#ffffff'},
+    {key:'snack',icon:'🍎',label:'Ara Öğün',color:'#ffffff'}
       meals.forEach(m=>{
         const meal=plan.nutrition[m.key];
         if(!meal)return;
