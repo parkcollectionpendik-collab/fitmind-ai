@@ -1336,7 +1336,7 @@ function quickLogCal(){quickCal+=200;localStorage.setItem('fp_cal_'+TODAY_STR2,q
 function quickLogWater(){quickWater+=1;localStorage.setItem('fp_water_'+TODAY_STR2,quickWater);updateQuickTrack();}
 
 function updateQuickTrack(){
-  if(document.getElementById('calorieCount')) document.getElementById('calorieCount').textContent=quickCal;
+  if(document.getElementById('calorieCount')) document.getElementById('calorieCount').textContent=quickCal===0?'—':quickCal;
   if(document.getElementById('qtCalVal')) document.getElementById('qtCalVal').textContent=quickCal;
   if(document.getElementById('qtWaterVal')) document.getElementById('qtWaterVal').textContent=quickWater;
   const calT=parseInt(document.getElementById('qtCalTarget')?.textContent||'2000');
