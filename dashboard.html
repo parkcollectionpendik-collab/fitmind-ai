@@ -689,7 +689,7 @@ function loadWeekProgress(){
   const done=JSON.parse(localStorage.getItem('fp_done')||'{}');
   const d=Object.keys(done).length;
   const pct=Math.round(d/7*100);
-  document.getElementById('streakVal').textContent=d+'🔥';
+  document.getElementById('streakVal').textContent=d===0?'—':d+'🔥';
   document.getElementById('planProgress').textContent='%'+pct;
   // Eski ring göstergeler (backward compat)
   if(document.getElementById('homeRingPct')) document.getElementById('homeRingPct').textContent='%'+pct;
