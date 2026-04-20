@@ -695,7 +695,8 @@ function loadWeekProgress(){
   const d=Object.keys(done).length;
   const pct=Math.round(d/7*100);
   document.getElementById('streakVal').textContent=d===0?'—':d+'🔥';
-  document.getElementById('planProgress').textContent=d===0?'Başlangıç':'%'+pct;
+  const planEl=document.getElementById('planProgress');
+  if(d===0){planEl.textContent='—';}else{planEl.textContent='%'+pct;}
   // Eski ring göstergeler (backward compat)
   if(document.getElementById('homeRingPct')) document.getElementById('homeRingPct').textContent='%'+pct;
   if(document.getElementById('homeRingCircle')) document.getElementById('homeRingCircle').style.strokeDashoffset=150.8*(1-d/7);
