@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitMind AI – Find a Trainer</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--blue:#44aaff;--muted:#888;--font-head:'Space Grotesk',sans-serif;--font-body:'Inter',sans-serif}
+body{background:var(--black);color:var(--white);font-family:var(--font-body);min-height:100vh}
+.nav{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.85);backdrop-filter:blur(12px);border-bottom:1px solid #ffffff0a;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--font-head);font-weight:800;font-size:1.15rem;color:var(--white);text-decoration:none}
+.logo span{color:var(--lime)}
+.nav-right{display:flex;align-items:center;gap:0.75rem}
+.nav-link{color:var(--muted);text-decoration:none;font-size:0.9rem;padding:0.5rem 0.9rem;border-radius:8px;transition:all 0.2s}
+.nav-link:hover{color:var(--white);background:#ffffff08}
+.btn-primary{background:var(--white);color:var(--black);border:none;border-radius:100px;padding:0.55rem 1.2rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.2s}
+.btn-primary:hover{background:var(--lime)}
+.hero{text-align:center;padding:4rem 2rem 2.5rem;max-width:720px;margin:0 auto}
+.hero-tag{font-family:var(--font-head);font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--lime);font-weight:700;margin-bottom:0.75rem}
+h1{font-family:var(--font-head);font-size:clamp(2rem,5vw,3rem);font-weight:800;line-height:1.1;margin-bottom:0.75rem}
+.hero-sub{color:var(--muted);font-size:1rem;line-height:1.6}
+
+/* SEARCH & FILTER BAR */
+.toolbar{max-width:1200px;margin:0 auto;padding:0 2rem 1.5rem}
+.search-row{display:flex;gap:0.75rem;margin-bottom:1rem;flex-wrap:wrap}
+.search-input{flex:1;min-width:240px;background:#111;border:1.5px solid #ffffff12;border-radius:14px;padding:0.95rem 1.2rem;color:var(--white);font-family:var(--font-body);font-size:0.95rem;outline:none;transition:border-color 0.2s}
+.search-input:focus{border-color:#c8f54230}
+.filter-chips{display:flex;gap:0.5rem;flex-wrap:wrap}
+.filter-chip{background:#111;border:1.5px solid #ffffff12;border-radius:100px;padding:0.6rem 1.1rem;cursor:pointer;font-size:0.85rem;font-family:var(--font-head);font-weight:600;transition:all 0.2s;color:var(--muted)}
+.filter-chip:hover{border-color:#ffffff25}
+.filter-chip.active{background:#c8f54215;border-color:var(--lime);color:var(--lime)}
+
+/* RESULTS */
+.results{max-width:1200px;margin:0 auto;padding:0 2rem 4rem}
+.results-count{color:var(--muted);font-size:0.88rem;margin-bottom:1.25rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem}
+
+/* CARD */
+.card{background:#111;border:1px solid #ffffff0f;border-radius:20px;padding:1.5rem;cursor:pointer;transition:all 0.25s;text-decoration:none;color:inherit;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.card:hover{border-color:#ffffff25;transform:translateY(-2px)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--lime)40,transparent);opacity:0;transition:opacity 0.25s}
+.card:hover::before{opacity:1}
+.card-header{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1rem}
+.card-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--lime),var(--blue));display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:1.3rem;color:var(--black);overflow:hidden;flex-shrink:0}
+.card-avatar img{width:100%;height:100%;object-fit:cover}
+.card-head-info{flex:1;min-width:0}
+.card-name{font-family:var(--font-head);font-size:1.05rem;font-weight:700;margin-bottom:0.2rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card-type{display:inline-flex;align-items:center;gap:0.3rem;font-size:0.72rem;color:var(--muted);font-weight:500}
+.card-type .dot{width:5px;height:5px;border-radius:50%;background:var(--lime)}
+.card-bio{font-size:0.85rem;color:#ffffffaa;line-height:1.55;margin-bottom:1rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;min-height:3.9em}
+.card-meta{display:flex;gap:1rem;font-size:0.75rem;color:var(--muted);margin-bottom:1rem;flex-wrap:wrap}
+.card-meta-item{display:inline-flex;align-items:center;gap:0.3rem}
+.card-tags{display:flex;gap:0.35rem;flex-wrap:wrap;margin-bottom:1rem;min-height:26px}
+.card-tag{background:#ffffff08;border:1px solid #ffffff10;border-radius:100px;padding:0.25rem 0.7rem;font-size:0.7rem;color:#ffffffbb;font-family:var(--font-head);font-weight:600}
+.card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:1rem;border-top:1px solid #ffffff08}
+.card-price{font-family:var(--font-head);font-weight:800;font-size:1.1rem;color:var(--lime)}
+.card-price-unit{font-size:0.72rem;color:var(--muted);font-weight:500}
+.card-cta{background:#ffffff10;color:var(--white);border:none;border-radius:100px;padding:0.5rem 1rem;font-family:var(--font-head);font-weight:700;font-size:0.78rem;transition:all 0.2s}
+.card:hover .card-cta{background:var(--lime);color:var(--black)}
+
+/* EMPTY & LOADING */
+.state{text-align:center;padding:4rem 2rem;color:var(--muted)}
+.state-icon{font-size:3rem;margin-bottom:1rem}
+.state-title{font-family:var(--font-head);font-size:1.2rem;font-weight:700;margin-bottom:0.5rem;color:var(--white)}
+.spin{display:inline-block;width:32px;height:32px;border:3px solid #ffffff15;border-top-color:var(--lime);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:640px){
+  .nav{padding:0.85rem 1rem}
+  .hero{padding:2.5rem 1rem 1.5rem}
+  .toolbar,.results{padding-left:1rem;padding-right:1rem}
+  .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="logo">Fit<span>Mind</span> AI</a>
+  <div class="nav-right">
+    <a href="dashboard.html" class="nav-link">Dashboard</a>
+    <a href="auth.html" class="btn-primary" id="loginBtn">Sign In</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag">Marketplace</div>
+  <h1>Find your perfect trainer.</h1>
+  <p class="hero-sub">Browse certified trainers and physiotherapists worldwide. Get fit, recover stronger, reach your goals — with an expert who gets you.</p>
+</section>
+
+<div class="toolbar">
+  <div class="search-row">
+    <input type="text" class="search-input" id="searchInput" placeholder="Search by name, specialty, or city...">
+  </div>
+  <div class="filter-chips">
+    <div class="filter-chip active" data-filter="all" onclick="setFilter(this,'all')">All</div>
+    <div class="filter-chip" data-filter="trainer" onclick="setFilter(this,'trainer')">🏋️ Personal Trainers</div>
+    <div class="filter-chip" data-filter="physio" onclick="setFilter(this,'physio')">🏥 Physiotherapists</div>
+    <div class="filter-chip" data-filter="online" onclick="setFilter(this,'online')">🌐 Online</div>
+    <div class="filter-chip" data-filter="in_person" onclick="setFilter(this,'in_person')">📍 In Person</div>
+  </div>
+</div>
+
+<div class="results">
+  <div class="results-count" id="resultsCount">Loading...</div>
+  <div id="gridWrap">
+    <div class="state"><div class="spin"></div></div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL='https://cypmmayxwbkarvheqoxu.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
+const {createClient}=supabase;
+const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
+
+let allTrainers=[];
+let currentFilter='all';
+let currentSearch='';
+
+async function init(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(session){
+    document.getElementById('loginBtn').textContent='Dashboard';
+    document.getElementById('loginBtn').href='dashboard.html';
+  }
+  await loadTrainers();
+}
+
+async function loadTrainers(){
+  const {data,error}=await sb.from('profiles').select('id,full_name,bio,trainer_type,experience_years,languages,city,country,work_type,price_hour,avatar_url,specialties,rating,review_count').eq('is_listed',true).order('rating',{ascending:false});
+  if(error){
+    document.getElementById('gridWrap').innerHTML='<div class="state"><div class="state-icon">⚠️</div><div class="state-title">Failed to load trainers</div><div>Please try again later.</div></div>';
+    return;
+  }
+  allTrainers=data||[];
+  render();
+}
+
+function setFilter(el,filter){
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  currentFilter=filter;
+  render();
+}
+
+document.getElementById('searchInput').addEventListener('input',e=>{
+  currentSearch=e.target.value.toLowerCase().trim();
+  render();
+});
+
+function applyFilters(list){
+  return list.filter(t=>{
+    // Type filter
+    if(currentFilter==='trainer'&&t.trainer_type!=='trainer'&&t.trainer_type!=='both')return false;
+    if(currentFilter==='physio'&&t.trainer_type!=='physio'&&t.trainer_type!=='both')return false;
+    if(currentFilter==='online'&&t.work_type!=='online'&&t.work_type!=='both')return false;
+    if(currentFilter==='in_person'&&t.work_type!=='in_person'&&t.work_type!=='both')return false;
+
+    // Search
+    if(currentSearch){
+      const hay=[t.full_name,t.bio,t.city,t.country,(t.specialties||[]).join(' ')].join(' ').toLowerCase();
+      if(!hay.includes(currentSearch))return false;
+    }
+    return true;
+  });
+}
+
+function typeLabel(t){
+  if(t==='trainer')return 'Personal Trainer';
+  if(t==='physio')return 'Physiotherapist';
+  if(t==='both')return 'Trainer & Physio';
+  return 'Trainer';
+}
+
+function workIcon(w){
+  if(w==='online')return '🌐 Online';
+  if(w==='in_person')return '📍 In Person';
+  if(w==='both')return '⚡ Online & In Person';
+  return '';
+}
+
+function render(){
+  const filtered=applyFilters(allTrainers);
+  document.getElementById('resultsCount').textContent=filtered.length+' trainer'+(filtered.length===1?'':'s')+' found';
+
+  const wrap=document.getElementById('gridWrap');
+  if(filtered.length===0){
+    wrap.innerHTML='<div class="state"><div class="state-icon">🔍</div><div class="state-title">No trainers match your search</div><div>Try adjusting your filters or search terms.</div></div>';
+    return;
+  }
+
+  wrap.innerHTML='<div class="grid">'+filtered.map(t=>{
+    const initial=(t.full_name||'T').charAt(0).toUpperCase();
+    const avatar=t.avatar_url?`<img src="${t.avatar_url}">`:initial;
+    const location=[t.city,t.country].filter(Boolean).join(', ')||'Online';
+    const tags=(t.specialties||[]).slice(0,3).map(s=>`<span class="card-tag">${s}</span>`).join('');
+    const price=t.price_hour?`$${t.price_hour}`:'Contact';
+    return `
+      <a href="trainer-profile.html?id=${t.id}" class="card">
+        <div class="card-header">
+          <div class="card-avatar">${avatar}</div>
+          <div class="card-head-info">
+            <div class="card-name">${t.full_name||'Trainer'}</div>
+            <span class="card-type"><span class="dot"></span>${typeLabel(t.trainer_type)}</span>
+          </div>
+        </div>
+        <div class="card-bio">${t.bio||'This trainer hasn\\'t added a bio yet.'}</div>
+        <div class="card-meta">
+          ${t.experience_years?`<span class="card-meta-item">💪 ${t.experience_years} yrs</span>`:''}
+          <span class="card-meta-item">📍 ${location}</span>
+          ${t.work_type?`<span class="card-meta-item">${workIcon(t.work_type)}</span>`:''}
+        </div>
+        <div class="card-tags">${tags}</div>
+        <div class="card-footer">
+          <div>
+            <span class="card-price">${price}</span>
+            ${t.price_hour?'<span class="card-price-unit"> / hr</span>':''}
+          </div>
+          <span class="card-cta">View Profile →</span>
+        </div>
+      </a>
+    `;
+  }).join('')+'</div>';
+}
+
+init();
+</script>
+</body>
+</html>
