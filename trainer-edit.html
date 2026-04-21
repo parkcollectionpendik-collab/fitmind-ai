@@ -319,6 +319,7 @@ async function init(){
 }
 
 async function saveProfile(){
+  console.log('Saving with isListed:',isListed);
   const btn=document.getElementById('saveBtn');
   btn.disabled=true;btn.textContent='Saving...';
 
