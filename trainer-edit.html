@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitMind AI – Edit Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--blue:#44aaff;--muted:#888;--font-head:'Space Grotesk',sans-serif;--font-body:'Inter',sans-serif}
+body{background:var(--black);color:var(--white);font-family:var(--font-body);min-height:100vh;padding:2rem 1rem}
+.container{max-width:720px;margin:0 auto}
+.back-link{color:var(--muted);text-decoration:none;font-size:0.88rem;display:inline-flex;align-items:center;gap:0.4rem;margin-bottom:1.5rem;transition:color 0.2s}
+.back-link:hover{color:var(--white)}
+h1{font-family:var(--font-head);font-size:1.8rem;font-weight:800;margin-bottom:0.5rem}
+.subtitle{color:var(--muted);font-size:0.92rem;margin-bottom:2rem}
+.section{background:#111;border:1px solid #ffffff0f;border-radius:18px;padding:1.75rem;margin-bottom:1.25rem}
+.section-title{font-family:var(--font-head);font-size:1rem;font-weight:700;margin-bottom:0.3rem}
+.section-sub{color:var(--muted);font-size:0.82rem;margin-bottom:1.25rem}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem}
+.field{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem}
+label{font-size:0.72rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;font-weight:700;font-family:var(--font-head)}
+input[type=text],input[type=number],input[type=tel],select,textarea{background:#ffffff08;border:1.5px solid #ffffff12;border-radius:12px;padding:0.85rem 1rem;color:var(--white);font-family:var(--font-body);font-size:0.95rem;outline:none;transition:border-color 0.2s;width:100%}
+input:focus,select:focus,textarea:focus{border-color:#c8f54250}
+select option{background:#1a1a1a}
+textarea{resize:vertical;min-height:100px;font-family:var(--font-body)}
+.chip-wrap{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.5rem}
+.chip{background:#ffffff08;border:1.5px solid #ffffff12;border-radius:100px;padding:0.5rem 1rem;cursor:pointer;font-size:0.82rem;font-family:var(--font-head);font-weight:600;transition:all 0.2s;color:var(--muted)}
+.chip:hover{border-color:#ffffff25}
+.chip.selected{background:#c8f54212;border-color:var(--lime);color:var(--lime)}
+.avatar-wrap{display:flex;align-items:center;gap:1.25rem;margin-bottom:1rem}
+.avatar-preview{width:88px;height:88px;border-radius:50%;background:#ffffff08;border:2px solid #ffffff12;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:2rem;color:var(--muted);overflow:hidden;flex-shrink:0}
+.avatar-preview img{width:100%;height:100%;object-fit:cover}
+.upload-btn{background:#ffffff08;color:var(--white);border:1.5px solid #ffffff15;border-radius:10px;padding:0.7rem 1.2rem;font-family:var(--font-head);font-weight:600;font-size:0.85rem;cursor:pointer;transition:all 0.2s}
+.upload-btn:hover{background:#ffffff12}
+.upload-info{font-size:0.72rem;color:var(--muted);margin-top:0.4rem}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:1rem;background:#ffffff04;border:1px solid #ffffff08;border-radius:12px;margin-bottom:0.75rem}
+.toggle-info{flex:1}
+.toggle-title{font-family:var(--font-head);font-weight:700;font-size:0.92rem;margin-bottom:0.25rem}
+.toggle-desc{font-size:0.78rem;color:var(--muted)}
+.toggle{position:relative;width:44px;height:24px;background:#ffffff15;border-radius:100px;cursor:pointer;transition:background 0.2s;flex-shrink:0}
+.toggle.on{background:var(--lime)}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;background:var(--white);border-radius:50%;transition:transform 0.2s}
+.toggle.on::after{transform:translateX(20px);background:var(--black)}
+.btn-row{display:flex;gap:0.75rem;margin-top:2rem}
+.btn-save{flex:1;background:var(--lime);color:#000;border:none;border-radius:100px;padding:0.95rem;font-family:var(--font-head);font-weight:800;font-size:0.95rem;cursor:pointer;transition:all 0.25s}
+.btn-save:hover{background:#a8d92e;transform:translateY(-1px)}
+.btn-save:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+.btn-cancel{background:transparent;color:var(--muted);border:1.5px solid #ffffff15;border-radius:100px;padding:0.95rem 1.5rem;font-family:var(--font-head);font-weight:700;font-size:0.92rem;cursor:pointer;transition:all 0.2s;text-decoration:none;display:inline-flex;align-items:center}
+.btn-cancel:hover{border-color:#ffffff30;color:var(--white)}
+.msg{padding:0.9rem 1.1rem;border-radius:12px;font-size:0.9rem;margin-top:1rem;display:none}
+.msg.success{background:#4ade8015;border:1px solid #4ade8030;color:#4ade80;display:block}
+.msg.error{background:#ff6b6b15;border:1px solid #ff6b6b30;color:#ff6b6b;display:block}
+.hidden-file{display:none}
+.trainer-type-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-top:0.5rem}
+.type-card{background:#ffffff06;border:1.5px solid #ffffff12;border-radius:14px;padding:1rem;cursor:pointer;text-align:center;transition:all 0.2s}
+.type-card:hover{border-color:#ffffff25}
+.type-card.selected{background:#c8f54212;border-color:var(--lime)}
+.type-icon{font-size:1.6rem;margin-bottom:0.4rem}
+.type-label{font-family:var(--font-head);font-weight:700;font-size:0.88rem}
+.type-desc{font-size:0.72rem;color:var(--muted);margin-top:0.15rem}
+@media(max-width:640px){
+  .row,.row-3,.trainer-type-grid{grid-template-columns:1fr}
+  h1{font-size:1.5rem}
+  .section{padding:1.25rem}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="physio-dashboard.html" class="back-link">← Back to Dashboard</a>
+  <h1>Your Public Profile</h1>
+  <p class="subtitle">This is how clients will see you on FitMind AI. Fill it out thoroughly for better visibility.</p>
+
+  <!-- AVATAR -->
+  <div class="section">
+    <div class="section-title">Profile Photo</div>
+    <div class="section-sub">A clear, friendly photo helps clients trust you.</div>
+    <div class="avatar-wrap">
+      <div class="avatar-preview" id="avatarPreview">?</div>
+      <div>
+        <button class="upload-btn" onclick="document.getElementById('avatarFile').click()">Upload Photo</button>
+        <input type="file" id="avatarFile" class="hidden-file" accept="image/*" onchange="uploadAvatar(event)">
+        <div class="upload-info">JPG or PNG, max 2MB</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BASIC INFO -->
+  <div class="section">
+    <div class="section-title">Basic Info</div>
+    <div class="section-sub">Your name and the type of work you do.</div>
+    <div class="field">
+      <label>Full Name</label>
+      <input type="text" id="fullName" placeholder="e.g. Sarah Johnson">
+    </div>
+    <div class="field">
+      <label>I am a...</label>
+      <div class="trainer-type-grid">
+        <div class="type-card" data-type="trainer" onclick="selectType(this,'trainer')">
+          <div class="type-icon">🏋️</div>
+          <div class="type-label">Personal Trainer</div>
+          <div class="type-desc">Fitness coaching</div>
+        </div>
+        <div class="type-card" data-type="physio" onclick="selectType(this,'physio')">
+          <div class="type-icon">🏥</div>
+          <div class="type-label">Physiotherapist</div>
+          <div class="type-desc">Injury & rehab</div>
+        </div>
+        <div class="type-card" data-type="both" onclick="selectType(this,'both')">
+          <div class="type-icon">⚡</div>
+          <div class="type-label">Both</div>
+          <div class="type-desc">Fitness & rehab</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BIO -->
+  <div class="section">
+    <div class="section-title">About You</div>
+    <div class="section-sub">Tell potential clients who you are and how you can help them.</div>
+    <div class="field">
+      <label>Short Bio</label>
+      <textarea id="bio" placeholder="I specialize in helping busy professionals build strength and confidence through sustainable training. With 8 years of experience working with beginners to athletes..."></textarea>
+    </div>
+  </div>
+
+  <!-- EXPERTISE -->
+  <div class="section">
+    <div class="section-title">Expertise</div>
+    <div class="section-sub">Select all that apply. These help clients find you.</div>
+    <div class="chip-wrap" id="specialtyChips"></div>
+    <div class="row" style="margin-top:1.25rem">
+      <div class="field">
+        <label>Years of Experience</label>
+        <input type="number" id="experienceYears" min="0" max="60" placeholder="5">
+      </div>
+      <div class="field">
+        <label>Languages Spoken</label>
+        <input type="text" id="languages" placeholder="English, Spanish, Turkish">
+      </div>
+    </div>
+  </div>
+
+  <!-- LOCATION & WORK -->
+  <div class="section">
+    <div class="section-title">Location & Availability</div>
+    <div class="section-sub">Where do you work? Online, in person, or both?</div>
+    <div class="row">
+      <div class="field">
+        <label>City</label>
+        <input type="text" id="city" placeholder="London">
+      </div>
+      <div class="field">
+        <label>Country</label>
+        <input type="text" id="country" placeholder="United Kingdom">
+      </div>
+    </div>
+    <div class="field">
+      <label>Work Type</label>
+      <div class="chip-wrap">
+        <div class="chip" data-work="online" onclick="selectWork(this,'online')">🌐 Online Only</div>
+        <div class="chip" data-work="in_person" onclick="selectWork(this,'in_person')">📍 In Person Only</div>
+        <div class="chip" data-work="both" onclick="selectWork(this,'both')">⚡ Both</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRICING & CONTACT -->
+  <div class="section">
+    <div class="section-title">Pricing & Contact</div>
+    <div class="section-sub">Your rates and how clients can reach you.</div>
+    <div class="row">
+      <div class="field">
+        <label>Price per Hour (USD)</label>
+        <input type="number" id="priceHour" min="0" step="5" placeholder="45">
+      </div>
+      <div class="field">
+        <label>WhatsApp (with country code)</label>
+        <input type="tel" id="whatsapp" placeholder="+44 7700 900123">
+      </div>
+    </div>
+  </div>
+
+  <!-- VISIBILITY -->
+  <div class="section">
+    <div class="section-title">Visibility</div>
+    <div class="section-sub">Control whether clients can find you on the marketplace.</div>
+    <div class="toggle-row">
+      <div class="toggle-info">
+        <div class="toggle-title">Show on Marketplace</div>
+        <div class="toggle-desc">When on, your profile appears in search results.</div>
+      </div>
+      <div class="toggle" id="isListedToggle" onclick="toggleListed()"></div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <a href="physio-dashboard.html" class="btn-cancel">Cancel</a>
+    <button class="btn-save" id="saveBtn" onclick="saveProfile()">Save Profile</button>
+  </div>
+  <div class="msg" id="msg"></div>
+</div>
+
+<script>
+const SUPABASE_URL='https://cypmmayxwbkarvheqoxu.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5cG1tYXl4d2JrYXJ2aGVxb3h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjU4ODgsImV4cCI6MjA5MTQwMTg4OH0.DYglvHEwlOCM3qfNSAG2PQMs76533XULIFNm5k8lYKk';
+const {createClient}=supabase;
+const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
+
+const SPECIALTIES=[
+  'Weight Loss','Muscle Gain','Strength Training','Cardio','HIIT','Yoga','Pilates','CrossFit',
+  'Bodybuilding','Powerlifting','Running','Cycling','Swimming','Boxing','Martial Arts',
+  'Post-Injury Rehab','Chronic Pain','Sports Injury','Posture Correction','Elderly Care',
+  'Prenatal/Postnatal','Kids & Teens','Nutrition','Mobility','Flexibility'
+];
+
+let currentUserId=null;
+let selectedSpecialties=new Set();
+let selectedType=null;
+let selectedWork=null;
+let isListed=false;
+let avatarUrl=null;
+
+function renderSpecialties(){
+  const wrap=document.getElementById('specialtyChips');
+  wrap.innerHTML=SPECIALTIES.map(s=>`<div class="chip ${selectedSpecialties.has(s)?'selected':''}" onclick="toggleSpecialty('${s}')">${s}</div>`).join('');
+}
+
+function toggleSpecialty(s){
+  if(selectedSpecialties.has(s))selectedSpecialties.delete(s);
+  else selectedSpecialties.add(s);
+  renderSpecialties();
+}
+
+function selectType(el,type){
+  document.querySelectorAll('.type-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedType=type;
+}
+
+function selectWork(el,work){
+  document.querySelectorAll('[data-work]').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedWork=work;
+}
+
+function toggleListed(){
+  isListed=!isListed;
+  document.getElementById('isListedToggle').classList.toggle('on',isListed);
+}
+
+async function uploadAvatar(e){
+  const file=e.target.files[0];
+  if(!file)return;
+  if(file.size>2*1024*1024){showMsg('File too large. Max 2MB.','error');return;}
+  const ext=file.name.split('.').pop();
+  const path=`avatars/${currentUserId}.${ext}`;
+  const {error}=await sb.storage.from('avatars').upload(path,file,{upsert:true});
+  if(error){showMsg('Upload failed: '+error.message,'error');return;}
+  const {data}=sb.storage.from('avatars').getPublicUrl(path);
+  avatarUrl=data.publicUrl+'?t='+Date.now();
+  document.getElementById('avatarPreview').innerHTML=`<img src="${avatarUrl}">`;
+  showMsg('Photo uploaded. Remember to Save Profile.','success');
+}
+
+function showMsg(text,type){
+  const m=document.getElementById('msg');
+  m.textContent=text;
+  m.className='msg '+type;
+  if(type==='success')setTimeout(()=>{m.className='msg';},4000);
+}
+
+async function init(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){window.location.href='auth.html';return;}
+  currentUserId=session.user.id;
+
+  renderSpecialties();
+
+  const {data:profile}=await sb.from('profiles').select('*').eq('id',currentUserId).maybeSingle();
+  if(profile){
+    document.getElementById('fullName').value=profile.full_name||'';
+    document.getElementById('bio').value=profile.bio||'';
+    document.getElementById('experienceYears').value=profile.experience_years||'';
+    document.getElementById('languages').value=(profile.languages||[]).join(', ');
+    document.getElementById('city').value=profile.city||'';
+    document.getElementById('country').value=profile.country||'';
+    document.getElementById('priceHour').value=profile.price_hour||'';
+    document.getElementById('whatsapp').value=profile.whatsapp||'';
+
+    if(profile.trainer_type){
+      const el=document.querySelector(`[data-type="${profile.trainer_type}"]`);
+      if(el)selectType(el,profile.trainer_type);
+    }
+    if(profile.work_type){
+      const el=document.querySelector(`[data-work="${profile.work_type}"]`);
+      if(el)selectWork(el,profile.work_type);
+    }
+    if(profile.specialties){
+      selectedSpecialties=new Set(profile.specialties);
+      renderSpecialties();
+    }
+    if(profile.is_listed){
+      isListed=true;
+      document.getElementById('isListedToggle').classList.add('on');
+    }
+    if(profile.avatar_url){
+      avatarUrl=profile.avatar_url;
+      document.getElementById('avatarPreview').innerHTML=`<img src="${avatarUrl}">`;
+    } else {
+      const initial=(profile.full_name||session.user.email).charAt(0).toUpperCase();
+      document.getElementById('avatarPreview').textContent=initial;
+    }
+  }
+}
+
+async function saveProfile(){
+  const btn=document.getElementById('saveBtn');
+  btn.disabled=true;btn.textContent='Saving...';
+
+  const fullName=document.getElementById('fullName').value.trim();
+  const bio=document.getElementById('bio').value.trim();
+
+  if(!fullName){showMsg('Please enter your name.','error');btn.disabled=false;btn.textContent='Save Profile';return;}
+  if(!selectedType){showMsg('Please select what you do (Trainer, Physio, or Both).','error');btn.disabled=false;btn.textContent='Save Profile';return;}
+
+  const languages=document.getElementById('languages').value.split(',').map(s=>s.trim()).filter(Boolean);
+
+  const update={
+    full_name:fullName,
+    bio:bio||null,
+    trainer_type:selectedType,
+    experience_years:parseInt(document.getElementById('experienceYears').value)||null,
+    languages:languages.length?languages:null,
+    city:document.getElementById('city').value.trim()||null,
+    country:document.getElementById('country').value.trim()||null,
+    work_type:selectedWork||null,
+    price_hour:parseFloat(document.getElementById('priceHour').value)||null,
+    whatsapp:document.getElementById('whatsapp').value.trim()||null,
+    specialties:selectedSpecialties.size?Array.from(selectedSpecialties):null,
+    avatar_url:avatarUrl,
+    is_listed:isListed,
+    user_role:'physio',
+    updated_at:new Date().toISOString()
+  };
+
+  const {error}=await sb.from('profiles').update(update).eq('id',currentUserId);
+  btn.disabled=false;btn.textContent='Save Profile';
+  if(error){showMsg('Save failed: '+error.message,'error');}
+  else{showMsg('Profile saved successfully!','success');}
+}
+
+init();
+</script>
+</body>
+</html>
