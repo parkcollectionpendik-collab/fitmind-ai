@@ -262,8 +262,8 @@ async function sendMsg(){
   const {error}=await sb.from('patient_messages').insert({
     patient_id:currentUser.id,
     physio_id:trainer.id,
-    sender:'patient',
-    content:text,
+    sender_role:'patient',
+    message:text,
     created_at:new Date().toISOString()
   });
 
