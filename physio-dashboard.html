@@ -842,7 +842,8 @@ function renderPatientList(list){
       <div class="patient-avatar">${initial}</div>
       <div style="flex:1">
         <div class="patient-name">${name}</div>
-        <div class="patient-meta">${goalMap[p.goal]||'Hedef belirtilmemiş'} · ${p.fitness_level||'Seviye yok'} · ${p.equipment||'Ekipman yok'}</div>
+        <div class="patient-meta">${goalMap[p.goal]||'Hedef belirtilmemiş'} · ${p.fitness_level||'Seviye yok'}</div>
+          <div style="margin-top:0.35rem">${p.source==='marketplace'?'<span style="background:#44aaff15;color:#44aaff;border:1px solid #44aaff30;border-radius:100px;padding:0.15rem 0.6rem;font-size:0.68rem;font-family:var(--font-head);font-weight:700">🌟 MARKETPLACE</span>':'<span style="background:#c8f54215;color:#c8f542;border:1px solid #c8f54230;border-radius:100px;padding:0.15rem 0.6rem;font-size:0.68rem;font-family:var(--font-head);font-weight:700">🏥 KLİNİK</span>'}</div>
       </div>
       <div class="patient-status">
         <span class="status-badge active">Aktif</span>
