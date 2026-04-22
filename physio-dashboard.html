@@ -589,9 +589,25 @@ if(profile?.user_role!=='physio'){
 
 async function loadPatients(){
   if(!physioProfile)return;
-  const {data}=await sb.from('profiles').select('*').eq('physio_id',physioProfile.id);
-  patients=data||[];
   
+  // 1) Klinik hastaları (davet koduyla bağlanmış)
+  const {data:clinicPatients}=await sb.from('profiles').select('*').eq('physio_id',physioProfile.id);
+  const clinic=(clinicPatients||[]).map(p=>({...p,source:'clinic'}));
+  
+  // 2) Marketplace'ten mesaj gelen yabancılar
+  const {data:marketMsgs}=await sb.from('patient_messages').select('patient_id').eq('physio_id',physioProfile.id).eq('source','marketplace');
+  const marketIds=[...new Set((marketMsgs||[]).map(m=>m.patient_id))];
+  const clinicIds=new Set(clinic.map(p=>p.id));
+  const newMarketIds=marketIds.filter(id=>!clinicIds.has(id));
+  
+  let market=[];
+  if(newMarketIds.length){
+    const {data:marketProfiles}=await sb.from('profiles').select('*').in('id',newMarketIds);
+    market=(marketProfiles||[]).map(p=>({...p,source:'marketplace'}));
+  }
+  
+  patients=[...clinic,...market];
+
   renderPatientList(patients);
   updateSessionDropdowns();
   updateStats();
