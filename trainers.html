@@ -126,6 +126,11 @@ if(paramType==='trainer'||paramType==='physio'){currentFilter=paramType;}
 let currentSearch='';
 
 async function init(){
+  if(currentFilter!=='all'){
+    document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+    const activeChip=document.querySelector(`[data-filter="${currentFilter}"]`);
+    if(activeChip)activeChip.classList.add('active');
+  }
   const {data:{session}}=await sb.auth.getSession();
   if(session){
     document.getElementById('loginBtn').textContent='Dashboard';
