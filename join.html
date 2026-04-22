@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitMind AI – Join</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--blue:#44aaff;--muted:#888;--font-head:'Space Grotesk',sans-serif;--font-body:'Inter',sans-serif}
+body{background:var(--black);color:var(--white);font-family:var(--font-body);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1rem}
+.logo{font-family:var(--font-head);font-weight:800;font-size:1.2rem;margin-bottom:2.5rem;text-decoration:none;color:inherit}
+.logo span{color:var(--lime)}
+.hero-tag{font-family:var(--font-head);font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--lime);font-weight:700;margin-bottom:0.75rem;text-align:center}
+h1{font-family:var(--font-head);font-size:clamp(1.8rem,4vw,2.5rem);font-weight:800;line-height:1.15;text-align:center;margin-bottom:0.6rem}
+.sub{color:var(--muted);font-size:1rem;text-align:center;margin-bottom:2.5rem;max-width:500px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;max-width:960px;width:100%}
+.card{background:#111;border:1.5px solid #ffffff12;border-radius:20px;padding:2rem 1.75rem;cursor:pointer;transition:all 0.25s;text-decoration:none;color:inherit;display:flex;flex-direction:column;align-items:flex-start;position:relative;overflow:hidden}
+.card:hover{border-color:var(--lime);transform:translateY(-4px)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--lime);opacity:0;transition:opacity 0.25s}
+.card:hover::before{opacity:1}
+.card-icon{font-size:2.5rem;margin-bottom:1rem}
+.card-title{font-family:var(--font-head);font-size:1.15rem;font-weight:700;margin-bottom:0.4rem}
+.card-desc{font-size:0.88rem;color:#ffffffaa;line-height:1.6;margin-bottom:1.25rem;flex:1}
+.card-cta{display:inline-flex;align-items:center;gap:0.3rem;font-family:var(--font-head);font-weight:700;font-size:0.85rem;color:var(--lime);transition:gap 0.2s}
+.card:hover .card-cta{gap:0.6rem}
+.back-link{color:var(--muted);text-decoration:none;font-size:0.9rem;margin-top:2rem;transition:color 0.2s}
+.back-link:hover{color:var(--white)}
+@media(max-width:640px){
+  h1{font-size:1.6rem}
+  .card{padding:1.5rem}
+}
+</style>
+</head>
+<body>
+<a href="index.html" class="logo">Fit<span>Mind</span> AI</a>
+<div class="hero-tag">Get Started</div>
+<h1>Who are you?</h1>
+<p class="sub">Pick the option that fits you best — we'll personalize your experience.</p>
+
+<div class="cards">
+  <a href="auth.html?role=user" class="card">
+    <div class="card-icon">🏋️</div>
+    <div class="card-title">I want to get fit</div>
+    <div class="card-desc">Personal AI coach, custom workout plans, nutrition tracking, progress — all in one place.</div>
+    <span class="card-cta">Start Free →</span>
+  </a>
+
+  <a href="auth.html?role=patient" class="card">
+    <div class="card-icon">🤕</div>
+    <div class="card-title">I need a physiotherapist</div>
+    <div class="card-desc">Recovering from an injury or dealing with pain? Find certified physiotherapists worldwide.</div>
+    <span class="card-cta">Browse Physios →</span>
+  </a>
+
+  <a href="auth.html?role=physio" class="card">
+    <div class="card-icon">👨‍⚕️</div>
+    <div class="card-title">I'm a trainer or physio</div>
+    <div class="card-desc">Join our marketplace. Build your profile, reach clients globally, grow your business.</div>
+    <span class="card-cta">Join as a Pro →</span>
+  </a>
+</div>
+
+<a href="index.html" class="back-link">← Back to home</a>
+
+</body>
+</html>
