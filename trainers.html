@@ -120,6 +120,9 @@ const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
 
 let allTrainers=[];
 let currentFilter='all';
+  const urlParams=new URLSearchParams(window.location.search);
+const paramType=urlParams.get('type');
+if(paramType==='trainer'||paramType==='physio'){currentFilter=paramType;}
 let currentSearch='';
 
 async function init(){
