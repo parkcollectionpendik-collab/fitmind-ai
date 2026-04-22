@@ -292,6 +292,22 @@ async function resetPassword(){
   if(error)showMsg('Hata: '+error.message,'error');
   else showMsg('Şifre sıfırlama linki gönderildi!','success');
 }
+(function(){
+  const p=new URLSearchParams(window.location.search).get('role');
+  if(!p)return;
+  window.addEventListener('DOMContentLoaded',()=>{
+    const tabs=document.querySelectorAll('.tab');
+    if(tabs.length){tabs.forEach(t=>t.classList.remove('active'));(tabs[1]||tabs[0]).classList.add('active');}
+    const signupForm=document.getElementById('signupForm');
+    if(signupForm)signupForm.style.display='block';
+    const loginForm=document.getElementById('loginForm');
+    if(loginForm)loginForm.style.display='none';
+    const physio=document.getElementById('isPhysio');
+    const patient=document.getElementById('isPatient');
+    if(p==='physio'&&physio){physio.checked=true;physio.dispatchEvent(new Event('change'));}
+    if(p==='patient'&&patient){patient.checked=true;patient.dispatchEvent(new Event('change'));}
+  });
+})();
 </script>
 </body>
 </html>
