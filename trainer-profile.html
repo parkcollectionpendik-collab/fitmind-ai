@@ -263,6 +263,7 @@ async function sendMsg(){
     patient_id:currentUser.id,
     physio_id:trainer.id,
     sender_role:'patient',
+    source:'marketplace',
     message:text,
     created_at:new Date().toISOString()
   });
