@@ -79,9 +79,8 @@ h1{font-family:var(--font-head);font-size:clamp(2rem,5vw,3rem);font-weight:800;l
 <body>
 
 <nav class="nav">
-  <a href="index.html" class="logo">Fit<span>Mind</span> AI</a>
+  <a href="index.html" class="logo" id="logoLink">Fit<span>Mind</span> AI</a>
   <div class="nav-right">
-    <a href="dashboard.html" class="nav-link">Dashboard</a>
     <a href="auth.html" class="btn-primary" id="loginBtn">Sign In</a>
   </div>
 </nav>
@@ -133,8 +132,14 @@ async function init(){
   }
   const {data:{session}}=await sb.auth.getSession();
   if(session){
+    // Kullanici rolune gore dogru panele yonlendir
+    const {data:profile}=await sb.from('profiles').select('user_role').eq('id',session.user.id).maybeSingle();
+    let target='dashboard.html';
+    if(profile?.user_role==='physio')target='physio-dashboard.html';
+    else if(profile?.user_role==='patient')target='patient-dashboard.html';
     document.getElementById('loginBtn').textContent='Dashboard';
-    document.getElementById('loginBtn').href='dashboard.html';
+    document.getElementById('loginBtn').href=target;
+    document.getElementById('logoLink').href=target;
   }
   await loadTrainers();
 }
