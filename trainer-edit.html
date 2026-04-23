@@ -302,8 +302,8 @@ async function init(){
   if(!session){window.location.href='auth.html';return;}
   currentUserId=session.user.id;
 // Pro durumu kontrolü
-  const {data:proCheck}=await sb.from('profiles').select('is_pro').eq('id',currentUserId).maybeSingle();
-  if(proCheck?.is_pro){
+  const {data:proCheck}=await sb.from('profiles').select('is_trainer_pro').eq('id',currentUserId).maybeSingle();
+  if(proCheck?.is_trainer_pro){
     document.getElementById('proActiveSection').style.display='block';
   } else {
     document.getElementById('proSection').style.display='block';
