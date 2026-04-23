@@ -269,7 +269,7 @@ async function signUp(){
     const physioCode=generatePhysioCode();
     await sb.from('profiles').upsert({id:data.user.id,user_role:'physio',physio_code:physioCode,physio_clinic:clinic,physio_spec:spec,updated_at:new Date().toISOString()});
     fetch('/api/send-welcome',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,name,isPhysio:true})}).catch(()=>{});
-    window.location.replace('physio-dashboard.html');
+    window.location.replace('trainer-edit.html');
   } else if(isPatient&&data.user&&verifiedPhysioId){
     // Hasta — onboarding atla, direkt dashboard
     await sb.from('profiles').upsert({id:data.user.id,user_role:'patient',physio_id:verifiedPhysioId,onboarding_done:true,updated_at:new Date().toISOString()});
