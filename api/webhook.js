@@ -101,6 +101,7 @@ export default async function handler(req, res) {
   const eventType = event.event_type || event.notification_type;
   const status = event.data?.status;
   const customerId = event.data?.customer_id || event.data?.customer?.id;
+  const priceId = event.data?.items?.[0]?.price?.id || event.data?.items?.[0]?.price_id;
 
   // Email bul - once direkt, bulamazsa Paddle API'den cek
   let email = event.data?.customer?.email || event.customer_email || null;
@@ -108,21 +109,21 @@ export default async function handler(req, res) {
     email = await getEmailFromCustomerId(customerId);
   }
 
-  console.log('Webhook:', eventType, '| email:', email, '| status:', status);
+  console.log('Webhook:', eventType, '| email:', email, '| status:', status, '| priceId:', priceId);
 
   try {
     if (eventType === 'subscription.activated' || eventType === 'subscription.created') {
-      await updateProStatus(email, true);
+      await updateProStatus(email, true, priceId);
     }
     else if (eventType === 'subscription.updated') {
       if (status === 'active' || status === 'trialing') {
-        await updateProStatus(email, true);
+        await updateProStatus(email, true, priceId);
       } else if (status === 'canceled' || status === 'paused') {
-        await updateProStatus(email, false);
+        await updateProStatus(email, false, priceId);
       }
     }
     else if (eventType === 'subscription.canceled' || eventType === 'subscription.paused') {
-      await updateProStatus(email, false);
+      await updateProStatus(email, false, priceId);
     }
   } catch (err) {
     console.error('Webhook error:', err);
