@@ -1840,7 +1840,19 @@ function copyLink(){
   const link=`https://fitmindai.ai/auth.html?code=${code}`;
   navigator.clipboard.writeText(link).then(()=>alert('Link kopyalandı! / Link copied!'));
 }
-
+async function openFirstUnreadPatient(){
+  if(!physioProfile)return;
+  const {data}=await sb.from('patient_messages').select('patient_id').eq('physio_id',physioProfile.id).eq('sender_role','patient').eq('is_read',false).order('created_at',{ascending:false}).limit(1);
+  if(!data||data.length===0){alert('Okunmamış mesaj yok 🎉');return;}
+  const pid=data[0].patient_id;
+  if(!patients.find(p=>p.id===pid))await loadPatients();
+  openPatient(pid);
+  setTimeout(()=>{
+    const tabs=document.querySelectorAll('.pm-tab');
+    const msgTab=Array.from(tabs).find(t=>t.textContent.includes('Mesajlar'));
+    if(msgTab)msgTab.click();
+  },300);
+}
 async function signOut(){await sb.auth.signOut();window.location.replace('auth.html');}
 
 init();
