@@ -1215,7 +1215,7 @@ async function sendMsg(){
   if(!text)return;
   if(!isPro&&freeCount>=FREE_LIMIT){
     const msgs=document.getElementById('messages');
-    msgs.innerHTML+=`<div class="msg limit">🔒 <strong>Ücretsiz limit doldu</strong><br><button onclick="openCheckout()" style="margin-top:0.5rem;background:var(--lime);color:#000;border:none;padding:0.4rem 1.2rem;border-radius:100px;font-family:var(--font-head);font-weight:700;cursor:pointer">Pro'ya Yükselt → $19/ay</button></div>`;
+    msgs.innerHTML+=`<div class="msg limit">🔒 <strong>Ücretsiz limit doldu</strong><br><button onclick="openCheckout()" style="margin-top:0.5rem;background:var(--lime);color:#000;border:none;padding:0.4rem 1.2rem;border-radius:100px;font-family:var(--font-head);font-weight:700;cursor:pointer">Pro'ya Yükselt → $4.99/ay</button></div>`;
     msgs.scrollTop=msgs.scrollHeight;return;
   }
   input.value='';
