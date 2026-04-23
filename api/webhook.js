@@ -36,26 +36,38 @@ async function getEmailFromCustomerId(customerId) {
   }
 }
 
-async function updateProStatus(email, isPro) {
+const PRICE_PRO = 'pri_01kpx2vkx89tsg5r5xt83nnz7h';          // Musteri Pro $4.99
+const PRICE_PRO_YEARLY = 'pri_01kpatf457sfxdr3xwhb25z588';   // Musteri Pro $144/yr
+const PRICE_TRAINER_PRO = 'pri_01kpx2gm5xq2ayf6yzzkx89z0p';  // Trainer Pro $9.99
+
+function getProField(priceId) {
+  if (priceId === PRICE_TRAINER_PRO) return 'is_trainer_pro';
+  if (priceId === PRICE_PRO || priceId === PRICE_PRO_YEARLY) return 'is_pro';
+  return null;
+}
+
+async function updateProStatus(email, isPro, priceId) {
   if (!email) { console.log('Email yok, islem yapilmadi'); return; }
+  const field = getProField(priceId);
+  if (!field) { console.log('Bilinmeyen price ID:', priceId); return; }
+
+  const updateData = { [field]: isPro };
+  if (isPro) updateData.pro_since = new Date().toISOString();
+
   const { data: profile } = await sb
     .from('profiles').select('id').eq('email', email).maybeSingle();
   if (profile?.id) {
-    await sb.from('profiles').update({
-      is_pro: isPro,
-      ...(isPro ? { pro_since: new Date().toISOString() } : {})
-    }).eq('id', profile.id);
-    console.log(`Guncellendi: ${email} -> is_pro: ${isPro}`);
+    await sb.from('profiles').update(updateData).eq('id', profile.id);
+    console.log(`Guncellendi: ${email} -> ${field}: ${isPro}`);
   } else {
     const { data: authData } = await sb.auth.admin.listUsers({ page: 1, perPage: 1000 });
     const user = authData?.users?.find(u => u.email === email);
     if (user) {
       await sb.from('profiles').upsert({
         id: user.id, email,
-        is_pro: isPro,
-        ...(isPro ? { pro_since: new Date().toISOString() } : {})
+        ...updateData
       }, { onConflict: 'id' });
-      console.log(`Upsert: ${email} -> is_pro: ${isPro}`);
+      console.log(`Upsert: ${email} -> ${field}: ${isPro}`);
     } else {
       console.log(`Kullanici bulunamadi: ${email}`);
     }
