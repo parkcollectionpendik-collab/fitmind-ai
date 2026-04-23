@@ -166,13 +166,22 @@ footer a:hover{color:var(--white)}
   <div class="logo">Fit<span>Mind</span> AI</div>
   <div class="nav-right">
     <button class="lang-btn" onclick="toggleLang()" id="langBtn">🇹🇷 Türkçe</button>
-    
     <a href="auth.html" class="nav-signin" data-en="Sign In" data-tr="Giriş Yap">Sign In</a>
     <a href="trainers.html?type=trainer" class="nav-signin" data-en="Find a Trainer" data-tr="Antrenör Bul">Find a Trainer</a>
     <a href="trainers.html?type=physio" class="nav-signin" data-en="Find a Physio" data-tr="Fizyoterapist Bul">Find a Physio</a>
     <a href="join.html" class="nav-cta" data-en="Start Free →" data-tr="Ücretsiz Dene →">Start Free →</a>
+    <button class="hamburger" onclick="openMobileMenu()">☰</button>
   </div>
 </nav>
+
+<div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileMenu()"></div>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="closeMobileMenu()">✕</button>
+  <a href="auth.html" data-en="Sign In" data-tr="Giriş Yap">Sign In</a>
+  <a href="trainers.html?type=trainer" data-en="Find a Trainer" data-tr="Antrenör Bul">Find a Trainer</a>
+  <a href="trainers.html?type=physio" data-en="Find a Physio" data-tr="Fizyoterapist Bul">Find a Physio</a>
+  <a href="join.html" class="cta" data-en="Start Free →" data-tr="Ücretsiz Dene →">Start Free →</a>
+</div>
 
 <section class="hero">
   <div class="hero-bg"><div class="orb orb1"></div><div class="orb orb2"></div></div>
