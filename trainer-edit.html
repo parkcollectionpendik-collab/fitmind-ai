@@ -6,6 +6,8 @@
 <title>FitMind AI – Edit Profile</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<script>Paddle.Initialize({token:'live_eefc76e39bd2263417b9b9ff52b'});</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--black:#0a0a0a;--white:#f5f2eb;--lime:#c8f542;--blue:#44aaff;--muted:#888;--font-head:'Space Grotesk',sans-serif;--font-body:'Inter',sans-serif}
@@ -73,7 +75,28 @@ textarea{resize:vertical;min-height:100px;font-family:var(--font-body)}
   <a href="physio-dashboard.html" class="back-link">← Back to Dashboard</a>
   <h1>Your Public Profile</h1>
   <p class="subtitle">This is how clients will see you on FitMind AI. Fill it out thoroughly for better visibility.</p>
+<!-- PRO UPGRADE -->
+  <div class="section" id="proSection" style="background:linear-gradient(135deg,#0a1628,#0d0d0d);border:1.5px solid #44aaff30;display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px">
+        <div style="font-family:var(--font-head);font-size:1.05rem;font-weight:800;color:#44aaff;margin-bottom:0.3rem">⭐ Trainer Pro</div>
+        <div style="font-size:0.85rem;color:#ffffffcc;line-height:1.5;margin-bottom:0.5rem">Üst sırada çık, WhatsApp butonu aç, "Pro" rozeti al. 3 kat daha fazla müşteri kazanır.</div>
+        <div style="font-family:var(--font-head);font-size:1.4rem;font-weight:800">$9.99<span style="font-size:0.85rem;color:var(--muted);font-weight:400">/ay</span></div>
+      </div>
+      <button onclick="openProCheckout()" style="background:#44aaff;color:#000;border:none;border-radius:100px;padding:0.85rem 1.6rem;font-family:var(--font-head);font-weight:800;font-size:0.9rem;cursor:pointer">Pro'ya Yükselt →</button>
+    </div>
+  </div>
 
+  <!-- PRO AKTİF -->
+  <div class="section" id="proActiveSection" style="background:linear-gradient(135deg,#0a2a0a,#0d0d0d);border:1.5px solid #4ade8040;display:none">
+    <div style="display:flex;align-items:center;gap:1rem">
+      <div style="font-size:2rem">✨</div>
+      <div>
+        <div style="font-family:var(--font-head);font-size:1.05rem;font-weight:800;color:#4ade80;margin-bottom:0.2rem">Pro Üyelik Aktif</div>
+        <div style="font-size:0.85rem;color:#ffffffcc">Listelerde üst sıradasın ve WhatsApp butonun açık.</div>
+      </div>
+    </div>
+  </div>
   <!-- AVATAR -->
   <div class="section">
     <div class="section-title">Profile Photo</div>
@@ -278,7 +301,13 @@ async function init(){
   const {data:{session}}=await sb.auth.getSession();
   if(!session){window.location.href='auth.html';return;}
   currentUserId=session.user.id;
-
+// Pro durumu kontrolü
+  const {data:proCheck}=await sb.from('profiles').select('is_pro').eq('id',currentUserId).maybeSingle();
+  if(proCheck?.is_pro){
+    document.getElementById('proActiveSection').style.display='block';
+  } else {
+    document.getElementById('proSection').style.display='block';
+  }
   renderSpecialties();
 
   const {data:profile}=await sb.from('profiles').select('*').eq('id',currentUserId).maybeSingle();
@@ -354,7 +383,12 @@ async function saveProfile(){
   if(error){showMsg('Save failed: '+error.message,'error');}
   else{showMsg('Profile saved successfully!','success');}
 }
-
+function openProCheckout(){
+  Paddle.Checkout.open({
+    items:[{priceId:'pri_01kpx2gm5xq2ayf6yzzkx89z0p',quantity:1}],
+    successUrl:'https://fitmindai.ai/trainer-edit.html'
+  });
+}
 init();
 </script>
 </body>
